@@ -18,6 +18,9 @@ class Profile(models.Model):
     class Meta:
         order_with_respect_to = 'user'
 
+    def __str__(self):
+        return self.user.username
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -27,6 +30,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
+class Attachment(models.Model):
+    uploader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    file = models.FileField()
+    comment = models.TextField()
+
 class Event(models.Model):
     '''Groups a set of activities'''
     name = models.CharField(max_length=40)
@@ -35,6 +43,7 @@ class Event(models.Model):
     comment = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
     coordinators = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    files = models.ManyToManyField(Attachment)
 
     class Meta:
         ordering = ['start_date', 'end_date']
@@ -44,6 +53,7 @@ class ActivityType(models.Model):
     name = models.CharField(max_length=40, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
+    files = models.ManyToManyField(Attachment)
 
 class Activity(models.Model):
     '''A specific activity on a given day, can be assigned to a user'''
@@ -59,3 +69,4 @@ class Activity(models.Model):
 
     class Meta:
         ordering=['start_time', 'end_time']
+
