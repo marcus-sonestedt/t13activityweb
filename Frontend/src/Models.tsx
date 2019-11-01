@@ -20,7 +20,16 @@ export class ActivityType implements IdValue {
     id: string = "";
     name: string = "";
     description: string = "";
-    image = <img/>;
+    image_url :string = "";
 }
 
-export default Activity;
+export class T13Event implements IdValue {
+    id: string = "";
+    name: string = "";
+    comment: string ="";
+    start_date: Date = new Date();
+    end_date: Date = new Date();
+    image_url: string | null = null;
+}
+
+export default { Activity, ActivityType, T13Event };

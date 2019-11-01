@@ -14,7 +14,7 @@ class App extends Component<{}, AppState> {
 
   state = new AppState();
 
-  componentDidMount = () => {
+  componentWillMount = () => {
     document.title = "Team13 Aktivitetswebb"
   }
 
@@ -31,7 +31,7 @@ class App extends Component<{}, AppState> {
 
     return (
       <BrowserRouter>
-        <Navigation loggedIn={loggedIn} onLoggedOut={this.onLogout} />
+        {loggedIn ? <Navigation onLoggedOut={this.onLogout} /> : null}
         <Switch>
           {loggedIn ? <Redirect from="/welcome" to="/home" /> :
             <Route path="/welcome">

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import IdValue from '../Models'
+import { IdValue } from '../Models'
 import { Table } from 'react-bootstrap'
 
 export class TableView<T extends IdValue>
