@@ -11,10 +11,6 @@ class AppState {
 }
 
 class App extends Component<{}, AppState> {
-  constructor(props: {}) {
-    super(props);
-    this.state.loginToken = null;
-  }
 
   state = new AppState();
 
@@ -32,17 +28,19 @@ class App extends Component<{}, AppState> {
 
   render() {
     const loggedIn = this.state.loginToken !== null;
-    let redirect = loggedIn ? "/home" : "/welcome";
 
     return (
       <BrowserRouter>
         <Navigation loggedIn={loggedIn} onLoggedOut={this.onLogout} />
         <Switch>
           <Route path="/welcome">
-            <Welcome onLoggedIn={this.onLogin} />
+            {loggedIn
+              ? <Redirect to="/home"/>
+              :<Welcome onLoggedIn={this.onLogin} />
+            }
           </Route>
           <Route path="/">
-            <Redirect to={redirect} />;
+            <Redirect to={loggedIn ? "/home" : "/welcome"} />
           </Route>
           <Route path="/home">
             <Home loginToken={this.state.loginToken as string} />
