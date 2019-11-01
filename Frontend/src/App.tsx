@@ -1,58 +1,63 @@
 import './App.css';
 import React, { Component } from "react";
-import { Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Navigation } from './components/Navigation'
 import { Welcome } from './components/Welcome'
 import { Home } from './components/Home'
 import { BrowserRouter, Switch, Route, Link, Redirect, useLocation } from 'react-router-dom';
 
 class AppState {
-  loginToken: string | null = null;
+  constructor(token: string|null) {
+    this.loginToken = token
+  } loginToken: string | null = null;
 }
 
 class App extends Component<{}, AppState> {
 
-  state = new AppState();
-
-  componentWillMount = () => {
-    document.title = "Team13 Aktivitetswebb"
+  constructor(props: any) {
+    super(props);
+    this.state = new AppState(localStorage.getItem("login-token"));
   }
 
   onLogin = (token: string) => {
     this.setState({ loginToken: token });
+    localStorage.setItem("login-token", token);
   }
 
   onLogout = () => {
     this.setState({ loginToken: null });
+    localStorage.removeItem("login-token");
   }
 
   render() {
     const loggedIn = this.state.loginToken !== null;
-
+    console.log(loggedIn);
     return (
       <BrowserRouter>
-        {loggedIn ? <Navigation onLoggedOut={this.onLogout} /> : null}
-        <Switch>
-          {loggedIn ? <Redirect from="/welcome" to="/home" /> :
+        <Navigation visible={loggedIn} onLoggedOut={this.onLogout} />
+        {!loggedIn ?
+          <Switch>
             <Route path="/welcome">
               <Welcome onLoggedIn={this.onLogin} />
             </Route>
-          }
-          <Route exact path="/">
-            <Redirect to={loggedIn ? "/home" : "/welcome"} />
-          </Route>
-          <Route path="/home">
-            <Home loginToken={this.state.loginToken as string} />
-          </Route>
-          <Route path="/logout">
-            <Redirect to="/" />
-          </Route>
-          <Route path="*">
-            <NoMatch />
-          </Route>
-        </Switch>
+            <Redirect to="/welcome" />
+          </Switch>
+          :
+          <Switch>
+            <Redirect from="/welcome" to="/home" />
+            <Route exact path="/">
+              <Redirect to={loggedIn ? "/home" : "/welcome"} />
+            </Route>
+            <Route path="/home">
+              <Home loginToken={this.state.loginToken as string} />
+            </Route>
+            <Route path="*">
+              <NoMatch />
+            </Route>
+          </Switch>
+        }
         <Footer />
-      </BrowserRouter>
+      </BrowserRouter >
     );
   }
 }

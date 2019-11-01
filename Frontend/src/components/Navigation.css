@@ -1,0 +1,7 @@
+.navbar {
+    margin-bottom: 1em;
+}
+
+.navbar.hidden {
+    visibility: hidden;
+}
