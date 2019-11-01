@@ -3,12 +3,12 @@ import { Form, FormControlProps, Button, Alert } from 'react-bootstrap'
 import { Activity } from '../Models'
 
 export class ActivityFormProps {
-    model: Activity | null = null;
+    model: Activity | undefined = undefined;
     onSave = (model: Activity) => true;
 }
 
 class ActivityFormState {
-    model: Activity | null = null;
+    model: Activity | undefined = undefined;
     changed: boolean = false;
 }
 
@@ -27,7 +27,7 @@ export class ActivityForm
     }
 
     render = () => {
-        if (this.state.model == null)
+        if (this.state.model === undefined)
             return null;
 
         return <Form>

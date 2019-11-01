@@ -73,13 +73,13 @@ export class LoginForm extends Component<LoginProps, LoginState>
                     {alert}
 
                     <Button variant="primary" type="submit"
-                        onClick={this.handleLoginClick}>
+                        onClick={this.handleLoginClick}
+                        disabled={this.state.email === "" ||
+                        this.state.password === ""}>
                         Logga in
                     </Button>
 
-                    &nbsp;
-
-                    <Button variant="primary" type="submit"
+                    <Button className="float-right" variant="primary" type="submit" disabled={this.state.email === ""}
                         onClick={this.handleSetupClick}>
                             Skapa nytt konto
                     </Button>

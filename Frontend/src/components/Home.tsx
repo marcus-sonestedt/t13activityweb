@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Table } from './Table'
 import { Container, Row, Col } from 'react-bootstrap'
-import DataProvider from './DataProvider'
-import ActivityForm from '../forms/ActivityForm'
 import { Activity, ActivityType } from '../Models'
+import DataProvider from './DataProvider'
+import { TableView } from './Table'
+import ActivityForm from '../forms/ActivityForm'
 
 export class HomeProps {
     loginToken: string = "";
@@ -11,11 +11,18 @@ export class HomeProps {
 
 class HomeState {
     myActivities: Activity[] = [];
-    selectedActivity: Activity | null = null;
+    selectedActivity: Activity | undefined = undefined;
 }
 
 export class Home extends Component<HomeProps, HomeState>
 {
+    constructor(props: HomeProps) {
+        super(props);
+        this.activityTable = new TableView<Activity>(
+            this.handleRowClicked
+        );
+    }
+
     state = new HomeState();
 
     handleMyActivitiesLoaded = (data: Activity[]) => {
@@ -26,8 +33,15 @@ export class Home extends Component<HomeProps, HomeState>
         return true;
     }
 
+    handleRowClicked = (modelId: string) => {
+        const model = this.state.myActivities.find(a => a.id === modelId);
+        this.setState({ selectedActivity: model });
+    }
+
+    activityTable: TableView<Activity>;
+
     render = () => {
-        let type = this.state.selectedActivity == null ? null
+        let type = this.state.selectedActivity === undefined ? null
             : this.state.selectedActivity.type;
 
         return (
@@ -35,9 +49,9 @@ export class Home extends Component<HomeProps, HomeState>
                 <Row>
                     <Col md={12}>
                         <h3>Mina aktiviteter</h3>
-                        <DataProvider<Activity>
+                        <DataProvider<Activity[]>
                             endpoint="/api/myactivities"
-                            render={Table}
+                            render={this.activityTable.render}
                             onLoaded={this.handleMyActivitiesLoaded} />
                     </Col>
                 </Row>
@@ -47,27 +61,23 @@ export class Home extends Component<HomeProps, HomeState>
                             model={this.state.selectedActivity}
                             onSave={this.handleActivitySave} />
                     </Col>
-                    {type == null ? null :
                     <Col sm={12} md={6}>
-                        <ActivityTypeView {...type} />
+                        {type == null ? null :
+                            <ActivityTypeView {...type} />
+                        }
                     </Col>
-                    }
                 </Row>
             </Container>
         );
     }
 }
 
-const ActivityTypeView:React.SFC<ActivityType | null> = (props) => {
-    if (props == null)
-        return null;
+const ActivityTypeView: React.SFC<ActivityType | null> = (props: ActivityType) => (
+    <div>
+        <h3>{props.name}</h3>
+        <p>{props.description}</p>
+    </div>
+);
 
-    return (
-        <div>
-            <h3>{props.name}</h3>
-            <p>{props.description}</p>
-        </div>
-    );
-}
 
 export default Home;

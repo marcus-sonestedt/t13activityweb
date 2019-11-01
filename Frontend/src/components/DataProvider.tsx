@@ -1,14 +1,15 @@
 import React, { Component } from "react";
+import { Row, Col } from 'react-bootstrap'
 
 class DataState<T> {
-    data: T[] | null = null;
+    data: T | null = null;
     placeholder: string = "Laddar...";
 };
 
 export class DataProps<T>  {
     endpoint: string = "";
-    render = (data: T[]) => <div>{data}</div>;
-    onLoaded = (data: T[]) => { };
+    render = (data: T) => <div>{data}</div>;
+    onLoaded = (data: T) => { };
 }
 
 export class DataProvider<T>
@@ -26,11 +27,17 @@ export class DataProvider<T>
                     });
                     return;
                 }
+
                 return response.json();
             })
             .then(data => {
                 this.setState({ data: data });
                 this.props.onLoaded(data);
+            }).catch(e => {
+                console.error(e);
+                this.setState({
+                    placeholder: "Oops. Något gick fel. :("
+                });
             });
     }
 
@@ -38,8 +45,8 @@ export class DataProvider<T>
         const { data, placeholder } = this.state;
 
         return data !== null
-            ? this.props.render(data as T[])
-            : <p>{placeholder}</p>;
+            ? this.props.render(data as T)
+            : <Row><Col lg={12}><p>{placeholder}</p></Col></Row>;
     }
 }
 

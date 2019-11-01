@@ -8,7 +8,7 @@ class NavProps {
 
 export class Navigation extends Component<NavProps, {}>{
 
-    render() {
+    render = () => {
         let loginNav;
         if (this.props.loggedIn) {
             loginNav = (
@@ -33,7 +33,7 @@ export class Navigation extends Component<NavProps, {}>{
 
         return (
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="#home">Team13's aktivitetswebb</Navbar.Brand>
+                <Navbar.Brand href="/">Team13's aktivitetswebb</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     {loginNav}
