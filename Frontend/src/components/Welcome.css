@@ -1,0 +1,11 @@
+.welcome {
+    margin-top: 1em;
+}
+
+.welcome img {
+    max-width: 100%
+}
+
+.welcome .jumbotron {
+    background-color: #555;
+}

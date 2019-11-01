@@ -1,0 +1,11 @@
+.App {
+  background-color: #282c34;
+}
+
+.footer {
+  position: absolute;
+  width: 100%;
+  bottom: 1m;
+  text-align: center;
+}
+

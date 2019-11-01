@@ -104,3 +104,6 @@ venv.bak/
 .mypy_cache/
 T13ActivityWeb/T13ActivityWeb.pyproj.user
 .vs
+T13ActivityWeb/node_modules/
+T13ActivityWeb/packages/
+Backend/packages/
