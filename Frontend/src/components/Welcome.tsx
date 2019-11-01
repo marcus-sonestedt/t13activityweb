@@ -1,7 +1,7 @@
 import React from "react";
-import { LoginForm, LoginProps } from './LoginForm'
-import logo from '../t13logo.jpg'
 import { Container, Row, Col, Jumbotron } from 'react-bootstrap'
+import { LoginForm, LoginProps } from '../forms/LoginForm'
+import logo from '../t13logo.jpg'
 import './Welcome.css'
 
 export const Welcome = (loginProps: LoginProps) => (

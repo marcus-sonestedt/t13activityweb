@@ -33,13 +33,12 @@ class App extends Component<{}, AppState> {
       <BrowserRouter>
         <Navigation loggedIn={loggedIn} onLoggedOut={this.onLogout} />
         <Switch>
-          <Route path="/welcome">
-            {loggedIn
-              ? <Redirect to="/home" />
-              : <Welcome onLoggedIn={this.onLogin} />
-            }
-          </Route>
-          <Route path="/">
+          {loggedIn ? <Redirect from="/welcome" to="/home" /> :
+            <Route path="/welcome">
+              <Welcome onLoggedIn={this.onLogin} />
+            </Route>
+          }
+          <Route exact path="/">
             <Redirect to={loggedIn ? "/home" : "/welcome"} />
           </Route>
           <Route path="/home">
@@ -77,7 +76,7 @@ const Footer = () => {
       <Col sm={12} lg={6}>
         <p>
           Developed with <a href="https://reactjs.org">React</a> and
-          {'\u00A0'}<a href="https:///www.python.org">Python</a> by
+          {'\u00A0'}<a href="https:///www.djangoproject.com">Django</a> by
           {'\u00A0'}<a href="https://github.com/marcusl">Marcus Sonestedt</a>.
         </p>
       </Col>

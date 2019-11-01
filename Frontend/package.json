@@ -39,8 +39,6 @@
   "devDependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "react-dom": "^16.11.0"
   }
 }
