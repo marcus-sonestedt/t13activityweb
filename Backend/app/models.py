@@ -35,15 +35,24 @@ class Attachment(models.Model):
     file = models.FileField()
     comment = models.TextField()
 
+class EventType(models.Model):
+    '''Predefined type of activity with some help text to explain it'''
+    name = models.CharField(max_length=40, unique=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(null=True, blank=True)
+    files = models.ManyToManyField(Attachment)
+
 class Event(models.Model):
     '''Groups a set of activities'''
     name = models.CharField(max_length=40)
+    description = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField()
     comment = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
     coordinators = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     files = models.ManyToManyField(Attachment)
+    type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ['start_date', 'end_date']
@@ -65,7 +74,7 @@ class Activity(models.Model):
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
     assigned = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    completed = models.BooleanField()
+    completed = models.BooleanField(default=False)
 
     class Meta:
         ordering=['start_time', 'end_time']

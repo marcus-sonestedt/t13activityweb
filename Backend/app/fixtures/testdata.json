@@ -1,0 +1,200 @@
+[
+  {
+    "model": "app.EventType",
+    "pk": 1,
+    "fields": {
+      "name": "Nationell tävling"
+    }
+  },
+  {
+    "model": "app.EventType",
+    "pk": 2,
+    "fields": {
+      "name": "Lokal tävling"
+    }
+  },
+  {
+    "model": "app.EventType",
+    "pk": 3,
+    "fields": {
+      "name": "Träningsvecka"
+    }
+  },
+  {
+    "model": "app.Event",
+    "pk": 1,
+    "fields": {
+      "name": "GSP 2022 Lördag",
+      "start_date": "2022-08-22",
+      "end_date": "2022-08-22",
+      "type": 1
+    }
+  },
+  {
+    "model": "app.Event",
+    "pk": 2,
+    "fields": {
+      "name": "GSP 2022 Söndag",
+      "start_date": "2022-08-23",
+      "end_date": "2022-08-23",
+      "type": 1
+    }
+  },
+  {
+    "model": "app.Event",
+    "pk": 3,
+    "fields": {
+      "name": "Lördaxx 4",
+      "start_date": "2022-09-19",
+      "end_date": "2022-09-19",
+      "type": 2
+    }
+  },
+  {
+    "model": "app.Event",
+    "pk": 32,
+    "fields": {
+      "name": "Träning vecka 30",
+      "start_date": "2022-06-10",
+      "end_date": "2022-06-16",
+      "type": 3
+    }
+  },
+  {
+    "model": "app.Event",
+    "pk": 33,
+    "fields": {
+      "name": "Träning vecka 31",
+      "start_date": "2022-06-17",
+      "end_date": "2022-06-23",
+      "type": 3
+    }
+  },
+
+  {
+    "model": "app.ActivityType",
+    "pk": 1,
+    "fields": {
+      "name": "Träningsvakt",
+      "description": "Hämta nyckelknippa, öppna banan, flagga, lås efteråt"
+    }
+  },
+  {
+    "model": "app.ActivityType",
+    "pk": 2,
+    "fields": {
+      "name": "Flaggvakt",
+      "description": "Hörlurar på, flagga gult och grönt när det behövs."
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 1,
+    "fields": {
+      "name": "Träningsvakt Tisdag",
+      "type": 1,
+      "event": 32,
+      "start_time": "2022-06-11T17:00:00",
+      "end_time": "2022-06-11T21:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 2,
+    "fields": {
+      "name": "Träningsvakt Torsdag",
+      "type": 1,
+      "event": 32,
+      "start_time": "2022-06-13T16:00:00",
+      "end_time": "2022-06-13T19:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 3,
+    "fields": {
+      "name": "Träningsvakt Lördag",
+      "type": 1,
+      "event": 32,
+      "start_time": "2022-06-15T10:00:00",
+      "end_time": "2022-06-15T16:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 4,
+    "fields": {
+      "name": "Träningsvakt Tisdag",
+      "type": 1,
+      "event": 33,
+      "start_time": "2022-06-18T17:00:00",
+      "end_time": "2022-06-18T21:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 5,
+    "fields": {
+      "name": "Träningsvakt Torsdag",
+      "type": 1,
+      "event": 33,
+      "start_time": "2022-06-20T16:00:00",
+      "end_time": "2022-06-20T19:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 6,
+    "fields": {
+      "name": "Träningsvakt Lördag",
+      "type": 1,
+      "event": 33,
+      "start_time": "2022-06-22T10:00:00",
+      "end_time": "2022-06-22T16:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 7,
+    "fields": {
+      "name": "Flaggvakt Kurva 1",
+      "type": 2,
+      "event": 1,
+      "start_time": "2022-08-22T07:30:00",
+      "end_time": "2022-06-22T17:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 8,
+    "fields": {
+      "name": "Flaggvakt Kurva 2",
+      "type": 2,
+      "event": 1,
+      "start_time": "2022-08-22T07:30:00",
+      "end_time": "2022-06-22T17:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 9,
+    "fields": {
+      "name": "Flaggvakt Kurva 1",
+      "type": 2,
+      "event": 2,
+      "start_time": "2022-08-23T07:30:00",
+      "end_time": "2022-06-23T17:00:00"
+    }
+  },
+  {
+    "model": "app.Activity",
+    "pk": 10,
+    "fields": {
+      "name": "Flaggvakt Kurva 2",
+      "type": 2,
+      "event": 2,
+      "start_time": "2022-08-23T07:30:00",
+      "end_time": "2022-06-23T17:00:00"
+    }
+  }
+]

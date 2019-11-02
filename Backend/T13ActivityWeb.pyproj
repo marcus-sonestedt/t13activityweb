@@ -38,8 +38,14 @@
     <Compile Include="app\admin.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\api.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\serializers.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -53,6 +59,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\fixtures\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
@@ -63,6 +70,8 @@
     <Folder Include="T13ActivityWeb\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\fixtures\activities.json" />
+    <Content Include="app\fixtures\testdata.json" />
     <Content Include="libman.json" />
     <None Include="packages.config" />
     <Content Include="requirements.txt" />
