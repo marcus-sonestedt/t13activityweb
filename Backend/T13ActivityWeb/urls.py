@@ -26,8 +26,8 @@ urlpatterns = [
          name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
-    path('api/login', api.obtain_auth_token, name='login'),
-    path('api/logout', api.ClearAuthToken.as_view(), name='logout'),
+    path('api/login', api.obtain_auth_token),
+    path('api/logout', api.ClearAuthToken.as_view()),
     path('api/myactivities', api.MyActivities.as_view()),
     path('api/events', api.EventList.as_view())
 ]
