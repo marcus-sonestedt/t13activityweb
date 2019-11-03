@@ -69,9 +69,10 @@ env/scripts/activate
 python -m pip install -r requirements.txt
 ```
 
-* Init database and populate tables
+* Init database, apply any new migrations and populate tables
 ```bash
 python manage.py createsuperuser
+python manage.py migrate
 python manage.py loaddata testdata
 ```
 
