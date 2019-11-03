@@ -67,10 +67,10 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="frontend\" />
     <Folder Include="T13ActivityWeb\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\fixtures\activities.json" />
     <Content Include="app\fixtures\testdata.json" />
     <Content Include="libman.json" />
     <None Include="packages.config" />

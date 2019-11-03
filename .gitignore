@@ -102,8 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-T13ActivityWeb/T13ActivityWeb.pyproj.user
+
+*.user
 .vs
-T13ActivityWeb/node_modules/
-T13ActivityWeb/packages/
-Backend/packages/
+node_modules/
+packages/
