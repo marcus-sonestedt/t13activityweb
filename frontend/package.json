@@ -6,22 +6,23 @@
     "@types/jest": "24.0.21",
     "@types/node": "12.12.3",
     "@types/react": "16.9.11",
+    "@types/react-bootstrap": "^0.32.20",
     "@types/react-dom": "16.9.3",
     "@types/react-router-dom": "^5.1.2",
     "bootstrap": "^4.3.1",
     "dom": "0.0.3",
+    "jquery": "^3.4.1",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
-    "typescript": "3.6.4"
+    "react-scripts": "3.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "wp-dev": "webpack --mode development ./frontend/src/index.js --output ./frontend/static/frontend/main.js",
-    "wp-build": "webpack --mode production ./frontend/src/index.js --output ./frontend/static/frontend/main.js"
+    "wp-dev": "webpack --mode development ./src/index.tsx --output ./static/main.js",
+    "wp-build": "webpack --mode production ./src/index.tsx --output ./static/main.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,14 +40,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/preset-react": "^7.6.3",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "webpack-cli": "^3.3.10"
+    "typescript": "^3.6.4"
   }
 }
