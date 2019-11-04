@@ -63,7 +63,7 @@ export class Home extends Component<HomeProps, HomeState>
         return (
             <Container>
                 <Row>
-                    <Col sm={12} mx-auto>
+                    <Col>
                         <Jumbotron>
                            <WelcomeText/>
                         </Jumbotron>

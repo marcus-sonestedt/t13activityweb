@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { IdValue } from '../Models'
 import { Table } from 'react-bootstrap'
 

@@ -5,10 +5,10 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
 import { Home } from './components/Home'
 import { Welcome } from './components/Welcome'
-import { NotFound} from './components/NotFound'
+import { NotFound } from './components/NotFound'
 
 class AppState {
-  constructor(token: string|null) {
+  constructor(token: string | null) {
     this.loginToken = token
   } loginToken: string | null = null;
 }
@@ -37,8 +37,8 @@ class App extends Component<{}, AppState> {
       <BrowserRouter>
         <Navigation visible={loggedIn} onLoggedOut={this.onLogout} />
         <Switch>
-          <Redirect exact from="/" to="/frontend/"/>
-            {!loggedIn ?
+          <Redirect exact from="/" to="/frontend/" />
+          {!loggedIn ?
             <div>
               <Route path="/frontend/welcome">
                 <Welcome onLoggedIn={this.onLogin} />
@@ -50,7 +50,7 @@ class App extends Component<{}, AppState> {
               <Redirect exact from="/frontend/" to="/frontend/home" />
               <Redirect exact from="/frontend/welcome" to="/frontend/home" />
               <Route path="/frontend/home">
-                <Home loginToken={this.state.loginToken as string} serverAddress='http://localhost:8000'/>
+                <Home loginToken={this.state.loginToken as string} serverAddress='http://localhost:8000' />
               </Route>
             </div>
           }
@@ -65,12 +65,11 @@ class App extends Component<{}, AppState> {
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <Row className="footer">
-      <Col sm={12} lg={6} className="text-center">
-
+    <Row className="fixed-bottom footer">
+      <Col>
         <p>Copyright &copy; Team13 GKRC and Marcus Sonestedt, 2019-{currentYear}.</p>
       </Col>
-      <Col sm={12} lg={6}>
+      <Col>
         <p>
           Developed with <a href="https://reactjs.org">React</a> and
           {'\u00A0'}<a href="https:///www.djangoproject.com">Django</a> by

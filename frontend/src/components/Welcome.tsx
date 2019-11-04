@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Jumbotron } from 'react-bootstrap'
+import { Container, Row, Col, Jumbotron, Image } from 'react-bootstrap'
 import { LoginForm, LoginProps } from '../forms/LoginForm'
 import './Welcome.css'
 
@@ -9,15 +9,15 @@ export const Welcome = (loginProps: LoginProps) => (
             <Col xs={12} md={8}>
                 <Jumbotron>
                     <WelcomeText />
-                    <img src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" />
+                    <Image src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" />
                 </Jumbotron>
             </Col>
             <Col xs={4} md={4} className="my-auto">
                 <LoginForm {...loginProps} />
             </Col>
         </Row>
-    </Container
->);
+    </Container>
+);
 
 export const WelcomeText = () => (
     <div>

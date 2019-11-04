@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Row, Col } from 'react-bootstrap'
+import { Container, Alert, Image } from 'react-bootstrap'
 
 class DataState<T> {
     data: T | null = null;
     placeholder: string = "Laddar...";
+    error: string | null = null;
 };
 
 export class DataProps<T>  {
@@ -18,11 +19,14 @@ export class DataProvider<T>
     state = new DataState<T>();
 
     componentDidMount = () => {
+
         fetch(this.props.endpoint)
             .then(response => {
                 return response.status !== 200
                     ? this.setState({
-                        placeholder: `Oops. Något gick fel! :(\n(Error ${response.status}: ${response.statusText})`})
+                        placeholder: "Oops. Något gick fel! :(",
+                        error: `Error ${response.status}: ${response.statusText}`
+                    })
                     : response.json()
             }).then(data => {
                 this.setState({ data: data });
@@ -30,19 +34,26 @@ export class DataProvider<T>
             }).catch(e => {
                 console.error(e);
                 this.setState({
-                    placeholder: "Oops. Något gick fel. :("
+                    placeholder: "Oops. Något gick fel. :(",
+                    error: e.toString()
                 });
             });
     }
 
     render = () => {
-        const { data, placeholder } = this.state;
+        const { data, placeholder, error } = this.state;
 
-        return (data !== null && data !== undefined)
-            ? this.props.render(data as T)
-            : <div>
+        if (data !== null && data !== undefined)
+            return this.props.render(data as T);
+
+        if (error != null)
+            return <Container fluid>
                 <p>{placeholder}</p>
-            </div>;
+                <Image src='/static/brokenpiston.jpg' alt="Broken piston" className="errorImage"/>
+                <Alert variant='warning'>{error}</Alert>
+            </Container>;
+
+        return <p>{placeholder}</p>
     }
 }
 

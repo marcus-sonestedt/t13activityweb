@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, FormControlProps, Button, Alert } from 'react-bootstrap'
+import { Form, FormControlProps, Button } from 'react-bootstrap'
 import { Activity } from '../Models'
 
 export class ActivityFormProps {
