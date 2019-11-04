@@ -6,21 +6,36 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 # Create your models here.
 
 class Member(models.Model):
     '''club member, Extends user object'''
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    fullname = models.CharField(max_length=120, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     comment = models.TextField(blank=True)
     licensed_driver = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         order_with_respect_to = 'user'
 
     def __str__(self):
-        return self.user.username
+        return self.fullname
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+
+        if self.user:
+            self.fullname = self.user.firstname + " " + self.user.lastname
+
+        return super(User, self).save(*args, **kwargs)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -35,6 +50,19 @@ class Attachment(models.Model):
     uploader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     file = models.FileField()
     comment = models.TextField()
+    created = models.DateTimeField()
+    modified = models.DateTimeField()
+
+    def __str__(self):
+        return self.file.name
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(User, self).save(*args, **kwargs)
+
 
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -51,12 +79,21 @@ class Event(models.Model):
     end_date = models.DateField()
     comment = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
-    coordinators = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    coordinators = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     files = models.ManyToManyField(Attachment)
     type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['start_date', 'end_date']
+        ordering = ['start_date', 'end_date', 'name']
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(User, self).save(*args, **kwargs)
 
 class ActivityType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -74,9 +111,9 @@ class Activity(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
-    assigned = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    assigned = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     completed = models.BooleanField(default=False)
 
     class Meta:
-        ordering=['start_time', 'end_time']
+        ordering=['start_time', 'end_time', 'name']
 

@@ -1,8 +1,12 @@
 from django.contrib import admin
 from app import models
 
-@admin.register(models.Profile)
-class ProfileAdmin(admin.ModelAdmin):
+@admin.register(models.Member)
+class MemberAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(models.EventType)
+class ActivityTypeAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(models.Event)

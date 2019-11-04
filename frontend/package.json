@@ -2,6 +2,7 @@
   "name": "t13-activity",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/frontend/", 
   "dependencies": {
     "@types/jest": "24.0.21",
     "@types/node": "12.12.3",
@@ -20,9 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "wp-dev": "webpack --mode development ./src/index.tsx --output ./static/main.js",
-    "wp-build": "webpack --mode production ./src/index.tsx --output ./static/main.js"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

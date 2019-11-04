@@ -1,10 +1,11 @@
 import './App.css';
 import React, { Component } from "react";
 import { Container, Row, Col } from 'react-bootstrap'
-import { Navigation } from './components/Navigation'
-import { Welcome } from './components/Welcome'
-import { Home } from './components/Home'
 import { BrowserRouter, Switch, Route, Link, Redirect, useLocation } from 'react-router-dom';
+import { Navigation } from './components/Navigation'
+import { Home } from './components/Home'
+import { Welcome } from './components/Welcome'
+import { NotFound} from './components/NotFound'
 
 class AppState {
   constructor(token: string|null) {
@@ -33,41 +34,31 @@ class App extends Component<{}, AppState> {
     const loggedIn = this.state.loginToken !== null;
     console.log(loggedIn);
     return (
-      <BrowserRouter>
+      <div>
         <Navigation visible={loggedIn} onLoggedOut={this.onLogout} />
         {!loggedIn ?
-          <Switch>
-            <Route path="/welcome">
+          <div>>
+            <Route path="welcome">
               <Welcome onLoggedIn={this.onLogin} />
             </Route>
-            <Redirect to="/welcome" />
-          </Switch>
+            <Redirect to="welcome" />
+          </div>
           :
-          <Switch>
-            <Redirect from="/welcome" to="/home" />
+          <div>
+            <Redirect from="welcome" to="home" />
             <Route exact path="/">
-              <Redirect to={loggedIn ? "/home" : "/welcome"} />
+              <Redirect to={loggedIn ? "home" : "welcome"} />
             </Route>
-            <Route path="/home">
+            <Route path="home">
               <Home loginToken={this.state.loginToken as string} />
             </Route>
-            <Route path="*">
-              <NoMatch />
-            </Route>
-          </Switch>
+            <Route component={NotFound}/>
+          </div>
         }
         <Footer />
-      </BrowserRouter >
+      </div >
     );
   }
-}
-
-const NoMatch = () => {
-  const location = useLocation();
-  return <div>
-    <h3>Oops. Route {location.pathname} has no match</h3>
-    <p>Go back or <Link to="/home">home</Link>.</p>
-  </div>
 }
 
 const Footer = () => {
