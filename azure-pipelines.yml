@@ -8,16 +8,24 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
-strategy:
-  matrix:
-    Python37:
-      PYTHON_VERSION: '3.7'
-  maxParallel: 1
 
 steps:
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '10.x' # replace this value with the version that you need for your project
+
+- script: npm install
+  workingDirectory: frontend
+
+- script: npm run build
+  workingDirectory: frontend
+
+- script: npm run test
+  workingDirectory: frontend
+
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '$(PYTHON_VERSION)'
+    versionSpec: '3.7'
     architecture: 'x64'
 
 - task: PythonScript@0
