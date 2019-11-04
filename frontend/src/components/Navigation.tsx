@@ -11,7 +11,7 @@ export class Navigation extends Component<NavProps, {}>{
 
     render = () => (
         <Navbar bg="light" className={this.props.visible ? "" : "hidden"}>
-            <Navbar.Brand href="/home">Team13's aktivitetswebb</Navbar.Brand>
+            <Navbar.Brand href="/">Team13's aktivitetswebb</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">

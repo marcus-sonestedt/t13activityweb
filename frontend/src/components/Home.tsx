@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Jumbotron } from 'react-bootstrap'
 import { Activity, ActivityType, T13Event } from '../Models'
 import DataProvider from './DataProvider'
 import { TableView } from './Table'
 import ActivityForm from '../forms/ActivityForm'
-import { useHistory } from "react-router";
+import { useHistory } from "react-router"
+import { WelcomeText } from './Welcome'
 
 interface HomeProps {
     loginToken: string;
+    serverAddress: string;
 }
 
 class HomeState {
@@ -61,17 +63,24 @@ export class Home extends Component<HomeProps, HomeState>
         return (
             <Container>
                 <Row>
+                    <Col sm={12} mx-auto>
+                        <Jumbotron>
+                           <WelcomeText/>
+                        </Jumbotron>
+                    </Col>
+                </Row>
+                <Row>
                     <Col sm={12} lg={6}>
                         <h3>Mina aktiviteter</h3>
                         <DataProvider<Activity[]>
-                            endpoint="/api/myactivities"
+                            endpoint={this.props.serverAddress  + "/api/myactivities"}
                             render={this.activityTable.render}
                             onLoaded={this.handleMyActivitiesLoaded} />
                     </Col>
                     <Col sm={12} lg={6}>
                         <h3>Kommande händelser</h3>
                         <DataProvider<T13Event[]>
-                            endpoint="/api/comingevents"
+                            endpoint={this.props.serverAddress  + "/api/events"}
                             render={this.eventTable.render}
                             onLoaded={this.handleEventsLoaded} />
                     </Col>

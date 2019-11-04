@@ -1,33 +1,49 @@
 import os.path
 import logging
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseNotFound
 from django.shortcuts import redirect
+from django.views.decorators.cache import cache_page, cache_control
 
 logger = logging.getLogger(__name__)
 
-# Create your views here.
-
+#@cache_page(60 * 15)
+#@cache_control(max_age=3600)
 def index(request, *path):
-    # if on better web server, x-sendfile can be used instead, see
-    # https://stackoverflow.com/questions/2294507/how-to-return-static-files-passing-through-a-view-in-django
+    # redirect to static if found there, otherwise return
+    # index.html to serve react page for all frontend urls
 
-    if path != ('',):
-        file = os.path.join(os.path.dirname(__file__), "build", *path)
+    fullpath = ''.join(path)
+    logger.info("index => {}".format(fullpath))
+
+    if path != ('',''):
+        file = os.path.join(os.path.dirname(__file__), "build", fullpath)
         if os.path.exists(file):
-            logger.info("{} => {} exixts!".format(path, file))
-            return redirect('/static/' + '/'.join(path))
+            logger.info("{} => {} exists!".format(path, file))
+            return redirect('/static/{}'.format(fullpath))
+        else:
+            logger.info("{} => {} does not exist!".format(path, file))
 
-    logger.info("{} => index.html ...".format(path))
+
+    if fullpath.endswith('.chunk.js') or fullpath.endswith('chunk.css'):
+        raise HttpResponseNotFound("Not found")
+
+    # On better web server (apache, nginx, etc),
+    # a rewrite or X-Sendfile can be used instead of having python
+    # reading the flie from disc, 
+    # see # https://stackoverflow.com/questions/2294507/how-to-return-static-files-passing-through-a-view-in-django
 
     index_html = os.path.join(os.path.dirname(__file__), "build", "index.html")
-    react_index = open(index_html, 'rb')
-    response = HttpResponse(content=react_index)
+    response = HttpResponse(content=open(index_html, 'rb'))
     response['Content-Type'] = 'text/html'
     return response
 
-def static(request, path):
+#@cache_page(60 * 60)
+#@cache_control(max_age=3600)
+def static(request, *path):
     # TODO: figure out how to get react to get things right, or django to serve
-    #       static under frontend/
-    logger.info("{} static!".format(path))
+    #       static under frontend too.. Probably easier with a proper  web server
 
-    return redirect('/static/static/' + path, permanent=True)
+    target = '/static/static/' + path[1]
+    logger.info("static {} => {}".format(path, target))
+
+    return redirect(target)

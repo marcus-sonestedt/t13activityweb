@@ -20,15 +20,15 @@ class ViewTest(TestCase):
 
     def test_home(self):
         """Tests the home page."""
-        response = self.client.get('/')
+        response = self.client.get('/app')
         self.assertContains(response, 'Home Page', 1, 200)
 
     def test_contact(self):
         """Tests the contact page."""
-        response = self.client.get('/contact')
+        response = self.client.get('/app/contact')
         self.assertContains(response, 'Contact', 3, 200)
 
     def test_about(self):
         """Tests the about page."""
-        response = self.client.get('/about')
+        response = self.client.get('/app/about')
         self.assertContains(response, 'About', 3, 200)

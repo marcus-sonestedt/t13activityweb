@@ -20,17 +20,11 @@ export class DataProvider<T>
     componentDidMount = () => {
         fetch(this.props.endpoint)
             .then(response => {
-                if (response.status !== 200) {
-                    console.error(response.statusText);
-                    this.setState({
-                        placeholder: "Oops. Något gick fel. :("
-                    });
-                    return;
-                }
-
-                return response.json();
-            })
-            .then(data => {
+                return response.status !== 200
+                    ? this.setState({
+                        placeholder: `Oops. Något gick fel! :(\n(Error ${response.status}: ${response.statusText})`})
+                    : response.json()
+            }).then(data => {
                 this.setState({ data: data });
                 this.props.onLoaded(data);
             }).catch(e => {
@@ -44,9 +38,11 @@ export class DataProvider<T>
     render = () => {
         const { data, placeholder } = this.state;
 
-        return data !== null
+        return (data !== null && data !== undefined)
             ? this.props.render(data as T)
-            : <Row><Col lg={12}><p>{placeholder}</p></Col></Row>;
+            : <div>
+                <p>{placeholder}</p>
+            </div>;
     }
 }
 

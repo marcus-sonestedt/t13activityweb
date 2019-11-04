@@ -1,7 +1,7 @@
 import './App.css';
 import React, { Component } from "react";
-import { Container, Row, Col } from 'react-bootstrap'
-import { BrowserRouter, Switch, Route, Link, Redirect, useLocation } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
 import { Home } from './components/Home'
 import { Welcome } from './components/Welcome'
@@ -32,31 +32,32 @@ class App extends Component<{}, AppState> {
 
   render() {
     const loggedIn = this.state.loginToken !== null;
-    console.log(loggedIn);
+
     return (
-      <div>
+      <BrowserRouter>
         <Navigation visible={loggedIn} onLoggedOut={this.onLogout} />
-        {!loggedIn ?
-          <div>>
-            <Route path="welcome">
-              <Welcome onLoggedIn={this.onLogin} />
-            </Route>
-            <Redirect to="welcome" />
-          </div>
-          :
-          <div>
-            <Redirect from="welcome" to="home" />
-            <Route exact path="/">
-              <Redirect to={loggedIn ? "home" : "welcome"} />
-            </Route>
-            <Route path="home">
-              <Home loginToken={this.state.loginToken as string} />
-            </Route>
-            <Route component={NotFound}/>
-          </div>
-        }
+        <Switch>
+          <Redirect exact from="/" to="/frontend/"/>
+            {!loggedIn ?
+            <div>
+              <Route path="/frontend/welcome">
+                <Welcome onLoggedIn={this.onLogin} />
+              </Route>
+              <Redirect to="/frontend/welcome" />
+            </div>
+            :
+            <div>
+              <Redirect exact from="/frontend/" to="/frontend/home" />
+              <Redirect exact from="/frontend/welcome" to="/frontend/home" />
+              <Route path="/frontend/home">
+                <Home loginToken={this.state.loginToken as string} serverAddress='http://localhost:8000'/>
+              </Route>
+            </div>
+          }
+          <Route component={NotFound} />
+        </Switch>
         <Footer />
-      </div >
+      </BrowserRouter >
     );
   }
 }
