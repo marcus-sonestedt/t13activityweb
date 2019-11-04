@@ -6,13 +6,18 @@
 trigger:
 - master
 
+variables:
+  CI: 'true'
+  nodeVersion: '10.x'
+  pythonVersion: '3.7'
+
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
 - task: NodeTool@0 
   inputs:
-    versionSpec: '10.x' # replace this value with the version that you need for your project
+    versionSpec: $(nodeVersion)
 
 - script: npm install
   workingDirectory: frontend
@@ -28,7 +33,7 @@ steps:
 
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.7'
+    versionSpec: $(pythonVersion)
     architecture: 'x64'
 
 - script: |
