@@ -2,7 +2,8 @@
   "name": "t13-activity",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/frontend/", 
+  "homepage": "/frontend/",
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@types/jest": "24.0.21",
     "@types/node": "12.12.3",

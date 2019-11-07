@@ -24,7 +24,9 @@ class Member(models.Model):
         order_with_respect_to = 'user'
 
     def __str__(self):
-        return self.fullname
+        if self.user:
+            self.fullname = self.user.first_name + " " + self.user.last_name
+        return self.fullname or "Member {}".format(self.id)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -33,9 +35,9 @@ class Member(models.Model):
         self.modified = timezone.now()
 
         if self.user:
-            self.fullname = self.user.firstname + " " + self.user.lastname
+            self.fullname = self.user.first_name + " " + self.user.last_name
 
-        return super(User, self).save(*args, **kwargs)
+        super(Member, self).save(*args, **kwargs)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -44,7 +46,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    instance.member.save()
 
 class Attachment(models.Model):
     uploader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)

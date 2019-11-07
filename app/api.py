@@ -12,10 +12,10 @@ from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
 class ClearAuthToken(ObtainAuthToken):
-    permission_classes = (IsAuthenticated)
+    permission_classes = [IsAuthenticated]
     schema = None
 
-    def post(self, request):
+    def post(self, reque8st):
         deleted, _ = Token.objects.delete(user=self.serializer.object['user'])
         if deleted == 0:
             return Response("not logged in?", status=status.HTTP_404_NOT_FOUND)
@@ -28,10 +28,11 @@ class MyActivities(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def get(self, request, format=None):
-        activitites = Activity.objects.filter(assigned=request.user)
+        member = Member.objects.get(user__username=request.user)
+        activitites = Activity.objects.filter(assigned=member)
         return Response(activitites)
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    permission_classes = (IsAuthenticated)
+    permission_classes = [IsAuthenticated]

@@ -9,7 +9,6 @@ import { WelcomeText } from './Welcome'
 
 interface HomeProps {
     loginToken: string;
-    serverAddress: string;
 }
 
 class HomeState {
@@ -73,14 +72,14 @@ export class Home extends Component<HomeProps, HomeState>
                     <Col sm={12} lg={6}>
                         <h3>Mina aktiviteter</h3>
                         <DataProvider<Activity[]>
-                            endpoint={this.props.serverAddress  + "/api/myactivities"}
+                            endpoint={"/api/myactivities"}
                             render={this.activityTable.render}
                             onLoaded={this.handleMyActivitiesLoaded} />
                     </Col>
                     <Col sm={12} lg={6}>
                         <h3>Kommande händelser</h3>
                         <DataProvider<T13Event[]>
-                            endpoint={this.props.serverAddress  + "/api/events"}
+                            endpoint={"/api/events"}
                             render={this.eventTable.render}
                             onLoaded={this.handleEventsLoaded} />
                     </Col>

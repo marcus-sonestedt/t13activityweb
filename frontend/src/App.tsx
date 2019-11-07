@@ -50,7 +50,7 @@ class App extends Component<{}, AppState> {
               <Redirect exact from="/frontend/" to="/frontend/home" />
               <Redirect exact from="/frontend/welcome" to="/frontend/home" />
               <Route path="/frontend/home">
-                <Home loginToken={this.state.loginToken as string} serverAddress='http://localhost:8000' />
+                <Home loginToken={this.state.loginToken as string} />
               </Route>
             </div>
           }
