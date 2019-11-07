@@ -23,11 +23,24 @@ export class Navigation extends Component<NavProps, {}>{
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown>
+                    <LinkItGood to="/admin">Administration</LinkItGood>
                     <Nav.Link href="/" onClick={this.props.onLoggedOut}>Logga ut</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
     );
+}
+
+class LinkItGood extends Component<{to:string}, {}>
+{
+    handleClick = () => {
+        window.location.href = this.props.to;
+    }
+
+    render = () =>
+    <Nav.Link href={this.props.to} target="_self" onClick={this.handleClick}>
+        {this.props.children}
+    </Nav.Link>;
 }
 
 

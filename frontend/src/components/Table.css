@@ -1,0 +1,9 @@
+table {
+    background-color:#ccc;
+    color: black;
+    font-size: small;
+}
+
+td {
+    white-space: no-wrap;
+}

@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component } from "react";
-import { Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
 import { Home } from './components/Home'
@@ -36,26 +36,28 @@ class App extends Component<{}, AppState> {
     return (
       <BrowserRouter>
         <Navigation visible={loggedIn} onLoggedOut={this.onLogout} />
-        <Switch>
-          <Redirect exact from="/" to="/frontend/" />
-          {!loggedIn ?
-            <div>
-              <Route path="/frontend/welcome">
-                <Welcome onLoggedIn={this.onLogin} />
-              </Route>
-              <Redirect to="/frontend/welcome" />
-            </div>
-            :
-            <div>
-              <Redirect exact from="/frontend/" to="/frontend/home" />
-              <Redirect exact from="/frontend/welcome" to="/frontend/home" />
-              <Route path="/frontend/home">
-                <Home loginToken={this.state.loginToken as string} />
-              </Route>
-            </div>
-          }
-          <Route component={NotFound} />
-        </Switch>
+        <Container>
+          <Switch>
+            <Redirect exact from="/" to="/frontend/" />
+            {!loggedIn ?
+              <>
+                <Route path="/frontend/welcome">
+                  <Welcome onLoggedIn={this.onLogin} />
+                </Route>
+                <Redirect to="/frontend/welcome" />
+              </>
+              :
+              <>
+                <Redirect exact from="/frontend/" to="/frontend/home" />
+                <Redirect exact from="/frontend/welcome" to="/frontend/home" />
+                <Route path="/frontend/home">
+                  <Home/>
+                </Route>
+              </>
+            }
+            <Route component={NotFound} />
+          </Switch>
+        </Container>
         <Footer />
       </BrowserRouter >
     );

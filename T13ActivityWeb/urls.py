@@ -11,7 +11,7 @@ from app import forms, views, api
 from frontend.urls import urlpatterns as frontend_urls
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='frontend/'), name="redirect_to_frontend"),
+    re_path(r'^$', RedirectView.as_view(url='frontend/'), name="redirect_to_frontend"),
     re_path(r'^frontend/(.*)', include(frontend_urls), name="frontend"),
     path('app/', views.home, name='home'),
     path('app/contact/', views.contact, name='contact'),

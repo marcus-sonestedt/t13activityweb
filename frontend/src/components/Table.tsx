@@ -1,49 +1,80 @@
+import './Table.css'
 import React from "react";
 import { IdValue } from '../Models'
 import { Table } from 'react-bootstrap'
 
 export class TableView<T extends IdValue>
 {
-    constructor(onRowClick: (id:string) => void)
+    constructor(onRowClick: (model:T) => void)
     {
         this.onRowClick = onRowClick;
     }
 
-    onRowClick: (id:string) => void;
+    onRowClick: (model:T) => void;
 
-    handleRowClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
+    handleRowClick = (
+        e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T) => {
         e.preventDefault();
-        const id = e.currentTarget.getAttribute("data-item");
-        this.onRowClick(id as string);
+        this.onRowClick(model);
     }
 
     render = (data: T[]) => {
-
-        if (!data.length)
-            return <p>Nothing to show</p>
+        const content =
+            data.length === 0
+            ? <p>Ingen data</p>
+            :
+            <Table striped bordered hover>
+            <thead>
+                <tr>
+                {data.length > 0 ?
+                    Object.entries(data[0]).map(el => <th key={el[0]}>{el[0]}</th>)
+                    : ''}
+                </tr>
+            </thead>
+            <tbody>
+                {data.map(this.renderRow)}
+            </tbody>
+        </Table>;
 
         return (
             <div className="table-container">
-                <h2 className="subtitle">
-                    Showing <strong>{data.length} item(s)</strong>
-                </h2>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            {Object.entries(data[0]).map(el => <th key={el[0]}>{el[0]}</th>)}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map(model => (
-                            <tr key={model.id} data-item={model.id} onClick={this.handleRowClick}>
-                                {Object.entries(model).map(el => <td key={(model.id, el[0])}>{el[1]}</td>)}
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                {content}
             </div>
         );
     }
+
+    private renderRow = (model: T) =>
+        <tr key={model.id} data-item={model.id}
+            onClick={e => this.handleRowClick(e, model)}>
+            {Object.entries(model).map(el =>
+                <td key={(model.id, el[0])}>{this.renderCell(el[1])}</td>
+            )}
+        </tr>;
+
+    private renderCell = (data: any) => {
+        if ( data.hasOwnProperty('name'))
+            return data.name;
+        else
+            return data;
+    }
 }
+
+export class PagedData<T>
+{
+    count:number = 0;
+    next:any = null;
+    previous:any = null;
+    results:T[] = [];
+}
+
+export class PagedTableView<T extends IdValue> extends TableView<T>
+{
+    renderPaged = (data: PagedData<T>) =>
+        <>
+            {this.render(data.results)}
+            <p>Visar {data.results.length}/{data.count} post(er).</p>
+        </>;
+}
+
 
 export default TableView;

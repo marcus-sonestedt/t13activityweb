@@ -73,6 +73,9 @@ class EventType(models.Model):
     image = models.ImageField(null=True, blank=True)
     files = models.ManyToManyField(Attachment)
 
+    def __str__(self):
+        return self.name
+
 class Event(models.Model):
     '''Groups a set of activities'''
     name = models.CharField(max_length=40)
@@ -86,6 +89,9 @@ class Event(models.Model):
     type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ['start_date', 'end_date', 'name']
@@ -104,6 +110,9 @@ class ActivityType(models.Model):
     image = models.ImageField(null=True, blank=True)
     files = models.ManyToManyField(Attachment)
 
+    def __str__(self):
+        return self.name
+
 class Activity(models.Model):
     '''A specific activity on a given day, can be assigned to a user'''
     name = models.CharField(max_length=40)
@@ -115,6 +124,9 @@ class Activity(models.Model):
     weight = models.FloatField(default=1.0)
     assigned = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering=['start_time', 'end_time', 'name']

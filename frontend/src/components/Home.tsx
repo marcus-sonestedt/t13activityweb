@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import { Container, Row, Col, Jumbotron } from 'react-bootstrap'
 import { Activity, ActivityType, T13Event } from '../Models'
 import DataProvider from './DataProvider'
-import { TableView } from './Table'
+import { TableView, PagedTableView, PagedData } from './Table'
 import ActivityForm from '../forms/ActivityForm'
 import { useHistory } from "react-router"
 import { WelcomeText } from './Welcome'
 
 interface HomeProps {
-    loginToken: string;
 }
 
 class HomeState {
@@ -24,21 +23,20 @@ export class Home extends Component<HomeProps, HomeState>
         this.activityTable = new TableView<Activity>(
             this.handleActivitySelect
         );
-        this.eventTable = new TableView<T13Event>(
-            this.handleActivitySelect
+        this.eventTable = new PagedTableView<T13Event>(
+            this.handleEventSelect
         );
     }
 
     state = new HomeState();
     activityTable: TableView<Activity>;
-    eventTable: TableView<T13Event>;
+    eventTable: PagedTableView<T13Event>;
 
     handleMyActivitiesLoaded = (data: Activity[]) => {
         this.setState({ myActivities: data });
     }
 
-    handleActivitySelect = (modelId: string) => {
-        const model = this.state.myActivities.find(a => a.id === modelId);
+    handleActivitySelect = (model: Activity) => {
         this.setState({ selectedActivity: model });
     }
 
@@ -46,13 +44,13 @@ export class Home extends Component<HomeProps, HomeState>
         return true;
     }
 
-    handleEventsLoaded = (data: T13Event[]) => {
-        this.setState({ events: data });
+    handleEventsLoaded = (data: PagedData<T13Event>) => {
+        this.setState({ events: data.results });
     }
 
-    handleEventSelect = (id: string) => {
+    handleEventSelect = (model: T13Event) => {
         const history = useHistory();
-        history.push(`/home/events/${id}`)
+        history.push(`/home/events/${model.id}`)
     }
 
     render = () => {
@@ -78,9 +76,9 @@ export class Home extends Component<HomeProps, HomeState>
                     </Col>
                     <Col sm={12} lg={6}>
                         <h3>Kommande händelser</h3>
-                        <DataProvider<T13Event[]>
+                        <DataProvider<PagedData<T13Event>>
                             endpoint={"/api/events"}
-                            render={this.eventTable.render}
+                            render={this.eventTable.renderPaged}
                             onLoaded={this.handleEventsLoaded} />
                     </Col>
                 </Row>

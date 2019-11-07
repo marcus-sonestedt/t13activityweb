@@ -26,13 +26,14 @@ class MyActivities(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
     renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = ActivitySerializer
 
     def get(self, request, format=None):
         member = Member.objects.get(user__username=request.user)
-        activitites = Activity.objects.filter(assigned=member)
+        activitites = Activity.objects.filter(assigned=member).select_related('type','event')
         return Response(activitites)
 
 class EventList(generics.ListAPIView):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().select_related('type')
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]

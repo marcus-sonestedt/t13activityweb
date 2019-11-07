@@ -29,8 +29,10 @@ export class DataProvider<T>
                     })
                     : response.json()
             }).then(data => {
-                this.setState({ data: data });
-                this.props.onLoaded(data);
+                var typedData = data as T;
+                console.log(data);
+                this.setState({ data:typedData });
+                this.props.onLoaded(typedData);
             }).catch(e => {
                 console.error(e);
                 this.setState({
@@ -44,12 +46,12 @@ export class DataProvider<T>
         const { data, placeholder, error } = this.state;
 
         if (data !== null && data !== undefined)
-            return this.props.render(data as T);
+            return this.props.render(data);
 
         if (error != null)
             return <Container fluid>
                 <p>{placeholder}</p>
-                <Image src='/static/brokenpiston.jpg' alt="Broken piston" className="errorImage"/>
+                <Image src='/static/brokenpiston.jpg' alt="Broken piston" className="errorImage" mx-auto />
                 <Alert variant='warning'>{error}</Alert>
             </Container>;
 
