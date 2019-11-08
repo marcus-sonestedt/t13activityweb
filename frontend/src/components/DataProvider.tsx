@@ -9,7 +9,6 @@ class DataState<T> {
 
 export class DataProps<T>  {
     endpoint: string = "";
-    render = (data: T) => <div>{data}</div>;
     onLoaded = (data: T) => { };
 }
 
@@ -46,7 +45,7 @@ export class DataProvider<T>
         const { data, placeholder, error } = this.state;
 
         if (data !== null && data !== undefined)
-            return this.props.render(data);
+            return this.props.children;
 
         if (error != null)
             return <Container fluid>

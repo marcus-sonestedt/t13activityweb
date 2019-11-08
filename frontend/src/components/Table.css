@@ -1,9 +1,29 @@
-table {
-    background-color:#ccc;
-    color: black;
-    font-size: small;
+.table {
+    color: white;
+    max-width: 100%;
+}
+
+.table-container h3
+{
+    width: 100%
 }
 
 td {
     white-space: no-wrap;
+    color: white;
+    background-color:#0f0f18;
+    font-size: small;
+}
+
+.table-count
+{
+    position: absolute;
+    right: .5em;
+}
+
+th {
+    white-space: no-wrap;
+    color: white;
+    font-weight: bolder;
+    background-color:#1f1f28;
 }

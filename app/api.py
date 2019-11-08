@@ -31,7 +31,7 @@ class MyActivities(APIView):
     def get(self, request, format=None):
         member = Member.objects.get(user__username=request.user)
         activitites = Activity.objects.filter(assigned=member).select_related('type','event')
-        return Response(activitites)
+        return Response(activitites.values())
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.all().select_related('type')

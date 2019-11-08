@@ -5,20 +5,20 @@ from app.models import *
 class EventTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventType
-        fields = ('name', 'description', 'image')
+        fields = '__all__'
 
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()
 
     class Meta:
         model = Event
-        fields = ('name','start_date','end_date','type')
+        fields = '__all__'
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityType
-        fields = ('name', 'description', 'image')
+        fields = '__all__'
 
 class ActivitySerializer(serializers.ModelSerializer):
     type = ActivityTypeSerializer()

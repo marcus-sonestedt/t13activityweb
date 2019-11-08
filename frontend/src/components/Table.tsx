@@ -1,65 +1,82 @@
 import './Table.css'
-import React from "react";
+import React, { Component } from "react";
 import { IdValue } from '../Models'
 import { Table } from 'react-bootstrap'
+import { tsModuleBlock } from '@babel/types';
 
-export class TableView<T extends IdValue>
+export type TableProps<T> =
 {
-    constructor(onRowClick: (model:T) => void)
+    title: string,
+    columns: any,
+    values: T[],
+
+    onRowClick: (model:T) => void,
+    renderCount: () => JSX.Element | null,
+}
+
+const defaultTableProps = {
+    title: "Tabell",
+    values: [],
+    onRowClick: (_:any) => {},
+    renderCount: null as ((() => JSX.Element) | null)
+}
+
+export class TableView<T extends IdValue> extends Component<TableProps<T>>
+{
+    static defaultProps = defaultTableProps;
+
+    renderCount = () => (this.props.renderCount || this.DefaultRenderCount)();
+
+    private DefaultRenderCount = () => <span>({this.props.values.length})</span>
+
+    handleRowClick =
+        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T) =>
     {
-        this.onRowClick = onRowClick;
-    }
-
-    onRowClick: (model:T) => void;
-
-    handleRowClick = (
-        e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T) => {
         e.preventDefault();
-        this.onRowClick(model);
+        this.props.onRowClick(model);
     }
 
-    render = (data: T[]) => {
-        const content =
-            data.length === 0
-            ? <p>Ingen data</p>
-            :
-            <Table striped bordered hover>
-            <thead>
-                <tr>
-                {data.length > 0 ?
-                    Object.entries(data[0]).map(el => <th key={el[0]}>{el[0]}</th>)
-                    : ''}
-                </tr>
-            </thead>
-            <tbody>
-                {data.map(this.renderRow)}
-            </tbody>
-        </Table>;
-
-        return (
-            <div className="table-container">
-                {content}
-            </div>
-        );
-    }
+    render = () =>
+        <div className="table-container">
+            <h3>
+                <span className="table-title">{this.props.title}</span>
+                <span className="table-count">{this.renderCount()}</span>
+            </h3>
+            <Table striped hover>
+                <thead>
+                    <tr>
+                        {Object.entries(this.props.columns).map(el =>
+                            <th key={el[0]}>{this.props.columns[el[0]]}</th>)
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.props.values.map(this.renderRow)}
+                </tbody>
+            </Table>
+        </div>;
 
     private renderRow = (model: T) =>
         <tr key={model.id} data-item={model.id}
             onClick={e => this.handleRowClick(e, model)}>
-            {Object.entries(model).map(el =>
-                <td key={(model.id, el[0])}>{this.renderCell(el[1])}</td>
+            {Object.entries(this.props.columns).map(col =>
+                    <td key={model.id + " " + col[0]}>
+                        {this.renderCell((model as any)[col[0]])}
+                    </td>
             )}
         </tr>;
 
     private renderCell = (data: any) => {
+        if ( data === undefined || data === null)
+            return data;
         if ( data.hasOwnProperty('name'))
             return data.name;
-        else
-            return data;
+
+        return data;
     }
 }
 
-export class PagedData<T>
+export class PagedValues<T>
 {
     count:number = 0;
     next:any = null;
@@ -67,14 +84,27 @@ export class PagedData<T>
     results:T[] = [];
 }
 
-export class PagedTableView<T extends IdValue> extends TableView<T>
-{
-    renderPaged = (data: PagedData<T>) =>
-        <>
-            {this.render(data.results)}
-            <p>Visar {data.results.length}/{data.count} post(er).</p>
-        </>;
-}
+export type PagedTableProps<T> = {
+    pagedValues: PagedValues<T>;
+} & TableProps<T>;
 
+export class PagedTableView<T extends IdValue> extends Component<PagedTableProps<T>, {}>
+{
+    static defaultProps = defaultTableProps;
+
+    renderCount = () => (this.props.renderCount || this.DefaultRenderCount)();
+
+    DefaultRenderCount = () =>
+        <span>
+            ({this.props.pagedValues.results.length}/{this.props.pagedValues.count})
+        </span>;
+
+    render = () =>
+        <TableView
+            {...this.props}
+            values={this.props.pagedValues.results}
+            renderCount={this.renderCount}
+        />;
+}
 
 export default TableView;

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Jumbotron } from 'react-bootstrap'
-import { Activity, ActivityType, T13Event } from '../Models'
-import DataProvider from './DataProvider'
-import { TableView, PagedTableView, PagedData } from './Table'
-import ActivityForm from '../forms/ActivityForm'
+import { Container, Row, Col } from 'react-bootstrap'
 import { useHistory } from "react-router"
-import { WelcomeText } from './Welcome'
+import * as H from 'history';
+
+import { Activity, ActivityType, T13Event } from '../Models'
+import { TableView, PagedTableView, PagedValues } from './Table'
+import { DataProvider } from './DataProvider'
+import { ActivityForm } from '../forms/ActivityForm'
 
 interface HomeProps {
 }
@@ -13,24 +14,13 @@ interface HomeProps {
 class HomeState {
     myActivities: Activity[] = [];
     selectedActivity: Activity | undefined = undefined;
-    events: T13Event[] = [];
+    events: PagedValues<T13Event> = new PagedValues<T13Event>();
+    history: H.History<H.LocationState> | null = null;
 }
 
 export class Home extends Component<HomeProps, HomeState>
 {
-    constructor(props: HomeProps) {
-        super(props);
-        this.activityTable = new TableView<Activity>(
-            this.handleActivitySelect
-        );
-        this.eventTable = new PagedTableView<T13Event>(
-            this.handleEventSelect
-        );
-    }
-
     state = new HomeState();
-    activityTable: TableView<Activity>;
-    eventTable: PagedTableView<T13Event>;
 
     handleMyActivitiesLoaded = (data: Activity[]) => {
         this.setState({ myActivities: data });
@@ -44,13 +34,12 @@ export class Home extends Component<HomeProps, HomeState>
         return true;
     }
 
-    handleEventsLoaded = (data: PagedData<T13Event>) => {
-        this.setState({ events: data.results });
+    handleEventsLoaded = (data: PagedValues<T13Event>) => {
+        this.setState({ events: data });
     }
 
     handleEventSelect = (model: T13Event) => {
-        const history = useHistory();
-        history.push(`/home/events/${model.id}`)
+        console.log("clicked: " + model.name);
     }
 
     render = () => {
@@ -60,26 +49,39 @@ export class Home extends Component<HomeProps, HomeState>
         return (
             <Container>
                 <Row>
-                    <Col>
-                        <Jumbotron>
-                           <WelcomeText/>
-                        </Jumbotron>
-                    </Col>
-                </Row>
-                <Row>
                     <Col sm={12} lg={6}>
-                        <h3>Mina aktiviteter</h3>
                         <DataProvider<Activity[]>
                             endpoint={"/api/myactivities"}
-                            render={this.activityTable.render}
-                            onLoaded={this.handleMyActivitiesLoaded} />
+                            onLoaded={this.handleMyActivitiesLoaded}>
+                            <TableView
+                                    title={"Mina aktiviteter"}
+                                    values={this.state.myActivities}
+                                    onRowClick={this.handleActivitySelect}
+                                    columns={{
+                                        name: "Namn",
+                                        event:"Händelse", start_time:"Börjar",
+                                        end_time:"Slutar", completed:"Utförd"
+                                    }}
+                            />
+                        </DataProvider>
                     </Col>
                     <Col sm={12} lg={6}>
-                        <h3>Kommande händelser</h3>
-                        <DataProvider<PagedData<T13Event>>
+                        <DataProvider< PagedValues<T13Event> >
                             endpoint={"/api/events"}
-                            render={this.eventTable.renderPaged}
-                            onLoaded={this.handleEventsLoaded} />
+                            onLoaded={this.handleEventsLoaded}>
+                                <PagedTableView
+                                    title="Kommande händelser"
+                                    pagedValues={this.state.events}
+                                    onRowClick={this.handleEventSelect}
+                                    columns={{
+                                        name: "Namn",
+                                        start_date: 'Start',
+                                        end_date: 'Slut',
+                                        type: 'Typ'
+                                    }}
+                                    values={this.state.events.results}
+                                />
+                            </DataProvider>
                     </Col>
                 </Row>
                 <Row>
