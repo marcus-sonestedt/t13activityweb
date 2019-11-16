@@ -3,12 +3,12 @@ import { Form, FormControlProps, Button } from 'react-bootstrap'
 import { Activity } from '../Models'
 
 export class ActivityFormProps {
-    model: Activity | undefined = undefined;
+    model: Activity | null = null;
     onSave = (model: Activity) => true;
 }
 
 class ActivityFormState {
-    model: Activity | undefined = undefined;
+    model: Activity | null = null;
     changed: boolean = false;
 }
 
@@ -30,13 +30,15 @@ export class ActivityForm
         if (this.state.model === undefined)
             return null;
 
+        const model = this.state.model as Activity;
+
         return <Form>
             <Form.Label>Namn</Form.Label>
             <Form.Control type="text" disabled={true}
-                value={this.state.model.name} />
+                value={model.name} />
             <Form.Label>Kommentar</Form.Label>
             <Form.Control type="text"
-                value={this.state.model.comment} />
+                value={model.comment} />
             <Button variant="primary" type="submit"
                 onClick={this.handleSave}>Spara</Button>
             <Button variant="secondary" type="submit"

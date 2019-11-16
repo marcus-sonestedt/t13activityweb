@@ -8,6 +8,7 @@ class DataState<T> {
 };
 
 export class DataProps<T>  {
+    ctor!: {(any: any): T; };
     endpoint: string = "";
     onLoaded = (data: T) => { };
 }
@@ -20,15 +21,15 @@ export class DataProvider<T>
     componentDidMount = () => {
 
         fetch(this.props.endpoint)
-            .then(response => {
-                return response.status !== 200
-                    ? this.setState({
+            .then(response =>
+                response.status !== 200
+                    ? (this.setState({
                         placeholder: "Oops. Något gick fel! :(",
                         error: `Error ${response.status}: ${response.statusText}`
-                    })
-                    : response.json()
-            }).then(data => {
-                var typedData = data as T;
+                    }), "")
+                    : response.text()
+            ).then(data => {
+                var typedData = this.props.ctor(data);
                 console.log(data);
                 this.setState({ data:typedData });
                 this.props.onLoaded(typedData);

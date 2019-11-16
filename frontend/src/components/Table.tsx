@@ -1,8 +1,7 @@
 import './Table.css'
 import React, { Component } from "react";
-import { IdValue } from '../Models'
+import { IdValue, PagedValues } from '../Models'
 import { Table } from 'react-bootstrap'
-import { tsModuleBlock } from '@babel/types';
 
 export type TableProps<T> =
 {
@@ -61,7 +60,9 @@ export class TableView<T extends IdValue> extends Component<TableProps<T>>
             onClick={e => this.handleRowClick(e, model)}>
             {Object.entries(this.props.columns).map(col =>
                     <td key={model.id + " " + col[0]}>
-                        {this.renderCell((model as any)[col[0]])}
+                        <a href={"/frontend/something/" + model.id}>
+                            {this.renderCell((model as any)[col[0]])}
+                        </a>
                     </td>
             )}
         </tr>;
@@ -74,14 +75,6 @@ export class TableView<T extends IdValue> extends Component<TableProps<T>>
 
         return data;
     }
-}
-
-export class PagedValues<T>
-{
-    count:number = 0;
-    next:any = null;
-    previous:any = null;
-    results:T[] = [];
 }
 
 export type PagedTableProps<T> = {

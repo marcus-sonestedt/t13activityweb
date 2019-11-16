@@ -44,18 +44,34 @@ By default, uses the [SQLite](https://www.sqlite.org/) db during development, wh
 
 * Install [Python 3.7](https://www.python.org) or later
 
-* Create and activate a virtual python environment
+* Create a virtual python environment
+
 ```bash
 python -m venv env
+```
+
+* Activate it:
+
+ * On Windows:
+
+```cmd
 env/scripts/activate
 ```
 
-* Instlal packages
+ * On Linux:
+
+```bash
+coutce env/scripts/activate
+```
+
+* Install required packages (into the virtual evnironment)
+
 ```bash
 python -m pip install -r requirements.txt
 ```
 
 * Init database, apply any new migrations and populate tables
+
 ```bash
 python manage.py createsuperuser
 python manage.py migrate
@@ -63,6 +79,7 @@ python manage.py loaddata testdata
 ```
 
 * Start development server
+
 ```bash
 python manage.py runserver
 ```
@@ -79,14 +96,41 @@ npm install
 ```
 
 * Start development server
+
 ```
 npm start
 ```
 
-### Building for production + tests
+## Deploying to production
 
-In repo root, run the build.py script:
+* Perform steps for backend & frontend above except starting servers
+* In repo root, run the build.py script:
 
 ```bash
-python .build.py
+python ./build.py
+```
+
+Or in ~/frontend/:
+
+```bash
+npm run build
+```
+
+* Setup the Django site as a WSGI app:
+
+```python
+import os
+import sys
+
+# assuming your django settings file is at '/home/macke/t13activityweb/T13ActivityWeb/settings.py'
+# and your manage.py is is at '/home/macke/t13activityweb/manage.py'
+path = '/home/macke/t13activityweb'
+if path not in sys.path:
+    sys.path.append(path)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'T13ActivityWeb.settings'
+
+# then:
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
 ```
