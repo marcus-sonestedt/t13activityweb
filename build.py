@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python3.7
 
 from subprocess import run
 import shutil, os, os.path
