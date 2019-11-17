@@ -71,7 +71,7 @@ export class Home extends Component<HomeProps, HomeState>
                             endpoint={"/api/events"}
                             onLoaded={this.handleEventsLoaded}>
                                 <UpcomingEventsTable
-                                    values={this.state.events}
+                                    events={this.state.events}
                                 />
                             </DataProvider>
                     </Col>

@@ -24,7 +24,7 @@ export class DataProvider<T>
             .then(response =>
                 response.status !== 200
                     ? (this.setState({
-                        placeholder: "Oops. Något gick fel! :(",
+                        placeholder: "Oops. Något gick fel! :(" + response.text(),
                         error: `Error ${response.status}: ${response.statusText}`
                     }), "")
                     : response.text()

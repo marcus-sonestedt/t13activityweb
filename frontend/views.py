@@ -7,7 +7,7 @@ from django.views.decorators.cache import cache_page, cache_control
 logger = logging.getLogger(__name__)
 
 @cache_page(60 * 15)
-@cache_control(max_age=3600)
+@cache_control(max_age=60*20)
 def index(request, *path):
     # redirect to static if found there, otherwise return
     # index.html to serve react page for all frontend urls
@@ -39,7 +39,7 @@ def index(request, *path):
     return response
 
 @cache_page(60 * 60)
-@cache_control(max_age=3600)
+@cache_control(max_age=60*60)
 def static(request, *path):
     # TODO: figure out how to get react to get things right, or django to serve
     #       static under frontend too.. Probably easier with a proper  web server

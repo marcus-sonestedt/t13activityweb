@@ -1,23 +1,50 @@
-import React from "react";
-import { Container, Row, Col, Jumbotron, Image } from 'react-bootstrap'
-import { LoginForm, LoginProps } from '../forms/LoginForm'
+import React, { useState } from "react";
+import { Container, Row, Col, Jumbotron, Image, Button } from 'react-bootstrap'
 import './Welcome.css'
+import { UpcomingEventsTable } from "./UpcomingEventsTable";
+import DataProvider from "./DataProvider";
+import { PagedT13Events } from "../Models";
+import { deserialize } from "class-transformer";
 
-export const Welcome = (loginProps: LoginProps) => (
-    <Container>
-        <Row className="welcome">
-            <Col xs={12} md={8}>
-                <Jumbotron>
-                    <WelcomeText />
-                    <Image src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" />
-                </Jumbotron>
-            </Col>
-            <Col xs={4} md={4} className="my-auto">
-                <LoginForm {...loginProps} />
-            </Col>
-        </Row>
-    </Container>
-);
+type Props =
+    {
+
+    };
+
+export const Welcome = (props: Props) => {
+    const [events, setEvents] = useState(new PagedT13Events());
+
+    return (
+        <Container>
+            <Row className="welcome">
+                <Col xs={12} lg={6}>
+                    <Jumbotron>
+                        <WelcomeText />
+                        <Image src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" />
+                    </Jumbotron>
+                </Col>
+                <Col xs={4} lg={6}>
+                    <DataProvider< PagedT13Events >
+                        ctor={t => deserialize(PagedT13Events, t)}
+                        endpoint={"/api/upcomingevents"}
+                        onLoaded={setEvents}>
+                        <UpcomingEventsTable events={events}
+                            title="Kommande händelser"/>
+                    </DataProvider>
+                    <div>
+                        <a href="/app/login/">
+                            <Button>Logga in</Button>
+                        </a>
+                        <span className="spacer" />
+                        <a href="/app/signup">
+                            <Button>Registrera konto</Button>
+                        </a>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
+    );
+}
 
 export const WelcomeText = () => (
     <div>

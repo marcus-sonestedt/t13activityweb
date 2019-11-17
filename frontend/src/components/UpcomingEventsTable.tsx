@@ -1,63 +1,63 @@
-import React, { Component } from "react";
+import React, {  } from "react";
 import { Container } from 'react-bootstrap'
 import { Table } from 'react-bootstrap'
-import { PagedValues, T13EventType, T13Event } from '../Models'
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import './Table.css'
+import { PagedT13Events, T13EventType, T13Event } from '../Models'
+import { useHistory } from 'react-router-dom';
 import { ConditionalWrapper } from "./Utils";
+import './Table.css'
 
-interface Props
-{
-    values: PagedValues<T13Event>;
+export interface MyProps {
+    events: PagedT13Events;
+    title?: string
 }
 
-type MyProps = Props & RouteComponentProps<any>;
+export function UpcomingEventsTable
+    ({ events, title = "Kommande händelser" }: MyProps) {
+        const history = useHistory();
 
-class UpcomingEvents extends Component<MyProps, {}>
-{
-    handleRowClick =
-        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T13Event) =>
-    {
-        e.preventDefault();
-        this.props.history.push(model.url());
-    }
+        const handleRowClick =
+            (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T13Event) => {
+                e.preventDefault();
+                history.push(model.url());
+            };
 
-    render = () =>
-        <Container className="table-container">
-            <h3>
-                <span className="table-title">Kommande händelser</span>
-                <span className="table-count">
-                    {this.props.values.results.length}/{this.props.values.count} st
-                </span>
-            </h3>
-            <Table>
-                <thead>
-                    <th>Namn</th>
-                    <th>Tid</th>
-                    <th>Typ</th>
-                </thead>
-                <tbody>
-                    {this.props.values.results.map(this.renderRow)}
-                </tbody>
-            </Table>
-        </Container>
+        const renderRow = (model: T13Event) => {
+            const type = model.type as T13EventType;
+            return (
+                <tr onClick={e => handleRowClick(e, model)}>
+                    <td><a href={model.url()}>{model.name}</a></td>
+                    <td>{model.start_date} - {model.end_date}</td>
+                    <td>
+                        <ConditionalWrapper condition={model.type != null}
+                            wrap={(c: any) => <a href={type.url()}>{c}</a>}>
+                            {model.type != null ? type.name : ""}
+                        </ConditionalWrapper>
+                    </td>
+                </tr>
+            );
+        }
 
-    renderRow = (model: T13Event) => {
-        const type = model.type as T13EventType;
         return (
-            <tr onClick={e => this.handleRowClick(e, model)}>
-                <td><a href={model.url()}>{model.name}</a></td>
-                <td>{model.start_date} - {model.end_date}</td>
-                <td>
-                    <ConditionalWrapper condition={model.type != null}
-                        wrap={(c:any) => <a href={type.url()}>{c}</a>}>
-                        {model.type != null ? type.name : ""}
-                    </ConditionalWrapper>
-                </td>
-            </tr>
+            <Container className="table-container">
+                <h3>
+                    <span className="table-title">{title}</span>
+                    <span className="table-count">
+                        {events.results.length}/{events.count} st
+                </span>
+                </h3>
+                <Table>
+                    <thead>
+                        <th>Namn</th>
+                        <th>Tid</th>
+                        <th>Typ</th>
+                    </thead>
+                    <tbody>
+                        {events.results.map(renderRow)}
+                    </tbody>
+                </Table>
+            </Container>
         );
     }
-}
 
-export const UpcomingEventsTable = withRouter(UpcomingEvents);
+export default UpcomingEventsTable;
 

@@ -42,7 +42,7 @@ class App extends Component<{}, AppState> {
             {!loggedIn ?
               <>
                 <Route path="/frontend/welcome">
-                  <Welcome onLoggedIn={this.onLogin} />
+                  <Welcome/>
                 </Route>
                 <Redirect to="/frontend/welcome" />
               </>

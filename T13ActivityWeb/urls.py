@@ -19,7 +19,7 @@ urlpatterns = [
     path('app/login/',
          LoginView.as_view
          (
-             template_name='app/login.html',
+             template_name='login.html',
              authentication_form=forms.BootstrapAuthenticationForm,
              extra_context=
              {
@@ -28,10 +28,12 @@ urlpatterns = [
              }
          ),
          name='login'),
-    path('app/logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('app/signup/', views.signup, name="signup"),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
     path('api/login', api.obtain_auth_token),
     path('api/logout', api.ClearAuthToken.as_view()),
     path('api/myactivities', api.MyActivities.as_view()),
-    path('api/events', api.EventList.as_view())
+    path('api/events', api.EventList.as_view()),
+    path('api/upcomingevents', api.UpcomingEventList.as_view())
 ]
