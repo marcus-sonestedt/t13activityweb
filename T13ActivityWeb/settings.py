@@ -35,7 +35,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '97e6d0e8-dd64-42d0-bfae-bf2f3e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['macke.pythonanywhere.com']
+ALLOWED_HOSTS = [
+    'macke.pythonanywhere.com',
+    'localhost'
+]
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS

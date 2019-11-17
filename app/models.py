@@ -13,12 +13,15 @@ from django.utils import timezone
 class Member(models.Model):
     '''club member, Extends user object'''
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
     fullname = models.CharField(max_length=120, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     comment = models.TextField(blank=True)
     licensed_driver = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+
+    membercard_number = models.CharField(max_length=20, blank=True)
 
     class Meta:
         order_with_respect_to = 'user'
@@ -69,9 +72,14 @@ class Attachment(models.Model):
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
     name = models.CharField(max_length=40, unique=True)
+
     description = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
     files = models.ManyToManyField(Attachment)
+
+    fee_reimbursed = models.BooleanField(default=False)
+    food_included = models.BooleanField(default=False)
+    rental_kart = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -89,6 +97,8 @@ class Event(models.Model):
     type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    cancelled = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -118,12 +128,15 @@ class Activity(models.Model):
     name = models.CharField(max_length=40)
     type = models.ForeignKey(ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField(blank=True, null=True)
+    date = models.DateField(null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
     assigned = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+
     completed = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
