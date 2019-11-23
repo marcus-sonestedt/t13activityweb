@@ -29,8 +29,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4')
+try:
+    import T13ActivityWeb.secrets as secrets
+    SECRET_KEY = secrets.DJANGO_SECRET_KEY
+    RECAPTCHA_PUBLIC_KEY = secrets.RECAPTCHA_PUBLIC_KEY
+    RECAPTCHA_PRIVATE_KEY = secrets.RECAPTCHA_PRIVATE_KEY
+except ImportError(e):
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
@@ -51,7 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'captcha'
 ]
 
 # Middleware framework
@@ -165,3 +172,15 @@ if not DEBUG:
             'LOCATION': 'unique-snowflake',
         }
     }
+
+# recaptcha
+RECAPTCHA_PROXY = {
+    'http': 'http://localhost:8000',
+    'https': 'https://localhost:8000'
+}
+
+# https://developers.google.com/recaptcha/docs/v3#score
+RECAPTCHA_REQUIRED_SCORE = 0.5
+
+# default is www.google.xom
+#RECAPTCHA_DOMAIN = 'www.recaptcha.net'

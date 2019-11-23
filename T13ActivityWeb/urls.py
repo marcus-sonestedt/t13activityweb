@@ -5,7 +5,7 @@ Definition of urls for T13ActivityWeb.
 from datetime import datetime
 from django.urls import path, re_path, include
 from django.contrib import admin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 from django.views.generic.base import RedirectView
 from app import forms, views, api
 from frontend.urls import urlpatterns as frontend_urls
@@ -16,18 +16,7 @@ urlpatterns = [
     path('app/', views.home, name='home'),
     path('app/contact/', views.contact, name='contact'),
     path('app/about/', views.about, name='about'),
-    path('app/login/',
-         LoginView.as_view
-         (
-             template_name='login.html',
-             authentication_form=forms.BootstrapAuthenticationForm,
-             extra_context=
-             {
-                 'title': 'Log in',
-                 'year' : datetime.now().year,
-             }
-         ),
-         name='login'),
+    path('app/login/', views.MyLoginView.as_view(), name='login'),
     path('app/signup/', views.signup, name="signup"),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),

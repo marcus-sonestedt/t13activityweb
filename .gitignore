@@ -111,3 +111,5 @@ frontend/static/main.js*
 frontend/build/
 static
 */obj/**
+
+settings/secrets.py
