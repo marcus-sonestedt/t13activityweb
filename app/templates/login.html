@@ -8,8 +8,8 @@
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                <h4>Logga in med dina uppgifter, eller 
-                    <a href="/app/signup">Registrera dig</a>
+                <h4>Logga in med dina uppgifter, eller
+                    <a href="{% url 'signup' %}">Registrera dig</a>
                     om du inte gjort det redan.
                 </h4>
                 <hr />

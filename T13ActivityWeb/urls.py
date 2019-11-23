@@ -18,7 +18,7 @@ urlpatterns = [
     path('app/about/', views.about, name='about'),
     path('app/login/', views.MyLoginView.as_view(), name='login'),
     path('app/signup/', views.signup, name="signup"),
-    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('app/logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
     path('api/login', api.obtain_auth_token),
     path('api/logout', api.ClearAuthToken.as_view()),

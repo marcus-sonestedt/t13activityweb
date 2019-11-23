@@ -6,6 +6,13 @@
     max-width: 100%
 }
 
-span .spacer {
-    width: 2em
+.spacer {
+    margin: 0.5em
+}
+
+.buttonContainer
+{
+    margin-top: 2em;
+    margin-bottom: 4em;
+    text-align: center;
 }

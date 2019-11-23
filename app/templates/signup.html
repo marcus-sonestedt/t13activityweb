@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h2>Sign up</h2>
+  <h2>Registrera nytt konto</h2>
+  <p>Använd den emailadress som du har lämnat till klubbens kansli tidigare</p>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
