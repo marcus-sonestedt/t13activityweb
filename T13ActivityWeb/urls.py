@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login', api.obtain_auth_token),
     path('api/logout', api.ClearAuthToken.as_view()),
+    path('api/isloggedin', api.IsLoggedIn.as_view()),
     path('api/myactivities', api.MyActivities.as_view()),
     path('api/events', api.EventList.as_view()),
     path('api/upcomingevents', api.UpcomingEventList.as_view())

@@ -55,3 +55,13 @@ class UpcomingEventList(generics.ListAPIView):
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+
+class IsLoggedIn(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    renderer_classes = (renderers.JSONRenderer,)
+
+    def get(self, request, format=None):
+        return Response({
+            'isLoggedIn:':request.user.is_authenticated,
+            'isStaff': request.user.is_staff
+        })

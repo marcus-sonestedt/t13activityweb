@@ -4,13 +4,13 @@ import './Navigation.css'
 
 class NavProps {
     visible = true;
-    onLoggedOut = () => { };
+    isStaff = false;
 }
 
-export class Navigation extends Component<NavProps, {}>{
+export const Navigation = (props: NavProps) => {
 
-    render = () => (
-        <Navbar bg="light" className={this.props.visible ? "" : "hidden"}>
+    return (
+        <Navbar bg="light" className={props.visible ? "" : "hidden"}>
             <Navbar.Brand href="/">Team13's aktivitetswebb</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -23,24 +23,26 @@ export class Navigation extends Component<NavProps, {}>{
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown>
-                    <LinkItGood to="/admin">Administration</LinkItGood>
-                    <Nav.Link href="/" onClick={this.props.onLoggedOut}>Logga ut</Nav.Link>
+                    {props.isStaff === true
+                        ? <LinkItGood to="/admin">Administration</LinkItGood>
+                        : null}
+                    <Nav.Link href="/app/logout">Logga ut</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
     );
 }
 
-class LinkItGood extends Component<{to:string}, {}>
+class LinkItGood extends Component<{ to: string }, {}>
 {
     handleClick = () => {
         window.location.href = this.props.to;
     }
 
     render = () =>
-    <Nav.Link href={this.props.to} target="_self" onClick={this.handleClick}>
-        {this.props.children}
-    </Nav.Link>;
+        <Nav.Link href={this.props.to} target="_self" onClick={this.handleClick}>
+            {this.props.children}
+        </Nav.Link>;
 }
 
 

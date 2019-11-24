@@ -30,7 +30,7 @@ export class DataProvider<T>
                     : response.text()
             ).then(data => {
                 var typedData = this.props.ctor(data);
-                console.log(data);
+                //console.log(data);
                 this.setState({ data:typedData });
                 this.props.onLoaded(typedData);
             }).catch(e => {

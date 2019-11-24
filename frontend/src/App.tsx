@@ -1,5 +1,5 @@
 import './App.css';
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
@@ -7,39 +7,47 @@ import { Home } from './components/Home'
 import { Welcome } from './components/Welcome'
 import { NotFound } from './components/NotFound'
 
-class AppState {
-  constructor(token: string | null) {
-    this.loginToken = token
-  } loginToken: string | null = null;
+interface LoginState {
+  isLoggedIn:boolean;
+  isStaff:boolean;
 }
 
-class App extends Component<{}, AppState> {
+const loggedOutState = {isLoggedIn:false,isStaff:false} as LoginState;
 
-  constructor(props: any) {
-    super(props);
-    this.state = new AppState(localStorage.getItem("login-token"));
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isStaff, setIsStaff] = useState(false);
+
+  const setState = (state:LoginState) => {
+    setIsLoggedIn(state.isLoggedIn);
+    setIsStaff(state.isStaff);
   }
 
-  onLogin = (token: string) => {
-    this.setState({ loginToken: token });
-    localStorage.setItem("login-token", token);
-  }
+  useEffect(() => {
+    fetch('/api/isloggedin')
+      .then(
+        r => r.status === 200 ? r.json() : undefined,
+        r => {
+          console.log(r);
+          setState(loggedOutState);
+        })
+      .then(json => {
+        console.log(json);
+        if (json !== undefined)
+          setState({isLoggedIn: json.isLoggedIn, isStaff: json.isStaff});
+        else
+          setState(loggedOutState);
+      });
+  }, [isLoggedIn, isStaff]);
 
-  onLogout = () => {
-    this.setState({ loginToken: null });
-    localStorage.removeItem("login-token");
-  }
-
-  render() {
-    const loggedIn = this.state.loginToken !== null;
-
-    return (
+  return (
       <BrowserRouter>
-        <Navigation visible={loggedIn} onLoggedOut={this.onLogout} />
+        <Navigation visible={isLoggedIn} isStaff={isStaff} />
         <Container>
+          <p>{isLoggedIn}</p>
           <Switch>
             <Redirect exact from="/" to="/frontend/" />
-            {!loggedIn ?
+            {!isLoggedIn ?
               <>
                 <Route path="/frontend/welcome">
                   <Welcome/>
@@ -61,7 +69,7 @@ class App extends Component<{}, AppState> {
         <Footer />
       </BrowserRouter >
     );
-  }
+
 }
 
 const Footer = () => {

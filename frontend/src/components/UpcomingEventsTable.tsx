@@ -24,7 +24,7 @@ export function UpcomingEventsTable
         const renderRow = (model: T13Event) => {
             const type = model.type as T13EventType;
             return (
-                <tr onClick={e => handleRowClick(e, model)}>
+                <tr key={model.id} onClick={e => handleRowClick(e, model)}>
                     <td><a href={model.url()}>{model.name}</a></td>
                     <td>{model.start_date} - {model.end_date}</td>
                     <td>
@@ -47,9 +47,11 @@ export function UpcomingEventsTable
                 </h3>
                 <Table>
                     <thead>
+                        <tr>
                         <th>Namn</th>
                         <th>Tid</th>
                         <th>Typ</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {events.results.map(renderRow)}
