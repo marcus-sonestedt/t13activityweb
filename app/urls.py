@@ -19,6 +19,7 @@ api_urlpatterns = [
     path('isloggedin', api.IsLoggedIn.as_view()),
     path('myactivities', api.MyActivities.as_view()),
     path('events', api.EventList.as_view()),
+    re_path('events/(?P<id>.+)', api.EventList.as_view()),
     path('upcomingevents', api.UpcomingEventList.as_view()),
-    path('activities', api.EventActivities.as_view())
+    re_path('event_activities/(?P<event_id>.+)', api.EventActivities.as_view())
 ]

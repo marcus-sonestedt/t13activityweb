@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthentic
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from django.http import HttpResponseBadRequest
 
 
 class ClearAuthToken(ObtainAuthToken):
@@ -28,26 +29,34 @@ class ClearAuthToken(ObtainAuthToken):
 
 
 class MyActivities(generics.ListAPIView):
-    throttle_classes = ()
     permission_classes = [IsAuthenticated]
     serializer_class = ActivitySerializer
 
     def get_queryset(self):
         member = Member.objects.get(user__username=self.request.user)
-        return Activity.objects.filter(
-            assigned=member).select_related('type', 'event').values()
+
+        return Activity.objects \
+            .filter(assigned=member) \
+            .select_related('type', 'event') \
+            .values()
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type')
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        try:
+            id = self.kwargs['id']
+        except KeyError:
+            return self.queryset
+
+        return self.queryset.filter(id=id)
 
 class UpcomingEventList(generics.ListAPIView):
     queryset = Event.objects \
                     .filter(start_date__gte=datetime.now()) \
-                    .select_related('type')[:5] \
-                    .values()
+                    .select_related('type')[:5]
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     read_only = True
@@ -63,15 +72,15 @@ class IsLoggedIn(APIView):
             'isStaff': request.user.is_staff
         })
 
-class EventActivities(APIView):
-    throttle_classes = ()
+class EventActivities(generics.ListAPIView):
+    queryset = Activity.objects.select_related('type', 'assigned')
     permission_classes = [IsAuthenticated]
-    serializer_class = ActivitySerializer
+    serializer_class = EventActivitySerializer
 
-    def get(self, request):
-        event_id = request.query_params['event_id']
-        values = Activity.objects \
-            .filter(event=event_id) \
-            .select_related('type', 'assigned') \
-            .values()
-        return Response(values)
+    def get_queryset(self):
+        try:
+            id = self.kwargs['event_id']
+        except KeyError:
+            return self.queryset.none()
+
+        return self.queryset.filter(event=id)

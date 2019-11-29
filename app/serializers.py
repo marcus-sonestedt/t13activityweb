@@ -35,3 +35,12 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = '__all__'
+
+class EventActivitySerializer(serializers.ModelSerializer):
+    type = ActivityTypeSerializer(required=False)
+    assigned = MemberSerializer(required=False)
+
+    class Meta:
+        model = Activity
+        fields = '__all__'
+

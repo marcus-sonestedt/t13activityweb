@@ -44,7 +44,7 @@ export class MyActivitiesTable extends Component<Props, {}>
     renderRow = (model: Activity) => {
         const event = model.event as T13Event;
         return (
-            <tr key={model.id} onClick={e => this.handleRowClick(e, model)}className='linked'>
+            <tr key={model.id} onClick={e => this.handleRowClick(e, model)} className='linked'>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>
                     <ConditionalWrapper condition={event != null}

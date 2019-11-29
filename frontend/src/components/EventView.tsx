@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { useHistory, useParams } from 'react-router-dom';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap'
-import { T13Event, Activity } from '../Models'
+import { deserialize } from "class-transformer";
+import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
 import './Table.css'
 
 export const EventView = () => {
@@ -22,35 +23,24 @@ export const EventView = () => {
     }, [id, event]);
 
     useEffect(() => {
-        const url = `/api/events?id=${id}`;
+        const url = `/api/events/${id}`;
         fetch(url)
             .then(
-                r => r.status === 200 ? r.json() : (setError(`${url}: HTTP ${r.status}: ${r.statusText}`), r.text()),
-                r => r.json().then((json:any) => setError(json.toString()))
-            ).then(json => {
-                if (typeof json === 'string') {
-                    setEvent(null);
-                    setHtmlError(json);
-                } else if (json !== undefined)
-                    setEvent(json as T13Event);
-                else
-                    setEvent(null);
-            });
+                r => r.status === 200
+                    ? r.text().then(t => setEvent(deserialize(PagedT13Events, t).results[0]))
+                    : (setError(`${url}: HTTP ${r.status}: ${r.statusText}`),
+                       r.text().then(setHtmlError)),
+                r => r.text().then((t:any) => setError(t))
+            );
 
-        const url2 = `/api/activities?event_id=${id}`;
+        const url2 = `/api/event_activities/${id}`;
         fetch(url2)
             .then(
-                r => r.status === 200 ? r.json() : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`), r.text()),
+                r => r.status === 200
+                    ? r.text().then(t => setActivities(deserialize(PagedActivities, t).results)): (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
+                       r.text().then(setHtmlError)),
                 r => r.json().then((json:any) => setError(json.toString()))
-            ).then(json => {
-                if (typeof json === 'string') {
-                    setActivities([]);
-                    setHtmlError(json);
-                } else if (json !== undefined)
-                    setActivities(json as Activity[]);
-                else
-                    setActivities([]);
-            });
+            );
 
     }, [id]);
 
