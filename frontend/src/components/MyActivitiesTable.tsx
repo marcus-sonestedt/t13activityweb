@@ -28,10 +28,12 @@ export class MyActivitiesTable extends Component<Props, {}>
             </h3>
             <Table>
                 <thead>
-                    <th>Namn</th>
-                    <th>Händelse</th>
-                    <th>Tid</th>
-                    <th>Utförd</th>
+                    <tr>
+                        <th>Namn</th>
+                        <th>Händelse</th>
+                        <th>Tid</th>
+                        <th>Utförd</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {this.props.values.map(this.renderRow)}
@@ -42,7 +44,7 @@ export class MyActivitiesTable extends Component<Props, {}>
     renderRow = (model: Activity) => {
         const event = model.event as T13Event;
         return (
-            <tr onClick={e => this.handleRowClick(e, model)}>
+            <tr key={model.id} onClick={e => this.handleRowClick(e, model)}className='linked'>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>
                     <ConditionalWrapper condition={event != null}

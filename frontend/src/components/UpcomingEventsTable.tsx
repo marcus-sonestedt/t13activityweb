@@ -1,9 +1,7 @@
-import React, {  } from "react";
-import { Container } from 'react-bootstrap'
-import { Table } from 'react-bootstrap'
-import { PagedT13Events, T13EventType, T13Event } from '../Models'
+import React, { } from "react";
 import { useHistory } from 'react-router-dom';
-import { ConditionalWrapper } from "./Utils";
+import { Container, Table } from 'react-bootstrap'
+import { PagedT13Events,  T13Event } from '../Models'
 import './Table.css'
 
 export interface MyProps {
@@ -13,53 +11,48 @@ export interface MyProps {
 
 export function UpcomingEventsTable
     ({ events, title = "Kommande händelser" }: MyProps) {
-        const history = useHistory();
+    const history = useHistory();
 
-        const handleRowClick =
-            (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T13Event) => {
-                e.preventDefault();
-                history.push(model.url());
-            };
+    const handleRowClick =
+        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T13Event) => {
+            e.preventDefault();
+            history.push(model.url());
+        };
 
-        const renderRow = (model: T13Event) => {
-            const type = model.type as T13EventType;
-            return (
-                <tr key={model.id} onClick={e => handleRowClick(e, model)}>
-                    <td><a href={model.url()}>{model.name}</a></td>
-                    <td>{model.start_date} - {model.end_date}</td>
-                    <td>
-                        <ConditionalWrapper condition={model.type != null}
-                            wrap={(c: any) => <a href={type.url()}>{c}</a>}>
-                            {model.type != null ? type.name : ""}
-                        </ConditionalWrapper>
-                    </td>
-                </tr>
-            );
-        }
-
+    const renderRow = (model: T13Event) => {
         return (
-            <Container className="table-container">
-                <h3>
-                    <span className="table-title">{title}</span>
-                    <span className="table-count">
-                        {events.results.length}/{events.count} st
-                </span>
-                </h3>
-                <Table>
-                    <thead>
-                        <tr>
+            <tr key={model.id} onClick={e => handleRowClick(e, model)}
+                className='linked'>
+                <td><a href={model.url()}>{model.name}</a></td>
+                <td>{model.start_date} - {model.end_date}</td>
+                <td>{model.type != null ? model.type.name : null}</td>
+            </tr>
+        );
+    }
+
+    return (
+        <Container className="table-container">
+            <h3>
+                <span className="table-title">{title}</span>
+                <span className="table-count">
+                    {events.results.length}/{events.count} st
+                    </span>
+            </h3>
+            <Table>
+                <thead>
+                    <tr>
                         <th>Namn</th>
                         <th>Tid</th>
                         <th>Typ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {events.results.map(renderRow)}
-                    </tbody>
-                </Table>
-            </Container>
-        );
-    }
+                    </tr>
+                </thead>
+                <tbody>
+                    {events.results.map(renderRow)}
+                </tbody>
+            </Table>
+        </Container>
+    );
+}
 
 export default UpcomingEventsTable;
 

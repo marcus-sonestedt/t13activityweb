@@ -134,3 +134,25 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'T13ActivityWeb.settings'
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 ```
+
+## Update packages
+
+### frontend
+
+Check outdated packages
+
+```bash
+npm outdated
+```
+
+Then update (save/save-dev depending if used during runtime or not)
+
+```bash
+npm install <package>@latest --save[-dev]
+```
+
+### Backend
+
+```bash
+pip
+```

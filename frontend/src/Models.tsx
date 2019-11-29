@@ -1,5 +1,6 @@
 import { Type } from "class-transformer";
 import "reflect-metadata"
+
 export class PagedValues<T>
 {
     count: number = 0;
@@ -10,6 +11,16 @@ export class PagedValues<T>
 
 export interface IdValue {
     id: string;
+}
+
+export class Member implements IdValue {
+    id: string = "";
+    fullname: string = "";
+    phone: string = "";
+    email: string = "";
+    image_url: string|null = null;
+
+    url = () => process.env.PUBLIC_URL + "member/" + this.id;
 }
 
 export class Activity implements IdValue {
@@ -24,6 +35,8 @@ export class Activity implements IdValue {
     type: ActivityType | null = null;
     @Type(() => T13Event)
     event: T13Event | null = null;
+    @Type(() => Member)
+    assigned: Member | null = null;
 
     url = () => process.env.PUBLIC_URL + "activity/" + this.id;
 }
@@ -55,6 +68,8 @@ export class T13Event implements IdValue {
     image_url: string | null = null;
     @Type(() => T13EventType)
     type: T13EventType | null = null;
+    @Type(() => Activity)
+    activities: Activity[] = [];
 
     url = () => process.env.PUBLIC_URL + "event/" + this.id;
 }
@@ -64,4 +79,12 @@ export class PagedT13Events extends PagedValues<T13Event> {
     results: T13Event[] = [];
 }
 
-export default { Activity, ActivityType, T13Event, T13EventType, PagedT13Events };
+export class PagedActivities extends PagedValues<Activity> {
+    @Type(() => Activity)
+    results: Activity[] = [];
+}
+
+
+export default {
+    Member,     Activity, ActivityType, T13Event, T13EventType, PagedT13Events
+};

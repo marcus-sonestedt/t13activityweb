@@ -17,6 +17,7 @@ class Member(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     fullname = models.CharField(max_length=120, blank=True)
+    email = models.EmailField(blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     comment = models.TextField(blank=True)
     licensed_driver = models.BooleanField(default=False)
@@ -39,6 +40,7 @@ class Member(models.Model):
 
         if self.user:
             self.fullname = self.user.first_name + " " + self.user.last_name
+            self.email = self.user.email
 
         super(Member, self).save(*args, **kwargs)
 
@@ -93,11 +95,10 @@ class Event(models.Model):
     comment = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
     coordinators = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
-    files = models.ManyToManyField(Attachment)
+    files = models.ManyToManyField(Attachment, blank=True)
     type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-
     cancelled = models.BooleanField(default=False)
 
     def __str__(self):
@@ -111,7 +112,7 @@ class Event(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
-        return super(User, self).save(*args, **kwargs)
+        return super(Event, self).save(*args, **kwargs)
 
 class ActivityType(models.Model):
     '''Predefined type of activity with some help text to explain it'''

@@ -27,3 +27,7 @@ th {
     font-weight: bolder;
     background-color:#1f1f28;
 }
+
+.linked {
+    cursor: pointer
+}

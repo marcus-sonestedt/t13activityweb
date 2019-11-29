@@ -12,7 +12,7 @@ class ActivityFormState {
     changed: boolean = false;
 }
 
-export class ActivityForm
+export class ActivityView
     extends Component<ActivityFormProps, ActivityFormState>
 {
     state = new ActivityFormState();
@@ -47,4 +47,4 @@ export class ActivityForm
     }
 }
 
-export default ActivityForm;
+export default ActivityView;

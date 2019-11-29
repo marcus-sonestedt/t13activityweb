@@ -5,25 +5,14 @@ Definition of urls for T13ActivityWeb.
 from datetime import datetime
 from django.urls import path, re_path, include
 from django.contrib import admin
-from django.contrib.auth.views import LogoutView
 from django.views.generic.base import RedirectView
-from app import forms, views, api
+from app import urls as app_urls
 from frontend.urls import urlpatterns as frontend_urls
 
 urlpatterns = [
     re_path(r'^$', RedirectView.as_view(url='frontend/'), name="redirect_to_frontend"),
     re_path(r'^frontend/(.*)', include(frontend_urls), name="frontend"),
-    path('app/', views.home, name='home'),
-    path('app/contact/', views.contact, name='contact'),
-    path('app/about/', views.about, name='about'),
-    path('app/login/', views.MyLoginView.as_view(), name='login'),
-    path('app/signup/', views.signup, name="signup"),
-    path('app/logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('app/', include(app_urls.urlpatterns)),
+    path('api/', include(app_urls.api_urlpatterns)),
     path('admin/', admin.site.urls),
-    path('api/login', api.obtain_auth_token),
-    path('api/logout', api.ClearAuthToken.as_view()),
-    path('api/isloggedin', api.IsLoggedIn.as_view()),
-    path('api/myactivities', api.MyActivities.as_view()),
-    path('api/events', api.EventList.as_view()),
-    path('api/upcomingevents', api.UpcomingEventList.as_view())
 ]

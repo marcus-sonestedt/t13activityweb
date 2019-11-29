@@ -5,62 +5,56 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
 import { Home } from './components/Home'
 import { Welcome } from './components/Welcome'
+import { EventView } from './components/EventView'
 import { NotFound } from './components/NotFound'
-
-interface LoginState {
-  isLoggedIn:boolean;
-  isStaff:boolean;
-}
-
-const loggedOutState = {isLoggedIn:false,isStaff:false} as LoginState;
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isStaff, setIsStaff] = useState(false);
-
-  const setState = (state:LoginState) => {
-    setIsLoggedIn(state.isLoggedIn);
-    setIsStaff(state.isStaff);
-  }
 
   useEffect(() => {
     fetch('/api/isloggedin')
       .then(
         r => r.status === 200 ? r.json() : undefined,
         r => {
-          console.log(r);
-          setState(loggedOutState);
+          console.error(r);
+          setIsLoggedIn(false);
         })
       .then(json => {
-        console.log(json);
-        if (json !== undefined)
-          setState({isLoggedIn: json.isLoggedIn, isStaff: json.isStaff});
-        else
-          setState(loggedOutState);
+        if (json !== undefined) {
+          setIsStaff(json.isStaff as boolean);
+          setIsLoggedIn(json.isLoggedIn as boolean);
+        }
+        else {
+          setIsLoggedIn(false);
+        }
       });
-  }, [isLoggedIn, isStaff]);
+
+    return;
+  },  []);
 
   return (
       <BrowserRouter>
         <Navigation visible={isLoggedIn} isStaff={isStaff} />
         <Container>
-          <p>{isLoggedIn}</p>
+          <pre>{isLoggedIn}</pre>
           <Switch>
             <Redirect exact from="/" to="/frontend/" />
             {!isLoggedIn ?
               <>
-                <Route path="/frontend/welcome">
-                  <Welcome/>
-                </Route>
+                <Route path="/frontend/welcome" component={Welcome}/>
                 <Redirect to="/frontend/welcome" />
               </>
               :
               <>
                 <Redirect exact from="/frontend/" to="/frontend/home" />
                 <Redirect exact from="/frontend/welcome" to="/frontend/home" />
-                <Route path="/frontend/home">
-                  <Home/>
-                </Route>
+                <Route path="/frontend/home" component={Home}/>
+                <Route path="/frontend/event/:id" component={EventView}/>
+                <Route path="/frontend/activity/:id" component={EventView}/>
+                <Route path="/frontend/event_type/:id" component={EventView}/>
+                <Route path="/frontend/activity_type/:id" component={EventView}/>
+                <Route path="/frontend/member/:id" component={EventView}/>
               </>
             }
             <Route component={NotFound} />

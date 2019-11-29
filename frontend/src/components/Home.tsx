@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { Container, Row, Col } from 'react-bootstrap'
 import * as H from 'history';
-import { deserialize, deserializeArray } from "class-transformer";
-import { Activity, ActivityType, T13Event, PagedT13Events } from '../Models'
+import { deserialize } from "class-transformer";
+import { Activity, ActivityType, T13Event, PagedT13Events, PagedActivities } from '../Models'
 import { MyActivitiesTable } from './MyActivitiesTable'
 import { UpcomingEventsTable } from './UpcomingEventsTable'
 import { DataProvider } from './DataProvider'
-import { ActivityForm } from '../forms/ActivityForm'
+import { ActivityView } from './ActivityView'
 
 interface HomeProps {
 }
 
 class HomeState {
-    myActivities: Activity[] = [];
+    myActivities: PagedActivities = new PagedActivities();
     events: PagedT13Events = new PagedT13Events();
 
     selectedActivity: Activity | null = null;
@@ -25,16 +25,12 @@ export class Home extends Component<HomeProps, HomeState>
 {
     state = new HomeState();
 
-    handleMyActivitiesLoaded = (data: Activity[]) => {
+    handleMyActivitiesLoaded = (data: PagedActivities) => {
         this.setState({ myActivities: data });
     }
 
     handleActivitySelect = (model: Activity) => {
         this.setState({ selectedActivity: model });
-    }
-
-    handleActivitySave = (data: Activity) => {
-        return true;
     }
 
     handleEventsLoaded = (data: PagedT13Events) => {
@@ -55,12 +51,12 @@ export class Home extends Component<HomeProps, HomeState>
             <Container>
                 <Row>
                     <Col sm={12} lg={6}>
-                        <DataProvider<Activity[]>
-                            ctor={t => deserializeArray(Activity, t)}
+                        <DataProvider< PagedActivities >
+                            ctor={t => deserialize(PagedActivities, t)}
                             endpoint={"/api/myactivities"}
                             onLoaded={this.handleMyActivitiesLoaded}>
                             <MyActivitiesTable
-                                values={this.state.myActivities}
+                                values={this.state.myActivities.results}
                                 onRowClick={this.handleActivitySelect}
                             />
                         </DataProvider>
@@ -72,6 +68,7 @@ export class Home extends Component<HomeProps, HomeState>
                             onLoaded={this.handleEventsLoaded}>
                                 <UpcomingEventsTable
                                     events={this.state.events}
+                                    //onRowClick={this.handleEventSelect}
                                 />
                             </DataProvider>
                     </Col>
@@ -80,8 +77,7 @@ export class Home extends Component<HomeProps, HomeState>
                     <Col sm={12} md={6}>
                         {this.state.selectedActivity == null ? null : <>
                         <h3>Aktivitet</h3>
-                        <ActivityForm model={activity}
-                            onSave={this.handleActivitySave} />
+                        <ActivityView model={activity} onSave={_ => true}/>
                         <ActivityTypeView model={activityType} />
                     </>}
                     </Col>

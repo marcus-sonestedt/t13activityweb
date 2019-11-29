@@ -27,33 +27,30 @@ class ClearAuthToken(ObtainAuthToken):
         return Response("bye")
 
 
-class MyActivities(APIView):
+class MyActivities(generics.ListAPIView):
     throttle_classes = ()
     permission_classes = [IsAuthenticated]
-    parser_classes = (parsers.FormParser,
-                      parsers.MultiPartParser, parsers.JSONParser,)
-    renderer_classes = (renderers.JSONRenderer,)
     serializer_class = ActivitySerializer
 
-    def get(self, request, format=None):
-        member = Member.objects.get(user__username=request.user)
-        activitites = Activity.objects.filter(
-            assigned=member).select_related('type', 'event')
-        return Response(activitites.values())
-
+    def get_queryset(self):
+        member = Member.objects.get(user__username=self.request.user)
+        return Activity.objects.filter(
+            assigned=member).select_related('type', 'event').values()
 
 class EventList(generics.ListAPIView):
-    queryset = Event.objects.filter(start_date__gte=datetime.now()
-                                    ).select_related('type')
+    queryset = Event.objects.select_related('type')
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticated]
 
 
 class UpcomingEventList(generics.ListAPIView):
-    queryset = Event.objects.filter(start_date__gte=datetime.now()
-                                    ).select_related('type')[:5]
+    queryset = Event.objects \
+                    .filter(start_date__gte=datetime.now()) \
+                    .select_related('type')[:5] \
+                    .values()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    read_only = True
 
 
 class IsLoggedIn(APIView):
@@ -62,6 +59,19 @@ class IsLoggedIn(APIView):
 
     def get(self, request, format=None):
         return Response({
-            'isLoggedIn:':request.user.is_authenticated,
+            'isLoggedIn': request.user.is_authenticated,
             'isStaff': request.user.is_staff
         })
+
+class EventActivities(APIView):
+    throttle_classes = ()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ActivitySerializer
+
+    def get(self, request):
+        event_id = request.query_params['event_id']
+        values = Activity.objects \
+            .filter(event=event_id) \
+            .select_related('type', 'assigned') \
+            .values()
+        return Response(values)

@@ -57,7 +57,8 @@ export class TableView<T extends IdValue> extends Component<TableProps<T>>
 
     private renderRow = (model: T) =>
         <tr key={model.id} data-item={model.id}
-            onClick={e => this.handleRowClick(e, model)}>
+            onClick={e => this.handleRowClick(e, model)}
+            className='linked'>
             {Object.entries(this.props.columns).map(col =>
                     <td key={model.id + " " + col[0]}>
                         <a href={"/frontend/something/" + model.id}>
