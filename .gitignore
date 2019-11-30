@@ -112,4 +112,4 @@ frontend/build/
 static
 */obj/**
 
-settings/secrets.py
+**/secrets.py
