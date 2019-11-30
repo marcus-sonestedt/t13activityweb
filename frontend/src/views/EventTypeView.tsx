@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Image, Button } from 'react-bootstrap'
 import { T13EventType, PagedEventTypes } from "../Models";
 import { deserialize } from "class-transformer";
 import { useParams } from "react-router";
 import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
+import { userContext } from "../App";
 
 export const EventTypeComponent = (model: T13EventType | null) => {
+    const user = useContext(userContext);
+
     if (model === null)
         return null;
 
     return (<>
         <div className="model-header">
             <h1>{model.name}</h1>
-            <a href={model.adminUrl()}>
-                <Button variant="secondary">Editera</Button>
-            </a>
+            {user.isStaff ?
+                <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                : null}
         </div>
         <hr />
         <h4>Beskrivning:</h4>

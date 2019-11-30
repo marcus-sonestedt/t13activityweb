@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { useParams } from 'react-router-dom';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
 import '../components/Table.css'
 import Cookies from 'universal-cookie';
+import { userContext } from "../App";
 
 export const EventView = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -14,6 +15,8 @@ export const EventView = () => {
     const [htmlError, setHtmlError] = useState('');
 
     const { id } = useParams();
+
+    const user = useContext(userContext);
 
     useEffect(() => {
         if (event === null || event === undefined)
@@ -108,8 +111,9 @@ export const EventView = () => {
                 <Col md={12} lg={5}>
                     <div className="model-header">
                         <a href={"../" + event.url()}><h2>{event.name}</h2></a>
-                        <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button>
-                        </a>
+                        {user.isStaff ?
+                            <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                            : null}
                     </div>
                     <hr />
                     {eventType}

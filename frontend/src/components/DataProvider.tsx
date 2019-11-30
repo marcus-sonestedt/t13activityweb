@@ -22,7 +22,10 @@ export class DataProvider<T>
 
     componentDidMount = () => {
 
-        fetch(this.props.endpoint, { signal: this.controller.signal })
+        fetch(this.props.endpoint, {
+            signal: this.controller.signal,
+            cache: "no-cache"
+        })
             .then(r => {
                 if (r.status !== 200) {
                     this.setState({

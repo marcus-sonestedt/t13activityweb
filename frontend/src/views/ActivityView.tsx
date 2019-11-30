@@ -1,13 +1,16 @@
 import { Activity, PagedActivities } from "../Models";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { ActivityTypeComponent } from "./ActivityTypeView";
 import { useParams } from "react-router";
 import { deserialize } from "class-transformer";
 import DataProvider from "../components/DataProvider";
 import { NotFound } from "../components/NotFound";
+import { userContext } from "../App";
 
 export const ActivityComponent = (model: Activity | null) => {
+    const user = useContext(userContext);
+
     if (model === null)
         return null;
 
@@ -25,7 +28,9 @@ export const ActivityComponent = (model: Activity | null) => {
         <>
             <div className='model-header'>
                 <a href={"../" + model.url()}><h1>{model.name}</h1></a>
+                {user.isStaff ?
                 <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                : null}
             </div>
             <hr />
             {event}

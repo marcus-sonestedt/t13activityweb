@@ -15,7 +15,7 @@ export const MemberHomeView = () => {
     return (
         <Container fluid >
             <Row>
-                <Col sm={12} lg={6}>
+                <Col md={12} lg={6}>
                     <DataProvider< PagedActivities >
                         ctor={t => deserialize(PagedActivities, t)}
                         endpoint={"/api/myactivities"}
@@ -25,7 +25,7 @@ export const MemberHomeView = () => {
                         />
                     </DataProvider>
                 </Col>
-                <Col sm={12} lg={6}>
+                <Col md={12} lg={6}>
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
                         endpoint={"/api/events"}

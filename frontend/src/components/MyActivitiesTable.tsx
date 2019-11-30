@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Button } from 'react-bootstrap'
 import { Activity } from '../Models'
 import { Table } from 'react-bootstrap'
 import './Table.css'
 import Cookies from "universal-cookie";
+import { userContext } from "../App";
 
 export class MyActivitiesProps {
     values: Activity[] = [];
 }
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
+
+    const user = useContext(userContext);
 
     const unlistFromActivity = (model: Activity) => {
         const cookies = new Cookies();
@@ -49,7 +52,11 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                     <Button
                         onClick={() => unlistFromActivity(model)}
                         variant='danger'>Avboka</Button>
-                }</td>
+                }
+                </td><td>
+                    {user.isStaff ? <a href={model.adminUrl()}>
+                        <Button variant="secondary">Editera</Button></a> : null}
+                </td>
             </tr>
         );
     }
@@ -70,10 +77,13 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                         <th>Tid</th>
                         <th>Utförd</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {props.values.map(renderRow)}
+                    {props.values
+                        .sort((a,b) => a.date < b.date ? 1 : 0)
+                        .map(renderRow)}
                 </tbody>
             </Table>
         </Container>

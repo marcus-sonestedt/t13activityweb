@@ -1,19 +1,24 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Container, Row, Col, Image, Button } from "react-bootstrap"
 import { ActivityType, PagedActivityTypes } from "../Models"
 import { useParams } from "react-router";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import NotFound from "../components/NotFound";
+import { userContext } from "../App";
 
 export const ActivityTypeComponent = (model: ActivityType | null) => {
+    const user = useContext(userContext);
+
     if (model === null)
         return null;
 
     return (<>
         <div className="model-header">
             <a href={"../" + model.url()}><h2>{model.name}</h2></a>
-            <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+            {user.isStaff ?
+                <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                : null}
         </div>
         <hr />
         <h4>Beskrivning:</h4>
@@ -26,7 +31,7 @@ export const ActivityTypeView = () => {
     const [model, setModel] = useState<ActivityType | null>(null);
 
     if (id === undefined)
-        return <NotFound/>
+        return <NotFound />
 
     return <Container>
         <Row>
