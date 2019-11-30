@@ -78,7 +78,7 @@ class EventType(models.Model):
 
     description = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
-    files = models.ManyToManyField(Attachment)
+    files = models.ManyToManyField(Attachment, blank=True)
 
     fee_reimbursed = models.BooleanField(default=False)
     food_included = models.BooleanField(default=False)

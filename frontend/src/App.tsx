@@ -12,9 +12,20 @@ import { EventTypeView } from './views/EventTypeView';
 import { ActivityTypeView } from './views/ActivityTypeView';
 import { MemberView } from './views/MemberView';
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isStaff, setIsStaff] = useState(false);
+class UserContext {
+  isLoggedIn = false;
+  isStaff = false;
+  memberId = '';
+  userId = '';
+  fullname = '';
+}
+
+export const userContext = React.createContext(new UserContext());
+export const UserProvider = userContext.Provider
+export const UserConsumer = userContext.Consumer
+
+export const App = () => {
+  const [state, setState] = useState<UserContext>(new UserContext());
 
   useEffect(() => {
     fetch('/api/isloggedin')
@@ -22,57 +33,51 @@ const App = () => {
         r => r.status === 200 ? r.json() : undefined,
         r => {
           console.error(r);
-          setIsLoggedIn(false);
+          setState(new UserContext());
         })
-      .then(json => {
-        if (json !== undefined) {
-          setIsStaff(json.isStaff as boolean);
-          setIsLoggedIn(json.isLoggedIn as boolean);
-        }
-        else {
-          setIsLoggedIn(false);
-        }
-      });
-
-    return;
+      .then(json =>
+        setState(json !== undefined ? json as UserContext : new UserContext())
+      );
   }, []);
 
   return (
-    <BrowserRouter>
-      <Navigation loggedIn={isLoggedIn} isStaff={isStaff} />
-      <pre>{isLoggedIn}</pre>
-      <Switch>
-        <Redirect exact from="/" to="/frontend/" />
-        <Route path="/frontend/event/:id" component={EventView} />
-        <Route path="/frontend/activity/:id" component={ActivityView} />
-        <Route path="/frontend/event_type/:id" component={EventTypeView} />
-        <Route path="/frontend/activity_type/:id" component={ActivityTypeView} />
-        <Redirect2 from="/frontend/member/:id" toFunc={(url:string) => `/app/login?next=${url}`} />
+    <UserProvider value={state}>
+      <BrowserRouter>
+        <Navigation />
+        <Switch>
+          <Redirect exact from="/" to="/frontend/" />
+          <Route path="/frontend/event/:id" component={EventView} />
+          <Route path="/frontend/activity/:id" component={ActivityView} />
+          <Route path="/frontend/event_type/:id" component={EventTypeView} />
+          <Route path="/frontend/activity_type/:id" component={ActivityTypeView} />
+          <Redirect2 from="/frontend/member/:id" toFunc={(url: string) => `/app/login?next=${url}`} />
 
-        {!isLoggedIn ?
-          <>
-            <Route path="/frontend/welcome" component={Welcome} />
-            <Redirect to="/frontend/welcome" />
-          </>
-          :
-          <>
-            <Redirect exact from="/frontend/" to="/frontend/home" />
-            <Redirect exact from="/frontend/welcome" to="/frontend/home" />
-            <Route path="/frontend/home" component={MemberHomeView} />
-            <Route path="/frontend/member/:id" component={MemberView} />
-          </>
-        }
-        <Route component={NotFound} />
-      </Switch>
-      <Footer />
-    </BrowserRouter >
+          {!state.isLoggedIn ?
+            <>
+              <Route path="/frontend/welcome" component={Welcome} />
+              <Redirect to="/frontend/welcome" />
+            </>
+            :
+            <>
+              <Route path="/frontend/home" component={MemberHomeView} />
+              <Route path="/frontend/member/:id" component={MemberView} />
+              <Redirect exact from="/frontend/" to="/frontend/home" />
+              <Redirect exact from="/frontend/welcome" to="/frontend/home" />
+            </>
+          }
+          <Route component={NotFound} />
+        </Switch>
+        <Footer />
+      </BrowserRouter >
+    </UserProvider>
   );
 }
 
-export const Redirect2 = (props:{from:string, toFunc:(url:string) => string}) => {
+export const Redirect2 =
+  (props: { from: string, toFunc: (url: string) => string }) => {
   const location = useLocation();
   const to = props.toFunc(location.pathname);
-  return <Redirect from={props.from} to={to}/>
+  return <Redirect from={props.from} to={to} />
 }
 
 const Footer = () => {

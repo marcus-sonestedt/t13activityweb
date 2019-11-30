@@ -5,3 +5,8 @@
 .navbar.hidden {
     visibility: hidden;
 }
+
+.navbar img {
+    height: 2.5em; width:2.5em;
+    margin-right: 1em;
+}

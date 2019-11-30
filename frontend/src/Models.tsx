@@ -65,7 +65,7 @@ export class T13EventType implements IdValue {
 
     url = () => process.env.PUBLIC_URL + "event_type/" + this.id;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
-    static apiUrl = (id: string) => `/api/event_types/${id}`;
+    static apiUrl = (id: string) => `/api/event_type/${id}`;
 }
 
 export class T13Event implements IdValue {
@@ -111,9 +111,6 @@ export class PagedEventTypes extends PagedValues<T13EventType> {
     @Type(() => T13EventType)
     results: T13EventType[] = [];
 }
-
-
-
 
 export default {
     Member, Activity, ActivityType, T13Event, T13EventType,

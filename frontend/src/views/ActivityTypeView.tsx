@@ -4,17 +4,19 @@ import { ActivityType, PagedActivityTypes } from "../Models"
 import { useParams } from "react-router";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
+import NotFound from "../components/NotFound";
 
 export const ActivityTypeComponent = (model: ActivityType | null) => {
     if (model === null)
-        return null
+        return null;
 
     return (<>
         <div className="model-header">
             <a href={"../" + model.url()}><h2>{model.name}</h2></a>
-            <a href={model.adminUrl()}><Button>Editera</Button></a>
+            <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
         </div>
-        <hr/>
+        <hr />
+        <h4>Beskrivning:</h4>
         <p>{model.description}</p>
     </>)
 }
@@ -23,8 +25,8 @@ export const ActivityTypeView = () => {
     const { id } = useParams();
     const [model, setModel] = useState<ActivityType | null>(null);
 
-    if (model === null || id === undefined)
-        return null
+    if (id === undefined)
+        return <NotFound/>
 
     return <Container>
         <Row>
@@ -33,7 +35,9 @@ export const ActivityTypeView = () => {
                     ctor={t => deserialize(PagedActivityTypes, t)}
                     endpoint={ActivityType.apiUrl(id)}
                     onLoaded={x => setModel(x.results[0])}>
-                    <ActivityTypeComponent {...model} />
+                    {model === null ? null :
+                        <ActivityTypeComponent {...model} />
+                    }
                 </DataProvider>
             </Col>
             <Col md={12} lg={4}>

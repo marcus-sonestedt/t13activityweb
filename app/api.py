@@ -70,9 +70,9 @@ class IsLoggedIn(APIView):
 
     def get(self, request, format=None):
         try:
-            member_id = Member.objects.get(user=request.user.id).id
+            member = Member.objects.get(user=request.user.id)
         except Member.DoesNotExist:
-            member_id = None
+            member = None
 
         user_id = request.user.id if request.user.is_authenticated else None
 
@@ -80,7 +80,8 @@ class IsLoggedIn(APIView):
             'isLoggedIn': request.user.is_authenticated,
             'isStaff': request.user.is_staff,
             'userId': user_id,
-            'memberId': member_id
+            'memberId': member.id if member else None,
+            'fullname' : member.fullname if member else None,
         })
 
 

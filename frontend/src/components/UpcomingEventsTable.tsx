@@ -1,5 +1,4 @@
 import React, { } from "react";
-import { useHistory } from 'react-router-dom';
 import { Container, Table } from 'react-bootstrap'
 import { PagedT13Events,  T13Event } from '../Models'
 import './Table.css'
@@ -11,21 +10,16 @@ export interface MyProps {
 
 export function UpcomingEventsTable
     ({ events, title = "Kommande aktiviteter" }: MyProps) {
-    const history = useHistory();
-
-    const handleRowClick =
-        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: T13Event) => {
-            e.preventDefault();
-            history.push(model.url());
-        };
 
     const renderRow = (model: T13Event) => {
+        const type = model.type === null ? null :
+            <a href={"../" + model.type.url()}>{model.type.name}</a>
+
         return (
-            <tr key={model.id} onClick={e => handleRowClick(e, model)}
-                className='linked'>
+            <tr key={model.id}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{model.start_date} - {model.end_date}</td>
-                <td>{model.type != null ? model.type.name : null}</td>
+                <td>{type}</td>
             </tr>
         );
     }

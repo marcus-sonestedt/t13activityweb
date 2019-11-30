@@ -2,6 +2,10 @@
   background-color: #282c34;
 }
 
+.container {
+  margin-bottom: 5em;
+}
+
 .navbar {
   padding-left: 5em;
   padding-right: 5em;

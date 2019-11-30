@@ -89,7 +89,7 @@ export const EventView = () => {
                 <Col md={12} lg={5}>
                     <div className="model-header">
                         <a href={"../" + event.url()}><h2>{event.name}</h2></a>
-                        <a href={event.adminUrl()}><Button>Editera</Button>
+                        <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button>
                         </a>
                     </div>
                     <hr/>

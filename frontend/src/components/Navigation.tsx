@@ -1,27 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Nav, Navbar } from 'react-bootstrap'
 import './Navigation.css'
+import { userContext } from "../App";
 
-class NavProps {
-    loggedIn = false;
-    isStaff = false;
-}
-
-export const Navigation = (props: NavProps) => {
+export const Navigation = () => {
+    const user = useContext(userContext);
 
     return (
         <Navbar bg="light">
-            <Navbar.Brand href="/">Team13's aktivitetswebb</Navbar.Brand>
+            <Navbar.Brand href="/">
+                <a href="http://team13.se" >
+                    <img src="/logo192.png" alt="Team13 logo"/>
+                </a>
+                Team13's aktivitetswebb
+                </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+            <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
-                    <Nav.Link href="http://team13.se">Team13 Hemsida</Nav.Link>
-                    {props.isStaff
-                        ? <Nav.Link href="/admin">Administration</Nav.Link>
-                        : null}
-                    {props.loggedIn ?
-                        <Nav.Link href="/app/logout">Logga ut</Nav.Link>
-                        : null}
+                    {!user.isStaff ? null
+                        : <Nav.Link href="/admin">Administrera</Nav.Link>
+                    }
+                    {!user.isLoggedIn ? null :
+                        <>
+                            <Nav.Link mr-sm={2} href="/frontend/profile">
+                                Hej {user.fullname}!</Nav.Link>
+                            <Nav.Link mr-sm={2} href="/app/logout">Logga ut</Nav.Link>
+                        </>
+                    }
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

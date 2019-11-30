@@ -6,16 +6,9 @@ import './Table.css'
 
 export class MyActivitiesProps {
     values: Activity[] = [];
-    onRowClick: (model: Activity) => void = (_) => { }
 }
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
-    const handleRowClick =
-        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: Activity) => {
-            e.preventDefault();
-            props.onRowClick(model);
-        }
-
     const renderRow = (model: Activity) => {
         const event = model.event !== null
             ? <a href={model.event.url()}>{model.event.name}</a>

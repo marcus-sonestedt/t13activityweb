@@ -7,24 +7,27 @@ import { deserialize } from "class-transformer";
 import DataProvider from "../components/DataProvider";
 import { NotFound } from "../components/NotFound";
 
-export const ActivityComponent = (model: Activity) => {
+export const ActivityComponent = (model: Activity | null) => {
+    if (model === null)
+        return null;
+
     const event = model.event !== null
-        ? <h3>Händelse: <a href={"../" +model.event.url()}>{model.event.name}</a></h3>
+        ? <h3>Händelse: <a href={"../" + model.event.url()}>{model.event.name}</a></h3>
         : null;
 
     let time = model.start_time === null ? ''
-        : model.start_time.toLocaleTimeString('sv-SE', { second: undefined });
+        : model.start_time;
 
     if (model.end_time !== null)
-        time += " - " + model.end_time.toLocaleTimeString('sv-SE', { second: undefined })
+        time += " - " + model.end_time;
 
     return (
         <>
             <div className='model-header'>
                 <a href={"../" + model.url()}><h1>{model.name}</h1></a>
-                <a href={model.adminUrl()}><Button>Editera</Button></a>
+                <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
             </div>
-            <hr/>
+            <hr />
             {event}
             <h5>Datum: {model.date}</h5>
             <h4>Tid: {time}</h4>
