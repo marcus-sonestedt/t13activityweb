@@ -17,14 +17,21 @@ api_urlpatterns = [
     path('login', api.obtain_auth_token),
     path('logout', api.ClearAuthToken.as_view()),
     path('isloggedin', api.IsLoggedIn.as_view()),
-    re_path('activity/(?P<id>.+)?', api.ActivityList.as_view()),
+
     path('myactivities', api.MyActivitiesList.as_view()),
+    re_path('activity/(?P<id>.+)?', api.ActivityList.as_view()),
+    re_path('event_activities/(?P<event_id>.+)', api.EventActivities.as_view()),
+
     path('upcomingevents', api.UpcomingEventList.as_view()),
     path('events', api.EventList.as_view()),
     re_path('events/(?P<id>.+)', api.EventList.as_view()),
-    re_path('event_activities/(?P<event_id>.+)', api.EventActivities.as_view()),
+
     path('event_type', api.EventTypeList.as_view()),
-    path('activity_type', api.ActivityTypeList.as_view()),
     re_path('event_type/(?P<id>.+)', api.EventTypeList.as_view()),
+
+    path('activity_type', api.ActivityTypeList.as_view()),
     re_path('activity_type/(?P<id>.+)', api.ActivityTypeList.as_view()),
+
+    re_path('activity_enlist/(?P<id>.+)', api.ActivityEnlist.as_view()),
+    re_path('activity_delist/(?P<id>.+)', api.ActivityDelist.as_view()),
 ]

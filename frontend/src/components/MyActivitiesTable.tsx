@@ -3,12 +3,36 @@ import { Container, Button } from 'react-bootstrap'
 import { Activity } from '../Models'
 import { Table } from 'react-bootstrap'
 import './Table.css'
+import Cookies from "universal-cookie";
 
 export class MyActivitiesProps {
     values: Activity[] = [];
 }
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
+
+    const unlistFromActivity = (model: Activity) => {
+        const cookies = new Cookies();
+        fetch(`/api/activity_delist/${model.id}`,
+            {
+                method: 'POST',
+                headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+            })
+            .then(r => {
+                if (r.status === 200)
+                    window.location.reload()
+                else {
+                    r.text().then(t => console.error(t));
+                    throw r.statusText;
+                }
+            }, r => { throw r })
+            .catch(e => {
+                console.error(e);
+                alert("Något gick fel! :(\n" + e);
+                window.location.reload()
+            });
+    }
+
     const renderRow = (model: Activity) => {
         const event = model.event !== null
             ? <a href={model.event.url()}>{model.event.name}</a>
@@ -21,11 +45,11 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 <td>{model.date}</td>
                 <td>{model.start_time} - {model.end_time}</td>
                 <td>{model.completed ? "✔" : "❌"}</td>
-                <td>{model.date <= new Date() ?
-                    <a href={`/api/activity_unlist/${model.id}`}>
-                        <Button variant='danger'>Avboka</Button>
-                    </a> : null}
-                </td>
+                <td>{model.date < new Date() ? null :
+                    <Button
+                        onClick={() => unlistFromActivity(model)}
+                        variant='danger'>Avboka</Button>
+                }</td>
             </tr>
         );
     }

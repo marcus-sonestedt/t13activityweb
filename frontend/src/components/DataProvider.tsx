@@ -8,7 +8,7 @@ class DataState<T> {
 };
 
 export class DataProps<T>  {
-    ctor!: {(any: any): T; };
+    ctor!: { (any: any): T; };
     endpoint: string = "";
     onLoaded = (data: T) => { };
 }
@@ -22,27 +22,34 @@ export class DataProvider<T>
 
     componentDidMount = () => {
 
-        fetch(this.props.endpoint, {signal: this.controller.signal})
-            .then(response =>
-                response.status !== 200
-                    ? (this.setState({
-                        placeholder: "Oops. Något gick fel! :(" + response.text(),
-                        error: `Error ${response.status}: ${response.statusText}`
-                    }), "")
-                    : response.text()
-            ).then(data => {
+        fetch(this.props.endpoint, { signal: this.controller.signal })
+            .then(r => {
+                if (r.status !== 200) {
+                    this.setState({
+                        placeholder: "Oops. Något gick fel! :(",
+                        error: `Error ${r.status}: ${r.statusText}}\n`
+                    });
+                    r.text().then(errorBody => this.setState(
+                        { error: this.state.error + errorBody }
+                    ));
+                } else {
+                    return r.text();
+                }
+            }).then(data => {
                 if (this.controller.signal.aborted)
                     return;
                 var typedData = this.props.ctor(data);
-                this.setState({ data:typedData });
+                this.setState({ data: typedData });
                 this.props.onLoaded(typedData);
             }).catch(e => {
+                if (e.name === 'AbortError')
+                    return
                 console.error(e);
                 this.setState({
                     placeholder: "Oops. Något gick fel. :(",
                     error: e.toString()
                 });
-            },);
+            });
     }
 
     componentWillUnmount = () => {

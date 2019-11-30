@@ -4,6 +4,7 @@ import { Table, Container, Row, Col, Button } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
 import '../components/Table.css'
+import Cookies from 'universal-cookie';
 
 export const EventView = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -55,10 +56,28 @@ export const EventView = () => {
     if (event === null)
         return <Container><p>Laddar ...</p></Container>
 
+
     const claimActivityClick = (
         e: React.MouseEvent<HTMLElement>, model: Activity) => {
-        e.preventDefault();
-        alert("yar");
+        const cookies = new Cookies();
+        fetch(`/api/activity_enlist/${model.id}`,
+            {
+                method: 'POST',
+                headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+            })
+            .then(r => {
+                if (r.status === 200)
+                    window.location.reload()
+                else {
+                    r.text().then(t => console.error(t));
+                    throw r.statusText;
+                }
+            }, r => { throw r })
+            .catch(e => {
+                console.error(e);
+                alert("Något gick fel! :(\n" + e);
+                window.location.reload()
+            });
     }
 
     const renderActivityRow = (model: Activity) => {
@@ -81,7 +100,7 @@ export const EventView = () => {
     }
 
     const eventType = event.type !== null ?
-         <a href={"../" + event.type.url()}><h4>{event.type.name}</h4></a> : null;
+        <a href={"../" + event.type.url()}><h4>{event.type.name}</h4></a> : null;
 
     return (
         <Container>
@@ -92,7 +111,7 @@ export const EventView = () => {
                         <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button>
                         </a>
                     </div>
-                    <hr/>
+                    <hr />
                     {eventType}
                     <h4>{event.start_date} - {event.end_date}</h4>
                     <h5>Beskrivning</h5>
@@ -100,7 +119,7 @@ export const EventView = () => {
                     <h5>Övrigt</h5>
                     <p>{event.comment}</p>
                 </Col>
-                <Col lg={1}/>
+                <Col lg={1} />
                 <Col md={12} lg={6}>
                     <h2>Uppgifter</h2>
                     <hr />
