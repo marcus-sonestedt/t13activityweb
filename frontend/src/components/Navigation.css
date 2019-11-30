@@ -2,6 +2,11 @@
     margin-bottom: 1em;
 }
 
+.navbar-light {
+    color: white
+}
+
+
 .navbar.hidden {
     visibility: hidden;
 }

@@ -7,7 +7,7 @@ export const Navigation = () => {
     const user = useContext(userContext);
 
     return (
-        <Navbar bg="light">
+        <Navbar bg='dark' variant='dark'>
             <Navbar.Brand href="/">
                 <img src="/logo192.png" alt="Team13 logo"/>
                 Team13's aktivitetswebb

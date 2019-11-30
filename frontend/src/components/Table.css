@@ -12,7 +12,6 @@ td {
     white-space: no-wrap;
     color: white;
     background-color:#0f0f18;
-    font-size: small;
 }
 
 .table-count
@@ -26,8 +25,13 @@ th {
     color: white;
     font-weight: bolder;
     background-color:#1f1f28;
+    font-size: large
 }
 
 .linked {
     cursor: pointer
+}
+
+td:first-child {
+    font-weight: bold;
 }

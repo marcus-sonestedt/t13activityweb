@@ -25,7 +25,7 @@ export function UpcomingEventsTable
     }
 
     return (
-        <Container className="table-container">
+        <div className="table-container">
             <h3>
                 <span className="table-title">{title}</span>
                 <span className="table-count">
@@ -44,7 +44,7 @@ export function UpcomingEventsTable
                     {events.results.map(renderRow)}
                 </tbody>
             </Table>
-        </Container>
+        </div>
     );
 }
 

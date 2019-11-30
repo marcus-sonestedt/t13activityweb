@@ -106,9 +106,9 @@ export const EventView = () => {
         <a href={"../" + event.type.url()}><h4>{event.type.name}</h4></a> : null;
 
     return (
-        <Container>
+        <Container fluid>
             <Row>
-                <Col md={12} lg={5}>
+                <Col md={12} lg={6}>
                     <div className="model-header">
                         <a href={"../" + event.url()}><h2>{event.name}</h2></a>
                         {user.isStaff ?
@@ -123,11 +123,10 @@ export const EventView = () => {
                     <h5>Övrigt</h5>
                     <p>{event.comment}</p>
                 </Col>
-                <Col lg={1} />
                 <Col md={12} lg={6}>
                     <h2>Uppgifter</h2>
                     <hr />
-                    <Table striped bordered hover>
+                    <Table hover>
                         <thead>
                             <tr>
                                 <th>Beskrivning</th>
