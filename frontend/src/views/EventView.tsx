@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react"
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
-import './Table.css'
+import '../components/Table.css'
 
 export const EventView = () => {
-    const [event, setEvent] = useState<T13Event|null>(null);
+    const [event, setEvent] = useState<T13Event | null>(null);
     const [activities, setActivities] = useState<Activity[]>([]);
 
     const [error, setError] = useState('');
     const [htmlError, setHtmlError] = useState('');
 
-    const { id }  = useParams();
-    const history = useHistory();
+    const { id } = useParams();
 
     useEffect(() => {
-        if (event === null)
-            document.title = `T13 - Event id ${id}`
+        if (event === null || event === undefined)
+            document.title = `T13 - Aktivitet id ${id}`
         else
             document.title = `T13 - ${event.name} - ${event.start_date}`
     }, [id, event]);
@@ -29,17 +28,17 @@ export const EventView = () => {
                 r => r.status === 200
                     ? r.text().then(t => setEvent(deserialize(PagedT13Events, t).results[0]))
                     : (setError(`${url}: HTTP ${r.status}: ${r.statusText}`),
-                       r.text().then(setHtmlError)),
-                r => r.text().then((t:any) => setError(t))
+                        r.text().then(setHtmlError)),
+                r => r.text().then((t: any) => setError(t))
             );
 
         const url2 = `/api/event_activities/${id}`;
         fetch(url2)
             .then(
                 r => r.status === 200
-                    ? r.text().then(t => setActivities(deserialize(PagedActivities, t).results)): (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
-                       r.text().then(setHtmlError)),
-                r => r.json().then((json:any) => setError(json.toString()))
+                    ? r.text().then(t => setActivities(deserialize(PagedActivities, t).results)) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
+                        r.text().then(setHtmlError)),
+                r => r.json().then((json: any) => setError(json.toString()))
             );
 
     }, [id]);
@@ -49,65 +48,67 @@ export const EventView = () => {
             <Container>
                 <h2>Hittar inte händelsen.</h2>
                 <p>{error}</p>
-                <div dangerouslySetInnerHTML={{ __html: htmlError}}/>
+                <div dangerouslySetInnerHTML={{ __html: htmlError }} />
             </Container>
         )
 
     if (event === null)
-        return <p>Laddar ...</p>
-
-    const activityClick = (
-        e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model:Activity) => {
-            e.preventDefault();
-            history.push(model.url())
-        }
+        return <Container><p>Laddar ...</p></Container>
 
     const claimActivityClick = (
-        e: React.MouseEvent<HTMLElement>, model:Activity) => {
-            e.preventDefault();
-            alert("yar");
-        }
+        e: React.MouseEvent<HTMLElement>, model: Activity) => {
+        e.preventDefault();
+        alert("yar");
+    }
 
-    const renderActivityRow = (model:Activity) => {
+    const renderActivityRow = (model: Activity) => {
         const type = model.type !== null
-            ? <a href={model.type.url()}>{model.type.name}</a>
+            ? <a href={'../' + model.type.url()}>{model.type.name}</a>
             : null;
 
         const assigned = model.assigned !== null
-            ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-            : <Button onClick={(e:React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>;
+            ? <a href={'../' + model.assigned.url()}>{model.assigned.fullname}</a>
+            : <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>;
 
         return (
-            <tr key={model.id} onClick={e => activityClick(e, model)}
-                className='linked'>
+            <tr key={model.id} className='linked'>
+                <td><a href={'../' + model.url()}>{model.name}</a></td>
                 <td>{type}</td>
-                <td>{model.name}</td>
-                <td>{model.start_time} - {model.end_time}</td>
+                <td>{model.date} {model.start_time} - {model.end_time}</td>
                 <td>{assigned}</td>
             </tr>
-        )}
+        )
+    }
 
-    const eventType = event.type != null ? <h3>{event.type.name}</h3> : null;
+    const eventType = event.type !== null ?
+         <a href={"../" + event.type.url()}><h4>{event.type.name}</h4></a> : null;
 
     return (
         <Container>
             <Row>
-                <Col md={12} lg={6}>
-                    <h1>{event.name}</h1>
-                    <h3>{event.start_date} - {event.end_date}</h3>
+                <Col md={12} lg={5}>
+                    <div className="model-header">
+                        <a href={"../" + event.url()}><h2>{event.name}</h2></a>
+                        <a href={event.adminUrl()}><Button>Editera</Button>
+                        </a>
+                    </div>
+                    <hr/>
                     {eventType}
+                    <h4>{event.start_date} - {event.end_date}</h4>
+                    <h5>Beskrivning</h5>
+                    <p>{event.description}</p>
+                    <h5>Övrigt</h5>
                     <p>{event.comment}</p>
-                    <a href={`/admin/app/event/${id}/change/`}>
-                        <Button>Editera</Button>
-                    </a>
                 </Col>
+                <Col lg={1}/>
                 <Col md={12} lg={6}>
-                    <h2>Aktiviteter</h2>
+                    <h2>Uppgifter</h2>
+                    <hr />
                     <Table striped bordered hover>
                         <thead>
                             <tr>
-                                <th>Typ</th>
                                 <th>Beskrivning</th>
+                                <th>Typ</th>
                                 <th>Tid</th>
                                 <th>Tilldelad</th>
                             </tr>

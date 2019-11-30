@@ -18,15 +18,18 @@ export class Member implements IdValue {
     fullname: string = "";
     phone: string = "";
     email: string = "";
-    image_url: string|null = null;
+    image_url: string | null = null;
 
     url = () => process.env.PUBLIC_URL + "member/" + this.id;
+    adminUrl = () => '/admin/app/member/' + this.id;
+    static apiUrl = (id: string) => `/api/member/${id}`;
 }
 
 export class Activity implements IdValue {
     id: string = "";
     name: string = "";
     comment: string = "";
+    date: Date = new Date();
     start_time: Date = new Date();
     end_time: Date | null = null;
     weight: number = 1;
@@ -39,6 +42,8 @@ export class Activity implements IdValue {
     assigned: Member | null = null;
 
     url = () => process.env.PUBLIC_URL + "activity/" + this.id;
+    adminUrl = () => '/admin/app/activity/' + this.id;
+    static apiUrl = (id: string) => `/api/activity/${id}`;
 }
 
 export class ActivityType implements IdValue {
@@ -48,6 +53,8 @@ export class ActivityType implements IdValue {
     image: string = "";
 
     url = () => process.env.PUBLIC_URL + "activity_type/" + this.id;
+    adminUrl = () => '/admin/app/activitytype/' + this.id;
+    static apiUrl = (id: string) => `/api/activity_type/${id}`;
 }
 
 export class T13EventType implements IdValue {
@@ -57,11 +64,14 @@ export class T13EventType implements IdValue {
     image: string = "";
 
     url = () => process.env.PUBLIC_URL + "event_type/" + this.id;
+    adminUrl = () => '/admin/app/eventtype/' + this.id;
+    static apiUrl = (id: string) => `/api/event_types/${id}`;
 }
 
 export class T13Event implements IdValue {
     id: string = "";
     name: string = "";
+    description: string = "";
     comment: string = "";
     start_date: Date = new Date();
     end_date: Date = new Date();
@@ -72,6 +82,8 @@ export class T13Event implements IdValue {
     activities: Activity[] = [];
 
     url = () => process.env.PUBLIC_URL + "event/" + this.id;
+    adminUrl = () => '/admin/app/event/' + this.id;
+    static apiUrl = (id: string) => `/api/event/${id}`;
 }
 
 export class PagedT13Events extends PagedValues<T13Event> {
@@ -84,7 +96,26 @@ export class PagedActivities extends PagedValues<Activity> {
     results: Activity[] = [];
 }
 
+export class PagedMembers extends PagedValues<Member> {
+    @Type(() => Member)
+    results: Member[] = [];
+}
+
+export class PagedActivityTypes extends PagedValues<ActivityType> {
+    @Type(() => ActivityType)
+    results: ActivityType[] = [];
+}
+
+
+export class PagedEventTypes extends PagedValues<T13EventType> {
+    @Type(() => T13EventType)
+    results: T13EventType[] = [];
+}
+
+
+
 
 export default {
-    Member,     Activity, ActivityType, T13Event, T13EventType, PagedT13Events
+    Member, Activity, ActivityType, T13Event, T13EventType,
+    PagedT13Events, PagedMembers, PagedActivities, PagedEventTypes
 };

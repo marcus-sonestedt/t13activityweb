@@ -10,7 +10,7 @@ export interface MyProps {
 }
 
 export function UpcomingEventsTable
-    ({ events, title = "Kommande händelser" }: MyProps) {
+    ({ events, title = "Kommande aktiviteter" }: MyProps) {
     const history = useHistory();
 
     const handleRowClick =

@@ -1,60 +1,64 @@
-import React, { Component } from "react";
-import { Container } from 'react-bootstrap'
-import { Activity, T13Event } from '../Models'
+import React from "react";
+import { Container, Button } from 'react-bootstrap'
+import { Activity } from '../Models'
 import { Table } from 'react-bootstrap'
-import { ConditionalWrapper } from "./Utils";
 import './Table.css'
 
-class Props
-{
+export class MyActivitiesProps {
     values: Activity[] = [];
-    onRowClick: (model: Activity) => void = (_) => {}
+    onRowClick: (model: Activity) => void = (_) => { }
 }
 
-export class MyActivitiesTable extends Component<Props, {}>
-{
-    handleRowClick =
-        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: Activity) =>
-    {
-        e.preventDefault();
-        this.props.onRowClick(model);
+export const MyActivitiesTable = (props: MyActivitiesProps) => {
+    const handleRowClick =
+        (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, model: Activity) => {
+            e.preventDefault();
+            props.onRowClick(model);
+        }
+
+    const renderRow = (model: Activity) => {
+        const event = model.event !== null
+            ? <a href={model.event.url()}>{model.event.name}</a>
+            : null;
+
+        return (
+            <tr key={model.id}>
+                <td><a href={model.url()}>{model.name}</a></td>
+                <td>{event}</td>
+                <td>{model.date}</td>
+                <td>{model.start_time} - {model.end_time}</td>
+                <td>{model.completed ? "✔" : "❌"}</td>
+                <td>{model.date <= new Date() ?
+                    <a href={`/api/activity_unlist/${model.id}`}>
+                        <Button variant='danger'>Avboka</Button>
+                    </a> : null}
+                </td>
+            </tr>
+        );
     }
 
-    render = () =>
+
+    return (
         <Container className="table-container">
             <h3>
-                <span className="table-title">Mina aktivititeter</span>
-                <span className="table-count">{this.props.values.length} st</span>
+                <span className="table-title">Mina uppgifter</span>
+                <span className="table-count">{props.values.length} st</span>
             </h3>
             <Table>
                 <thead>
                     <tr>
                         <th>Namn</th>
-                        <th>Händelse</th>
+                        <th>Aktivitet</th>
+                        <th>Datum</th>
                         <th>Tid</th>
                         <th>Utförd</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.values.map(this.renderRow)}
+                    {props.values.map(renderRow)}
                 </tbody>
             </Table>
         </Container>
-
-    renderRow = (model: Activity) => {
-        const event = model.event as T13Event;
-        return (
-            <tr key={model.id} onClick={e => this.handleRowClick(e, model)} className='linked'>
-                <td><a href={model.url()}>{model.name}</a></td>
-                <td>
-                    <ConditionalWrapper condition={event != null}
-                        wrap={(c:any) => <a href={event.url()}>{c}</a>}>
-                        {model.event != null ? event.name : ""}
-                    </ConditionalWrapper>
-                </td>
-                <td>{model.start_time} - {model.end_time}</td>
-                <td>{model.completed ? "✔" : "❌" }</td>
-            </tr>
-        );
-    }
+    )
 }

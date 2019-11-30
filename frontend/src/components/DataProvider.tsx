@@ -30,7 +30,6 @@ export class DataProvider<T>
                     : response.text()
             ).then(data => {
                 var typedData = this.props.ctor(data);
-                //console.log(data);
                 this.setState({ data:typedData });
                 this.props.onLoaded(typedData);
             }).catch(e => {
@@ -39,8 +38,15 @@ export class DataProvider<T>
                     placeholder: "Oops. Något gick fel. :(",
                     error: e.toString()
                 });
-            });
+            },);
     }
+
+    /*
+    componentWillUnmount = () => {
+        this.setState({data: null})
+        // todo: cancel fetch
+    }
+    */
 
     render = () => {
         const { data, placeholder, error } = this.state;

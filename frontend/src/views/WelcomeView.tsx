@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Jumbotron, Image, Button } from 'react-bootstrap'
-import './Welcome.css'
-import { UpcomingEventsTable } from "./UpcomingEventsTable";
-import DataProvider from "./DataProvider";
+import { UpcomingEventsTable } from "../components/UpcomingEventsTable";
+import DataProvider from "../components/DataProvider";
 import { PagedT13Events } from "../Models";
 import { deserialize } from "class-transformer";
+import './WelcomeView.css'
 
 type Props =
     {
@@ -29,7 +29,7 @@ export const Welcome = (props: Props) => {
                         endpoint={"/api/upcomingevents"}
                         onLoaded={setEvents}>
                         <UpcomingEventsTable events={events}
-                            title="Kommande händelser"/>
+                            title="Kommande aktiviteter"/>
                     </DataProvider>
                     <div className="buttonContainer">
                         <a href="/app/login/">

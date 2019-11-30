@@ -26,6 +26,8 @@ class Member(models.Model):
 
     class Meta:
         order_with_respect_to = 'user'
+        verbose_name = 'Medlem'
+        verbose_name_plural = 'Medlemmar'
 
     def __str__(self):
         if self.user:
@@ -70,7 +72,6 @@ class Attachment(models.Model):
         self.modified = timezone.now()
         return super(User, self).save(*args, **kwargs)
 
-
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
     name = models.CharField(max_length=40, unique=True)
@@ -85,6 +86,12 @@ class EventType(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Aktivitetstyp'
+        verbose_name_plural = 'Aktivitetstyper'
+
 
 class Event(models.Model):
     '''Groups a set of activities'''
@@ -106,6 +113,8 @@ class Event(models.Model):
 
     class Meta:
         ordering = ['start_date', 'end_date', 'name']
+        verbose_name = 'Aktivitet'
+        verbose_name_plural = 'Aktiviteter'
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -123,6 +132,10 @@ class ActivityType(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Uppgiftstyp'
+        verbose_name_plural = 'Uppgiftstyper'
 
 class Activity(models.Model):
     '''A specific activity on a given day, can be assigned to a user'''
@@ -144,4 +157,6 @@ class Activity(models.Model):
 
     class Meta:
         ordering=['start_time', 'end_time', 'name']
+        verbose_name = 'Uppgift'
+        verbose_name_plural = 'Uppgifter'
 

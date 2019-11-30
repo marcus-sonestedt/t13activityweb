@@ -16,3 +16,15 @@
 .jumbotron {
   background-color: #555;
 }
+
+.model-header button {
+  float:right
+}
+
+.model-header h1,h2 {
+  float:left
+}
+
+.model-header + * {
+  clear:both
+}

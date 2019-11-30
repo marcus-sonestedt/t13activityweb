@@ -1,12 +1,16 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap'
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
-import { Home } from './components/Home'
-import { Welcome } from './components/Welcome'
-import { EventView } from './components/EventView'
+import { MemberHomeView } from './views/MemberHomeView'
+import { Welcome } from './views/WelcomeView'
+import { EventView } from './views/EventView'
 import { NotFound } from './components/NotFound'
+import { ActivityView } from './views/ActivityView';
+import { EventTypeView } from './views/EventTypeView';
+import { ActivityTypeView } from './views/ActivityTypeView';
+import { MemberView } from './views/MemberView';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,56 +35,63 @@ const App = () => {
       });
 
     return;
-  },  []);
+  }, []);
 
   return (
-      <BrowserRouter>
-        <Navigation visible={isLoggedIn} isStaff={isStaff} />
-        <Container>
-          <pre>{isLoggedIn}</pre>
-          <Switch>
-            <Redirect exact from="/" to="/frontend/" />
-            {!isLoggedIn ?
-              <>
-                <Route path="/frontend/welcome" component={Welcome}/>
-                <Redirect to="/frontend/welcome" />
-              </>
-              :
-              <>
-                <Redirect exact from="/frontend/" to="/frontend/home" />
-                <Redirect exact from="/frontend/welcome" to="/frontend/home" />
-                <Route path="/frontend/home" component={Home}/>
-                <Route path="/frontend/event/:id" component={EventView}/>
-                <Route path="/frontend/activity/:id" component={EventView}/>
-                <Route path="/frontend/event_type/:id" component={EventView}/>
-                <Route path="/frontend/activity_type/:id" component={EventView}/>
-                <Route path="/frontend/member/:id" component={EventView}/>
-              </>
-            }
-            <Route component={NotFound} />
-          </Switch>
-        </Container>
-        <Footer />
-      </BrowserRouter >
-    );
+    <BrowserRouter>
+      <Navigation loggedIn={isLoggedIn} isStaff={isStaff} />
+      <pre>{isLoggedIn}</pre>
+      <Switch>
+        <Redirect exact from="/" to="/frontend/" />
+        <Route path="/frontend/event/:id" component={EventView} />
+        <Route path="/frontend/activity/:id" component={ActivityView} />
+        <Route path="/frontend/event_type/:id" component={EventTypeView} />
+        <Route path="/frontend/activity_type/:id" component={ActivityTypeView} />
+        <Redirect2 from="/frontend/member/:id" toFunc={(url:string) => `/app/login?next=${url}`} />
 
+        {!isLoggedIn ?
+          <>
+            <Route path="/frontend/welcome" component={Welcome} />
+            <Redirect to="/frontend/welcome" />
+          </>
+          :
+          <>
+            <Redirect exact from="/frontend/" to="/frontend/home" />
+            <Redirect exact from="/frontend/welcome" to="/frontend/home" />
+            <Route path="/frontend/home" component={MemberHomeView} />
+            <Route path="/frontend/member/:id" component={MemberView} />
+          </>
+        }
+        <Route component={NotFound} />
+      </Switch>
+      <Footer />
+    </BrowserRouter >
+  );
+}
+
+export const Redirect2 = (props:{from:string, toFunc:(url:string) => string}) => {
+  const location = useLocation();
+  const to = props.toFunc(location.pathname);
+  return <Redirect from={props.from} to={to}/>
 }
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <Row className="fixed-bottom footer">
-      <Col>
-        <p>Copyright &copy; Team13 GKRC and Marcus Sonestedt, 2019-{currentYear}.</p>
-      </Col>
-      <Col>
-        <p>
-          Developed with <a href="https://reactjs.org">React</a> and
+    <Container fluid>
+      <Row className="fixed-bottom footer">
+        <Col>
+          <p>Copyright &copy; Team13 GKRC and Marcus Sonestedt, {currentYear}.</p>
+        </Col>
+        <Col>
+          <p>
+            Developed with <a href="https://reactjs.org">React</a> and
           {'\u00A0'}<a href="https:///www.djangoproject.com">Django</a> by
           {'\u00A0'}<a href="https://github.com/marcusl">Marcus Sonestedt</a>.
         </p>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

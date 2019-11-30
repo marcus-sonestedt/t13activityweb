@@ -29,16 +29,17 @@ class ClearAuthToken(ObtainAuthToken):
 
 
 class MyActivities(generics.ListAPIView):
+    queryset = Activity.objects.select_related('type', 'event')
     permission_classes = [IsAuthenticated]
     serializer_class = ActivitySerializer
 
     def get_queryset(self):
         member = Member.objects.get(user__username=self.request.user)
 
-        return Activity.objects \
+        return self.queryset \
             .filter(assigned=member) \
-            .select_related('type', 'event') \
             .values()
+
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type')
@@ -53,10 +54,11 @@ class EventList(generics.ListAPIView):
 
         return self.queryset.filter(id=id)
 
+
 class UpcomingEventList(generics.ListAPIView):
     queryset = Event.objects \
                     .filter(start_date__gte=datetime.now()) \
-                    .select_related('type')[:5]
+                    .select_related('type')[:10]
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     read_only = True
@@ -67,14 +69,24 @@ class IsLoggedIn(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def get(self, request, format=None):
+        try:
+            member_id = Member.objects.get(user=request.user.id).id
+        except Member.DoesNotExist:
+            member_id = None
+
+        user_id = request.user.id if request.user.is_authenticated else None
+
         return Response({
             'isLoggedIn': request.user.is_authenticated,
-            'isStaff': request.user.is_staff
+            'isStaff': request.user.is_staff,
+            'userId': user_id,
+            'memberId': member_id
         })
+
 
 class EventActivities(generics.ListAPIView):
     queryset = Activity.objects.select_related('type', 'assigned')
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = EventActivitySerializer
 
     def get_queryset(self):
@@ -84,3 +96,49 @@ class EventActivities(generics.ListAPIView):
             return self.queryset.none()
 
         return self.queryset.filter(event=id)
+
+class ActivityList(generics.ListAPIView):
+    queryset = Activity.objects
+    serializer_class = ActivitySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    read_only = True
+
+    def get_queryset(self):
+        try:
+            id = self.kwargs['id']
+        except KeyError:
+            return self.queryset
+
+        return self.queryset \
+                .filter(id=id) \
+                .select_related('type', 'event', 'assigned')
+
+
+class EventTypeList(generics.ListAPIView):
+    queryset = EventType.objects
+    serializer_class = EventTypeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    read_only = True
+
+    def get_queryset(self):
+        try:
+            id = self.kwargs['id']
+        except KeyError:
+            return self.queryset
+
+        return self.queryset.filter(id=id)
+
+
+class ActivityTypeList(generics.ListAPIView):
+    queryset = ActivityType.objects
+    serializer_class = ActivityTypeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    read_only = True
+
+    def get_queryset(self):
+        try:
+            id = self.kwargs['id']
+        except KeyError:
+            return self.queryset
+
+        return self.queryset.filter(id=id)
