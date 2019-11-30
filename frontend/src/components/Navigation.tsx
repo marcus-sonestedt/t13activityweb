@@ -9,9 +9,7 @@ export const Navigation = () => {
     return (
         <Navbar bg="light">
             <Navbar.Brand href="/">
-                <a href="http://team13.se" >
-                    <img src="/logo192.png" alt="Team13 logo"/>
-                </a>
+                <img src="/logo192.png" alt="Team13 logo"/>
                 Team13's aktivitetswebb
                 </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

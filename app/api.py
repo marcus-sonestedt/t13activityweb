@@ -21,20 +21,20 @@ class ClearAuthToken(ObtainAuthToken):
     permission_classes = [IsAuthenticated]
     schema = None
 
-    def post(self, reque8st):
+    def post(self, request):
         deleted, _ = Token.objects.delete(user=self.serializer.object['user'])
         if deleted == 0:
-            return Response("not logged in?", status=status.HTTP_404_NOT_FOUND)
+            return Response("not logged in?", status=status.HTTP_410_GONE)
         return Response("bye")
 
 
-class MyActivities(generics.ListAPIView):
+class MyActivitiesList(generics.ListAPIView):
     queryset = Activity.objects.select_related('type', 'event')
     permission_classes = [IsAuthenticated]
     serializer_class = ActivitySerializer
 
     def get_queryset(self):
-        member = Member.objects.get(user__username=self.request.user)
+        member = Member.objects.get(user=self.request.user)
 
         return self.queryset \
             .filter(assigned=member) \

@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Row, Col, Jumbotron, Image, Button } from 'react-bootstrap'
 import { UpcomingEventsTable } from "../components/UpcomingEventsTable";
 import DataProvider from "../components/DataProvider";
 import { PagedT13Events } from "../Models";
 import { deserialize } from "class-transformer";
 import './WelcomeView.css'
+import { userContext } from "../App";
 
-type Props =
-    {
-
-    };
-
-export const Welcome = (props: Props) => {
+export const Welcome = () => {
     const [events, setEvents] = useState(new PagedT13Events());
+    const user = useContext(userContext);
+
+    if (user.isLoggedIn)
+        return null;
 
     return (
         <Container>

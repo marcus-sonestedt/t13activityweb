@@ -18,9 +18,11 @@ export class DataProvider<T>
 {
     state = new DataState<T>();
 
+    controller = new AbortController();
+
     componentDidMount = () => {
 
-        fetch(this.props.endpoint)
+        fetch(this.props.endpoint, {signal: this.controller.signal})
             .then(response =>
                 response.status !== 200
                     ? (this.setState({
@@ -29,6 +31,8 @@ export class DataProvider<T>
                     }), "")
                     : response.text()
             ).then(data => {
+                if (this.controller.signal.aborted)
+                    return;
                 var typedData = this.props.ctor(data);
                 this.setState({ data:typedData });
                 this.props.onLoaded(typedData);
@@ -41,12 +45,9 @@ export class DataProvider<T>
             },);
     }
 
-    /*
     componentWillUnmount = () => {
-        this.setState({data: null})
-        // todo: cancel fetch
+        this.controller.abort()
     }
-    */
 
     render = () => {
         const { data, placeholder, error } = this.state;
@@ -57,7 +58,7 @@ export class DataProvider<T>
         if (error != null)
             return <Container fluid>
                 <p>{placeholder}</p>
-                <Image src='/static/brokenpiston.jpg' alt="Broken piston" className="errorImage" mx-auto />
+                <Image src='/static/brokenpiston.jpg' alt="Broken piston" className="errorImage" fluid />
                 <Alert variant='warning'>{error}</Alert>
             </Container>;
 
