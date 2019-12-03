@@ -12,9 +12,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import posixpath
+import logging
 
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.staticfiles.finders import AppDirectoriesFinder
+
+logger = logging.getLogger(__name__)
 
 def get_env_value(env_variable):
     try:
@@ -31,10 +34,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     import T13ActivityWeb.secrets as secrets
+
     SECRET_KEY = secrets.DJANGO_SECRET_KEY
     RECAPTCHA_PUBLIC_KEY = secrets.RECAPTCHA_PUBLIC_KEY
     RECAPTCHA_PRIVATE_KEY = secrets.RECAPTCHA_PRIVATE_KEY
+
+    logger.info("Secrets imported successfully")
+
 except ImportError(e):
+    logger.error(f"Failed to import secrets: {e}")
+
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4')
 
@@ -175,8 +184,8 @@ if not DEBUG:
 
 # recaptcha
 RECAPTCHA_PROXY = {
-    'http': 'http://localhost:8000',
-    'https': 'https://localhost:8000'
+#    'http': 'http://localhost:8000',
+#    'https': 'https://localhost:8000'
 }
 
 # https://developers.google.com/recaptcha/docs/v3#score

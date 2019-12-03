@@ -23,4 +23,4 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 
 class BootstrapUserCreationForm(UserCreationForm):
     """Signup form which uses ReCaptcha"""
-    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
