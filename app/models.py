@@ -128,7 +128,7 @@ class ActivityType(models.Model):
     name = models.CharField(max_length=40, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
-    files = models.ManyToManyField(Attachment)
+    files = models.ManyToManyField(Attachment, blank=True)
 
     def __str__(self):
         return self.name
