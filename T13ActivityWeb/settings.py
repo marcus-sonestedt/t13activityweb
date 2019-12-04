@@ -51,6 +51,7 @@ except ImportError(e):
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
+    'macke.eu.pythonanywhere.com',
     'macke.pythonanywhere.com',
     'localhost'
 ]
