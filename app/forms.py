@@ -19,8 +19,8 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                widget=forms.PasswordInput({
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
-    captcha = ReCaptchaField(widget=ReCaptchaV3)
+#    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
 class BootstrapUserCreationForm(UserCreationForm):
     """Signup form which uses ReCaptcha"""
-    captcha = ReCaptchaField(widget=ReCaptchaV3)
+#    captcha = ReCaptchaField(widget=ReCaptchaV3)

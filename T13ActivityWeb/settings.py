@@ -39,6 +39,12 @@ try:
     RECAPTCHA_PUBLIC_KEY = secrets.RECAPTCHA_PUBLIC_KEY
     RECAPTCHA_PRIVATE_KEY = secrets.RECAPTCHA_PRIVATE_KEY
 
+    EMAIL_HOST = secrets.EMAIL_HOST
+    EMAIL_HOST_USER = secrets.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+
     logger.info("Secrets imported successfully")
 
 except ImportError(e):
