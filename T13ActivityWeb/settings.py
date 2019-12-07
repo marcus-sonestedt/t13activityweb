@@ -47,7 +47,7 @@ try:
 
     logger.info("Secrets imported successfully")
 
-except ImportError(e):
+except ImportError as e:
     logger.error(f"Failed to import secrets: {e}")
 
     # SECURITY WARNING: keep the secret key used in production secret!
@@ -168,17 +168,27 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True
+        },
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-        },        
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
     'root': {
         'handlers': ['console'],
         'level': 'INFO'
-    }    
+    }
 }
 
 if not DEBUG:
