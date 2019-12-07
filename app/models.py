@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.core.mail import mail_managers
 
 # Create your models here.
 
@@ -49,11 +50,37 @@ class Member(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Member.objects.create(user=instance)
+        instance.member = Member.objects.create(user=instance)
+        instance.email = instance.username
+        instance.save()
+    elif instance.username != instance.email:
+        instance.username = instance.email
+        instance.save()
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
     instance.member.save()
+
+#@receiver(post_save, sender=Member)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        user = instance.user
+        member = instance
+
+        mail_managers(
+            f'New user {user.username} registered at T13 web',
+            f'''Hi,
+
+            The user {member.fullname} (username: '{user.username}', email:
+            {user.email}) just registered themselves on the Team 13 website.
+
+            Go to https://eu.macke.pythonanywhere.com/admin/auth/user/{user.id}/change/'
+            to give them access, i.e. at least add them to the 'T13 Members'
+            group if they are a legitimate member of the club.
+
+            See also https://macke.eu.pythonanywhere.com/admin/app/member/{member.id}/change/ to check their membership status & data.
+
+            Best regards,
+            /The Team13 website
+            ''')
 
 class Attachment(models.Model):
     uploader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)

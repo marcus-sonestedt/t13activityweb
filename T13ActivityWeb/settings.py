@@ -56,6 +56,17 @@ except ImportError as e:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
+ADMINS = [
+    ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
+]
+
+MANAGERS = [
+    ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
+]
+
+DEFAULT_FROM_EMAIL = 'noreply@macke.eu.pythonanywhere.com'
+
+
 ALLOWED_HOSTS = [
     'macke.eu.pythonanywhere.com',
     'macke.pythonanywhere.com',
