@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 import logging
 
 from django.urls import path
@@ -39,8 +39,7 @@ class MyActivitiesList(generics.ListAPIView):
         member = Member.objects.get(user=self.request.user)
 
         return self.queryset \
-            .filter(assigned=member) \
-            .values()
+            .filter(assigned=member)
 
 
 class EventList(generics.ListAPIView):
@@ -59,7 +58,7 @@ class EventList(generics.ListAPIView):
 
 class UpcomingEventList(generics.ListAPIView):
     queryset = Event.objects \
-                    .filter(start_date__gte=datetime.now()) \
+                    .filter(start_date__gte=datetime.datetime.now()) \
                     .select_related('type')[:10]
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]

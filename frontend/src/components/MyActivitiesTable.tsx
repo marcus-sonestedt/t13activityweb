@@ -34,18 +34,16 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
     }
 
     const renderRow = (model: Activity) => {
-        const event = model.event !== null
-            ? <a href={model.event.url()}>{model.event.name}</a>
-            : null;
+        const unlistPossible = model.event.date < new Date();
 
         return (
             <tr key={model.id}>
                 <td><a href={model.url()}>{model.name}</a></td>
-                <td>{event}</td>
-                <td>{model.date}</td>
+                <td><a href={model.event.url()}>{model.event.name}</a></td>
+                <td>{model.event.date}</td>
                 <td>{model.start_time} - {model.end_time}</td>
                 <td>{model.completed ? "✔" : "❌"}</td>
-                <td>{model.date < new Date() ? null :
+                <td>{unlistPossible ? null :
                     <Button
                         onClick={() => unlistFromActivity(model)}
                         variant='danger'>Avboka</Button>

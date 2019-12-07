@@ -9,6 +9,8 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.core.mail import mail_managers
 
+import datetime
+
 # Create your models here.
 
 class Member(models.Model):
@@ -33,7 +35,7 @@ class Member(models.Model):
     def __str__(self):
         if self.user:
             self.fullname = self.user.first_name + " " + self.user.last_name
-        return self.fullname or "Member {}".format(self.id)
+        return f"{self.fullname or 'Member'} ({self.user.email})"
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -59,8 +61,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 
     instance.member.save()
 
-#@receiver(post_save, sender=Member)
-def create_user_profile(sender, instance, created, **kwargs):
+@receiver(post_save, sender=Member)
+def email_managers_for_new_users(sender, instance, created, **kwargs):
     if created:
         user = instance.user
         member = instance
@@ -168,11 +170,14 @@ class Activity(models.Model):
     '''A specific activity on a given day, can be assigned to a user'''
     name = models.CharField(max_length=40)
     type = models.ForeignKey(ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
     assigned = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
-    date = models.DateField(null=True)
+    assigned_at = models.DateTimeField(null=True)
+
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
+
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
 
@@ -187,3 +192,27 @@ class Activity(models.Model):
         verbose_name = 'Uppgift'
         verbose_name_plural = 'Uppgifter'
 
+    def save(self, *args, **kwargs):
+        if 'assigned' in self.kwargs:
+            self.assigned_at = datetime.date.today()
+
+        super(Activity, self).save(*args, **kwargs)
+
+
+class ActivityDelistRequest(models.Model):
+    '''request from a user to delist from an activity'''
+
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, \
+        related_name='delist_requests')
+    reason = models.TextField(blank=True)
+    approved = models.BooleanField(default=False)
+    approver = models.ForeignKey(Member, on_delete=models.SET_NULL, \
+        blank=True, null=True, related_name='approvers')
+
+    def __str__(self):
+        return f"{self.member}: {self.activity.name} ({self.activity.date})"
+
+    class Meta:
+        ordering = ['activity__assigned', 'activity__date']
+        verbose_name = "Avbokningsbegäran"
+        verbose_name_plural = "Avbokningsbegäranden"

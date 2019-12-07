@@ -22,7 +22,7 @@ export const EventView = () => {
         if (event === null || event === undefined)
             document.title = `T13 - Aktivitet id ${id}`
         else
-            document.title = `T13 - ${event.name} - ${event.start_date}`
+            document.title = `T13 - ${event.name} - ${event.date}`
     }, [id, event]);
 
     useEffect(() => {
@@ -117,7 +117,7 @@ export const EventView = () => {
                     </div>
                     <hr />
                     {eventType}
-                    <h4>{event.start_date} - {event.end_date}</h4>
+                    <h4>{event.date}</h4>
                     <h5>Beskrivning</h5>
                     <p>{event.description}</p>
                     <h5>Övrigt</h5>

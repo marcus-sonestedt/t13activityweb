@@ -37,9 +37,10 @@ export class Activity implements IdValue {
     @Type(() => ActivityType)
     type: ActivityType | null = null;
     @Type(() => T13Event)
-    event: T13Event | null = null;
+    event: T13Event = new T13Event();
     @Type(() => Member)
     assigned: Member | null = null;
+    assigned_at: Date | null = null;
 
     url = () => process.env.PUBLIC_URL + "activity/" + this.id;
     adminUrl = () => '/admin/app/activity/' + this.id;
@@ -73,8 +74,7 @@ export class T13Event implements IdValue {
     name: string = "";
     description: string = "";
     comment: string = "";
-    start_date: Date = new Date();
-    end_date: Date = new Date();
+    date: Date = new Date();
     image_url: string | null = null;
     @Type(() => T13EventType)
     type: T13EventType | null = null;
