@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import { userContext } from "../App";
 import { ActivityDelistRequest } from '../Models';
+import Cookies from "universal-cookie";
 
 export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => {
     if (model.activity == null)
@@ -25,6 +26,7 @@ export const ActivityDelistRequestView = () => {
     const [currentReq, setCurrentReq] = useState<ActivityDelistRequest | null>(null);
     const [allRequests, setAllRequests] = useState<ActivityDelistRequest[]>([]);
     const user = useContext(userContext);
+    const cookies = new Cookies();
 
     const handleResponse = (resp: any, action: string, url: string) => {
         if (resp instanceof Response) {
@@ -47,7 +49,10 @@ export const ActivityDelistRequestView = () => {
 
         const handler = (r: any) => handleResponse(r, 'radera', model.apiUrl());
 
-        fetch(model.apiUrl(), { method: 'DELETE' })
+        fetch(model.apiUrl(), {
+            method: 'DELETE',
+            headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+        })
             .then(handler, handler);
     };
 
@@ -60,6 +65,7 @@ export const ActivityDelistRequestView = () => {
         fetch(model.apiUrl(),
             {
                 method: 'UPDATE',
+                headers: { 'X-CSRFToken': cookies.get('csrftoken') },
                 body: JSON.stringify({
                     approved: true,
                     approved_by: user.memberId
@@ -77,6 +83,7 @@ export const ActivityDelistRequestView = () => {
 
         fetch(model.apiUrl(), {
             method: 'UPDATE',
+            headers: { 'X-CSRFToken': cookies.get('csrftoken') },
             body: JSON.stringify({
                 approved: false,
                 approved_by: user.memberId,
@@ -93,14 +100,25 @@ export const ActivityDelistRequestView = () => {
             <td>{model.activity.event.date}</td>
             <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
             <td>{model.member.id === user.memberId
-                ? <Button variant='danger' onClick={() => cancel(model)}>Avbryt</Button>
+                ? <Button variant='danger' size='sm' onClick={() => cancel(model)}>Avbryt</Button>
                 : null}
             </td>
         </tr>
     }
 
     const myRequests = allRequests.filter(r => r.member.id === user.memberId)
-    const otherRequests = allRequests.filter(r => r.member.id !== user.memberId)
+
+    const unhandledRequests = allRequests
+        .filter(r => r.member.id !== user.memberId && r.approved === null)
+
+    const myHandledRequests = allRequests
+        .filter(r => r.approver !== null && r.approver.id == user.memberId)
+
+    const separator = (title: string) =>
+        <tr><td colSpan={5}>
+            <h4>{title}</h4>
+            <hr />
+        </td></tr>
 
     return (
         <Container fluid>
@@ -118,12 +136,14 @@ export const ActivityDelistRequestView = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {separator('Mina förfrågningar')}
                             {myRequests.map(renderRow)}
-                            {myRequests.length === 0 || otherRequests.length === 0
-                                ? null
-                                : <tr><td colSpan={5}>---</td></tr>
-                            }
-                            {otherRequests.map(renderRow)}
+                            {!user.isStaff ? null : <>
+                                {separator('Ohanterade förfrågningar')}
+                                {unhandledRequests.map(renderRow)}
+                                {separator('Fförfrågningar hanterade av mig')}
+                                {myHandledRequests.map(renderRow)}
+                            </>}
                         </tbody>
                     </Table>
                 </Col>
