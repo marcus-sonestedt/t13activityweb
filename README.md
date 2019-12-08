@@ -61,7 +61,7 @@ env/scripts/activate
  * On Linux:
 
 ```bash
-coutce env/scripts/activate
+source env/scripts/activate
 ```
 
 * Install required packages (into the virtual evnironment)

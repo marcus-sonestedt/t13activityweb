@@ -26,11 +26,12 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                     throw r.statusText;
                 }
             }, r => { throw r })
-            .catch(e => {
-                console.error(e);
-                alert("Något gick fel! :(\n" + e);
-                window.location.reload()
-            });
+            .catch(err => {
+                console.error(err);
+                alert("Något gick fel! :(\n" + err);
+                
+            })
+            .finally(() => window.location.reload());
     }
 
     const renderRow = (model: Activity) => {

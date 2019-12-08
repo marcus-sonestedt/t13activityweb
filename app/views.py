@@ -51,7 +51,7 @@ def about(request):
 def signup(request):
     if request.method == 'POST':
         form = BootstrapUserCreationForm(request.POST)
-        if 'localhost' in request.get_host():
+        if 'localhost' in request.get_host() and 'captcha' in form.fields:
             del form.fields['captcha']
 
         if form.is_valid():
@@ -63,7 +63,7 @@ def signup(request):
             return redirect('/')
     else:
         form = BootstrapUserCreationForm()
-        if 'localhost' in request.get_host():
+        if 'localhost' in request.get_host() and 'captcha' in form.fields:
             del form.fields['captcha']
 
     return render(request, 'signup.html', {
@@ -83,7 +83,7 @@ class MyLoginView(LoginView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        if 'localhost' in self._request.get_host():
+        if 'localhost' in self.request.get_host() and 'captcha' in form.fields:
             del form.fields['captcha']
         return form
 

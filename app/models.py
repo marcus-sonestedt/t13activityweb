@@ -99,7 +99,7 @@ class Attachment(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
-        return super(User, self).save(*args, **kwargs)
+        return super(Attachment, self).save(*args, **kwargs)
 
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -193,7 +193,7 @@ class Activity(models.Model):
         verbose_name_plural = 'Uppgifter'
 
     def save(self, *args, **kwargs):
-        if 'assigned' in self.kwargs:
+        if 'assigned' in kwargs:
             self.assigned_at = datetime.date.today()
 
         super(Activity, self).save(*args, **kwargs)
@@ -202,17 +202,20 @@ class Activity(models.Model):
 class ActivityDelistRequest(models.Model):
     '''request from a user to delist from an activity'''
 
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, \
+        related_name='delist_request_members')
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, \
         related_name='delist_requests')
     reason = models.TextField(blank=True)
-    approved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=None, null=True, blank=True)
     approver = models.ForeignKey(Member, on_delete=models.SET_NULL, \
         blank=True, null=True, related_name='approvers')
+    reject_readon = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.member}: {self.activity.name} ({self.activity.date})"
+        return f"{self.member}: {self.activity.name} ({self.activity.event.date})"
 
     class Meta:
         ordering = ['activity__assigned', 'activity__date']
-        verbose_name = "Avbokningsbegäran"
-        verbose_name_plural = "Avbokningsbegäranden"
+        verbose_name = "Avbokningsförfrågan"
+        verbose_name_plural = "Avbokningsförfråganden"

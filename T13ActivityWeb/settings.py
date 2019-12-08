@@ -48,7 +48,8 @@ try:
     logger.info("Secrets imported successfully")
 
 except ImportError as e:
-    logger.error(f"Failed to import secrets: {e}")
+    print(f"WARNING: Failed to import secrets: {e}. Disabling captcha and email!")
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4')

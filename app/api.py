@@ -148,10 +148,8 @@ class ActivityTypeList(generics.ListAPIView):
 
         return self.queryset.filter(id=id)
 
-
-
 class ActivityDelist(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     authentication_classes = [authentication.SessionAuthentication]
 
     def post(self, request, id):
@@ -183,3 +181,15 @@ class ActivityEnlist(APIView):
         activity.save()
 
         return Response("Inbokad på " + activity.name)
+
+class ActivityDelistRequests(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    parser_classes = [parsers.JSONParser]
+    queryset = ActivityDelistRequest.objects
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return self.queryset
+        
+        return self.queryset.filter(activity__member__user=request.user)

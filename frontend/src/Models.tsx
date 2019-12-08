@@ -25,6 +25,11 @@ export class Member implements IdValue {
     static apiUrl = (id: string) => `/api/member/${id}`;
 }
 
+export class PagedMembers extends PagedValues<Member> {
+    @Type(() => Member)
+    results: Member[] = [];
+}
+
 export class Activity implements IdValue {
     id: string = "";
     name: string = "";
@@ -47,6 +52,12 @@ export class Activity implements IdValue {
     static apiUrl = (id: string) => `/api/activity/${id}`;
 }
 
+
+export class PagedActivities extends PagedValues<Activity> {
+    @Type(() => Activity)
+    results: Activity[] = [];
+}
+
 export class ActivityType implements IdValue {
     id: string = "";
     name: string = "";
@@ -58,6 +69,13 @@ export class ActivityType implements IdValue {
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
 }
 
+
+export class PagedActivityTypes extends PagedValues<ActivityType> {
+    @Type(() => ActivityType)
+    results: ActivityType[] = [];
+}
+
+
 export class T13EventType implements IdValue {
     id: string = "";
     name: string = "";
@@ -67,6 +85,11 @@ export class T13EventType implements IdValue {
     url = () => process.env.PUBLIC_URL + "event_type/" + this.id;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
     static apiUrl = (id: string) => `/api/event_type/${id}`;
+}
+
+export class PagedEventTypes extends PagedValues<T13EventType> {
+    @Type(() => T13EventType)
+    results: T13EventType[] = [];
 }
 
 export class T13Event implements IdValue {
@@ -91,25 +114,29 @@ export class PagedT13Events extends PagedValues<T13Event> {
     results: T13Event[] = [];
 }
 
-export class PagedActivities extends PagedValues<Activity> {
-    @Type(() => Activity)
-    results: Activity[] = [];
+export class ActivityDelistRequest implements IdValue {
+    constructor(member: Member, activity: Activity) {
+        this.member = member;
+        this.activity = activity;
+    }
+
+    id: string = '';
+    member: Member;
+    activity: Activity;
+    reason: string = '';
+    approver: Member | null = null;
+    approved: boolean | null = null;
+
+    url = () => process.env.PUBLIC_URL + `delistrequest/${this.id}`
+    adminUrl = () => `/admin/app/delistrequest/${this.id}`
+    apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id)
+    static apiUrlForId = (id: string) => `/api/delistrequest/${id}`
 }
 
-export class PagedMembers extends PagedValues<Member> {
-    @Type(() => Member)
-    results: Member[] = [];
-}
-
-export class PagedActivityTypes extends PagedValues<ActivityType> {
-    @Type(() => ActivityType)
-    results: ActivityType[] = [];
-}
-
-
-export class PagedEventTypes extends PagedValues<T13EventType> {
-    @Type(() => T13EventType)
-    results: T13EventType[] = [];
+export class PagedADR extends PagedValues<ActivityDelistRequest>
+{
+    @Type(() => ActivityDelistRequest)
+    results: ActivityDelistRequest[] = [];
 }
 
 export default {
