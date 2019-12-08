@@ -118,12 +118,12 @@ export const ActivityDelistRequestView = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {myRequests}
+                            {myRequests.map(renderRow)}
                             {myRequests.length === 0 || otherRequests.length === 0
                                 ? null
                                 : <tr><td colSpan={5}>---</td></tr>
                             }
-                            {otherRequests}
+                            {otherRequests.map(renderRow)}
                         </tbody>
                     </Table>
                 </Col>
