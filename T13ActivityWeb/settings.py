@@ -45,7 +45,7 @@ try:
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
 
-    logger.info("Secrets imported successfully")
+    print("Secrets imported successfully")
 
 except ImportError as e:
     print(f"WARNING: Failed to import secrets: {e}. Disabling captcha and email!")
@@ -57,10 +57,12 @@ except ImportError as e:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
+# will get site errors
 ADMINS = [
     ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
 ]
 
+# will get content notifications (broken links, new users, etc)
 MANAGERS = [
     ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
 ]

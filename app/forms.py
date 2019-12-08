@@ -14,13 +14,22 @@ class BootstrapAuthenticationForm(AuthenticationForm):
     username = forms.CharField(max_length=64,
                                widget=forms.TextInput({
                                    'class': 'form-control',
-                                   'placeholder': 'User name'}))
+                                   'placeholder': 'Email'}))
     password = forms.CharField(label=_("Password"),
                                widget=forms.PasswordInput({
                                    'class': 'form-control',
-                                   'placeholder':'Password'}))
+                                   'placeholder':'Lösenord'}))
 #    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
 class BootstrapUserCreationForm(UserCreationForm):
     """Signup form which uses ReCaptcha"""
 #    captcha = ReCaptchaField(widget=ReCaptchaV3)
+    first_name = forms.CharField(max_length=64,
+                               widget=forms.TextInput({
+                                   'class': 'form-control',
+                                   'placeholder': 'Förnamn'}))
+    last_name = forms.CharField(max_length=64,
+                               widget=forms.TextInput({
+                                   'class': 'form-control',
+                                   'placeholder': 'Efternamn'}))
+
