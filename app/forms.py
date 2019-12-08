@@ -12,9 +12,9 @@ from captcha.widgets import ReCaptchaV2Checkbox, ReCaptchaV3
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS & ReCaptcha."""
     username = forms.CharField(max_length=64,
-                               widget=forms.TextInput({
+                               widget=forms.EmailInput({
                                    'class': 'form-control',
-                                   'placeholder': 'Email'}))
+                                   'placeholder': 'E-mail'}))
     password = forms.CharField(label=_("Password"),
                                widget=forms.PasswordInput({
                                    'class': 'form-control',

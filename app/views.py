@@ -64,6 +64,7 @@ def signup(request):
 
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
+            user.email = username
             user.save()
 
             login(request, user)
