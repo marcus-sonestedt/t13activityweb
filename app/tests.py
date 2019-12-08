@@ -8,27 +8,25 @@ from django.test import TestCase
 
 # TODO: Configure your database in settings.py and sync before running tests.
 
-class ViewTest(TestCase):
+class AppViewTest(TestCase):
     """Tests for the application views."""
 
     if django.VERSION[:2] >= (1, 7):
         # Django 1.7 requires an explicit setup() when running tests in PTVS
         @classmethod
         def setUpClass(cls):
-            super(ViewTest, cls).setUpClass()
+            super(AppViewTest, cls).setUpClass()
             django.setup()
+            django.conf.settings.DEBUG = True
 
     def test_home(self):
-        """Tests the home page."""
-        response = self.client.get('/app')
-        self.assertContains(response, 'Home Page', 1, 200)
+        """Tests the home page redirects."""
+        response = self.client.get('/app/', follow=True)
+        self.assertRedirects(response, 'static/index.html')
 
-    def test_contact(self):
-        """Tests the contact page."""
-        response = self.client.get('/app/contact')
-        self.assertContains(response, 'Contact', 3, 200)
+    def test_admin(self):
+        """Tests the admin page."""
+        response = self.client.get('/admin/', follow=True)
+        #print(response.content)
+        self.assertContains(response, 'Django webbplatsadministration', 1, 200)
 
-    def test_about(self):
-        """Tests the about page."""
-        response = self.client.get('/app/about')
-        self.assertContains(response, 'About', 3, 200)

@@ -153,6 +153,16 @@ npm install <package>@latest --save[-dev]
 
 ### Backend
 
+List outdated packages:
+
 ```bash
-pip
+pip list --outdated
+```
+
+Update via [pipupgrade](https://github.com/achillesrasquinha/pipupgrade),
+or any another method recommended [here](https://stackoverflow.com/questions/2720014/how-to-upgrade-all-python-packages-with-pip).
+
+```
+pip install pipupgrade
+pipupgrade --latest --yes
 ```

@@ -8,27 +8,39 @@ from django.test import TestCase
 
 # TODO: Configure your database in settings.py and sync before running tests.
 
-class ViewTest(TestCase):
+class FrontendViewTest(TestCase):
     """Tests for the application views."""
 
     if django.VERSION[:2] >= (1, 7):
         # Django 1.7 requires an explicit setup() when running tests in PTVS
         @classmethod
         def setUpClass(cls):
-            super(ViewTest, cls).setUpClass()
+            super(FrontendViewTest, cls).setUpClass()
             django.setup()
 
     def test_home(self):
         """Tests the home page."""
-        response = self.client.get('/frontend/')
-        self.assertContains(response, '<!DOCTYPE html>', 1, 200)
+        response = self.client.get('/frontend/', follow=True)
+        self.assertContains(response,
+            "content=\"Team13's aktivitietwebb\"", 1, 200)
 
-    def test_manifest(self):
-        """Tests the home page."""
-        response = self.client.get('/frontend/manifest.json')
+    def test_manifest_via_redirect(self):
+        """Tests getting the manifest via redirects."""
+        response = self.client.get('/manifest.json', follow=True)
         self.assertContains(response, '"short_name":', 1, 200)
 
+    def test_manifest_in_static(self):
+        """Tests getting the manifest via redirects."""
+        response = self.client.get('/static/manifest.json')
+        self.assertContains(response, '"short_name":', 1, 200)
+
+    def test_manifest_redirect(self):
+        """Tests that the manifest is riderected."""
+        response = self.client.get('/manifest.json')
+        self.assertRedirects(response, '/static/manifest.json')
+
+
     def test_static(self):
-        """Tests the static redirect page."""
-        response = self.client.get('/frontend/static')
-        self.assertContains(response, '/static', 1, 302)
+        """Tests the static redirect for favicon.ico."""
+        response = self.client.get('/frontend/robots.txt', follow=False)
+        self.assertRedirects(response, '/static/robots.txt')

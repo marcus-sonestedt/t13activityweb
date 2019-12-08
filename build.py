@@ -26,7 +26,7 @@ def test():
     run(('npm','run','test'), check=True, env=testEnv, cwd='frontend', shell=True)
 
     print("\n == PYTHON TEST")
-    run(('python','manage.py','test'), check=True, env=testEnv)    
+    run(('python','manage.py','test', '--debug-mode'), check=True, env=testEnv)
 
 if __name__ == '__main__':
     print("Working in " + ROOT_DIR + " ...")
