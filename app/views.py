@@ -28,7 +28,8 @@ def contact(request):
         'contact.html',
         {
             'title': 'Contact',
-            'message': 'Your contact page.',
+            'message': '''For web site technical issues, contact macke@yar.nu\n\n
+                For issues w.r.t. the club, events and tasks, contat info@team13.se.''',
             'year': datetime.now().year,
         }
     )
@@ -42,7 +43,7 @@ def about(request):
         'about.html',
         {
             'title': 'About',
-            'message': 'Your application description page.',
+            'message': 'Webb app that helps Team 13 manage club activites and tasks that members can take upon themselves.',
             'year': datetime.now().year,
         }
     )
