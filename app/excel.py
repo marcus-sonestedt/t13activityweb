@@ -14,6 +14,7 @@ def importDataFromExcel(file, year=2019):
     sheet = wb._sheets[0]
 
     events = dict()
+    eventTypes = dict()
     activityTypes = dict()
     n = 0
 
@@ -21,22 +22,32 @@ def importDataFromExcel(file, year=2019):
 
     for cols in sheet.rows:
         n += 1
-        if n < 6: continue
+        if n < 7: continue
+        if cols[0].value is None: continue
 
-        if cols[0].value is not None:
-            event_name = f"{cols[0].value} vecka {cols[1].value}"
-            date = cols[2].value.replace(year=year)
-            event = events.get((event_name,date))
-            if event is None:
-                logger.info(f"Event {event_name} {date}")
-                try:
-                    event = Event.objects.get(name=event_name,
-                start_date=date)
-                except Event.DoesNotExist:
-                    event = Event(name=event_name, start_date=date, end_date=date)
-                    event.save()
+        et_name = cols[0].value
+        et = eventTypes.get(et_name)
+        if et is None:
+            try:
+                et = EventType.objects.get(name=et_name)
+            except EventType.DoesNotExist:
+                et = EventType(name=et_name)
+                et.save()
+            eventTypes[et_name] = et
 
-                events[event_name] = event
+        event_name = f"{et_name} vecka {cols[1].value}"
+        date = cols[2].value.replace(year=year)
+        event = events.get((event_name,date))
+        if event is None:
+            logger.info(f"Event {event_name} {date}")
+            try:
+                event = Event.objects.get(name=event_name,
+            start_date=date, type=et)
+            except Event.DoesNotExist:
+                event = Event(name=event_name, start_date=date, end_date=date, type=et)
+                event.save()
+
+            events[event_name] = event
 
         at_name = cols[5].value
         at = activityTypes.get(at_name)
