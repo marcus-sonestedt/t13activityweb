@@ -18,7 +18,7 @@ export function UpcomingEventsTable
         return (
             <tr key={model.id}>
                 <td><a href={model.url()}>{model.name}</a></td>
-                <td>{model.date}</td>
+                <td>{model.date.toLocaleDateString()}</td>
                 <td>{type}</td>
             </tr>
         );

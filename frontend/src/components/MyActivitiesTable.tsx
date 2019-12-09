@@ -52,7 +52,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
             <tr key={model.id}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td><a href={model.event.url()}>{model.event.name}</a></td>
-                <td>{model.event.date}</td>
+                <td>{model.event.date.toLocaleDateString()}</td>
                 <td>{model.start_time} - {model.end_time}</td>
                 <td>{model.completed ? "✔" : "❌"}</td>
                 <td>{unlistPossible ? null :
