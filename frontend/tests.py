@@ -35,7 +35,7 @@ class FrontendViewTest(TestCase):
         self.assertContains(response, '"short_name":', 1, 200)
 
     def test_manifest_redirect(self):
-        """Tests that the manifest is riderected."""
+        """Tests that the manifest is redirected."""
         response = self.client.get('/manifest.json')
         self.assertRedirects(response, '/static/manifest.json')
 

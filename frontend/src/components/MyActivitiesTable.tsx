@@ -1,35 +1,46 @@
-import React from "react";
-import { Container, Button } from 'react-bootstrap'
+import React, { useContext } from "react";
+import { Container, Button, Table } from 'react-bootstrap'
 import { Activity } from '../Models'
-import { Table } from 'react-bootstrap'
 import './Table.css'
-import Cookies from "universal-cookie";
+import Cookies from "universal-cookie"
+import { userContext } from "../App"
 
 export class MyActivitiesProps {
     values: Activity[] = [];
 }
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
+    const user = useContext(userContext)
 
     const unlistFromActivity = (model: Activity) => {
+        const reason = prompt(
+            "Ange varför du vill avboka ditt åtagande.\n" +
+            "Observera att det gäller till det har bekräftats av klubben");
+        if (reason === null)
+            return
+
         const cookies = new Cookies();
+
         fetch(`/api/activity_delist/${model.id}`,
             {
                 method: 'POST',
-                headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+                headers: { 'X-CSRFToken': cookies.get('csrftoken') },
+                body: JSON.stringify({
+                    member: user.memberId,
+                    activity: model.id,
+                    reason: reason
+                })
             })
             .then(r => {
-                if (r.status === 200)
-                    window.location.reload()
-                else {
+                if (r.status !== 200) {
                     r.text().then(t => console.error(t));
                     throw r.statusText;
                 }
-            }, r => { throw r })
+            }, r => { throw r }
+            )
             .catch(err => {
                 console.error(err);
                 alert("Något gick fel! :(\n" + err);
-                
             })
             .finally(() => window.location.reload());
     }
@@ -74,7 +85,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 </thead>
                 <tbody>
                     {props.values
-                        .sort((a,b) => a.date < b.date ? 1 : 0)
+                        .sort((a, b) => a.date < b.date ? 1 : 0)
                         .map(renderRow)}
                 </tbody>
             </Table>
