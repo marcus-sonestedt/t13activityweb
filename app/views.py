@@ -3,16 +3,20 @@ Definition of views.
 """
 
 from datetime import datetime
+import logging
+import app.excel
 
 from django.shortcuts import render
 from django.http import HttpRequest
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
-
+from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_http_methods
 
 from app.forms import BootstrapUserCreationForm, BootstrapAuthenticationForm
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     """Renders the home page."""
@@ -98,3 +102,26 @@ class MyLoginView(LoginView):
     def dispatch(self, request, *args, **kwargs):
         self._request = request
         return super().dispatch(request, *args, **kwargs)
+
+@staff_member_required
+@require_http_methods(['GET', 'POST'])
+def excelImport(request):
+    msgs = []
+
+    if request.method == 'POST':
+        for file in request.files:
+            try:
+                excel.importDataFromExcel(file, request.user)
+            except Exception as e:
+                logger.warning(e)
+                msgs.append(f'{file.name}: {e}')
+
+    return render(
+        request,
+        'excelImport.html',
+        { 'year': datetime.date.today().year,
+          'messages' : msgs,
+          'success': None
+        }
+    )
+
