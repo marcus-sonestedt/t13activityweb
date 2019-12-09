@@ -96,7 +96,7 @@ export const EventView = () => {
             <tr key={model.id} className='linked'>
                 <td><a href={'../' + model.url()}>{model.name}</a></td>
                 <td>{type}</td>
-                <td>{model.date} {model.start_time} - {model.end_time}</td>
+                <td>{model.date.toLocaleDateString()} {model.start_time} - {model.end_time}</td>
                 <td>{assigned}</td>
             </tr>
         )
@@ -117,7 +117,7 @@ export const EventView = () => {
                     </div>
                     <hr />
                     {eventType}
-                    <h4>{event.date}</h4>
+                    <h4>{event.date.toLocaleDateString()}</h4>
                     <h5>Beskrivning</h5>
                     <p>{event.description}</p>
                     <h5>Övrigt</h5>
