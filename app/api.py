@@ -51,7 +51,7 @@ class EventList(generics.ListAPIView):
         try:
             id = self.kwargs['id']
         except KeyError:
-            return self.queryset
+            return self.queryset.all()
 
         return self.queryset.filter(id=id)
 
@@ -190,6 +190,6 @@ class ActivityDelistRequests(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return self.queryset
-        
-        return self.queryset.filter(activity__member__user=request.user)
+            return self.queryset.all()
+
+        return self.queryset.filter(activity__member__user=self.request.user)

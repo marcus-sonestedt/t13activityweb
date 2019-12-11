@@ -1,79 +1,83 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, ReactNode, ReactElement, useCallback } from "react";
 import { Container, Alert, Image } from 'react-bootstrap'
 
-class DataState<T> {
-    data: T | null = null;
-    placeholder: string = "Laddar...";
-    error: string | null = null;
-};
-
-export class DataProps<T>  {
-    ctor!: { (any: any): T; };
-    endpoint: string = "";
-    onLoaded = (data: T) => { };
+export interface DataProps<T> {
+    ctor: ((json: string) => T);
+    url: string;
+    onLoaded?: ((data: T) => void);
+    render?: (() => ReactNode);
 }
 
-export class DataProvider<T>
-    extends Component<DataProps<T>, DataState<T>>
-{
-    state = new DataState<T>();
+export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
+    const { ctor, url, onLoaded, render, children } = props;
+    const [data, setData] = useState<any | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [placeHolder, setPlaceHolder] = useState("Laddar...");
 
-    controller = new AbortController();
+    const handleData = useCallback((json: string) => {
+        var typedData = ctor(json);
+        setData(typedData);
+        if (onLoaded !== undefined)
+            onLoaded(typedData);
+    },
+        // eslint-disable-next-line
+        []);
 
-    componentDidMount = () => {
+    useEffect(() => {
+        const controller = new AbortController();
+        setPlaceHolder("Laddar...");
+        setError(null);
+        setData(null);
 
-        fetch(this.props.endpoint, {
-            signal: this.controller.signal,
+        fetch(url, {
+            signal: controller.signal,
             cache: "no-cache"
         })
             .then(r => {
                 if (r.status !== 200) {
-                    this.setState({
-                        placeholder: "Oops. Något gick fel! :(",
-                        error: `Error ${r.status}: ${r.statusText}}\n`
-                    });
-                    r.text().then(errorBody => this.setState(
-                        { error: this.state.error + errorBody }
-                    ));
+                    setPlaceHolder("Oops. Något gick fel! :(");
+                    setError(`Error ${r.status}: ${r.statusText}}\n`);
+                    r.text().then(errorBody => setError(err => err + errorBody));
                 } else {
                     return r.text();
                 }
-            }).then(data => {
-                if (this.controller.signal.aborted)
+            }).then(json => {
+                if (controller.signal.aborted)
                     return;
-                var typedData = this.props.ctor(data);
-                this.setState({ data: typedData });
-                this.props.onLoaded(typedData);
+                if (json === undefined)
+                    return;
+                handleData(json)
             }).catch(e => {
                 if (e.name === 'AbortError')
                     return
                 console.error(e);
-                this.setState({
-                    placeholder: "Oops. Något gick fel. :(",
-                    error: e.toString()
-                });
+                setPlaceHolder("Oops. Något gick fel. :(");
+                setError(e.toString());
             });
-    }
 
-    componentWillUnmount = () => {
-        this.controller.abort()
-    }
+        return function cleanup() {
+            controller.abort();
+        }
+    }, [url, handleData]);
 
-    render = () => {
-        const { data, placeholder, error } = this.state;
+    if (data !== null && data !== undefined)
+        // see https://stackoverflow.com/questions/54905376/type-error-jsx-element-type-null-undefined-is-not-a-constructor-functi/54908762
+        if (render !== undefined)
+            return render() as ReactElement<any>;
+        else
+            return children as ReactElement<any>;
 
-        if (data !== null && data !== undefined)
-            return this.props.children;
+    if (error != null)
+        return <Container fluid>
+            <p>{placeHolder}</p>
+            <Image src='/static/brokenpiston.jpg'
+                alt="Broken piston"
+                className="errorImage"
+                fluid />
+            <Alert variant='warning'>{error}</Alert>
+        </Container>;
 
-        if (error != null)
-            return <Container fluid>
-                <p>{placeholder}</p>
-                <Image src='/static/brokenpiston.jpg' alt="Broken piston" className="errorImage" fluid />
-                <Alert variant='warning'>{error}</Alert>
-            </Container>;
-
-        return <p>{placeholder}</p>
-    }
+    return <p>{placeHolder}</p>
 }
 
 export default DataProvider;

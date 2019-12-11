@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Pagination } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, PagedActivities } from '../Models'
 import { MyActivitiesTable } from '../components/MyActivitiesTable'
@@ -9,8 +9,25 @@ import { DataProvider } from '../components/DataProvider'
 
 
 export const MemberHomeView = () => {
-    const [myActivities, setMyActivities] = useState(new PagedActivities());
+    const [activities, setActivities] = useState(new PagedActivities());
+    const [activitiesPage, setActivitiesPage] = useState(1);
+
     const [events, setEvents] = useState(new PagedT13Events());
+    const [eventPage, setEventPage] = useState(1);
+
+    const pageItems = (count: number, pagesize: number,
+        currentPage: number, setFunc: ((page: number) => void)) => {
+
+        const numPages = Math.floor(count / pagesize)
+        const pageNumbers = Array.from(Array(numPages).keys())
+            .map(i => i + 1)
+
+        return pageNumbers.map(i =>
+            <Pagination.Item key={i} active={i === currentPage}
+                onClick={() => setFunc(i)}>
+                {i}
+            </Pagination.Item>)
+    }
 
     return (
         <Container fluid >
@@ -18,19 +35,25 @@ export const MemberHomeView = () => {
                 <Col md={12} lg={6}>
                     <DataProvider< PagedActivities >
                         ctor={t => deserialize(PagedActivities, t)}
-                        endpoint={"/api/myactivities"}
-                        onLoaded={setMyActivities}>
+                        url={`/api/myactivities?page=${activitiesPage}`}
+                        onLoaded={setActivities}>
                         <MyActivitiesTable
-                            values={myActivities.results}
+                            values={activities.results}
                         />
+                        <Pagination>
+                            {pageItems(activities.count, 15, activitiesPage, setActivitiesPage)}
+                        </Pagination>
                     </DataProvider>
                 </Col>
                 <Col md={12} lg={6}>
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
-                        endpoint={"/api/events"}
+                        url={`/api/events?page=${eventPage}`}
                         onLoaded={setEvents}>
                         <UpcomingEventsTable events={events} />
+                        <Pagination>
+                            {pageItems(events.count, 15, eventPage, setEventPage)}
+                        </Pagination>
                     </DataProvider>
                 </Col>
             </Row>

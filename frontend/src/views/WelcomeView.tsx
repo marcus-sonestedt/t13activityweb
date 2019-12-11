@@ -26,7 +26,7 @@ export const Welcome = () => {
                 <Col md={12} lg={6}>
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
-                        endpoint={"/api/upcomingevents"}
+                        url={"/api/upcomingevents"}
                         onLoaded={setEvents}>
                         <UpcomingEventsTable events={events}
                             title="Kommande aktiviteter"/>

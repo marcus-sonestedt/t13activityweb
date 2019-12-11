@@ -18,7 +18,7 @@ export const MemberView = () => {
             <Row>
                 <Col>
                     <DataProvider<PagedMembers>
-                        endpoint={Member.apiUrl(id)}
+                        url={Member.apiUrl(id)}
                         ctor={t => deserialize(PagedMembers, t)}
                         onLoaded={x => setMember(x.results[0])}>
                         {member === null ? null :

@@ -7,7 +7,8 @@ import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../App";
 
-export const EventTypeComponent = (model: T13EventType | null) => {
+export const EventTypeComponent = (props: {model: T13EventType | null}) => {
+    const {model} = props;
     const user = useContext(userContext);
 
     if (model === null)
@@ -40,11 +41,8 @@ export const EventTypeView = () => {
                     <DataProvider<PagedEventTypes>
                         ctor={t => deserialize(PagedEventTypes, t)}
                         onLoaded={x => setModel(x.results[0])}
-                        endpoint={T13EventType.apiUrl(id)}
-                    >
-                        {model === null ? null :
-                            <EventTypeComponent {...model} />
-                        }
+                        url={T13EventType.apiUrl(id)}                    >
+                        <EventTypeComponent model={model} />
                     </DataProvider>
                 </Col>
                 <Col sm={12} md={6}>

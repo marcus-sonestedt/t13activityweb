@@ -18,12 +18,6 @@ export const ActivityComponent = (model: Activity | null) => {
         ? <h3>Händelse: <a href={"../" + model.event.url()}>{model.event.name}</a></h3>
         : null;
 
-    let time = model.start_time === null ? ''
-        : model.start_time;
-
-    if (model.end_time !== null)
-        time += " - " + model.end_time;
-
     return (
         <>
             <div className='model-header'>
@@ -34,8 +28,8 @@ export const ActivityComponent = (model: Activity | null) => {
             </div>
             <hr />
             {event}
-            <h5>Datum: {model.date.toLocaleDateString()}</h5>
-            <h4>Tid: {time}</h4>
+            <h5>Datum: {model.date.toLocaleDateString('sv-SE')}</h5>
+            <h4>Tid: {model.time()}</h4>
             <p>{model.comment}</p>
         </>
     )
@@ -51,7 +45,7 @@ export const ActivityView = () => {
     return (
         <Container>
             <DataProvider<PagedActivities>
-                endpoint={Activity.apiUrl(id)}
+                url={Activity.apiUrl(id)}
                 ctor={t => deserialize(PagedActivities, t)}
                 onLoaded={x => setModel(x.results[0])}>
                 {model === null ? null :
@@ -60,9 +54,7 @@ export const ActivityView = () => {
                             <ActivityComponent {...model} />
                         </Col>
                         <Col>
-                            {model.type !== null
-                                ? <ActivityTypeComponent {...model.type} />
-                                : null}
+                            <ActivityTypeComponent model={model.type} />
                         </Col>
                     </Row>
                 }

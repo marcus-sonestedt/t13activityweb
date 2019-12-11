@@ -34,8 +34,8 @@ export class Activity implements IdValue {
     id: string = "";
     name: string = "";
     comment: string = "";
-    date: Date = new Date();
-    start_time: Date = new Date();
+    date: Date = new Date(0);
+    start_time: Date = new Date(0);
     end_time: Date | null = null;
     weight: number = 1;
     completed: boolean = false;
@@ -46,6 +46,13 @@ export class Activity implements IdValue {
     @Type(() => Member)
     assigned: Member | null = null;
     assigned_at: Date | null = null;
+
+    time = () => {
+        if (this.end_time === null)
+            return this.start_time
+
+        return this.start_time + " - " + this.end_time
+    }
 
     url = () => process.env.PUBLIC_URL + "activity/" + this.id;
     adminUrl = () => '/admin/app/activity/' + this.id;
@@ -97,12 +104,20 @@ export class T13Event implements IdValue {
     name: string = "";
     description: string = "";
     comment: string = "";
-    date: Date = new Date();
+    start_date: Date = new Date(0);
+    end_date: Date = new Date(0);
     image_url: string | null = null;
     @Type(() => T13EventType)
     type: T13EventType | null = null;
     @Type(() => Activity)
     activities: Activity[] = [];
+
+    date = () => {
+        if (this.start_date === this.end_date)
+            return this.start_date
+
+        return `${this.start_date} - ${this.end_date}`
+    }
 
     url = () => process.env.PUBLIC_URL + "event/" + this.id;
     adminUrl = () => '/admin/app/event/' + this.id;

@@ -45,26 +45,32 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
             .finally(() => window.location.reload());
     }
 
+    const today = new Date();
+
     const renderRow = (model: Activity) => {
-        const unlistPossible = model.event.date < new Date();
+        const unlistPossible = model.event.start_date > today;
 
         return (
             <tr key={model.id}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td><a href={model.event.url()}>{model.event.name}</a></td>
-                <td>{model.event.date.toLocaleDateString()}</td>
-                <td>{model.start_time} - {model.end_time}</td>
+                <td>{model.event.date()}</td>
+                <td>{model.time()}</td>
                 <td>{model.completed ? "✔" : "❌"}</td>
                 <td>{unlistPossible ? null :
                     <Button
                         onClick={() => unlistFromActivity(model)}
-                        variant='danger'>Avboka</Button>
+                        variant='danger' size='sm'>
+                            Avboka
+                        </Button>
                 }
                 </td>
             </tr>
         );
     }
 
+    if (props.values === undefined)
+        return <p>Oops</p>
 
     return (
         <Container className="table-container">

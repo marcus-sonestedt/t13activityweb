@@ -232,3 +232,9 @@ RECAPTCHA_REQUIRED_SCORE = 0.5
 
 # default is www.google.xom
 #RECAPTCHA_DOMAIN = 'www.recaptcha.net'
+
+REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

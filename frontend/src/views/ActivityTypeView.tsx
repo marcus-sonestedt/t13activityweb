@@ -7,11 +7,12 @@ import { deserialize } from "class-transformer";
 import NotFound from "../components/NotFound";
 import { userContext } from "../App";
 
-export const ActivityTypeComponent = (model: ActivityType | null) => {
+export const ActivityTypeComponent = (props: { model: ActivityType | null }) => {
     const user = useContext(userContext);
+    const { model } = props;
 
-    if (model === null)
-        return null;
+    if (model == null)
+        return null
 
     return (<>
         <div className="model-header">
@@ -37,13 +38,10 @@ export const ActivityTypeView = () => {
         <Row>
             <Col md={12} lg={8}>
                 <DataProvider<PagedActivityTypes>
-                    ctor={t => deserialize(PagedActivityTypes, t)}
-                    endpoint={ActivityType.apiUrl(id)}
-                    onLoaded={x => setModel(x.results[0])}>
-                    {model === null ? null :
-                        <ActivityTypeComponent {...model} />
-                    }
-                </DataProvider>
+                    ctor={json => deserialize(PagedActivityTypes, json)}
+                    url={ActivityType.apiUrl(id)}
+                    onLoaded={x => setModel(x.results[0])}
+                    render={() => <ActivityTypeComponent model={model} />}/>
             </Col>
             <Col md={12} lg={4}>
                 {model !== null ? <Image src={model.image} /> : null}
