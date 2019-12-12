@@ -15,13 +15,13 @@ export const ActivityComponent = (model: Activity | null) => {
         return null;
 
     const event = model.event !== null
-        ? <h3>Händelse: <a href={"../" + model.event.url()}>{model.event.name}</a></h3>
+        ? <h3>Händelse: <a href={model.event.url()}>{model.event.name}</a></h3>
         : null;
 
     return (
         <>
             <div className='model-header'>
-                <a href={"../" + model.url()}><h1>{model.name}</h1></a>
+                <a href={model.url()}><h1>{model.name}</h1></a>
                 {user.isStaff ?
                 <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
                 : null}

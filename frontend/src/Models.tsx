@@ -20,7 +20,7 @@ export class Member implements IdValue {
     email: string = "";
     image_url: string | null = null;
 
-    url = () => process.env.PUBLIC_URL + "member/" + this.id;
+    url = () =>`/frontend/member/${this.id}/${this.fullname.replace(/ /g,'-').toLowerCase()}`;
     adminUrl = () => '/admin/app/member/' + this.id;
     static apiUrl = (id: string) => `/api/member/${id}`;
 }
@@ -54,7 +54,7 @@ export class Activity implements IdValue {
         return this.start_time + " - " + this.end_time
     }
 
-    url = () => process.env.PUBLIC_URL + "activity/" + this.id;
+    url = () =>`/frontend/activity/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     static apiUrl = (id: string) => `/api/activity/${id}`;
 }
@@ -71,8 +71,8 @@ export class ActivityType implements IdValue {
     description: string = "";
     image: string = "";
 
-    url = () => process.env.PUBLIC_URL + "activity_type/" + this.id;
-    adminUrl = () => '/admin/app/activitytype/' + this.id;
+    url = () =>`/frontend/activity_type/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
+    adminUrl = () => `/admin/app/activitytype/${this.id}`;
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
 }
 
@@ -89,7 +89,7 @@ export class T13EventType implements IdValue {
     description: string = "";
     image: string = "";
 
-    url = () => process.env.PUBLIC_URL + "event_type/" + this.id;
+    url = () =>`/frontend/event_type/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
     static apiUrl = (id: string) => `/api/event_type/${id}`;
 }
@@ -119,8 +119,8 @@ export class T13Event implements IdValue {
         return `${this.start_date} - ${this.end_date}`
     }
 
-    url = () => process.env.PUBLIC_URL + "event/" + this.id;
-    adminUrl = () => '/admin/app/event/' + this.id;
+    url = () =>`/frontend/event/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
+    adminUrl = () => `admin/app/event/${this.id}`;
     static apiUrl = (id: string) => `/api/event/${id}`;
 }
 
@@ -142,7 +142,7 @@ export class ActivityDelistRequest implements IdValue {
     approver: Member | null = null;
     approved: boolean | null = null;
 
-    url = () => process.env.PUBLIC_URL + `delistrequest/${this.id}`
+    url = () =>`/frontend/delistrequest/${this.id}`
     adminUrl = () => `/admin/app/delistrequest/${this.id}`
     apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id)
     static apiUrlForId = (id: string) => `/api/delistrequest/${id}`

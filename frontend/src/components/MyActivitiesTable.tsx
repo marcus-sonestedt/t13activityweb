@@ -61,7 +61,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                     <Button
                         onClick={() => unlistFromActivity(model)}
                         variant='danger' size='sm'>
-                            Avboka
+                            Avboka?
                         </Button>
                 }
                 </td>

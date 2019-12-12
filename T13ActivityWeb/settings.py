@@ -50,7 +50,7 @@ try:
 
     print("Secrets imported successfully")
 
-except ImportError as e:
+except (AttributeError, ImportError) as e:
     print(
         f"WARNING: Failed to import secrets: {e}. Disabling captcha and email!")
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
@@ -106,6 +106,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'T13ActivityWeb.urls'

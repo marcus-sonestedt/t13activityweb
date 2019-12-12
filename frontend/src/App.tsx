@@ -11,6 +11,11 @@ import { ActivityView } from './views/ActivityView';
 import { EventTypeView } from './views/EventTypeView';
 import { ActivityTypeView } from './views/ActivityTypeView';
 import { MemberView } from './views/MemberView';
+import { ActivityDelistRequestView } from './views/ActivityDelistRequestsView';
+import ActivityTypesView, { EventTypesView } from './views/EventTypesView';
+import FAQView from './views/FAQView';
+import ProfileView from './views/ProfileView';
+import { deserialize } from 'class-transformer';
 
 class UserContext {
   isLoggedIn = false;
@@ -25,19 +30,32 @@ export const UserProvider = userContext.Provider
 export const UserConsumer = userContext.Consumer
 
 export const App = () => {
-  const [state, setState] = useState<UserContext>(new UserContext());
+  const userJson = localStorage.getItem("user");
+  const user = userJson !== null ? deserialize(UserContext, userJson) : new UserContext()
+
+  const [state, setState] = useState<UserContext>(user);
 
   useEffect(() => {
     fetch('/api/isloggedin')
       .then(
-        r => r.status === 200 ? r.json() : undefined,
         r => {
-          console.error(r);
-          setState(new UserContext());
-        })
-      .then(json =>
-        setState(json !== undefined ? json as UserContext : new UserContext())
-      );
+          if (r.status === 200)
+            return r.json()
+          else
+            throw r.statusText
+        },
+        err => { throw err }
+      )
+      .then(json => {
+        if (json !== undefined) {
+          setState(json as UserContext);
+          localStorage.setItem('user', JSON.stringify(json))
+        }
+      }).catch(e => {
+        console.error(e);
+        setState(new UserContext());
+        localStorage.removeItem('user');
+      })
   }, []);
 
   return (
@@ -46,11 +64,14 @@ export const App = () => {
         <Navigation />
         <Switch>
           <Redirect exact from="/" to="/frontend/" />
-          <Route path="/frontend/event/:id" component={EventView} />
-          <Route path="/frontend/activity/:id" component={ActivityView} />
-          <Route path="/frontend/event_type/:id" component={EventTypeView} />
-          <Route path="/frontend/activity_type/:id" component={ActivityTypeView} />
-          <Redirect2 from="/frontend/member/:id" toFunc={(url: string) => `/app/login?next=${url}`} />
+          <Route path="/frontend/event/:id/:name" component={EventView} />
+          <Route path="/frontend/activity/:id/:name" component={ActivityView} />
+          <Route path="/frontend/event_type/:id/:name" component={EventTypeView} />
+          <Route path="/frontend/activity_type/:id/:name" component={ActivityTypeView} />
+
+          <Route path="/frontend/activitytypes" component={ActivityTypesView} />
+          <Route path="/frontend/eventtypes" component={EventTypesView} />
+          <Route path="/frontend/faq" component={FAQView} />
 
           {!state.isLoggedIn ?
             <>
@@ -60,7 +81,9 @@ export const App = () => {
             :
             <>
               <Route path="/frontend/home" component={MemberHomeView} />
+              <Route path="/frontend/profile" component={ProfileView} />
               <Route path="/frontend/member/:id" component={MemberView} />
+              <Route path="/frontend/delistrequests" component={ActivityDelistRequestView} />
               <Redirect exact from="/frontend/" to="/frontend/home" />
               <Redirect exact from="/frontend/welcome" to="/frontend/home" />
             </>
@@ -75,10 +98,10 @@ export const App = () => {
 
 export const Redirect2 =
   (props: { from: string, toFunc: (url: string) => string }) => {
-  const location = useLocation();
-  const to = props.toFunc(location.pathname);
-  return <Redirect from={props.from} to={to} />
-}
+    const location = useLocation();
+    const to = props.toFunc(location.pathname);
+    return <Redirect from={props.from} to={to} />
+  }
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

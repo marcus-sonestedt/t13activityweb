@@ -3,6 +3,7 @@ import logging
 
 from django.urls import path
 from django.views.decorators.cache import cache_page, cache_control
+from django.views.decorators.vary import vary_on_cookie
 from django.utils.decorators import method_decorator
 
 from app.models import *
@@ -70,6 +71,9 @@ class IsLoggedIn(APIView):
     renderer_classes = (renderers.JSONRenderer,)
     read_only = True
 
+    @method_decorator(cache_page(60*5))
+    @method_decorator(vary_on_cookie)
+    @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
     def get(self, request, format=None):
         try:
             member = Member.objects.get(user=request.user.id)

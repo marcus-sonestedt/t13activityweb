@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react"
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import { userContext } from "../App";
-import { ActivityDelistRequest } from '../Models';
+import { ActivityDelistRequest, PagedADR } from '../Models';
 import Cookies from "universal-cookie";
+import DataProvider from "../components/DataProvider";
+import { deserialize } from "class-transformer";
 
 export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => {
     if (model.activity == null)
@@ -24,7 +26,7 @@ export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => 
 
 export const ActivityDelistRequestView = () => {
     const [currentReq, setCurrentReq] = useState<ActivityDelistRequest | null>(null);
-    const [allRequests, setAllRequests] = useState<ActivityDelistRequest[]>([]);
+    const [allRequests, setAllRequests] = useState<PagedADR | null>(null);
     const user = useContext(userContext);
     const cookies = new Cookies();
 
@@ -44,7 +46,7 @@ export const ActivityDelistRequestView = () => {
 
 
     const cancel = (model: ActivityDelistRequest) => {
-        if (!confirm(`Vill du verkligen radera avbokningsförfrågan för\n${model}?`))
+        if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model}?`))
             return
 
         const handler = (r: any) => handleResponse(r, 'radera', model.apiUrl());
@@ -57,7 +59,7 @@ export const ActivityDelistRequestView = () => {
     };
 
     const approve = (model: ActivityDelistRequest) => {
-        if (!confirm(`Godkänn avbokningsförfrågan för\n${model}?`))
+        if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`))
             return
 
         const handler = (r: any) => handleResponse(r, 'bekräfta', model.apiUrl());
@@ -93,59 +95,80 @@ export const ActivityDelistRequestView = () => {
             .then(handler, handler);
     };
 
-    const renderRow = (model: ActivityDelistRequest) => {
-        return <tr>
-            <td><a href={model.activity.event.url()}>{model.activity.event.name}</a></td>
-            <td><a href={model.activity.url()}>{model.activity.name}</a></td>
-            <td>{model.activity.event.date}</td>
-            <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
-            <td>{model.member.id === user.memberId
-                ? <Button variant='danger' size='sm' onClick={() => cancel(model)}>Avbryt</Button>
-                : null}
-            </td>
-        </tr>
+
+
+    const delistRequestsTable = (reqs: PagedADR | null) => {
+        if (reqs === null)
+            return
+
+        const rowClicked = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, req: ActivityDelistRequest) => {
+            if (e.target === null || e.currentTarget.tagName === 'a')
+                return
+
+            e.preventDefault();
+            setCurrentReq(req);
+        }
+
+        const renderRow = (model: ActivityDelistRequest) => {
+            return <tr onClick={e => rowClicked(e, model)}>
+                <td><a href={model.activity.event.url()}>{model.activity.event.name}</a></td>
+                <td><a href={model.activity.url()}>{model.activity.name}</a></td>
+                <td>{model.activity.event.date}</td>
+                <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
+                <td>{model.member.id === user.memberId
+                    ? <Button variant='danger' size='sm' onClick={() => cancel(model)}>Avbryt</Button>
+                    : null}
+                </td>
+            </tr>
+        }
+
+        const myRequests = reqs.results.filter(r => r.member.id === user.memberId)
+
+        const unhandledRequests = reqs
+            .results.filter(r => r.member.id !== user.memberId && r.approved === null)
+
+        const myHandledRequests = reqs
+            .results.filter(r => r.approver !== null && r.approver.id === user.memberId)
+
+        const separator = (title: string) =>
+            <tr><td colSpan={5}>
+                <h4>{title}</h4>
+                <hr />
+            </td></tr>
+
+        return <Table>
+            <thead>
+                <tr>
+                    <th>Aktivitet</th>
+                    <th>Uppgift</th>
+                    <th>Datum</th>
+                    <th>Godkänd</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {separator('Mina förfrågningar')}
+                {myRequests.map(renderRow)}
+                {!user.isStaff ? null : <>
+                    {separator('Ohanterade förfrågningar')}
+                    {unhandledRequests.map(renderRow)}
+                    {separator('Fförfrågningar hanterade av mig')}
+                    {myHandledRequests.map(renderRow)}
+                </>}
+            </tbody>
+        </Table>
     }
-
-    const myRequests = allRequests.filter(r => r.member.id === user.memberId)
-
-    const unhandledRequests = allRequests
-        .filter(r => r.member.id !== user.memberId && r.approved === null)
-
-    const myHandledRequests = allRequests
-        .filter(r => r.approver !== null && r.approver.id == user.memberId)
-
-    const separator = (title: string) =>
-        <tr><td colSpan={5}>
-            <h4>{title}</h4>
-            <hr />
-        </td></tr>
 
     return (
         <Container fluid>
             <Row>
                 <Col md={12} lg={16}>
                     <h1>Avbokningsförfrågningar</h1>
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th>Aktivitet</th>
-                                <th>Uppgift</th>
-                                <th>Datum</th>
-                                <th>Godkänd</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {separator('Mina förfrågningar')}
-                            {myRequests.map(renderRow)}
-                            {!user.isStaff ? null : <>
-                                {separator('Ohanterade förfrågningar')}
-                                {unhandledRequests.map(renderRow)}
-                                {separator('Fförfrågningar hanterade av mig')}
-                                {myHandledRequests.map(renderRow)}
-                            </>}
-                        </tbody>
-                    </Table>
+                    <DataProvider url="/api/activity_delist_requests"
+                        ctor={json => deserialize(PagedADR, json)}
+                        onLoaded={setAllRequests}>
+                        {delistRequestsTable(allRequests)}
+                    </DataProvider>
                 </Col>
                 <Col>
                     <h1>Detaljer</h1>

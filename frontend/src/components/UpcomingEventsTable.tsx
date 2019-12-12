@@ -13,7 +13,7 @@ export function UpcomingEventsTable
 
     const renderRow = (model: T13Event) => {
         const type = model.type === null ? null :
-            <a href={"../" + model.type.url()}>{model.type.name}</a>
+            <a href={model.type.url()}>{model.type.name}</a>
 
         return (
             <tr key={model.id}>

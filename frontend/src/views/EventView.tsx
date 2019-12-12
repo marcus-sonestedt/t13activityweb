@@ -85,16 +85,16 @@ export const EventView = () => {
 
     const renderActivityRow = (model: Activity) => {
         const type = model.type !== null
-            ? <a href={'../' + model.type.url()}>{model.type.name}</a>
+            ? <a href={model.type.url()}>{model.type.name}</a>
             : null;
 
         const assigned = model.assigned !== null
-            ? <a href={'../' + model.assigned.url()}>{model.assigned.fullname}</a>
+            ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
             : <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>;
 
         return (
             <tr key={model.id} className='linked'>
-                <td><a href={'../' + model.url()}>{model.name}</a></td>
+                <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
                 <td>{model.date.toLocaleDateString()} {model.start_time} - {model.end_time}</td>
                 <td>{assigned}</td>
@@ -103,14 +103,14 @@ export const EventView = () => {
     }
 
     const eventType = event.type !== null ?
-        <a href={"../" + event.type.url()}><h4>{event.type.name}</h4></a> : null;
+        <a href={event.type.url()}><h4>{event.type.name}</h4></a> : null;
 
     return (
         <Container fluid>
             <Row>
                 <Col md={12} lg={6}>
                     <div className="model-header">
-                        <a href={"../" + event.url()}><h2>{event.name}</h2></a>
+                        <a href={event.url()}><h2>{event.name}</h2></a>
                         {user.isStaff ?
                             <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button></a>
                             : null}
