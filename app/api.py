@@ -132,7 +132,7 @@ class EventTypeList(generics.ListAPIView):
         try:
             id = self.kwargs['id']
         except KeyError:
-            return self.queryset
+            return self.queryset.all()
 
         return self.queryset.filter(id=id)
 

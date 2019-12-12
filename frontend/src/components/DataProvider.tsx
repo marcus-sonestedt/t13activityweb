@@ -27,7 +27,6 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         const controller = new AbortController();
         setPlaceHolder("Laddar...");
         setError(null);
-        setData(null);
 
         fetch(url, {
             signal: controller.signal,
