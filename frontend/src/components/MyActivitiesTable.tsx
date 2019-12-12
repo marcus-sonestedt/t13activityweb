@@ -56,12 +56,12 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 <td><a href={model.event.url()}>{model.event.name}</a></td>
                 <td>{model.event.date()}</td>
                 <td>{model.time()}</td>
-                <td>{model.completed ? "✔" : "❌"}</td>
-                <td>{unlistPossible ? null :
+                <td>{unlistPossible ?
+                    (model.completed ? "✔" : "❌") :
                     <Button
                         onClick={() => unlistFromActivity(model)}
                         variant='danger' size='sm'>
-                            Avboka?
+                        Avboka?
                         </Button>
                 }
                 </td>
@@ -86,7 +86,6 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                         <th>Datum</th>
                         <th>Tid</th>
                         <th>Utförd</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

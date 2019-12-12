@@ -6,6 +6,23 @@ import { MyActivitiesTable } from '../components/MyActivitiesTable'
 import { UpcomingEventsTable } from '../components/UpcomingEventsTable'
 import { DataProvider } from '../components/DataProvider'
 
+export const pageItems = (count: number, pagesize: number,
+    currentPage: number, setFunc: ((page: number) => void)) => {
+
+    const numPages = Math.ceil(count / pagesize)
+
+    if (count <= pagesize)
+        return null;
+
+    const pageNumbers = Array.from(Array(numPages).keys())
+        .map(i => i + 1)
+
+    return pageNumbers.map(i =>
+        <Pagination.Item key={i} active={i === currentPage}
+            onClick={() => setFunc(i)}>
+            {i}
+        </Pagination.Item>)
+}
 
 
 export const MemberHomeView = () => {
@@ -15,19 +32,6 @@ export const MemberHomeView = () => {
     const [events, setEvents] = useState(new PagedT13Events());
     const [eventPage, setEventPage] = useState(1);
 
-    const pageItems = (count: number, pagesize: number,
-        currentPage: number, setFunc: ((page: number) => void)) => {
-
-        const numPages = Math.floor(count / pagesize)
-        const pageNumbers = Array.from(Array(numPages).keys())
-            .map(i => i + 1)
-
-        return pageNumbers.map(i =>
-            <Pagination.Item key={i} active={i === currentPage}
-                onClick={() => setFunc(i)}>
-                {i}
-            </Pagination.Item>)
-    }
 
     return (
         <Container fluid >
@@ -41,7 +45,7 @@ export const MemberHomeView = () => {
                             values={activities.results}
                         />
                         <Pagination>
-                            {pageItems(activities.count, 15, activitiesPage, setActivitiesPage)}
+                            {pageItems(activities.count, 10, activitiesPage, setActivitiesPage)}
                         </Pagination>
                     </DataProvider>
                 </Col>
@@ -52,7 +56,7 @@ export const MemberHomeView = () => {
                         onLoaded={setEvents}>
                         <UpcomingEventsTable events={events} />
                         <Pagination>
-                            {pageItems(events.count, 15, eventPage, setEventPage)}
+                            {pageItems(events.count, 10, eventPage, setEventPage)}
                         </Pagination>
                     </DataProvider>
                 </Col>

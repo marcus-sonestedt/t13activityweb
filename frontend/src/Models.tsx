@@ -74,6 +74,7 @@ export class ActivityType implements IdValue {
     url = () =>`/frontend/activity_type/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
+    static apiUrlAll = () => `/api/activity_type`;
 }
 
 
@@ -92,6 +93,7 @@ export class T13EventType implements IdValue {
     url = () =>`/frontend/event_type/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
     static apiUrl = (id: string) => `/api/event_type/${id}`;
+    static apiUrlAll = () => `/api/event_type`;
 }
 
 export class PagedEventTypes extends PagedValues<T13EventType> {
