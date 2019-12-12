@@ -210,7 +210,7 @@ class ActivityDelistRequest(models.Model):
     approved = models.BooleanField(default=None, null=True, blank=True)
     approver = models.ForeignKey(Member, on_delete=models.SET_NULL, \
         blank=True, null=True, related_name='approvers')
-    reject_readon = models.TextField(blank=True)
+    reject_reason = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.member}: {self.activity.name} ({self.activity.event.date})"

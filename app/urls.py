@@ -35,5 +35,6 @@ api_urlpatterns = [
     re_path('activity_enlist/(?P<id>.+)', api.ActivityEnlist.as_view()),
     re_path('activity_delist/(?P<id>.+)', api.ActivityDelist.as_view()),
 
-    path('activity_delist_requests', api.ActivityDelistRequests.as_view()),
+    path('activity_delist_request', api.ActivityDelistRequestList.as_view()),
+    re_path('activity_delist_request/(?P<id>.+)', api.ActivityDelistRequestView.as_view()),
 ]

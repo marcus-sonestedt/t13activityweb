@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react"
-import { Container, Row, Col, Table, Button } from "react-bootstrap";
+import { Container, Row, Col, Table, Button, Pagination } from "react-bootstrap";
 import { userContext } from "../App";
 import { ActivityDelistRequest, PagedADR } from '../Models';
 import Cookies from "universal-cookie";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
+import { pageItems } from "./MemberHomeView";
 
 export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => {
     if (model.activity == null)
@@ -27,6 +28,7 @@ export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => 
 export const ActivityDelistRequestView = () => {
     const [currentReq, setCurrentReq] = useState<ActivityDelistRequest | null>(null);
     const [allRequests, setAllRequests] = useState<PagedADR | null>(null);
+    const [page, setPage] = useState(1);
     const user = useContext(userContext);
     const cookies = new Cookies();
 
@@ -133,7 +135,6 @@ export const ActivityDelistRequestView = () => {
         const separator = (title: string) =>
             <tr><td colSpan={5}>
                 <h4>{title}</h4>
-                <hr />
             </td></tr>
 
         return <Table>
@@ -147,12 +148,14 @@ export const ActivityDelistRequestView = () => {
                 </tr>
             </thead>
             <tbody>
-                {separator('Mina förfrågningar')}
+                {!user.isStaff ? null :
+                    separator(`Mina förfrågningar (${myRequests.length})`)
+                }
                 {myRequests.map(renderRow)}
                 {!user.isStaff ? null : <>
-                    {separator('Ohanterade förfrågningar')}
+                    {separator(`Ohanterade förfrågningar (${unhandledRequests.length})`)}
                     {unhandledRequests.map(renderRow)}
-                    {separator('Fförfrågningar hanterade av mig')}
+                    {separator(`Förfrågningar hanterade av mig (${myHandledRequests.length})`)}
                     {myHandledRequests.map(renderRow)}
                 </>}
             </tbody>
@@ -163,15 +166,18 @@ export const ActivityDelistRequestView = () => {
         <Container fluid>
             <Row>
                 <Col md={12} lg={7}>
-                    <h1>Avbokningsförfrågningar</h1>
-                    <DataProvider url="/api/activity_delist_requests"
+                    <h2>Avbokningsförfrågningar</h2>
+                    <DataProvider url={ActivityDelistRequest.apiUrlAll() + `?page=${page}`}
                         ctor={json => deserialize(PagedADR, json)}
                         onLoaded={setAllRequests}>
                         {delistRequestsTable(allRequests)}
+                        <Pagination>
+                            {pageItems(allRequests !== null ? allRequests.count : 0, 10, page, setPage)}
+                        </Pagination>
                     </DataProvider>
                 </Col>
                 <Col md={12} lg={5}>
-                    <h1>Detaljer</h1>
+                    <h2>Detaljer</h2>
                     {currentReq === null ? null : <>
                         <ActivityDelistRequestComponent {...currentReq} />
                         {!user.isStaff ? null : <div>

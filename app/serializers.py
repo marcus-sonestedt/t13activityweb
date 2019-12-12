@@ -44,3 +44,12 @@ class EventActivitySerializer(serializers.ModelSerializer):
         model = Activity
         fields = '__all__'
 
+class ActivityDelistRequestSerializer(serializers.ModelSerializer):
+    member = MemberSerializer(required=False)
+    activity = ActivityTypeSerializer(required=False)
+    approver = MemberSerializer(required=False)
+
+    class Meta:
+        model = ActivityDelistRequest
+        fields = '__all__'
+

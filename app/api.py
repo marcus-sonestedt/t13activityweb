@@ -186,11 +186,25 @@ class ActivityEnlist(APIView):
 
         return Response("Inbokad på " + activity.name)
 
-class ActivityDelistRequests(generics.RetrieveUpdateDestroyAPIView):
+class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
     queryset = ActivityDelistRequest.objects
+    serializer_class = ActivityDelistRequestSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return self.queryset.all()
+
+        return self.queryset.filter(activity__member__user=self.request.user)
+
+class ActivityDelistRequestList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    parser_classes = [parsers.JSONParser]
+    queryset = ActivityDelistRequest.objects
+    serializer_class = ActivityDelistRequestSerializer
 
     def get_queryset(self):
         if self.request.user.is_staff:
