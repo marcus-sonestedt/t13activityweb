@@ -74,6 +74,11 @@ export const App = () => {
           <Route path="/frontend/eventtypes" component={EventTypesView} />
           <Route path="/frontend/faq" component={FAQView} />
 
+          <Route path="/frontend/home" component={MemberHomeView} />
+          <Route path="/frontend/profile" component={ProfileView} />
+          <Route path="/frontend/member/:id" component={MemberView} />
+          <Route path="/frontend/delistrequests" component={ActivityDelistRequestView} />
+
           {!state.isLoggedIn ?
             <>
               <Route path="/frontend/welcome" component={Welcome} />
@@ -81,10 +86,7 @@ export const App = () => {
             </>
             :
             <>
-              <Route path="/frontend/home" component={MemberHomeView} />
-              <Route path="/frontend/profile" component={ProfileView} />
-              <Route path="/frontend/member/:id" component={MemberView} />
-              <Route path="/frontend/delistrequests" component={ActivityDelistRequestView} />
+
               <Redirect exact from="/frontend/" to="/frontend/home" />
               <Redirect exact from="/frontend/welcome" to="/frontend/home" />
             </>

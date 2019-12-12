@@ -162,7 +162,7 @@ export const ActivityDelistRequestView = () => {
     return (
         <Container fluid>
             <Row>
-                <Col md={12} lg={16}>
+                <Col md={12} lg={7}>
                     <h1>Avbokningsförfrågningar</h1>
                     <DataProvider url="/api/activity_delist_requests"
                         ctor={json => deserialize(PagedADR, json)}
@@ -170,7 +170,7 @@ export const ActivityDelistRequestView = () => {
                         {delistRequestsTable(allRequests)}
                     </DataProvider>
                 </Col>
-                <Col>
+                <Col md={12} lg={5}>
                     <h1>Detaljer</h1>
                     {currentReq === null ? null : <>
                         <ActivityDelistRequestComponent {...currentReq} />
