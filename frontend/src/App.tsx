@@ -86,7 +86,6 @@ export const App = () => {
             </>
             :
             <>
-
               <Redirect exact from="/frontend/" to="/frontend/home" />
               <Redirect exact from="/frontend/welcome" to="/frontend/home" />
             </>

@@ -28,7 +28,7 @@ export const ActivityComponent = (model: Activity | null) => {
             </div>
             <hr />
             {event}
-            <h5>Datum: {model.date.toLocaleDateString('sv-SE')}</h5>
+            <h5>Datum: {model.date()}</h5>
             <h4>Tid: {model.time()}</h4>
             <p>{model.comment}</p>
         </>

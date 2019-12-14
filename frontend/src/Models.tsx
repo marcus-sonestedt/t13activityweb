@@ -34,18 +34,24 @@ export class Activity implements IdValue {
     id: string = "";
     name: string = "";
     comment: string = "";
-    date: Date = new Date(0);
+    date = () => { return this.event.date() };
     start_time: Date = new Date(0);
     end_time: Date | null = null;
     weight: number = 1;
     completed: boolean = false;
+
     @Type(() => ActivityType)
     type: ActivityType | null = null;
+
     @Type(() => T13Event)
     event: T13Event = new T13Event();
+
     @Type(() => Member)
     assigned: Member | null = null;
     assigned_at: Date | null = null;
+
+    @Type(() => ActivityDelistRequest)
+    delistRequest: ActivityDelistRequest|null = null;
 
     time = () => {
         if (this.end_time === null)
@@ -109,8 +115,10 @@ export class T13Event implements IdValue {
     start_date: Date = new Date(0);
     end_date: Date = new Date(0);
     image_url: string | null = null;
+
     @Type(() => T13EventType)
     type: T13EventType | null = null;
+
     @Type(() => Activity)
     activities: Activity[] = [];
 

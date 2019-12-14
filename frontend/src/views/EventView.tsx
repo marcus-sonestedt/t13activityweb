@@ -26,8 +26,10 @@ export const EventView = () => {
     }, [id, event]);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const url = `/api/events/${id}`;
-        fetch(url)
+        fetch(url, {signal:controller.signal})
             .then(
                 r => r.status === 200
                     ? r.text().then(t => setEvent(deserialize(PagedT13Events, t).results[0]))
@@ -36,15 +38,24 @@ export const EventView = () => {
                 r => r.text().then((t: any) => setError(t))
             );
 
+        const gotActivities = (t:any) => {
+            let r = deserialize(PagedActivities, t).results;
+            r = r.map(a => {if (event !== null) a.event = event; return a;})
+            setActivities(r);
+        }
+
+        if (activities.length !== 0)
+
         const url2 = `/api/event_activities/${id}`;
-        fetch(url2)
+        fetch(url2, {signal:controller.signal})
             .then(
                 r => r.status === 200
-                    ? r.text().then(t => setActivities(deserialize(PagedActivities, t).results)) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
+                    ? r.text().then(gotActivities) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
                         r.text().then(setHtmlError)),
                 r => r.json().then((json: any) => setError(json.toString()))
             );
 
+        return function cleanup() { controller.abort(); }
     }, [id]);
 
     if (error !== '')
@@ -79,8 +90,8 @@ export const EventView = () => {
             .catch(e => {
                 console.error(e);
                 alert("Något gick fel! :(\n" + e);
-                window.location.reload()
-            });
+            })
+            .finally(() => window.location.reload());
     }
 
     const renderActivityRow = (model: Activity) => {
@@ -96,7 +107,7 @@ export const EventView = () => {
             <tr key={model.id} className='linked'>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
-                <td>{model.date.toLocaleDateString()} {model.start_time} - {model.end_time}</td>
+                <td>{model.date()} {model.time()}</td>
                 <td>{assigned}</td>
             </tr>
         )

@@ -7,6 +7,37 @@ import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import { pageItems } from "./MemberHomeView";
 
+
+const handleResponse = (resp: any, action: string, url: string) => {
+    if (resp instanceof Response) {
+        if (resp.status !== 200) {
+            console.error(resp.statusText);
+            resp.text().then(console.error);
+            alert(`Misslyckades att ${action} förfrågan\nUPDATE ${url}: ${resp.statusText}`);
+        }
+    } else {
+        console.error(resp);
+        alert(`Misslyckades att ${action} förfrågan\n${url}: ${resp}`);
+    }
+    window.location.reload();
+};
+
+
+export const cancelDelistRequest = (model: ActivityDelistRequest) => {
+    if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model}?`))
+        return
+
+    const handler = (r: any) => handleResponse(r, 'radera', model.apiUrl());
+
+    const cookies = new Cookies();
+
+    fetch(model.apiUrl(), {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+    })
+        .then(handler, handler);
+};
+
 export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => {
     if (model.activity == null)
         return <p>Datafel, saknar uppgift</p>
@@ -31,34 +62,6 @@ export const ActivityDelistRequestView = () => {
     const [page, setPage] = useState(1);
     const user = useContext(userContext);
     const cookies = new Cookies();
-
-    const handleResponse = (resp: any, action: string, url: string) => {
-        if (resp instanceof Response) {
-            if (resp.status !== 200) {
-                console.error(resp.statusText);
-                resp.text().then(console.error);
-                alert(`Misslyckades att ${action} förfrågan\nUPDATE ${url}: ${resp.statusText}`);
-            }
-        } else {
-            console.error(resp);
-            alert(`Misslyckades att ${action} förfrågan\n${url}: ${resp}`);
-        }
-        window.location.reload();
-    };
-
-
-    const cancel = (model: ActivityDelistRequest) => {
-        if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model}?`))
-            return
-
-        const handler = (r: any) => handleResponse(r, 'radera', model.apiUrl());
-
-        fetch(model.apiUrl(), {
-            method: 'DELETE',
-            headers: { 'X-CSRFToken': cookies.get('csrftoken') }
-        })
-            .then(handler, handler);
-    };
 
     const approve = (model: ActivityDelistRequest) => {
         if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`))
@@ -118,7 +121,7 @@ export const ActivityDelistRequestView = () => {
                 <td>{model.activity.event.date}</td>
                 <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
                 <td>{model.member.id === user.memberId
-                    ? <Button variant='danger' size='sm' onClick={() => cancel(model)}>Avbryt</Button>
+                    ? <Button variant='danger' size='sm' onClick={() => cancelDelistRequest(model)}>Avbryt</Button>
                     : null}
                 </td>
             </tr>

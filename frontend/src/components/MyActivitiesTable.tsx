@@ -4,6 +4,7 @@ import { Activity } from '../Models'
 import './Table.css'
 import Cookies from "universal-cookie"
 import { userContext } from "../App"
+import { cancelDelistRequest } from "../views/ActivityDelistRequestsView"
 
 export class MyActivitiesProps {
     values: Activity[] = [];
@@ -12,10 +13,10 @@ export class MyActivitiesProps {
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
     const user = useContext(userContext)
 
-    const unlistFromActivity = (model: Activity) => {
+    const requestActivityDelist = (model: Activity) => {
         const reason = prompt(
             "Ange varför du vill avboka ditt åtagande.\n" +
-            "Observera att det gäller till det har bekräftats av klubben");
+            "Observera att avbokningen måste bekräftas av klubben.");
         if (reason === null)
             return
 
@@ -49,6 +50,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
 
     const renderRow = (model: Activity) => {
         const unlistPossible = model.event.start_date > today;
+        const delistRequest = model.delistRequest;
 
         return (
             <tr key={model.id}>
@@ -56,14 +58,17 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 <td><a href={model.event.url()}>{model.event.name}</a></td>
                 <td>{model.event.date()}</td>
                 <td>{model.time()}</td>
-                <td>{unlistPossible ?
-                    (model.completed ? "✔" : "❌") :
-                    <Button
-                        onClick={() => unlistFromActivity(model)}
-                        variant='danger' size='sm'>
-                        Avboka?
+                <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
+                    (delistRequest === null ?
+                        <Button variant='danger' size='sm'
+                            onClick={() => requestActivityDelist(model)}>
+                            Avboka?
                         </Button>
-                }
+                        : <Button variant='success' size='sm'
+                            onClick={() => cancelDelistRequest(delistRequest)}>
+                            Återboka
+                        </Button>
+                    )}
                 </td>
             </tr>
         );
