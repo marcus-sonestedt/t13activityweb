@@ -1,6 +1,6 @@
 import React, { } from "react";
 import { Table } from 'react-bootstrap'
-import { PagedT13Events,  T13Event } from '../Models'
+import { PagedT13Events, T13Event } from '../Models'
 import './Table.css'
 
 export interface MyProps {
@@ -30,8 +30,8 @@ export function UpcomingEventsTable
             <h3>
                 <span className="table-title">{title}</span>
                 <span className="table-count">
-                    {events.results.length}/{events.count} st
-                    </span>
+                    ({events.results.length}/{events.count})
+                </span>
             </h3>
             <Table>
                 <thead>

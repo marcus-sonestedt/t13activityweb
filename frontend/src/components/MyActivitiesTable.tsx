@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Container, Button, Table } from 'react-bootstrap'
+import { Button, Table } from 'react-bootstrap'
 import { Activity } from '../Models'
 import './Table.css'
 import Cookies from "universal-cookie"
@@ -78,12 +78,12 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
         return <p>Oops</p>
 
     return (
-        <Container className="table-container">
+        <div className="table-container">
             <h3>
                 <span className="table-title">Mina uppgifter</span>
-                <span className="table-count">{props.values.length} st</span>
+                <span className="table-count">({props.values.length} st)</span>
             </h3>
-            <Table>
+            <Table striped>
                 <thead>
                     <tr>
                         <th>Namn</th>
@@ -99,6 +99,6 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                         .map(renderRow)}
                 </tbody>
             </Table>
-        </Container>
+        </div>
     )
 }

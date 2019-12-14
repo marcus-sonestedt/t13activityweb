@@ -5,11 +5,18 @@ import { userContext } from "../App";
 export const ProfileView = () => {
     const user = useContext(userContext);
 
-    return <Container><Row><Col>
-        <h1>Min profil</h1>
-        <h2>Namn: {user.fullname} {user.isStaff ? '(Personal)' : '(Medlem'}</h2>
-        <p>Arbete pågår</p>
-    </Col></Row></Container>
+    return <Container>
+        <Row>
+            <Col>
+                <h1>Min profil</h1>
+                <h2>Namn: {user.fullname}</h2>
+                <h4>Roll: {user.isStaff ? '(Personal)' : '(Medlem)'}</h4>
+            </Col>
+            <Col>
+                <p>Arbete pågår</p>
+            </Col>
+        </Row>
+    </Container>
 }
 
 export default ProfileView;

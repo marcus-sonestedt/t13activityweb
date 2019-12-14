@@ -130,7 +130,7 @@ export class T13Event implements IdValue {
     }
 
     url = () =>`/frontend/event/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
-    adminUrl = () => `admin/app/event/${this.id}`;
+    adminUrl = () => `/admin/app/event/${this.id}`;
     static apiUrl = (id: string) => `/api/event/${id}`;
 }
 

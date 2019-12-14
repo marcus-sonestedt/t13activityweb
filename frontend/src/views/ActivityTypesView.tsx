@@ -16,14 +16,19 @@ export const ActivityTypesView = () => {
         </tr>
     }
 
-    return <Container>
+    return <Container className="table-container">
         <Row>
             <Col md={12}>
                 <DataProvider<PagedActivityTypes>
                     ctor={json => deserialize(PagedActivityTypes, json)}
                     url={ActivityType.apiUrlAll() + `?page=${page}`}
                     onLoaded={setData}>
-                    <h1>Uppgiftstyper ({data.results.length}/{data.count})</h1>
+                    <h1>
+                        <span className="table-title">Uppgiftstyper</span>
+                        <span className="table-count">
+                            ({data.results.length}/{data.count})
+                        </span>
+                    </h1>
                     <Table >
                         <thead>
                             <th>Namn</th>

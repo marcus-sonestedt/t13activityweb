@@ -3,7 +3,7 @@
     max-width: 100%;
 }
 
-.table-container h3
+.table-container :matches(h1,h2,h3)
 {
     width: 100%
 }

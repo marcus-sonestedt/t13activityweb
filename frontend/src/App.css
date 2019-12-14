@@ -21,13 +21,14 @@
   background-color: #555;
 }
 
-.model-header button {
+.model-header :first-child {
+  float:left
+}
+
+.model-header :not(:first-child) {
   float:right
 }
 
-.model-header h1,h2 {
-  float:left
-}
 
 .model-header + * {
   clear:both

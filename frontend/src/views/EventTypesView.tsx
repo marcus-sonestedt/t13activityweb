@@ -4,6 +4,7 @@ import { PagedEventTypes, T13EventType } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import { pageItems } from "./MemberHomeView";
+import "../components/Table.css"
 
 export const EventTypesView = () => {
     const [data, setData] = useState<PagedEventTypes>(new PagedEventTypes());
@@ -16,14 +17,19 @@ export const EventTypesView = () => {
         </tr>
     }
 
-    return <Container>
+    return <Container className="table-container">
         <Row>
             <Col md={12}>
                 <DataProvider<PagedEventTypes>
                     ctor={json => deserialize(PagedEventTypes, json)}
                     url={T13EventType.apiUrlAll()+ `?page=${page}`}
                     onLoaded={setData}>
-                    <h1>Aktivitetstyper ({data.results.length}/{data.count})</h1>
+                    <h1>
+                        <span className="table-title">Aktivitetstyper</span>
+                        <span className="table-count">
+                        ({data.results.length}/{data.count})
+                        </span>
+                     </h1>
                     <Table >
                         <thead>
                             <th>Namn</th>

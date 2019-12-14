@@ -173,7 +173,7 @@ class Activity(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     assigned = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
-    assigned_at = models.DateTimeField(null=True)
+    assigned_at = models.DateTimeField(null=True, blank=True)
 
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)

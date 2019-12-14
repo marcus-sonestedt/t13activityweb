@@ -15,8 +15,10 @@ export const EventView = () => {
     const [htmlError, setHtmlError] = useState('');
 
     const { id } = useParams();
-
     const user = useContext(userContext);
+
+    if (event !== null)
+        activities.forEach(a => a.event = event);
 
     useEffect(() => {
         if (event === null || event === undefined)
@@ -27,33 +29,44 @@ export const EventView = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-
         const url = `/api/events/${id}`;
-        fetch(url, {signal:controller.signal})
+        const gotEvent = (t: string) => {
+            const newEvent = deserialize(PagedT13Events, t).results[0];
+            setEvent(newEvent);
+        }
+        fetch(url, { signal: controller.signal })
             .then(
                 r => r.status === 200
-                    ? r.text().then(t => setEvent(deserialize(PagedT13Events, t).results[0]))
+                    ? r.text().then(gotEvent)
                     : (setError(`${url}: HTTP ${r.status}: ${r.statusText}`),
-                        r.text().then(setHtmlError)),
-                r => r.text().then((t: any) => setError(t))
-            );
+                        r.text().then(setHtmlError))
+            ).catch(e => {
+                if (e.name === 'AbortError')
+                    return;
+                setError(e.toString());
+            });
 
-        const gotActivities = (t:any) => {
+        return function cleanup() { controller.abort(); }
+    }, [id]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        const gotActivities = (t: any) => {
             let r = deserialize(PagedActivities, t).results;
-            r = r.map(a => {if (event !== null) a.event = event; return a;})
             setActivities(r);
         }
 
-        if (activities.length !== 0)
-
         const url2 = `/api/event_activities/${id}`;
-        fetch(url2, {signal:controller.signal})
+        fetch(url2, { signal: controller.signal })
             .then(
                 r => r.status === 200
                     ? r.text().then(gotActivities) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
-                        r.text().then(setHtmlError)),
-                r => r.json().then((json: any) => setError(json.toString()))
-            );
+                        r.text().then(setHtmlError))
+            ).catch(e => {
+                if (e.name === 'AbortError')
+                    return;
+                setError(e.toString());
+            });
 
         return function cleanup() { controller.abort(); }
     }, [id]);
@@ -119,24 +132,27 @@ export const EventView = () => {
     return (
         <Container fluid>
             <Row>
-                <Col md={12} lg={6}>
-                    <div className="model-header">
-                        <a href={event.url()}><h2>{event.name}</h2></a>
+                <Col md={12}>
+                <div className="model-header">
+                        <a href={event.url()}><h1>{event.name}</h1></a>
                         {user.isStaff ?
                             <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button></a>
                             : null}
                     </div>
                     <hr />
-                    {eventType}
-                    <h4>{event.date()}</h4>
-                    <h5>Beskrivning</h5>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={12} lg={6}>
+                    <h4>Datum: {event.date()}</h4>
+                    <h4>Typ: {eventType}</h4>
+                    <h5>Beskrivning:</h5>
                     <p>{event.description}</p>
-                    <h5>Övrigt</h5>
+                    <h5>Övrigt:</h5>
                     <p>{event.comment}</p>
                 </Col>
                 <Col md={12} lg={6}>
-                    <h2>Uppgifter</h2>
-                    <hr />
+                    <h3>Uppgifter</h3>
                     <Table hover>
                         <thead>
                             <tr>
