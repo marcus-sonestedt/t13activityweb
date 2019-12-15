@@ -34,9 +34,11 @@ export class Activity implements IdValue {
     id: string = "";
     name: string = "";
     comment: string = "";
+
     date = () => { return this.event.date() };
     start_time: Date = new Date(0);
     end_time: Date | null = null;
+
     weight: number = 1;
     completed: boolean = false;
 
@@ -112,8 +114,10 @@ export class T13Event implements IdValue {
     name: string = "";
     description: string = "";
     comment: string = "";
+
     start_date: Date = new Date(0);
     end_date: Date = new Date(0);
+
     image_url: string | null = null;
 
     @Type(() => T13EventType)
