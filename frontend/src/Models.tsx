@@ -20,7 +20,7 @@ export class Member implements IdValue {
     email: string = "";
     image_url: string | null = null;
 
-    url = () =>`/frontend/member/${this.id}/${this.fullname.replace(/ /g,'-').toLowerCase()}`;
+    url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/member/' + this.id;
     static apiUrl = (id: string) => `/api/member/${id}`;
 }
@@ -36,8 +36,9 @@ export class Activity implements IdValue {
     comment: string = "";
 
     date = () => { return this.event.date() };
-    start_time: Date = new Date(0);
-    end_time: Date | null = null;
+
+    start_time: string = '';
+    end_time: string = '';
 
     weight: number = 1;
     completed: boolean = false;
@@ -50,10 +51,12 @@ export class Activity implements IdValue {
 
     @Type(() => Member)
     assigned: Member | null = null;
+
+    @Type(() => Date)
     assigned_at: Date | null = null;
 
     @Type(() => ActivityDelistRequest)
-    delistRequest: ActivityDelistRequest|null = null;
+    delistRequest: ActivityDelistRequest | null = null;
 
     time = () => {
         if (this.end_time === null)
@@ -62,7 +65,7 @@ export class Activity implements IdValue {
         return this.start_time + " - " + this.end_time
     }
 
-    url = () =>`/frontend/activity/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
+    url = () => `/frontend/activity/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     static apiUrl = (id: string) => `/api/activity/${id}`;
 }
@@ -79,7 +82,7 @@ export class ActivityType implements IdValue {
     description: string = "";
     image: string = "";
 
-    url = () =>`/frontend/activity_type/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
+    url = () => `/frontend/activity_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
     static apiUrlAll = () => `/api/activity_type`;
@@ -98,7 +101,7 @@ export class T13EventType implements IdValue {
     description: string = "";
     image: string = "";
 
-    url = () =>`/frontend/event_type/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
+    url = () => `/frontend/event_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
     static apiUrl = (id: string) => `/api/event_type/${id}`;
     static apiUrlAll = () => `/api/event_type`;
@@ -115,7 +118,10 @@ export class T13Event implements IdValue {
     description: string = "";
     comment: string = "";
 
+    @Type(() => Date)
     start_date: Date = new Date(0);
+
+    @Type(() => Date)
     end_date: Date = new Date(0);
 
     image_url: string | null = null;
@@ -128,12 +134,12 @@ export class T13Event implements IdValue {
 
     date = () => {
         if (this.start_date === this.end_date)
-            return this.start_date
+            return this.start_date.toLocaleDateString('sv-SE')
 
-        return `${this.start_date} - ${this.end_date}`
+        return `${this.start_date.toLocaleDateString('sv-SE')} - ${this.end_date.toLocaleDateString('sv-SE')}`
     }
 
-    url = () =>`/frontend/event/${this.id}/${this.name.replace(/ /g,'-').toLowerCase()}`;
+    url = () => `/frontend/event/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/event/${this.id}`;
     static apiUrl = (id: string) => `/api/event/${id}`;
 }
@@ -150,13 +156,21 @@ export class ActivityDelistRequest implements IdValue {
     }
 
     id: string = '';
+    
+    @Type(() => Member)
     member: Member;
+
+    @Type(() => Activity)
     activity: Activity;
+    
     reason: string = '';
+    
+    @Type(() => Member)
     approver: Member | null = null;
+    
     approved: boolean | null = null;
 
-    url = () =>`/frontend/delistrequest/${this.id}`
+    url = () => `/frontend/delistrequest/${this.id}`
     adminUrl = () => `/admin/app/delistrequest/${this.id}`
     apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id)
     static apiUrlForId = (id: string) => `/api/activity_delist_request/${id}`
