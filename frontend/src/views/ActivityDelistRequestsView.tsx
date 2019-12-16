@@ -38,8 +38,13 @@ export const cancelDelistRequest = (model: ActivityDelistRequest) => {
         .then(handler, handler);
 };
 
-export const ActivityDelistRequestComponent = (model: ActivityDelistRequest) => {
-    if (model.activity == null)
+export const ActivityDelistRequestComponent = (props:{model: ActivityDelistRequest|null}) => {
+    const { model } = props;
+    
+    if (model === null)
+        return null
+    
+    if (model.activity === null)
         return <p>Datafel, saknar uppgift</p>
 
     const approver = model.approver === null ? null :
@@ -181,15 +186,15 @@ export const ActivityDelistRequestView = () => {
                 </Col>
                 <Col md={12} lg={5}>
                     <h2>Detaljer</h2>
-                    {currentReq === null ? null : <>
-                        <ActivityDelistRequestComponent {...currentReq} />
-                        {!user.isStaff ? null : <div>
+                    <ActivityDelistRequestComponent model={currentReq} />
+                    {(currentReq === null || !user.isStaff) ? null : 
+                        <div>
                             <Button variant='success' onClick={() => approve(currentReq)}>
                                 Godkänn</Button>
                             <Button variant='danger' onClick={() => reject(currentReq)}>
                                 Avvisa</Button>
-                        </div>}
-                    </>}
+                        </div>
+                    }                    
                 </Col>
             </Row>
         </Container>
