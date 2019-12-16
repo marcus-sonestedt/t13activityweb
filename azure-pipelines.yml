@@ -43,7 +43,11 @@ steps:
   displayName: 'pip install'
 
 - script: |
-    python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
+    python manage.py collectstatic
+  displayName: 'django collectstatic'
+
+- script: |
+    python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input --debug-mode
   displayName: 'python tests'
 
 - task: PublishTestResults@2
