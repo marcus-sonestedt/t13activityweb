@@ -2,41 +2,10 @@ import React, { useState, useContext } from "react"
 import { Container, Row, Col, Table, Button, Pagination } from "react-bootstrap";
 import { userContext } from "../App";
 import { ActivityDelistRequest, PagedADR } from '../Models';
-import Cookies from "universal-cookie";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import { pageItems } from "./MemberHomeView";
-
-
-const handleResponse = (resp: any, action: string, url: string) => {
-    if (resp instanceof Response) {
-        if (resp.status !== 200) {
-            console.error(resp.statusText);
-            resp.text().then(console.error);
-            alert(`Misslyckades att ${action} förfrågan\nUPDATE ${url}: ${resp.statusText}`);
-        }
-    } else {
-        console.error(resp);
-        alert(`Misslyckades att ${action} förfrågan\n${url}: ${resp}`);
-    }
-    window.location.reload();
-};
-
-
-export const cancelDelistRequest = (model: ActivityDelistRequest) => {
-    if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model}?`))
-        return
-
-    const handler = (r: any) => handleResponse(r, 'radera', model.apiUrl());
-
-    const cookies = new Cookies();
-
-    fetch(model.apiUrl(), {
-        method: 'DELETE',
-        headers: { 'X-CSRFToken': cookies.get('csrftoken') }
-    })
-        .then(handler, handler);
-};
+import { cancelDLR, reject, approveDLR } from "../logic/DelistRequestActions";
 
 export const ActivityDelistRequestComponent = (props:{model: ActivityDelistRequest|null}) => {
     const { model } = props;
@@ -66,46 +35,6 @@ export const ActivityDelistRequestView = () => {
     const [allRequests, setAllRequests] = useState<PagedADR | null>(null);
     const [page, setPage] = useState(1);
     const user = useContext(userContext);
-    const cookies = new Cookies();
-
-    const approve = (model: ActivityDelistRequest) => {
-        if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`))
-            return
-
-        const handler = (r: any) => handleResponse(r, 'bekräfta', model.apiUrl());
-
-        fetch(model.apiUrl(),
-            {
-                method: 'UPDATE',
-                headers: { 'X-CSRFToken': cookies.get('csrftoken') },
-                body: JSON.stringify({
-                    approved: true,
-                    approved_by: user.memberId
-                })
-            })
-            .then(handler, handler);
-    };
-
-    const reject = (model: ActivityDelistRequest) => {
-        var rejectReason = prompt(`Ange anledning att avvisa avbokningsförfrågan för\n${model}?`);
-        if (rejectReason === null)
-            return
-
-        const handler = (r: any) => handleResponse(r, 'avvisa', model.apiUrl());
-
-        fetch(model.apiUrl(), {
-            method: 'UPDATE',
-            headers: { 'X-CSRFToken': cookies.get('csrftoken') },
-            body: JSON.stringify({
-                approved: false,
-                approved_by: user.memberId,
-                reject_reason: rejectReason
-            })
-        })
-            .then(handler, handler);
-    };
-
-
 
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
@@ -120,13 +49,13 @@ export const ActivityDelistRequestView = () => {
         }
 
         const renderRow = (model: ActivityDelistRequest) => {
-            return <tr onClick={e => rowClicked(e, model)}>
+            return <tr key={model.id} onClick={e => rowClicked(e, model)}>
                 <td><a href={model.activity.event.url()}>{model.activity.event.name}</a></td>
                 <td><a href={model.activity.url()}>{model.activity.name}</a></td>
-                <td>{model.activity.event.date}</td>
+                <td>{model.activity.event.date()}</td>
                 <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
                 <td>{model.member.id === user.memberId
-                    ? <Button variant='danger' size='sm' onClick={() => cancelDelistRequest(model)}>Avbryt</Button>
+                    ? <Button variant='danger' size='sm' onClick={() => cancelDLR(model)}>Avbryt</Button>
                     : null}
                 </td>
             </tr>
@@ -189,9 +118,9 @@ export const ActivityDelistRequestView = () => {
                     <ActivityDelistRequestComponent model={currentReq} />
                     {(currentReq === null || !user.isStaff) ? null : 
                         <div>
-                            <Button variant='success' onClick={() => approve(currentReq)}>
+                            <Button variant='success' onClick={() => approveDLR(currentReq, user)}>
                                 Godkänn</Button>
-                            <Button variant='danger' onClick={() => reject(currentReq)}>
+                            <Button variant='danger' onClick={() => reject(currentReq, user)}>
                                 Avvisa</Button>
                         </div>
                     }                    

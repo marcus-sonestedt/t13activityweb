@@ -87,9 +87,9 @@ def email_managers_for_new_users(sender, instance, created, **kwargs):
 class Attachment(models.Model):
     uploader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     file = models.FileField()
-    comment = models.TextField()
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
+    comment = models.TextField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.file.name
@@ -107,7 +107,7 @@ class EventType(models.Model):
 
     description = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
-    files = models.ManyToManyField(Attachment, blank=True)
+    attachments = models.ManyToManyField(Attachment, blank=True)
 
     fee_reimbursed = models.BooleanField(default=False)
     food_included = models.BooleanField(default=False)
@@ -132,7 +132,7 @@ class Event(models.Model):
     image = models.ImageField(null=True, blank=True)
     type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
     coordinators = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
-    files = models.ManyToManyField(Attachment, blank=True)
+    attachments = models.ManyToManyField(Attachment, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     cancelled = models.BooleanField(default=False)
@@ -157,7 +157,7 @@ class ActivityType(models.Model):
     name = models.CharField(max_length=40, unique=True)
     description = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
-    files = models.ManyToManyField(Attachment, blank=True)
+    attachments = models.ManyToManyField(Attachment, blank=True)
 
     def __str__(self):
         return self.name
@@ -184,13 +184,13 @@ class Activity(models.Model):
     completed = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         ordering=['start_time', 'end_time', 'name']
         verbose_name = 'Uppgift'
         verbose_name_plural = 'Uppgifter'
+
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         if 'assigned' in kwargs:
@@ -213,9 +213,9 @@ class ActivityDelistRequest(models.Model):
     reject_reason = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.member}: {self.activity.name} ({self.activity.event.date})"
+        return f"{self.member}: {self.activity.name} ({self.activity.event.start_date})"
 
     class Meta:
         ordering = ['activity__assigned', 'activity__date']
-        verbose_name = "Avbokningsförfrågan"
-        verbose_name_plural = "Avbokningsförfråganden"
+        verbose_name = "Avbokningsbegäran"
+        verbose_name_plural = "Avbokningsbegäranden"

@@ -45,7 +45,7 @@ export const ActivityView = () => {
     return (
         <Container>
             <DataProvider<PagedActivities>
-                url={Activity.apiUrl(id)}
+                url={Activity.apiUrlFromId(id)}
                 ctor={t => deserialize(PagedActivities, t)}
                 onLoaded={x => setModel(x.results[0])}>
                 {model === null ? null :

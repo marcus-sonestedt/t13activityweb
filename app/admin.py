@@ -21,3 +21,6 @@ class ActivityTypeAdmin(admin.ModelAdmin):
 class ActivityAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(models.ActivityDelistRequest)
+class ActivityAdmin(admin.ModelAdmin):
+    pass

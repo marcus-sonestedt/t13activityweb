@@ -2,9 +2,8 @@ import React, { useContext } from "react";
 import { Button, Table } from 'react-bootstrap'
 import { Activity } from '../Models'
 import './Table.css'
-import Cookies from "universal-cookie"
 import { userContext } from "../App"
-import { cancelDelistRequest } from "../views/ActivityDelistRequestsView"
+import { requestActivityDelist, cancelDLR } from "../logic/DelistRequestActions";
 
 export class MyActivitiesProps {
     values: Activity[] = [];
@@ -12,40 +11,6 @@ export class MyActivitiesProps {
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
     const user = useContext(userContext)
-
-    const requestActivityDelist = (model: Activity) => {
-        const reason = prompt(
-            "Ange varför du vill avboka ditt åtagande.\n" +
-            "Observera att avbokningen måste bekräftas av klubben.");
-        if (reason === null)
-            return
-
-        const cookies = new Cookies();
-
-        fetch(`/api/activity_delist/${model.id}`,
-            {
-                method: 'POST',
-                headers: { 'X-CSRFToken': cookies.get('csrftoken') },
-                body: JSON.stringify({
-                    member: user.memberId,
-                    activity: model.id,
-                    reason: reason
-                })
-            })
-            .then(r => {
-                if (r.status !== 200) {
-                    r.text().then(t => console.error(t));
-                    throw r.statusText;
-                }
-            }, r => { throw r }
-            )
-            .catch(err => {
-                console.error(err);
-                alert("Något gick fel! :(\n" + err);
-            })
-            .finally(() => window.location.reload());
-    }
-
     const today = new Date();
 
     const renderRow = (model: Activity) => {
@@ -61,11 +26,11 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
                     (delistRequest === null ?
                         <Button variant='danger' size='sm'
-                            onClick={() => requestActivityDelist(model)}>
+                            onClick={() => requestActivityDelist(model, user)}>
                             Avboka?
                         </Button>
                         : <Button variant='success' size='sm'
-                            onClick={() => cancelDelistRequest(delistRequest)}>
+                            onClick={() => cancelDLR(delistRequest)}>
                             Återboka
                         </Button>
                     )}

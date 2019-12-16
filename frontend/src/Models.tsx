@@ -59,7 +59,7 @@ export class Activity implements IdValue {
     delistRequest: ActivityDelistRequest | null = null;
 
     time = () => {
-        if (this.end_time === null)
+        if (this.end_time === null || this.end_time === this.start_time)
             return this.start_time
 
         return this.start_time + " - " + this.end_time
@@ -67,7 +67,8 @@ export class Activity implements IdValue {
 
     url = () => `/frontend/activity/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
-    static apiUrl = (id: string) => `/api/activity/${id}`;
+    apiUrl = () => Activity.apiUrlFromId(this.id);
+    static apiUrlFromId = (id: string) => `/api/activity/${id}`;
 }
 
 
@@ -133,7 +134,7 @@ export class T13Event implements IdValue {
     activities: Activity[] = [];
 
     date = () => {
-        if (this.start_date === this.end_date)
+        if (this.start_date.toDateString() === this.end_date.toDateString() ||this.end_date === null)
             return this.start_date.toLocaleDateString('sv-SE')
 
         return `${this.start_date.toLocaleDateString('sv-SE')} - ${this.end_date.toLocaleDateString('sv-SE')}`

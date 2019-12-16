@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from app.models import *
+from app.models import Attachment, Member, Event, EventType, Activity, ActivityType, ActivityDelistRequest
+
+class AttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = ('uploader', 'comment', 'created')
+
 
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,17 +26,18 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
 
-
 class ActivityTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityType
-        fields = '__all__'
+        fields = ('name', 'description', 'image')
 
 class ActivitySerializer(serializers.ModelSerializer):
     type = ActivityTypeSerializer(required=False)
     event = EventSerializer(required=False)
     assigned = MemberSerializer(required=False)
+    start_time = serializers.TimeField(format="%H:%M")
+    end_time = serializers.TimeField(format="%H:%M")
 
     class Meta:
         model = Activity
@@ -39,6 +46,8 @@ class ActivitySerializer(serializers.ModelSerializer):
 class EventActivitySerializer(serializers.ModelSerializer):
     type = ActivityTypeSerializer(required=False)
     assigned = MemberSerializer(required=False)
+    start_time = serializers.TimeField(format="%H:%M")
+    end_time = serializers.TimeField(format="%H:%M")
 
     class Meta:
         model = Activity

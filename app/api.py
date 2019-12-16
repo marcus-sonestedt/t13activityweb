@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from django.urls import path
+from django.urls import path, re_path
 from django.views.decorators.cache import cache_page, cache_control
 from django.views.decorators.vary import vary_on_cookie
 from django.utils.decorators import method_decorator
@@ -190,7 +190,7 @@ class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
-    queryset = ActivityDelistRequest.objects
+    queryset = ActivityDelistRequest.objects.select_related('activity')
     serializer_class = ActivityDelistRequestSerializer
 
     def get_queryset(self):
@@ -203,7 +203,7 @@ class ActivityDelistRequestList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
-    queryset = ActivityDelistRequest.objects
+    queryset = ActivityDelistRequest.objects.select_related('activity')
     serializer_class = ActivityDelistRequestSerializer
 
     def get_queryset(self):
@@ -211,3 +211,31 @@ class ActivityDelistRequestList(generics.ListCreateAPIView):
             return self.queryset.all()
 
         return self.queryset.filter(activity__member__user=self.request.user)
+
+##############################################################################
+
+url_patterns = [
+    path('login', obtain_auth_token),
+    path('logout', ClearAuthToken.as_view()),
+    path('isloggedin', IsLoggedIn.as_view()),
+
+    path('myactivities', MyActivitiesList.as_view()),
+    re_path('activity/(?P<id>.+)?', ActivityList.as_view()),
+    re_path('event_activities/(?P<event_id>.+)', EventActivities.as_view()),
+
+    path('upcomingevents', UpcomingEventList.as_view()),
+    path('events', EventList.as_view()),
+    re_path('events/(?P<id>.+)', EventList.as_view()),
+
+    path('event_type', EventTypeList.as_view()),
+    re_path('event_type/(?P<id>.+)', EventTypeList.as_view()),
+
+    path('activity_type', ActivityTypeList.as_view()),
+    re_path('activity_type/(?P<id>.+)', ActivityTypeList.as_view()),
+
+    re_path('activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
+    re_path('activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
+
+    path('activity_delist_request', ActivityDelistRequestList.as_view()),
+    re_path('activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
+]        

@@ -18,7 +18,7 @@ import FAQView from './views/FAQView';
 import ProfileView from './views/ProfileView';
 import { deserialize } from 'class-transformer';
 
-class UserContext {
+export class UserContext {
   isLoggedIn = false;
   isStaff = false;
   memberId = '';

@@ -47,6 +47,7 @@ try:
     EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
+    SERVER_EMAIL = 't13-no-reply@macke.eu.pythonanywhere.com'
 
     print("Secrets imported successfully")
 
@@ -81,6 +82,12 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
+
+# common urls
+LOGIN_REDIRECT_URL = '/frontend/home/'
+LOGIN_URL = '/app/login/'
+LOGOUT_REDIRECT_URL = '/frontend/welcome'
+
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
 INSTALLED_APPS = [
@@ -105,6 +112,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'app.middleware.disable_api_cache_middleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
@@ -169,7 +177,7 @@ LANGUAGE_CODE = 'sv-se'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
