@@ -15,7 +15,7 @@ export const Welcome = () => {
         return null;
 
     return (
-        <Container>
+        <Container fluid>
             <Row className="welcome">
                 <Col md={12} lg={6}>
                     <Jumbotron>
@@ -48,7 +48,7 @@ export const Welcome = () => {
 
 export const WelcomeText = () => (
     <div>
-        <h2>Välkommen till Team13's aktivitetswebb!</h2>
+        <h2>Välkommen till Team13's webbaktivitetslista!</h2>
         <p>
             Har du inget konto kan du <a href="/app/signup">skapa ett nytt</a> med den e-mailadress som du registrerat hos klubben.
 

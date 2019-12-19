@@ -174,7 +174,7 @@ export class ActivityDelistRequest implements IdValue {
     url = () => `/frontend/delistrequest/${this.id}`
     adminUrl = () => `/admin/app/delistrequest/${this.id}`
     apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id)
-    static apiUrlForId = (id: string) => `/api/activity_delist_request/${id}`
+    static apiUrlForId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/${id}`
     static apiUrlAll = () => `/api/activity_delist_request`
 }
 

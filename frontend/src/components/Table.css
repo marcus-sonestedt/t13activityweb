@@ -35,3 +35,7 @@ th {
 td:first-child {
     font-weight: bold;
 }
+
+.nowrap {
+    white-space: nowrap;
+}

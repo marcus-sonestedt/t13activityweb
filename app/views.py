@@ -15,8 +15,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods
 
 from app.forms import BootstrapUserCreationForm, BootstrapAuthenticationForm
+from app.excel import importDataFromExcel
 
 logger = logging.getLogger(__name__)
+
 
 def home(request):
     """Renders the home page."""
@@ -32,7 +34,7 @@ def contact(request):
         'contact.html',
         {
             'title': 'Contact',
-            'message': '''For web site technical issues, contact macke@yar.nu\n\n
+            'message': '''For web site technical issues, contact marcus.s.lindblom@gmail.com\r\n\r\n
                 For issues w.r.t. the club, events and tasks, contat info@team13.se.''',
             'year': datetime.now().year,
         }
@@ -47,7 +49,7 @@ def about(request):
         'about.html',
         {
             'title': 'About',
-            'message': 'Webb app that helps Team 13 manage club activites and tasks that members can take upon themselves.',
+            'message': 'En weppapplikation som hjälper Team 13 att hantera aktivitetslistor och uppgifter åt sina medlemmar.',
             'year': datetime.now().year,
         }
     )
@@ -63,7 +65,7 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            
+
             user = authenticate(username=username, password=raw_password)
 
             user.first_name = form.cleaned_data.get('first_name')
@@ -103,6 +105,7 @@ class MyLoginView(LoginView):
         self._request = request
         return super().dispatch(request, *args, **kwargs)
 
+
 @staff_member_required
 @require_http_methods(['GET', 'POST'])
 def excelImport(request):
@@ -111,7 +114,7 @@ def excelImport(request):
     if request.method == 'POST':
         for file in request.files:
             try:
-                excel.importDataFromExcel(file, request.user)
+                importDataFromExcel(file, request.user)
             except Exception as e:
                 logger.warning(e)
                 msgs.append(f'{file.name}: {e}')
@@ -119,9 +122,8 @@ def excelImport(request):
     return render(
         request,
         'excelImport.html',
-        { 'year': datetime.date.today().year,
-          'messages' : msgs,
-          'success': None
-        }
+        {'year': datetime.date.today().year,
+         'messages': msgs,
+         'success': None
+         }
     )
-

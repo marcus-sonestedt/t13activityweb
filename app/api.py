@@ -238,4 +238,4 @@ url_patterns = [
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
     re_path('activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
-]        
+]
