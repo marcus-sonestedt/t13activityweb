@@ -3,7 +3,7 @@ import { Button, Table } from 'react-bootstrap'
 import { Activity } from '../Models'
 import './Table.css'
 import { userContext } from "../App"
-import { requestActivityDelist, cancelDLR } from "../logic/DelistRequestActions";
+import { createADR, cancelADR } from "../logic/ADRActions";
 
 export class MyActivitiesProps {
     values: Activity[] = [];
@@ -26,11 +26,11 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
                     (delistRequest === null ?
                         <Button variant='danger' size='sm'
-                            onClick={() => requestActivityDelist(model, user)}>
+                            onClick={() => createADR(model, user)}>
                             Avboka?
                         </Button>
                         : <Button variant='success' size='sm'
-                            onClick={() => cancelDLR(delistRequest)}>
+                            onClick={() => cancelADR(delistRequest)}>
                             Återboka
                         </Button>
                     )}

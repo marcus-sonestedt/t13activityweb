@@ -5,7 +5,7 @@ import { ActivityDelistRequest, PagedADR } from '../Models';
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import { pageItems } from "./MemberHomeView";
-import { cancelDLR, reject, approveDLR } from "../logic/DelistRequestActions";
+import { cancelADR, rejectADR, approveADR } from "../logic/ADRActions"
 
 export const ActivityDelistRequestComponent = (props:{model: ActivityDelistRequest|null}) => {
     const { model } = props;
@@ -55,7 +55,7 @@ export const ActivityDelistRequestView = () => {
                 <td>{model.activity.event.date()}</td>
                 <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
                 <td>{model.member.id === user.memberId
-                    ? <Button variant='danger' size='sm' onClick={() => cancelDLR(model)}>Avbryt</Button>
+                    ? <Button variant='danger' size='sm' onClick={() => cancelADR(model)}>Avbryt</Button>
                     : null}
                 </td>
             </tr>
@@ -118,9 +118,9 @@ export const ActivityDelistRequestView = () => {
                     <ActivityDelistRequestComponent model={currentReq} />
                     {(currentReq === null || !user.isStaff) ? null : 
                         <div>
-                            <Button variant='success' onClick={() => approveDLR(currentReq, user)}>
+                            <Button variant='success' onClick={() => approveADR(currentReq, user)}>
                                 Godkänn</Button>
-                            <Button variant='danger' onClick={() => reject(currentReq, user)}>
+                            <Button variant='danger' onClick={() => rejectADR(currentReq, user)}>
                                 Avvisa</Button>
                         </div>
                     }                    

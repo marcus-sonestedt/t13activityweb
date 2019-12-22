@@ -20,7 +20,7 @@ const handleResponse = (resp: any, action: string, url: string) => {
 };
 
 
-export const requestActivityDelist = (model: Activity, user: UserContext) => {
+export const createADR = (model: Activity, user: UserContext) => {
     const reason = prompt(
         "Ange varför du vill avboka ditt åtagande.\n" +
         "Observera att avbokningen måste bekräftas av klubben.");
@@ -48,7 +48,7 @@ export const requestActivityDelist = (model: Activity, user: UserContext) => {
 
 
 
-export const cancelDLR = (model: ActivityDelistRequest) => {
+export const cancelADR = (model: ActivityDelistRequest) => {
     if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model}?`))
         return
 
@@ -67,7 +67,12 @@ export const cancelDLR = (model: ActivityDelistRequest) => {
         .then(handler, handler);
 };
 
-export const approveDLR = (model: ActivityDelistRequest, user: UserContext) => {
+export const approveADR = (model: ActivityDelistRequest, user: UserContext) => {
+    if (!user.isStaff) {
+        console.error("Cannot approve ADR unless user is staff")
+        return
+    }        
+
     if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`))
         return
 
@@ -88,7 +93,12 @@ export const approveDLR = (model: ActivityDelistRequest, user: UserContext) => {
         .then(handler, handler);
 };
 
-export const reject = (model: ActivityDelistRequest, user: UserContext) => {
+export const rejectADR = (model: ActivityDelistRequest, user: UserContext) => {
+    if (!user.isStaff) {
+        console.error("Cannot reject ADR unless user is staff")
+        return
+    }        
+
     var rejectReason = prompt(`Ange anledning att avvisa avbokningsförfrågan för\n${model}?`);
     if (rejectReason === null)
         return
