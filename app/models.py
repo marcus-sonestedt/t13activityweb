@@ -14,9 +14,11 @@ import datetime
 
 # Create your models here.
 
+
 class Member(models.Model):
     '''club member, Extends user object'''
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -50,6 +52,7 @@ class Member(models.Model):
 
         super(Member, self).save(*args, **kwargs)
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -61,6 +64,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         instance.save()
 
     instance.member.save()
+
 
 @receiver(post_save, sender=Member)
 def email_managers_for_new_users(sender, instance, created, **kwargs):
@@ -85,8 +89,10 @@ def email_managers_for_new_users(sender, instance, created, **kwargs):
             /The Team13 website
             ''')
 
+
 class Attachment(models.Model):
-    uploader = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    uploader = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
     file = models.FileField()
     comment = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -101,6 +107,7 @@ class Attachment(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Attachment, self).save(*args, **kwargs)
+
 
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -131,8 +138,10 @@ class Event(models.Model):
     end_date = models.DateField()
     comment = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
-    type = models.ForeignKey(EventType, on_delete=models.SET_NULL, null=True, blank=True)
-    coordinators = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    type = models.ForeignKey(
+        EventType, on_delete=models.SET_NULL, null=True, blank=True)
+    coordinators = models.ForeignKey(
+        Member, on_delete=models.SET_NULL, null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -153,6 +162,7 @@ class Event(models.Model):
         self.modified = timezone.now()
         return super(Event, self).save(*args, **kwargs)
 
+
 class ActivityType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
     name = models.CharField(max_length=40, unique=True)
@@ -167,13 +177,16 @@ class ActivityType(models.Model):
         verbose_name = 'Uppgiftstyp'
         verbose_name_plural = 'Uppgiftstyper'
 
+
 class Activity(models.Model):
     '''A specific activity on a given day, can be assigned to a user'''
     name = models.CharField(max_length=128)
-    type = models.ForeignKey(ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
+    type = models.ForeignKey(
+        ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    assigned = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    assigned = models.ForeignKey(
+        Member, on_delete=models.SET_NULL, null=True, blank=True)
     assigned_at = models.DateTimeField(null=True, blank=True)
 
     start_time = models.TimeField(blank=True, null=True)
@@ -193,7 +206,7 @@ class Activity(models.Model):
         return self.event.start_date >= now and self.event.start_date <= max_date
 
     class Meta:
-        ordering=['start_time', 'end_time', 'name']
+        ordering = ['start_time', 'end_time', 'name']
         verbose_name = 'Uppgift'
         verbose_name_plural = 'Uppgifter'
 
@@ -204,20 +217,23 @@ class Activity(models.Model):
         if 'assigned' in kwargs:
             self.assigned_at = datetime.date.today()
 
-        super(Activity, self).save(*args, **kwargs)
+            if kwargs['assigned'] is not None and not self.bookable:
+                raise Exception("Cannot assign non-bookable Activity")
+
+        super().save(*args, **kwargs)
 
 
 class ActivityDelistRequest(models.Model):
     '''request from a user to delist from an activity'''
 
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, \
-        related_name='delist_request_members')
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, \
-        related_name='delist_requests')
+    member = models.ForeignKey(Member, on_delete=models.CASCADE,
+                               related_name='delist_request_members')
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE,
+                                 related_name='delist_requests')
     reason = models.TextField(blank=True)
     approved = models.BooleanField(default=None, null=True, blank=True)
-    approver = models.ForeignKey(Member, on_delete=models.SET_NULL, \
-        blank=True, null=True, related_name='approvers')
+    approver = models.ForeignKey(Member, on_delete=models.SET_NULL,
+                                 blank=True, null=True, related_name='approvers')
     reject_reason = models.TextField(blank=True)
 
     def __str__(self):
@@ -227,3 +243,20 @@ class ActivityDelistRequest(models.Model):
         ordering = ['activity__assigned', 'activity__date']
         verbose_name = "Avbokningsbegäran"
         verbose_name_plural = "Avbokningsbegäranden"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            config = apps.get_containing_app_config('app')
+
+            # TODO: fix & test this logic
+
+            booked_count = Activity.objects.filter(
+                assigned=self.member).count()
+            delist_req_count = ActivityDelistRequest.objects.filter(
+                member=self.member, approved=None).count()
+
+            if booked_count - delist_req_count - 1 < config.MIN_ACTIVITY_SIGNUPS:
+                raise Exception(
+                    f"Cannot create delist request when member is booked for less than {config.MIN_ACTIVITY_SIGNUPS} activities if all outstanding request(s) are approved.")
+
+        super().save(*args, **kwargs)

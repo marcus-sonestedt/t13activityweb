@@ -30,7 +30,7 @@ const handleResponse = (action: string, url: string) => {
 export const createADR = (model: Activity, user: UserContext) => {
     const reason = prompt(
         "Ange varför du vill avboka ditt åtagande.\n" +
-        "Observera att avbokningen måste bekräftas av klubben.");
+        "Observera att avbokningen inte är giltig innan den bekräftats av klubben.");
     if (reason === null)
         return Promise.reject(null);
 
