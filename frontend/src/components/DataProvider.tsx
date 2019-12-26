@@ -21,7 +21,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             onLoaded(typedData);
     },
         // eslint-disable-next-line
-        []);
+        [onLoaded]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -33,7 +33,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             cache: "no-cache"
         })
             .then(r => {
-                if (r.status !== 200) {
+                if (r.status >= 300) {
                     setPlaceHolder("Oops. Något gick fel! :(");
                     setError(`Error ${r.status}: ${r.statusText}}\n`);
                     r.text().then(errorBody => setError(err => err + errorBody));

@@ -2,7 +2,7 @@ import datetime
 import logging
 
 from django.urls import path, re_path
-from django.views.decorators.cache import cache_page, cache_control
+from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.utils.decorators import method_decorator
 
@@ -42,6 +42,9 @@ class MyActivitiesList(generics.ListAPIView):
         return self.queryset \
             .filter(assigned=member)
 
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type')
@@ -56,6 +59,9 @@ class EventList(generics.ListAPIView):
 
         return self.queryset.filter(id=id)
 
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class UpcomingEventList(generics.ListAPIView):
     queryset = Event.objects \
@@ -65,6 +71,9 @@ class UpcomingEventList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     read_only = True
 
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class IsLoggedIn(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -105,6 +114,10 @@ class EventActivities(generics.ListAPIView):
 
         return self.queryset.filter(event=id)
 
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 class ActivityList(generics.ListAPIView):
     queryset = Activity.objects
     serializer_class = ActivitySerializer
@@ -121,6 +134,10 @@ class ActivityList(generics.ListAPIView):
                 .filter(id=id) \
                 .select_related('type', 'event', 'assigned')
 
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 class EventTypeList(generics.ListAPIView):
     queryset = EventType.objects
@@ -135,6 +152,10 @@ class EventTypeList(generics.ListAPIView):
             return self.queryset.all()
 
         return self.queryset.filter(id=id)
+
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
 class ActivityTypeList(generics.ListAPIView):
@@ -151,6 +172,11 @@ class ActivityTypeList(generics.ListAPIView):
             return self.queryset.all()
 
         return self.queryset.filter(id=id)
+
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
 
 class ActivityDelist(APIView):
     permission_classes = [IsAdminUser]

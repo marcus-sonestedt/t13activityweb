@@ -34,7 +34,7 @@ export const EventView = () => {
             const newEvent = deserialize(PagedT13Events, t).results[0];
             setEvent(newEvent);
         }
-        fetch(url, { signal: controller.signal })
+        fetch(url, { signal: controller.signal, cache: 'no-cache' })
             .then(
                 r => r.status === 200
                     ? r.text().then(gotEvent)
@@ -57,7 +57,7 @@ export const EventView = () => {
         }
 
         const url2 = `/api/event_activities/${id}`;
-        fetch(url2, { signal: controller.signal })
+        fetch(url2, { signal: controller.signal, cache: 'no-cache' })
             .then(
                 r => r.status === 200
                     ? r.text().then(gotActivities) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
