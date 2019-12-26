@@ -32,26 +32,19 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
         model = ActivityType
         fields = ('name', 'description', 'image')
 
-class ActivitySerializer(serializers.ModelSerializer):
-    type = ActivityTypeSerializer(required=False)
-    event = EventSerializer(required=False)
-    assigned = MemberSerializer(required=False)
-    start_time = serializers.TimeField(format="%H:%M")
-    end_time = serializers.TimeField(format="%H:%M")
-
-    class Meta:
-        model = Activity
-        fields = '__all__'
-
 class EventActivitySerializer(serializers.ModelSerializer):
     type = ActivityTypeSerializer(required=False)
     assigned = MemberSerializer(required=False)
     start_time = serializers.TimeField(format="%H:%M")
     end_time = serializers.TimeField(format="%H:%M")
+    bookable = serializers.BooleanField()
 
     class Meta:
         model = Activity
-        fields = '__all__'
+        fields = [x.name for x in Activity._meta.get_fields()] + ['bookable']
+
+class ActivitySerializer(EventActivitySerializer):
+    event = EventSerializer(required=False)
 
 class ActivityDelistRequestSerializer(serializers.ModelSerializer):
     member = MemberSerializer(required=False)

@@ -67,7 +67,7 @@ def importDataFromExcel(file, year=2019):
             activityTypes[at_name] = at
 
         activity = Activity(
-            name=f"{at_name} {event_name} {calendar.day_name[date.weekday()]}", event=event, type=at)
+            name=f"{at_name} {calendar.day_name[date.weekday()]}", event=event, type=at)
 
         interval = cols[4].value.replace('—', '-').replace('–', '-') \
             .replace(' ', '').replace('.', ':')

@@ -91,7 +91,7 @@ LOGOUT_REDIRECT_URL = '/frontend/welcome'
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
 INSTALLED_APPS = [
-    'app',
+    'app.apps.ActivityListAppConfig',
     'frontend',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.core.mail import mail_managers
+from django.apps import apps
 
 import datetime
 
@@ -183,6 +184,13 @@ class Activity(models.Model):
 
     completed = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
+
+    @property
+    def bookable(self):
+        config = apps.get_app_config('app')
+        max_date = config.LATEST_BOOKABLE_DATE
+        now = datetime.date.today()
+        return self.event.start_date >= now and self.event.start_date <= max_date
 
     class Meta:
         ordering=['start_time', 'end_time', 'name']

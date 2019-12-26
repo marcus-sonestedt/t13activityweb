@@ -42,6 +42,7 @@ export class Activity implements IdValue {
 
     weight: number = 1;
     completed: boolean = false;
+    bookable: boolean = false;
 
     @Type(() => ActivityType)
     type: ActivityType | null = null;

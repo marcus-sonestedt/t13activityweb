@@ -5,6 +5,7 @@ from django.urls import path, re_path
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.utils.decorators import method_decorator
+from django.apps import apps
 
 from app.models import *
 from app.serializers import *
@@ -19,6 +20,7 @@ from rest_framework.authtoken.models import Token
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 
 logger = logging.getLogger(__name__)
+
 
 class ClearAuthToken(ObtainAuthToken):
     permission_classes = [IsAuthenticated]
@@ -46,6 +48,7 @@ class MyActivitiesList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type')
     serializer_class = EventSerializer
@@ -63,6 +66,7 @@ class EventList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class UpcomingEventList(generics.ListAPIView):
     queryset = Event.objects \
                     .filter(start_date__gte=datetime.datetime.now()) \
@@ -74,6 +78,7 @@ class UpcomingEventList(generics.ListAPIView):
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
 
 class IsLoggedIn(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -90,18 +95,23 @@ class IsLoggedIn(APIView):
             member = None
 
         user_id = request.user.id if request.user.is_authenticated else None
+        config = apps.get_app_config('app')
 
         return Response({
             'isLoggedIn': request.user.is_authenticated,
             'isStaff': request.user.is_staff,
             'userId': user_id,
             'memberId': member.id if member else None,
-            'fullname' : member.fullname if member else None,
+            'fullname': member.fullname if member else None,
+            'settings': {
+                'minSignups': config.MIN_ACTIVITY_SIGNUPS,
+                'latestBookableDate': config.LATEST_BOOKABLE_DATE
+            }
         })
 
 
 class EventActivities(generics.ListAPIView):
-    queryset = Activity.objects.select_related('type', 'assigned')
+    queryset = Activity.objects.select_related('type', 'assigned', 'event')
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = EventActivitySerializer
     read_only = True
@@ -118,6 +128,7 @@ class EventActivities(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class ActivityList(generics.ListAPIView):
     queryset = Activity.objects
     serializer_class = ActivitySerializer
@@ -131,8 +142,8 @@ class ActivityList(generics.ListAPIView):
             return self.queryset
 
         return self.queryset \
-                .filter(id=id) \
-                .select_related('type', 'event', 'assigned')
+            .filter(id=id) \
+            .select_related('type', 'event', 'assigned')
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
@@ -184,7 +195,8 @@ class ActivityDelist(APIView):
 
     def post(self, request, id):
         activity = Activity.objects.select_related('assigned').get(id=id)
-        logger.info(f"User {request.user.id} about to delist from activity {activity.id}")
+        logger.info(
+            f"User {request.user.id} about to delist from activity {activity.id}")
 
         if (activity.assigned.user != request.user):
             return HttpResponseForbidden("Inte bokad av dig")
@@ -194,16 +206,21 @@ class ActivityDelist(APIView):
 
         return Response("Avbokad från " + activity.name)
 
+
 class ActivityEnlist(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
 
     def post(self, request, id):
         activity = Activity.objects.get(id=id)
-        logger.info(f"User {request.user.id} about to enlist on activity {activity.id}")
+        logger.info(
+            f"User {request.user.id} about to enlist on activity {activity.id}")
 
-        if (activity.assigned is not None):
+        if activity.assigned is not None:
             return HttpResponseForbidden("Redan bokad av " + activity.assigned.fullname)
+
+        if not activity.bookable:
+            return HttpResponseForbidden("Aktiviteten är inte bokningsbar (i dåtid eller blockerad)")
 
         member = Member.objects.get(user=request.user)
 
@@ -211,6 +228,7 @@ class ActivityEnlist(APIView):
         activity.save()
 
         return Response("Inbokad på " + activity.name)
+
 
 class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -224,6 +242,7 @@ class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView):
             return self.queryset.all()
 
         return self.queryset.filter(activity__member__user=self.request.user)
+
 
 class ActivityDelistRequestList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -239,6 +258,7 @@ class ActivityDelistRequestList(generics.ListCreateAPIView):
         return self.queryset.filter(activity__member__user=self.request.user)
 
 ##############################################################################
+
 
 url_patterns = [
     path('login', obtain_auth_token),
@@ -263,5 +283,6 @@ url_patterns = [
     re_path('activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path('activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
+    re_path('activity_delist_request/(?P<pk>.+)',
+            ActivityDelistRequestView.as_view()),
 ]

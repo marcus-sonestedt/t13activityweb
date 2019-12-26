@@ -114,7 +114,9 @@ export const EventView = () => {
 
         const assigned = model.assigned !== null
             ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-            : <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>;
+            : model.bookable
+            ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
+            : null;
 
         return (
             <tr key={model.id} className='linked'>
