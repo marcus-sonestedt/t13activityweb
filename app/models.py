@@ -168,7 +168,7 @@ class ActivityType(models.Model):
 
 class Activity(models.Model):
     '''A specific activity on a given day, can be assigned to a user'''
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=128)
     type = models.ForeignKey(ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
