@@ -4,32 +4,40 @@ import { UserContext } from '../App';
 
 const cookies = new Cookies();
 
+const handleResponse = (action: string, url: string) => {
+    return (resp: any) => new Promise((resolve: () => void, reject: () => void) => {
+        let errText = "";
 
-const handleResponse = (resp: any, action: string, url: string) => {
-    if (resp instanceof Response) {
-        if (resp.status !== 200) {
-            console.error(resp.statusText);
+        if (resp instanceof Response) {
+            if (resp.status < 300) {
+                console.info(`Lyckades att ${action} avbokningsförfrågan.`)
+                resolve();
+                return;
+            }
+
+            errText = resp.statusText;
             resp.text().then(console.error);
-            alert(`Misslyckades att ${action} förfrågan\nUPDATE ${url}: ${resp.statusText}`);
+        } else {
+            errText = resp.toString();
         }
-    } else {
-        console.error(resp);
-        alert(`Misslyckades att ${action} förfrågan\n${url}: ${resp}`);
-    }
-    window.location.reload();
-};
 
+        console.error(errText);
+        alert(`Misslyckades att ${action} avbokningsförfrågan\n${url}: ${errText}`);
+        reject();
+    });
+}
 
 export const createADR = (model: Activity, user: UserContext) => {
     const reason = prompt(
         "Ange varför du vill avboka ditt åtagande.\n" +
         "Observera att avbokningen måste bekräftas av klubben.");
     if (reason === null)
-        return
+        return Promise.reject(null);
 
-    const handler = (x: any) => handleResponse(x, 'avboka', model.apiUrl())
+    const url = `/api/activity_delist/${model.id}`;
+    const handler = handleResponse('skapa', url)
 
-    fetch(`/api/activity_delist/${model.id}`,
+    return fetch(url,
         {
             method: 'POST',
             headers: {
@@ -42,21 +50,16 @@ export const createADR = (model: Activity, user: UserContext) => {
                 reason: reason
             })
         })
-        .then(handler, handler)
-        .finally(() => window.location.reload());
+        .then(handler, handler);
 }
-
-
 
 export const cancelADR = (model: ActivityDelistRequest) => {
     if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model}?`))
-        return
+        return Promise.reject(null);
 
-    const handler = (r: any) => handleResponse(r, 'radera', model.apiUrl());
+    const handler = handleResponse('radera', model.apiUrl())
 
-    const cookies = new Cookies();
-
-    fetch(model.apiUrl(),
+    return fetch(model.apiUrl(),
         {
             method: 'DELETE',
             headers: {
@@ -70,15 +73,16 @@ export const cancelADR = (model: ActivityDelistRequest) => {
 export const approveADR = (model: ActivityDelistRequest, user: UserContext) => {
     if (!user.isStaff) {
         console.error("Cannot approve ADR unless user is staff")
-        return
-    }        
+        return Promise.reject(null);
+    }
 
-    if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`))
-        return
+    if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`)) {
+        return Promise.reject(null);
+    }
 
-    const handler = (r: any) => handleResponse(r, 'bekräfta', model.apiUrl());
+    const handler = handleResponse('bekräfta', model.apiUrl())
 
-    fetch(model.apiUrl(),
+    return fetch(model.apiUrl(),
         {
             method: 'UPDATE',
             headers: {
@@ -96,16 +100,18 @@ export const approveADR = (model: ActivityDelistRequest, user: UserContext) => {
 export const rejectADR = (model: ActivityDelistRequest, user: UserContext) => {
     if (!user.isStaff) {
         console.error("Cannot reject ADR unless user is staff")
-        return
-    }        
+        return Promise.reject(null);
+    }
 
     var rejectReason = prompt(`Ange anledning att avvisa avbokningsförfrågan för\n${model}?`);
-    if (rejectReason === null)
-        return
 
-    const handler = (r: any) => handleResponse(r, 'avvisa', model.apiUrl());
+    if (rejectReason === null) {
+        return Promise.reject(null);
+    }
 
-    fetch(model.apiUrl(),
+    const handler = handleResponse('avvisa', model.apiUrl())
+
+    return fetch(model.apiUrl(),
         {
             method: 'UPDATE',
             headers: {
@@ -120,8 +126,5 @@ export const rejectADR = (model: ActivityDelistRequest, user: UserContext) => {
         })
         .then(handler, handler);
 };
-
-
-
 
 export default {}

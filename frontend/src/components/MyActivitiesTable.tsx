@@ -7,9 +7,12 @@ import { createADR, cancelADR } from "../logic/ADRActions";
 
 export class MyActivitiesProps {
     values: Activity[] = [];
+    reload: () => void = () => {};
 }
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
+    const { values, reload } = props;
+
     const user = useContext(userContext)
     const today = new Date();
 
@@ -26,11 +29,11 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                 <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
                     (delistRequest === null ?
                         <Button variant='danger' size='sm'
-                            onClick={() => createADR(model, user)}>
+                            onClick={() => createADR(model, user).then(reload)}>
                             Avboka?
                         </Button>
                         : <Button variant='success' size='sm'
-                            onClick={() => cancelADR(delistRequest)}>
+                            onClick={() => cancelADR(delistRequest).then(reload)}>
                             Återboka
                         </Button>
                     )}
@@ -46,7 +49,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
         <div className="table-container">
             <h3>
                 <span className="table-title">Mina uppgifter</span>
-                <span className="table-count">({props.values.length} st)</span>
+                <span className="table-count">({values.length} st)</span>
             </h3>
             <Table striped>
                 <thead>
@@ -59,7 +62,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.values
+                    {values
                         .sort((a, b) => a.date < b.date ? 1 : 0)
                         .map(renderRow)}
                 </tbody>

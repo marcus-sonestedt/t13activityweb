@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useCallback } from "react"
 import { Container, Row, Col, Table, Button, Pagination } from "react-bootstrap";
 import { userContext } from "../App";
 import { ActivityDelistRequest, PagedADR } from '../Models';
@@ -7,12 +7,12 @@ import { deserialize } from "class-transformer";
 import { pageItems } from "./MemberHomeView";
 import { cancelADR, rejectADR, approveADR } from "../logic/ADRActions"
 
-export const ActivityDelistRequestComponent = (props:{model: ActivityDelistRequest|null}) => {
+export const ActivityDelistRequestComponent = (props: { model: ActivityDelistRequest | null }) => {
     const { model } = props;
-    
+
     if (model === null)
         return null
-    
+
     if (model.activity === null)
         return <p>Datafel, saknar uppgift</p>
 
@@ -35,6 +35,13 @@ export const ActivityDelistRequestView = () => {
     const [allRequests, setAllRequests] = useState<PagedADR | null>(null);
     const [page, setPage] = useState(1);
     const user = useContext(userContext);
+    const [reload, setReload] = useState(1);
+
+    const incReload = useCallback(() => setReload(reload + 1), [reload])
+    const reloadHandler = useCallback((data: PagedADR) => {
+        if (reload >= 0) // just to force reload of data
+            setAllRequests(data);
+    }, [reload]);
 
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
@@ -55,7 +62,7 @@ export const ActivityDelistRequestView = () => {
                 <td>{model.activity.event.date()}</td>
                 <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
                 <td>{model.member.id === user.memberId
-                    ? <Button variant='danger' size='sm' onClick={() => cancelADR(model)}>Avbryt</Button>
+                    ? <Button variant='danger' size='sm' onClick={() => cancelADR(model).then(incReload)}>Avbryt</Button>
                     : null}
                 </td>
             </tr>
@@ -106,7 +113,7 @@ export const ActivityDelistRequestView = () => {
                     <h2>Avbokningsförfrågningar</h2>
                     <DataProvider url={ActivityDelistRequest.apiUrlAll() + `?page=${page}`}
                         ctor={json => deserialize(PagedADR, json)}
-                        onLoaded={setAllRequests}>
+                        onLoaded={reloadHandler}>
                         {delistRequestsTable(allRequests)}
                         <Pagination>
                             {pageItems(allRequests !== null ? allRequests.count : 0, 10, page, setPage)}
@@ -116,14 +123,14 @@ export const ActivityDelistRequestView = () => {
                 <Col md={12} lg={5}>
                     <h2>Detaljer</h2>
                     <ActivityDelistRequestComponent model={currentReq} />
-                    {(currentReq === null || !user.isStaff) ? null : 
+                    {(currentReq === null || !user.isStaff) ? null :
                         <div>
-                            <Button variant='success' onClick={() => approveADR(currentReq, user)}>
+                            <Button variant='success' onClick={() => approveADR(currentReq, user).then(incReload)}>
                                 Godkänn</Button>
-                            <Button variant='danger' onClick={() => rejectADR(currentReq, user)}>
+                            <Button variant='danger' onClick={() => rejectADR(currentReq, user).then(incReload)}>
                                 Avvisa</Button>
                         </div>
-                    }                    
+                    }
                 </Col>
             </Row>
         </Container>

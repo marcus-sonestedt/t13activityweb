@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Container, Row, Col, Pagination } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, PagedActivities } from '../Models'
@@ -31,7 +31,18 @@ export const MemberHomeView = () => {
 
     const [events, setEvents] = useState(new PagedT13Events());
     const [eventPage, setEventPage] = useState(1);
+    const [reload, setReload] = useState(1);
 
+    const incReload = () => setReload(reload + 1);
+    const setActivitiesReload = useCallback((data: PagedActivities) => {
+        if (reload > 0)
+            setActivities(data);
+    }, [reload]);
+
+    const setEventsReload = useCallback((data: PagedT13Events) => {
+        if (reload > 0)
+            setEvents(data);
+    }, [reload]);
 
     return (
         <Container fluid >
@@ -40,9 +51,10 @@ export const MemberHomeView = () => {
                     <DataProvider< PagedActivities >
                         ctor={t => deserialize(PagedActivities, t)}
                         url={`/api/myactivities?page=${activitiesPage}`}
-                        onLoaded={setActivities}>
+                        onLoaded={setActivitiesReload}>
                         <MyActivitiesTable
                             values={activities.results}
+                            reload={incReload}
                         />
                         <Pagination>
                             {pageItems(activities.count, 10, activitiesPage, setActivitiesPage)}
@@ -53,7 +65,7 @@ export const MemberHomeView = () => {
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
                         url={`/api/events?page=${eventPage}`}
-                        onLoaded={setEvents}>
+                        onLoaded={setEventsReload}>
                         <UpcomingEventsTable events={events} />
                         <Pagination>
                             {pageItems(events.count, 10, eventPage, setEventPage)}
