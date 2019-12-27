@@ -122,7 +122,9 @@ export const EventView = () => {
             <tr key={model.id} className='linked'>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
-                <td>{model.date()} {model.time()}</td>
+                <td className='nowrap'>
+                    {model.date()}<br/>{model.time()}
+                </td>
                 <td>{assigned}</td>
             </tr>
         )

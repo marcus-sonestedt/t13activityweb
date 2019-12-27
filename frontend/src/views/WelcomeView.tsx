@@ -20,26 +20,28 @@ export const Welcome = () => {
                 <Col md={12} lg={6}>
                     <Jumbotron>
                         <WelcomeText />
-                        <Image src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" />
+                        <div style={{textAlign:'center'}}>
+                            <Image src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" fluid />
+                        </div>
+                        <div className="buttonContainer">
+                            <a href="/app/login/">
+                                <Button>Logga in</Button>
+                            </a>
+                            <span className="spacer">&nbsp;</span>
+                            <a href="/app/signup">
+                                <Button>Registrera konto</Button>
+                            </a>
+                        </div>
                     </Jumbotron>
                 </Col>
                 <Col md={12} lg={6}>
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
-                        url={"/api/upcomingevents"}
+                        url={"/api/upcomingevents?page_size=50"}
                         onLoaded={setEvents}>
                         <UpcomingEvents events={events}
-                            title="Kommande aktiviteter"/>
+                            title="Kommande aktiviteter" />
                     </DataProvider>
-                    <div className="buttonContainer">
-                        <a href="/app/login/">
-                            <Button>Logga in</Button>
-                        </a>
-                        <span className="spacer">&nbsp;</span>
-                        <a href="/app/signup">
-                            <Button>Registrera konto</Button>
-                        </a>
-                    </div>
                 </Col>
             </Row>
         </Container>
@@ -52,8 +54,10 @@ export const WelcomeText = () => (
         <p>
             Har du inget konto kan du <a href="/app/signup">skapa ett nytt</a> med den e-mailadress som du registrerat hos klubben.
 
-            Kontakta klubbens kansli på <a href="mailto:info@team13.se">info@team13.se</a> om du behöver hjälp.
-    </p>
+            Kontakta klubbens kansli på&nbsp;
+            <a href="mailto:info@team13.se">info@team13.se</a>
+            om du behöver hjälp.
+        </p>
     </div>
 );
 

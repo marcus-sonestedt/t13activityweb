@@ -1,12 +1,13 @@
 import React, { useState, SyntheticEvent } from "react";
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Pagination } from 'react-bootstrap'
 import { PagedT13Events, T13Event } from '../Models'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
+import RBC, { Calendar, momentLocalizer } from 'react-big-calendar'
 import { useHistory } from "react-router";
 import moment from 'moment'
 import 'moment/locale/sv';
 import './Table.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { pageItems } from "../views/MemberHomeView";
 
 export interface MyProps {
     events: PagedT13Events;
@@ -15,11 +16,23 @@ export interface MyProps {
 
 const localizer = momentLocalizer(moment);
 
+class MyAgendaEvent extends React.Component<any, {}> {
+    render = () =>
+        <a href={this.props.event.url()}>{this.props.event.name}</a>
+}
+
+const LS_EVENTCAL_VIEW_KEY = 'eventcal-view';
+
 export const UpcomingEventsCalendar = (props: { events: PagedT13Events }) => {
     const { events } = props;
+    const bcViewJson = localStorage.getItem(LS_EVENTCAL_VIEW_KEY);
+    const bcViewStored = (bcViewJson === null ? 'month' : JSON.parse(bcViewJson)) as RBC.View;
+    const [bcView, setBCView] = useState<RBC.View>(bcViewStored);
     const history = useHistory();
     const eventClicked = (event: T13Event, e: SyntheticEvent) =>
         history.push(event.url());
+
+    const components = { agenda: { event: MyAgendaEvent } }
 
     return <Calendar
         culture='sv-SE'
@@ -30,12 +43,23 @@ export const UpcomingEventsCalendar = (props: { events: PagedT13Events }) => {
         allDayAccessor={() => true}
         titleAccessor="name"
         tooltipAccessor="name"
+        resourceAccessor={x => x.url()}
         onSelectEvent={eventClicked}
+        components={components}
+        view={bcView}
+        onView={v => {
+            localStorage.setItem(LS_EVENTCAL_VIEW_KEY, JSON.stringify(v));
+            setBCView(v);
+         }}
     />
 }
 
-export const UpcomingEventsTable = (props: { events: PagedT13Events }) => {
-    const { events } = props;
+export const UpcomingEventsTable = (props: {
+    events: PagedT13Events,
+    count: number
+}) => {
+    const { events, count = 10 } = props;
+    const [page, setPage] = useState(1);
 
     const renderRow = (model: T13Event) => {
         const type = model.type === null ? null :
@@ -51,7 +75,7 @@ export const UpcomingEventsTable = (props: { events: PagedT13Events }) => {
         );
     }
 
-    return (
+    return <>
         <Table>
             <thead>
                 <tr>
@@ -62,28 +86,34 @@ export const UpcomingEventsTable = (props: { events: PagedT13Events }) => {
                 </tr>
             </thead>
             <tbody>
-                {events.results.map(renderRow)}
+                {events.results.slice((page - 1) * count, page * count).map(renderRow)}
             </tbody>
         </Table>
-    );
+        <Pagination>
+            {pageItems(events.results.length, 10, page, setPage)}
+        </Pagination>
+    </>
 }
 
 export interface EventProps {
     events: PagedT13Events;
-    title?: string
+    title?: string,
+    height?: string
 }
 
+const LS_CALMODE_KEY = "event-calendar-mode";
 
 export const UpcomingEvents = (props: EventProps) => {
-    const { events, title = 'Kommande händelser' } = props;
-    const storedViewModeJson = localStorage.getItem("cal-mode");
+    const { events, title = 'Kommande händelser', height = '75vh' } = props;
+
+    const storedViewModeJson = localStorage.getItem(LS_CALMODE_KEY);
     const storedViewMode = storedViewModeJson === null
         ? false : JSON.parse(storedViewModeJson);
     const [viewMode, setViewMode] = useState(storedViewMode);
 
     const toggleViewMode = () => setViewMode((x: boolean) => {
         x = !x;
-        localStorage.setItem("cal-mode", JSON.stringify(x));
+        localStorage.setItem(LS_CALMODE_KEY, JSON.stringify(x));
         return x;
     });
 
@@ -99,10 +129,10 @@ export const UpcomingEvents = (props: EventProps) => {
                 </Button>
             </span>
         </h3>
-        <div style={{ height: '65vh' }}>
+        <div style={{ height: height }}>
             {viewMode
                 ? <UpcomingEventsCalendar events={events} />
-                : <UpcomingEventsTable events={events} />
+                : <UpcomingEventsTable events={events} count={10} />
             }
         </div>
     </div>

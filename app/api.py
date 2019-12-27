@@ -70,7 +70,7 @@ class EventList(generics.ListAPIView):
 class UpcomingEventList(generics.ListAPIView):
     queryset = Event.objects \
                     .filter(start_date__gte=datetime.datetime.now()) \
-                    .select_related('type')[:10]
+                    .select_related('type')
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     read_only = True

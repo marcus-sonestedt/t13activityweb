@@ -30,7 +30,6 @@ export const MemberHomeView = () => {
     const [activitiesPage, setActivitiesPage] = useState(1);
 
     const [events, setEvents] = useState(new PagedT13Events());
-    const [eventPage, setEventPage] = useState(1);
     const [reload, setReload] = useState(1);
 
     const incReload = () => setReload(reload + 1);
@@ -44,32 +43,31 @@ export const MemberHomeView = () => {
             setEvents(data);
     }, [reload]);
 
+    const ACTIVITIES_PAGE_SIZE = 10;
+
     return (
         <Container fluid >
             <Row>
                 <Col md={12} lg={6}>
                     <DataProvider< PagedActivities >
                         ctor={t => deserialize(PagedActivities, t)}
-                        url={`/api/myactivities?page=${activitiesPage}`}
+                        url={`/api/myactivities?page=${activitiesPage}&page_size=${ACTIVITIES_PAGE_SIZE}`}
                         onLoaded={setActivitiesReload}>
                         <MyActivitiesTable
                             values={activities.results}
                             reload={incReload}
                         />
                         <Pagination>
-                            {pageItems(activities.count, 10, activitiesPage, setActivitiesPage)}
+                            {pageItems(activities.count, ACTIVITIES_PAGE_SIZE, activitiesPage, setActivitiesPage)}
                         </Pagination>
                     </DataProvider>
                 </Col>
                 <Col md={12} lg={6}>
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
-                        url={`/api/events?page=${eventPage}`}
+                        url={`/api/events?page_size=100`}
                         onLoaded={setEventsReload}>
                         <UpcomingEvents events={events} />
-                        <Pagination>
-                            {pageItems(events.count, 10, eventPage, setEventPage)}
-                        </Pagination>
                     </DataProvider>
                 </Col>
             </Row>

@@ -24,8 +24,9 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
             <tr key={model.id}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td><a href={model.event.url()}>{model.event.name}</a></td>
-                <td>{model.event.date()}</td>
-                <td>{model.time()}</td>
+                <td className='nowrap'>
+                    {model.date()}<br/>{model.time()}
+                </td>
                 <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
                     (delistRequest === null ?
                         <Button variant='danger' size='sm'
@@ -56,8 +57,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                     <tr>
                         <th>Namn</th>
                         <th>Aktivitet</th>
-                        <th>Datum</th>
-                        <th>Tid</th>
+                        <th>Tidpunkt</th>
                         <th>Utförd</th>
                     </tr>
                 </thead>
