@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Container, Row, Col, Jumbotron, Image, Button } from 'react-bootstrap'
-import { UpcomingEventsTable } from "../components/UpcomingEventsTable";
+import { UpcomingEvents } from "../components/UpcomingEvents";
 import DataProvider from "../components/DataProvider";
 import { PagedT13Events } from "../Models";
 import { deserialize } from "class-transformer";
@@ -28,7 +28,7 @@ export const Welcome = () => {
                         ctor={t => deserialize(PagedT13Events, t)}
                         url={"/api/upcomingevents"}
                         onLoaded={setEvents}>
-                        <UpcomingEventsTable events={events}
+                        <UpcomingEvents events={events}
                             title="Kommande aktiviteter"/>
                     </DataProvider>
                     <div className="buttonContainer">

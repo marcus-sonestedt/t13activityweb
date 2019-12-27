@@ -3,7 +3,7 @@ import { Container, Row, Col, Pagination } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, PagedActivities } from '../Models'
 import { MyActivitiesTable } from '../components/MyActivitiesTable'
-import { UpcomingEventsTable } from '../components/UpcomingEventsTable'
+import { UpcomingEvents } from '../components/UpcomingEvents'
 import { DataProvider } from '../components/DataProvider'
 
 export const pageItems = (count: number, pagesize: number,
@@ -66,7 +66,7 @@ export const MemberHomeView = () => {
                         ctor={t => deserialize(PagedT13Events, t)}
                         url={`/api/events?page=${eventPage}`}
                         onLoaded={setEventsReload}>
-                        <UpcomingEventsTable events={events} />
+                        <UpcomingEvents events={events} />
                         <Pagination>
                             {pageItems(events.count, 10, eventPage, setEventPage)}
                         </Pagination>

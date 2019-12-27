@@ -30,7 +30,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
 
         fetch(url, {
             signal: controller.signal,
-            cache: "no-cache"
+            cache: "no-store"
         })
             .then(r => {
                 if (r.status >= 300) {

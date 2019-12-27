@@ -10,7 +10,7 @@ export const Navigation = () => {
         <Navbar bg='dark' variant='dark'>
             <Navbar.Brand href="/">
                 <img src="/logo192.png" alt="Team13 logo" />
-                Team13's aktivitetswebb
+                GKRC Team13s aktivitetslista
                 </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="justify-content-end">

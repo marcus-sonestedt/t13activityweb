@@ -245,6 +245,6 @@ RECAPTCHA_REQUIRED_SCORE = 0.5
 
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'app.drf_defaults.DefaultResultsSetPagination',
     'PAGE_SIZE': 10
 }
