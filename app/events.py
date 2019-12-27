@@ -40,7 +40,7 @@ def new_user_created(member):
 
 
 def adr_approved(adr):
-    log.info("ADR {adr} is approved, sending email")
+    log.info(f"ADR {adr} has been approved, sending email")
 
     send_mail("Avbokningsbegäran godkänd",
         f"Hej!\n\nBegäran att bli avbokad från {adr} har godkänts",
@@ -54,9 +54,30 @@ def adr_approved(adr):
     else:
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
-            body=f"Din begäran om avbokning av {adr} har blivit godkänd",
+            body=f"Din begäran om avbokning av {adr} har blivit godkänd. /Team13",
             from_=settings.TWILIO_SMS_FROM_NUMBER,
             to=sms_target)
+
+def adr_rejected(adr):
+    log.info(f"ADR {adr} has been rejected, sending email")
+
+    send_mail("Avbokningsbegäran avvisad",
+        f"Hej!\n\nBegäran att bli avbokad från {adr} har tyvärr avvisats.",
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[adr.member.user.email])
+
+    sms_target = adr.member.phone_number
+
+    if sms_target is None:
+        log.warning(f"No phone_number set for {adr.member}")
+    else:
+        log.info(f"Sending SMS to {sms_target}")
+        sms_client().messages.create(
+            body=f"Din begäran om avbokning av {adr} har tyvärr avvisats. /Team13",
+            from_=settings.TWILIO_SMS_FROM_NUMBER,
+            to=sms_target)
+
+
 
 def notify_upcoming_activity(activity):
     if activity.assigned is None:

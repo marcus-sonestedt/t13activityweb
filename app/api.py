@@ -1,11 +1,13 @@
 import datetime
 import logging
 
+from django.conf import settings
 from django.urls import path, re_path
+from django.apps import apps
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
+from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.apps import apps
 
 from app.models import *
 from app.serializers import *
@@ -13,11 +15,13 @@ from app.serializers import *
 from rest_framework.views import APIView
 from rest_framework import authentication, generics, parsers, renderers, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
+
+from twilio.rest import Client as TwilioClient
 
 logger = logging.getLogger(__name__)
 
@@ -257,6 +261,81 @@ class ActivityDelistRequestList(generics.ListCreateAPIView):
 
         return self.queryset.filter(activity__member__user=self.request.user)
 
+
+class ReceiveSMS(APIView):
+    parser_classes = [parsers.JSONParser, parsers.MultiPartParser, parsers.FormParser]
+    permission_classes = [AllowAny]
+
+    @method_decorator(csrf_exempt)
+    def post(self, request, *args, **kwargs):
+        sid = self.serializer.object['AccountSid']
+        msgsid = self.serializer.object['MessagingServiceSid']
+
+        if sid != settings.TWILIO_ACCOUNT_SID:
+            raise HttpResponseForbidden('Invalid SID')
+
+        body = self.serializer.object['Body']
+        from_ = self.serializer.object['From']
+        to = self.serializer.object['To']
+
+        logger.info(f'Received SMS from {from_} to {to} via {msgsid}: "{body}"')
+
+
+class VerifyPhone(APIView):
+    _client = TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+
+    parser_classes = [parsers.JSONParser]
+    permission_classes = [IsAuthenticated]
+
+    def _start_verify(self, phone):
+        logger.info(f"Creating verification for {phone}")
+
+        verification = _client.verify \
+            .services(settings.TWILIO_VERIFY_SID) \
+            .verifications \
+            .create(to=phone, channel='sms')
+
+        return verification
+
+    def _check_verify(self, phone, code):
+        logger.info(f"Checking verification for {phone}")
+
+        verification = _client.verify \
+            .services(settings.TWILIO_VERIFY_SID) \
+            .verification_checks \
+            .create(to=phone, code=code)
+
+        return verification
+
+    def post(self, request, action, code=None):
+        member = request.user.member
+        if member.phone_number is None:
+            return HttpResponseForbidden("Member does not have a phone number")
+
+        if action == 'send_code':
+            v = self._start_verify(member.phone_number)
+            if v.sid is None:
+                return Response("Failed to create verify request, retry?", status=502)
+
+            logger.info(f"Successfully created verification for {member.phone_number}")
+
+            return Response('OK. Send the code for verification.')
+
+        elif action == 'verify_code':
+            c = self._check_verify(member.phone_number, code)
+            if c.status != 'approved':
+                return HttpResponseForbidden(c.status)
+
+            logger.info(f"{member.fullname}'s number {member.phone_number} has been verified!")
+            member.phone_verified = True
+            member.save()
+
+            return Response(c.status)
+
+        else:
+            return HttpResponseBadRequest('invalid action')
+
+
 ##############################################################################
 
 
@@ -266,23 +345,26 @@ url_patterns = [
     path('isloggedin', IsLoggedIn.as_view()),
 
     path('myactivities', MyActivitiesList.as_view()),
-    re_path('activity/(?P<id>.+)?', ActivityList.as_view()),
-    re_path('event_activities/(?P<event_id>.+)', EventActivities.as_view()),
+    re_path(r'activity/(?P<id>.+)?', ActivityList.as_view()),
+    re_path(r'event_activities/(?P<event_id>.+)', EventActivities.as_view()),
 
     path('upcomingevents', UpcomingEventList.as_view()),
     path('events', EventList.as_view()),
-    re_path('events/(?P<id>.+)', EventList.as_view()),
+    re_path(r'events/(?P<id>.+)', EventList.as_view()),
 
     path('event_type', EventTypeList.as_view()),
-    re_path('event_type/(?P<id>.+)', EventTypeList.as_view()),
+    re_path(r'event_type/(?P<id>.+)', EventTypeList.as_view()),
 
     path('activity_type', ActivityTypeList.as_view()),
-    re_path('activity_type/(?P<id>.+)', ActivityTypeList.as_view()),
+    re_path(r'activity_type/(?P<id>.+)', ActivityTypeList.as_view()),
 
-    re_path('activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
-    re_path('activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
+    re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
+    re_path(r'activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path('activity_delist_request/(?P<pk>.+)',
+    re_path(r'activity_delist_request/(?P<pk>.+)',
             ActivityDelistRequestView.as_view()),
+
+    path('sms', ReceiveSMS.as_view()),
+    path('phone', VerifyPhone.as_view()),
 ]

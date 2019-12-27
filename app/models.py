@@ -24,7 +24,10 @@ class Member(models.Model):
 
     fullname = models.CharField(max_length=120, blank=True)
     email = models.EmailField(blank=True)
+
     phone_number = models.CharField(max_length=20, blank=True)
+    phone_verified = models.BooleanField(default=False)
+
     comment = models.TextField(blank=True)
     licensed_driver = models.BooleanField(default=False)
 
@@ -37,24 +40,19 @@ class Member(models.Model):
 
     def __str__(self):
         if self.user:
-            self.fullname = self.user.first_name + " " + self.user.last_name
+            self.fullname = f"{self.user.first_name} {self.user.last_name}"
         return f"{self.fullname or 'Member'} ({self.user.email})"
 
     def save(self, *args, **kwargs):
-        ''' On save, update timestamps '''
-        if not self.id:
-            self.created = timezone.now()
-        self.modified = timezone.now()
-
         if self.user:
-            self.fullname = self.user.first_name + " " + self.user.last_name
+            self.fullname = f"{self.user.first_name} {self.user.last_name}"
             self.email = self.user.email
 
         super(Member, self).save(*args, **kwargs)
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def user_saved(sender, instance, created, **kwargs):
     if created:
         instance.member = Member.objects.create(user=instance)
         instance.email = instance.username
@@ -66,7 +64,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     instance.member.save()
 
 @receiver(post_save, sender=Member)
-def email_managers_for_new_users(sender, instance, created, **kwargs):
+def member_saved(sender, instance, created, **kwargs):
     if created:
         events.new_user_created(instance)
 

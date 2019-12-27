@@ -49,5 +49,5 @@ class Command(BaseCommand):
             self.stderr.write("FAILURE (-ISH, maybe)")
         else:
             self.stdout.write("SUCCESS")
-            
+
 

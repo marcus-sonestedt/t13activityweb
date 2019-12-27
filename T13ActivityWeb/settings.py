@@ -45,13 +45,13 @@ try:
     TWILIO_ACCOUNT_SID = secrets.TWILIO_ACCOUNT_SID
     TWILIO_AUTH_TOKEN = secrets.TWILIO_AUTH_TOKEN
     TWILIO_SMS_FROM_NUMBER = secrets.TWILIO_SMS_FROM_NUMBER
+    TWILIO_VERIFY_SID = secrets.TWILIO_VERIFY_SID
 
     EMAIL_HOST = secrets.EMAIL_HOST
     EMAIL_HOST_USER = secrets.EMAIL_HOST_USER
     EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    SERVER_EMAIL = 't13-no-reply@macke.eu.pythonanywhere.com'
 
     print("Secrets imported successfully")
 
@@ -78,7 +78,8 @@ MANAGERS = [
     ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com'),
 ]
 
-DEFAULT_FROM_EMAIL = 'noreply@macke.eu.pythonanywhere.com'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL = 't13-noreply@macke.eu.pythonanywhere.com'
+
 
 ALLOWED_HOSTS = [
     'macke.eu.pythonanywhere.com',
