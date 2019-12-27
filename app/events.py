@@ -58,7 +58,7 @@ def adr_approved(adr):
             from_=settings.TWILIO_SMS_FROM_NUMBER,
             to=sms_target)
 
-def notify_activity_next_day(activity):
+def notify_upcoming_activity(activity):
     if activity.assigned is None:
         # TODO: Notify event coordinator/responsible with summary in this case?
         log.warning(f"Activity '{activity}' is not assigned, cannot notify")

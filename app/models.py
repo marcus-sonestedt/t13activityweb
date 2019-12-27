@@ -16,7 +16,7 @@ from app import events
 # Create your models here, these will be tables in the SQL database.
 
 class Member(models.Model):
-    '''club member, Extends user object'''
+    '''A club member, extensions to user object'''
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
