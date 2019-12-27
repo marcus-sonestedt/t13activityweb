@@ -29,8 +29,6 @@ class Member(models.Model):
     phone_verified = models.BooleanField(default=False)
 
     comment = models.TextField(blank=True)
-    licensed_driver = models.BooleanField(default=False)
-
     membercard_number = models.CharField(max_length=20, blank=True)
 
     class Meta:
