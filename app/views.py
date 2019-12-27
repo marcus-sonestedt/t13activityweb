@@ -23,8 +23,7 @@ logger = logging.getLogger(__name__)
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return redirect('/')
-
+    return redirect('/frontend/home' if request.user.is_authenticated else '/frontend/welcome')
 
 def contact(request):
     """Renders the contact page."""

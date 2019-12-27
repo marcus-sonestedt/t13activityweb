@@ -2,19 +2,24 @@
   background-color: #282c34;
 }
 
-.container {
-  margin-bottom: 5em;
-}
-
 .navbar {
   padding-left: 5em;
   padding-right: 5em;
 }
 
-.footer {
+main > .container {
+  padding: 15px 15px 0;
+}
+
+footer {
+  margin: 0;
+}
+
+.my-footer {
   padding-top: 1em;
   text-align: center;
   background-color: black;
+  margin-bottom: 0;
 }
 
 .jumbotron {
@@ -28,7 +33,6 @@
 .model-header :not(:first-child) {
   float:right
 }
-
 
 .model-header + * {
   clear:both

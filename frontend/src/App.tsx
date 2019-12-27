@@ -62,36 +62,40 @@ export const App = () => {
   return (
     <UserProvider value={state}>
       <BrowserRouter>
-        <Navigation />
-        <Switch>
-          <Redirect exact from="/" to="/frontend/" />
-          <Route path="/frontend/event/:id/:name" component={EventView} />
-          <Route path="/frontend/activity/:id/:name" component={ActivityView} />
-          <Route path="/frontend/event_type/:id/:name" component={EventTypeView} />
-          <Route path="/frontend/activity_type/:id/:name" component={ActivityTypeView} />
+        <header>
+          <Navigation />
+        </header>
+        <main>
+          <Switch>
+            <Redirect exact from="/" to="/frontend/" />
+            <Route path="/frontend/event/:id/:name" component={EventView} />
+            <Route path="/frontend/activity/:id/:name" component={ActivityView} />
+            <Route path="/frontend/event_type/:id/:name" component={EventTypeView} />
+            <Route path="/frontend/activity_type/:id/:name" component={ActivityTypeView} />
 
-          <Route path="/frontend/activitytypes" component={ActivityTypesView} />
-          <Route path="/frontend/eventtypes" component={EventTypesView} />
-          <Route path="/frontend/faq" component={FAQView} />
+            <Route path="/frontend/activitytypes" component={ActivityTypesView} />
+            <Route path="/frontend/eventtypes" component={EventTypesView} />
+            <Route path="/frontend/faq" component={FAQView} />
 
-          <Route path="/frontend/home" component={MemberHomeView} />
-          <Route path="/frontend/profile" component={ProfileView} />
-          <Route path="/frontend/member/:id" component={MemberView} />
-          <Route path="/frontend/delistrequests" component={ActivityDelistRequestView} />
+            <Route path="/frontend/member/:id" component={MemberView} />
+            <Route path="/frontend/delistrequests" component={ActivityDelistRequestView} />
 
-          {!state.isLoggedIn ?
-            <>
-              <Route path="/frontend/welcome" component={Welcome} />
-              <Redirect to="/frontend/welcome" />
-            </>
-            :
-            <>
-              <Redirect exact from="/frontend/" to="/frontend/home" />
-              <Redirect exact from="/frontend/welcome" to="/frontend/home" />
-            </>
-          }
-          <Route component={NotFound} />
-        </Switch>
+            {!state.isLoggedIn ?
+              <>
+                <Route path="/frontend/welcome" component={Welcome} />
+                <Redirect to="/frontend/welcome" />
+              </>
+              :
+              <>
+                <Route path="/frontend/profile" component={ProfileView} />
+                <Route path="/frontend/home" component={MemberHomeView} />
+                <Redirect exact from="/frontend/" to="/frontend/home" />
+                <Redirect exact from="/frontend/welcome" to="/frontend/home" />
+              </>
+            }
+            <Route component={NotFound} />
+          </Switch>
+        </main>
         <Footer />
       </BrowserRouter >
     </UserProvider>
@@ -108,20 +112,22 @@ export const Redirect2 =
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <Container fluid>
-      <Row className="fixed-bottom footer">
-        <Col>
-          <p>Copyright &copy; Team13 GKRC and Marcus Sonestedt, {currentYear}.</p>
-        </Col>
-        <Col>
-          <p>
-            Developed with <a href="https://reactjs.org">React</a> and
+    <footer className="footer mt-auto">
+      <Container fluid>
+        <Row className="my-footer">
+          <Col>
+            <p>Copyright &copy; Team13 GKRC and Marcus Sonestedt, {currentYear}.</p>
+          </Col>
+          <Col>
+            <p>
+              Developed with <a href="https://reactjs.org">React</a> and
           {'\u00A0'}<a href="https:///www.djangoproject.com">Django</a> by
           {'\u00A0'}<a href="https://github.com/marcusl">Marcus Sonestedt</a>.
         </p>
-        </Col>
-      </Row>
-    </Container>
+          </Col>
+        </Row>
+      </Container>
+    </footer>
   );
 }
 
