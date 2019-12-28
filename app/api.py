@@ -362,9 +362,9 @@ url_patterns = [
     re_path(r'activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path(r'activity_delist_request/(?P<pk>.+)',
+    re_path(r'activity_delist_request/(?P<id>.+)',
             ActivityDelistRequestView.as_view()),
 
     path('sms', ReceiveSMS.as_view()),
-    path('phone', VerifyPhone.as_view()),
+    re_path(r'phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
 ]
