@@ -13,6 +13,8 @@ Developed by [Marcus Sonestedt](https://www.github.com/marcusl) under the [Affer
 * ActivityType - a role that has to be filled during an event, flag marshal, pre-grid controller or technical scrutineer for races, carpenter or painter for work days or grillmeister and saucemaster for barbequeues.
 * Activity - a specific activity of given type for an event, which can be assigned to a user
 * Member - person able to perform an Activity, possible linked to a web site User
+* ActivityDelistRequest - request by member to be delisted from an activity, must be approved/rejected by staff to have an effect, unless someone else
+books that activity
 
 ## Development
 
@@ -166,3 +168,41 @@ or any another method recommended [here](https://stackoverflow.com/questions/272
 pip install pipupgrade
 pipupgrade --latest --yes
 ```
+
+
+## Third-party services
+
+### ReCaptcha
+
+** Disabled for now as something is not working right... :-| **
+
+Purpose:
+
+* Verify that users registering and/or logging in are humans
+
+Get the two keys from [Admin Console](https://www.google.com/recaptcha/admin/)
+
+Website uses the django-recaptcha library to integrate into login/register forms.
+
+### Twilio
+
+Purpose:
+
+* send/receive SMSes.
+* verifying phone numbers (via SMS)
+
+Create phone number (for SMS source) and get api keys from their [Admin Console](https://www.twilio.com/console/).
+
+Create messaging service and configure webhook to point to our server's 'api/sms' view to receive SMS.
+
+Web site uses Twilio's python library to send SMS and verify phone numbers.
+
+### Sendgrid (by Twilio)
+
+Purpose:
+
+* Send lots of emails
+
+Get API key from [Admin Console](https://app.sendgrid.com/).
+
+Wet site uses Sendgrid's SMTP relay to use Django's existing email code easily.
