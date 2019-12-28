@@ -50,8 +50,10 @@ try:
     EMAIL_HOST = secrets.EMAIL_HOST
     EMAIL_HOST_USER = secrets.EMAIL_HOST_USER
     EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
+    EMAIL_PORT = secrets.EMAIL_PORT
+    EMAIL_USE_TLS = secrets.EMAIL_USE_TLS
+
+    SENDGRID_API_KEY = secrets.SENDGRID_API_KEY
 
     print("Secrets imported successfully")
 
