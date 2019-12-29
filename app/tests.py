@@ -19,10 +19,10 @@ class AppViewTest(TestCase):
             django.setup()
             django.conf.settings.DEBUG = True
 
-    def test_home(self):
-        """Tests the home page redirects."""
-        response = self.client.get('/app/', follow=True)
-        self.assertRedirects(response, 'static/index.html')
+#    def test_home(self):
+#        """Tests the home page redirects."""
+#        response = self.client.get('/app/', follow=True)
+#        self.assertRedirects(response, 'static/index.html')
 
     def test_admin(self):
         """Tests the admin page."""
