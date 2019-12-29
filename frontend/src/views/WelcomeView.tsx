@@ -25,11 +25,11 @@ export const Welcome = () => {
                         </div>
                         <div className="buttonContainer">
                             <a href="/app/login/">
-                                <Button>Logga in</Button>
+                                <Button size='lg'>Logga in</Button>
                             </a>
                             <span className="spacer">&nbsp;</span>
                             <a href="/app/signup">
-                                <Button>Registrera konto</Button>
+                                <Button size='lg'>Registrera konto</Button>
                             </a>
                         </div>
                     </Jumbotron>
