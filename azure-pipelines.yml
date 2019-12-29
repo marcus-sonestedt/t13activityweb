@@ -54,3 +54,10 @@ steps:
   condition: succeededOrFailed()
   inputs:
     testResultsFiles: "**/TEST-*.xml"
+
+- task: PublishBuildArtifacts@1
+  condition: succeeded()
+  inputs:
+    pathtoPublish: '$(Build.SourcesDirectory)'
+    artifactName: 'sources'
+    parallel: true
