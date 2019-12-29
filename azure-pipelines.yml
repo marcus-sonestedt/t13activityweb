@@ -55,9 +55,18 @@ steps:
   inputs:
     testResultsFiles: "**/TEST-*.xml"
 
+
+- powershell: >
+    Copy -Path $(Build.SourcesDirectory) -Recurse
+      -Destination $(Build.ArtifactStagingDirectory)
+      -Exclude @('*/node_modules/*', '*/env/*')
+  condition: succeeded()
+  displayName: 'copy build artifacts'
+
 - task: PublishBuildArtifacts@1
   condition: succeeded()
+  displayName: 'publish build artifacts'
   inputs:
-    pathtoPublish: '$(Build.SourcesDirectory)'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'sources'
     parallel: true
