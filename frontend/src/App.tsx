@@ -17,6 +17,7 @@ import { ActivityTypesView } from './views/ActivityTypesView';
 import FAQView from './views/FAQView';
 import ProfileView from './views/ProfileView';
 import { deserialize } from 'class-transformer';
+import CookieConsent from "react-cookie-consent";
 
 export class UserContext {
   isLoggedIn = false;
@@ -63,6 +64,7 @@ export const App = () => {
     <UserProvider value={state}>
       <BrowserRouter>
         <header>
+          <T13CookieConsent isLoggedIn={state.isLoggedIn}/>
           <Navigation />
         </header>
         <main>
@@ -108,6 +110,21 @@ export const Redirect2 =
     const to = props.toFunc(location.pathname);
     return <Redirect from={props.from} to={to} />
   }
+
+const T13CookieConsent = (props:{isLoggedIn:boolean}) => {
+  const {isLoggedIn} = props;
+
+  if (!isLoggedIn)
+    return null;
+
+  return <CookieConsent buttonText="Okaj!">
+      Den här webbplatsen använder cookies.{' '}
+      <span style={{ fontSize: "small" }}>
+        Vi behöver hålla koll på att du är inloggad och
+        säkra kommandon till webbservern.
+      </span>
+    </CookieConsent>
+}
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
