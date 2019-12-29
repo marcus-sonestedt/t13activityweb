@@ -60,11 +60,11 @@ steps:
     Copy -Path $(Build.SourcesDirectory) -Recurse
       -Destination $(Build.ArtifactStagingDirectory)
       -Exclude @('*/node_modules/*', '*/env/*')
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'copy build artifacts'
 
 - task: PublishBuildArtifacts@1
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'publish build artifacts'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
