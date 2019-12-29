@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os
+import os,sys
 import os.path as path
 import logging
 
@@ -35,42 +35,78 @@ print(f"BASE_DIR: {BASE_DIR}")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+secret_names = [
+    'DATABASES',
+
+    'SECRET_KEY',
+    'RECAPTCHA_PUBLIC_KEY',
+    'RECAPTCHA_PRIVATE_KEY',
+
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_AUTH_TOKEN',
+    'TWILIO_VERIFY_SID',
+    'SMS_FROM_NUMBER',
+
+    'EMAIL_HOST',
+    'EMAIL_HOST_USER',
+    'EMAIL_HOST_PASSWORD',
+    'EMAIL_PORT',
+    'EMAIL_USE_TLS',
+
+    'SENDGRID_API_KEY']
+
+this_module = sys.modules[__name__]
+
+for n in secret_names:
+    setattr(this_module, n, None)
+
 try:
     import T13ActivityWeb.secrets as secrets
-
-    SECRET_KEY = secrets.DJANGO_SECRET_KEY
-    RECAPTCHA_PUBLIC_KEY = secrets.RECAPTCHA_PUBLIC_KEY
-    RECAPTCHA_PRIVATE_KEY = secrets.RECAPTCHA_PRIVATE_KEY
-
-    TWILIO_ACCOUNT_SID = secrets.TWILIO_ACCOUNT_SID
-    TWILIO_AUTH_TOKEN = secrets.TWILIO_AUTH_TOKEN
-    TWILIO_SMS_FROM_NUMBER = secrets.TWILIO_SMS_FROM_NUMBER
-    TWILIO_VERIFY_SID = secrets.TWILIO_VERIFY_SID
-
-    EMAIL_HOST = secrets.EMAIL_HOST
-    EMAIL_HOST_USER = secrets.EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
-    EMAIL_PORT = secrets.EMAIL_PORT
-    EMAIL_USE_TLS = secrets.EMAIL_USE_TLS
-
-    SENDGRID_API_KEY = secrets.SENDGRID_API_KEY
-
-    print("Secrets imported successfully")
-
 except (AttributeError, ImportError) as e:
-    print(
-        f"WARNING: Failed to import secrets: {e}. Disabling captcha and email!")
-    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+    print(f"WARNING: Failed to import T13ActivityWeb/secrets.py: {e}")
+    secrets = None
 
-    # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = os.environ.get(
-        'DJANGO_SECRET_KEY', '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4')
+SILENCED_SYSTEM_CHECKS = []    
+EMAIL_HOST = None
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 print (f"DEBUG: {DEBUG}")
 
-# will get site errors
+for n in secret_names:
+    if hasattr(secrets, n):
+        setting = getattr(secrets, n)
+        setattr(this_module, n, setting)
+        continue
+
+    print(f"  {n} not found")
+
+    if not n.startswith('EMAIL_'):
+        setattr(this_module, n, '')
+
+    if n == 'EMAIL_HOST':
+        print("    Disabling email")
+        del EMAIL_HOST
+
+    if n.startswith('RECAPTCHA_'):
+        SILENCED_SYSTEM_CHECKS += 'captcha.recaptcha_test_key_error'
+
+    if n == 'SECRET_KEY':
+        print('    WARNING: Using predefined SECRET_KEY, not ok in production!')
+        SECRET_KEY = '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4'
+
+    if n == 'DATABASES':
+        print("    INFO: Using local sqlite database")
+        # Databases
+        # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            }
+        }
+
+# will get emails with site errors
 ADMINS = [
     ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
 ]
@@ -82,13 +118,11 @@ MANAGERS = [
 
 SERVER_EMAIL = DEFAULT_FROM_EMAIL = 't13-noreply@macke.eu.pythonanywhere.com'
 
-
 ALLOWED_HOSTS = [
     'macke.eu.pythonanywhere.com',
     'macke.pythonanywhere.com',
     'localhost'
 ]
-
 
 # common urls
 LOGIN_REDIRECT_URL = '/frontend/home/'
@@ -119,10 +153,10 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'app.middleware.disable_api_cache_middleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'app.middleware.disable_api_cache_middleware',
 ]
 
 ROOT_URLCONF = 'T13ActivityWeb.urls'
@@ -146,15 +180,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'T13ActivityWeb.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

@@ -19,13 +19,16 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
     const approver = model.approver === null ? null :
         <span>av <a href={model.approver.url()}>{model.approver.fullname}</a></span>
 
+    const approved = model.approved === true ? "JA"
+         : model.approved === false ?  "NEJ"
+         : "Ej besvarad";
+
     return (
         <>
-            <h3>Aktivitet: {model.activity.event.name}</h3>
-            <h3>Uppgift: {model.activity.name}</h3>
-            <h4>Godkänd: {model.approved ? "JA" : "NEJ"} {approver}</h4>
-            <h4>Anledning:</h4>
-            <p>{model.reason}</p>
+            <h4>Aktivitet:</h4><p>{model.activity.event.name}</p>
+            <h4>Uppgift:</h4><p>{model.activity.name}</p>
+            <h4>Godkänd:</h4><p>{approved} {approver}</p>
+            <h4>Anledning:</h4><p>{model.reason}</p>
         </>
     )
 }

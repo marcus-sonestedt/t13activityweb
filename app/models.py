@@ -8,10 +8,16 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.apps import apps
+from django.core.mail import mail_managers, send_mail, send_mass_mail
+from django.conf import settings
 
 import datetime
 
 from app import events
+
+class RuleViolationException(BaseException):
+    '''thrown when a model change violates rules set by the club'''
+    pass
 
 # Create your models here, these will be tables in the SQL database.
 
@@ -221,7 +227,8 @@ class ActivityDelistRequest(models.Model):
         return f"{self.member}: {self.activity.name} ({self.activity.event.start_date})"
 
     class Meta:
-        ordering = ['activity__assigned', 'activity__date']
+        ordering = ['activity__date', 'activity__assigned']
+        unique_together = [['member', 'activity']]
         verbose_name = "Avbokningsbegäran"
         verbose_name_plural = "Avbokningsbegäranden"
 
@@ -237,7 +244,22 @@ class ActivityDelistRequest(models.Model):
                 member=self.member, approved=None).count()
 
             if booked_count - delist_req_count - 1 < config.MIN_ACTIVITY_SIGNUPS:
-                raise Exception(
-                    f"Cannot create delist request when member is booked for less than {config.MIN_ACTIVITY_SIGNUPS} activities if all outstanding request(s) are approved.")
+                raise RuleViolationException(
+                    f'Cannot create delist request when member would be booked for less than' + 
+                     f'{config.MIN_ACTIVITY_SIGNUPS} activities if all outstanding request(s) are approved.')
 
         super().save(*args, **kwargs)
+
+@receiver(post_save, sender=ActivityDelistRequest)
+def save_activity_delist_request(sender, instance, created, **kwargs):
+    assigned = instance.activity.assigned
+
+    if assigned is None or 'approved' not in kwargs:
+        return
+
+    if instance.approved is True:
+        instance.activity.assigned = None
+        instance.activity.save()
+        events.adr_approved(instance)
+    elif instance.approved is False:
+        events.adr_rejected(instance)

@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.core.mail import mail_managers, send_mail
+from django.core.mail import mail_managers, send_mail, send_mass_mail
 
 from twilio.rest import Client as TwilioClient
 
@@ -42,10 +42,16 @@ def new_user_created(member):
 def adr_approved(adr):
     log.info(f"ADR {adr} has been approved, sending email")
 
-    send_mail("Avbokningsbegäran godkänd",
-        f"Hej!\n\nBegäran att bli avbokad från {adr} har godkänts",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[adr.member.user.email])
+    send_mail('Avbokning godkänd',
+        f'''Hej {adr.assigned.fullname}
+        
+        Din önskan om avbokning från {adr.activity}
+        har blivit godkänd av {adr.approver.fullname}.
+
+        mvh
+        /Team13 aktivitetswebb''',
+        settings.DEFAULT_FROM_EMAIL,
+        [adr.assigned.user.email])
 
     sms_target = adr.member.phone_number
 
@@ -54,17 +60,26 @@ def adr_approved(adr):
     else:
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
-            body=f"Din begäran om avbokning av {adr} har blivit godkänd. /Team13",
-            from_=settings.TWILIO_SMS_FROM_NUMBER,
+            body=f"Din begäran om avbokning av {adr.activity} har blivit godkänd. mvh /Team13",
+            from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
 
 def adr_rejected(adr):
     log.info(f"ADR {adr} has been rejected, sending email")
 
-    send_mail("Avbokningsbegäran avvisad",
-        f"Hej!\n\nBegäran att bli avbokad från {adr} har tyvärr avvisats.",
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[adr.member.user.email])
+    send_mass_mail('Avbokning ej godkänd',
+            f'''Hej {adr.assigned.fullname},
+            
+            Din önskan om avbokning från {adr.activity} 
+            har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
+            med följande meddelande:\n\n"{adr.reject_reason}"
+
+            Vänligen tag kontakt om du har frågor.
+            
+            mvh
+            /Team13 aktivitetswebb''',
+            settings.DEFAULT_FROM_EMAIL,
+            [adr.assigned.user.email, adr.approved_by.user.email])
 
     sms_target = adr.member.phone_number
 
@@ -73,8 +88,8 @@ def adr_rejected(adr):
     else:
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
-            body=f"Din begäran om avbokning av {adr} har tyvärr avvisats. /Team13",
-            from_=settings.TWILIO_SMS_FROM_NUMBER,
+            body=f"Hej! Din begäran om avbokning från {adr.activity} har tyvärr avvisats. mvh /Team13",
+            from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
 
 
@@ -87,11 +102,15 @@ def notify_upcoming_activity(activity):
 
     log.info(f"Notifying {activity.assigned} that {activity} happens tomorrow")
 
-    send_mail(f"Påminnelse om {activity}",
-        f'''Hej!\n
-        Här kommer en liten påminnelse om att du är inbokad på uppgiften {activity} den {activity.date}
+    message = f'''Hej!
+
+        Här kommer en påminnelse om att du är inbokad på uppgiften {activity} den {activity.date}
         mellan {activity.start_time} och {activity.end_time}.
-        \nmvh /Team13''',
+
+        mvh /Team13'''
+
+    send_mail(f"Påminnelse om {activity}",
+        message,
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[activity.assigned.user.email])
 
@@ -102,6 +121,6 @@ def notify_upcoming_activity(activity):
     else:
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
-            body=f"Hej! En påminnelse om att avbokning av {activity} har blivit godkänd. /Team13",
-            from_=settings.TWILIO_SMS_FROM_NUMBER,
+            body=message,
+            from_=settings.SMS_FROM_NUMBER,
             to=sms_target)

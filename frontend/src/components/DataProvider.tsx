@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ReactNode, ReactElement, useCallback } from "react";
-import { Container, Alert, Image } from 'react-bootstrap'
+import { Alert, Image } from 'react-bootstrap'
 
 export interface DataProps<T> {
     ctor: ((json: string) => T);
@@ -19,8 +19,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         setData(typedData);
         if (onLoaded !== undefined)
             onLoaded(typedData);
-    },
-        // eslint-disable-next-line
+    }, // eslint-disable-next-line
         [onLoaded]);
 
     useEffect(() => {
@@ -30,7 +29,8 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
 
         fetch(url, {
             signal: controller.signal,
-            cache: "no-store"
+            cache: "no-store",
+            headers: { accept: 'application/json' }
         })
             .then(r => {
                 if (r.status >= 300) {
@@ -67,16 +67,16 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             return children as ReactElement<any>;
 
     if (error != null)
-        return <Container fluid>
+        return <div>
             <p>{placeHolder}</p>
             <Image src='/static/brokenpiston.jpg'
                 alt="Broken piston"
                 className="errorImage"
                 fluid />
             <Alert variant='warning'>{error}</Alert>
-        </Container>;
+        </div>;
 
-    return <p>{placeHolder}</p>
+    return <div><p>{placeHolder}</p></div>
 }
 
 export default DataProvider;

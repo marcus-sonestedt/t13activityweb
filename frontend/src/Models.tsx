@@ -66,6 +66,8 @@ export class Activity implements IdValue {
         return this.start_time + " - " + this.end_time
     }
 
+    toString = () =>  `${this.name} - ${this.event.date()} - ${this.time()}` 
+
     url = () => `/frontend/activity/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     apiUrl = () => Activity.apiUrlFromId(this.id);

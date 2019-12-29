@@ -6,6 +6,6 @@ class ActivityListAppConfig(AppConfig):
     name = 'app'
     verbose_name = 'Activity List'
 
-    # app specific settings
+    # app specific settings, should probably be in a db config object
     MIN_ACTIVITY_SIGNUPS = 5
     LATEST_BOOKABLE_DATE = date(2020, 7, 31)

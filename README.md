@@ -2,7 +2,9 @@
 
 Website to help organizations &amp; clubs coordinate activities amongst their members, especially my local karting club.
 
-[![Build Status](https://lolworx.visualstudio.com/macke/_apis/build/status/marcusl.t13activityweb?branchName=master)](https://lolworx.visualstudio.com/macke/_build/latest?definitionId=1&branchName=master)
+[Master: ![Build Status](https://lolworx.visualstudio.com/macke/_apis/build/status/marcusl.t13activityweb?branchName=master)](https://lolworx.visualstudio.com/macke/_build/latest?definitionId=1&branchName=master)
+[Dev: ![Build Status](https://lolworx.visualstudio.com/macke/_apis/build/status/marcusl.t13activityweb?branchName=dev)](https://lolworx.visualstudio.com/macke/_build/latest?definitionId=1&branchName=dev)
+
 
 Developed by [Marcus Sonestedt](https://www.github.com/marcusl) under the [Affero GPL license](https://en.wikipedia.org/wiki/Affero_General_Public_License).
 
@@ -54,19 +56,20 @@ python -m venv env
 
 * Activate it:
 
- * On Windows:
+  * On Windows:
 
-```cmd
-env/scripts/activate
-```
+    ```cmd
+    env/scripts/activate
+    ```
 
- * On Linux:
+  * On Linux:
 
-```bash
-source env/scripts/activate
-```
+    ```bash
+    source env/scripts/activate
+    ```
 
-* Install required packages (into the virtual evnironment)
+* Install required packages (into the virtual environment)  
+  This must be done whenever requirements.txt is updated)
 
 ```bash
 python -m pip install -r requirements.txt
@@ -91,55 +94,61 @@ python manage.py runserver
 Uses [React](https://reactjs.org), TypeScript and Bootstrap.
 
 * Install [Node.js](https://nodejs.org)
-* Install packages:
 
-```bash
-npm install
-```
+* Go into frontend dir
+
+  ```bash
+  cd frontend
+  ```
+
+* Install packages:  
+  This must be done whenever frontend/packages.json is updated.
+
+  ```bash
+  npm install
+  ```
 
 * Start development server
 
-```
-npm start
-```
+  ```bash
+  npm run start
+  ```
 
-## Deploying to production
+## Setup running in production
 
 * Perform steps for backend & frontend above except starting servers
-* In repo root, run the build.py script:
+* In repo root, run the build.py script:  
 
-```bash
-python ./build.py
-```
+  ```bash
+  python ./build.py
+  ```
 
-Or in ~/frontend/:
+  This builds the frontend and copies static files to where Django expects them.
 
-```bash
-npm run build
-```
+* Setup the Django site as a WSGI app on your web host:
 
-* Setup the Django site as a WSGI app:
+    ```python
+    import os
+    import sys
 
-```python
-import os
-import sys
+    # assuming your django settings file is at '/home/macke/t13activityweb/T13ActivityWeb/settings.py'
+    # and your manage.py is is at '/home/macke/t13activityweb/manage.py'
+    path = '/home/macke/t13activityweb'
+    if path not in sys.path:
+        sys.path.append(path)
 
-# assuming your django settings file is at '/home/macke/t13activityweb/T13ActivityWeb/settings.py'
-# and your manage.py is is at '/home/macke/t13activityweb/manage.py'
-path = '/home/macke/t13activityweb'
-if path not in sys.path:
-    sys.path.append(path)
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'T13ActivityWeb.settings'
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'T13ActivityWeb.settings'
+    # then:
+    from django.core.wsgi import get_wsgi_application
+    application = get_wsgi_application()
+    ```
 
-# then:
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
-```
+* Start your server!
 
-## Update packages
+## Update individual packages
 
-### frontend
+### Frontend/NPM
 
 Check outdated packages
 
@@ -153,36 +162,41 @@ Then update (save/save-dev depending if used during runtime or not)
 npm install <package>@latest --save[-dev]
 ```
 
-### Backend
+### Backend/PIP
 
 List outdated packages:
 
 ```bash
-pip list --outdated
+python -m pip list --outdated
 ```
 
 Update via [pipupgrade](https://github.com/achillesrasquinha/pipupgrade),
 or any another method recommended [here](https://stackoverflow.com/questions/2720014/how-to-upgrade-all-python-packages-with-pip).
 
+```bash
+python -m pip install pipupgrade
+python -m pip upgrade --latest --yes
 ```
-pip install pipupgrade
-pipupgrade --latest --yes
-```
-
 
 ## Third-party services
 
 ### ReCaptcha
 
-** Disabled for now as something is not working right... :-| **
+**NOTE**: Disabled for now as something is not working right... :-|
 
 Purpose:
 
 * Verify that users registering and/or logging in are humans
 
-Get the two keys from [Admin Console](https://www.google.com/recaptcha/admin/)
+Setup:
 
-Website uses the django-recaptcha library to integrate into login/register forms.
+* Get the two keys from [Admin Console](https://www.google.com/recaptcha/admin/).
+* Add these to secrets.py
+
+Usage:
+
+* Website uses the django-recaptcha library to integrate into login/register forms.  
+  The forms have a ReCaptcha field and the require
 
 ### Twilio
 
@@ -191,18 +205,26 @@ Purpose:
 * send/receive SMSes.
 * verifying phone numbers (via SMS)
 
-Create phone number (for SMS source) and get api keys from their [Admin Console](https://www.twilio.com/console/).
+Setup:
 
-Create messaging service and configure webhook to point to our server's 'api/sms' view to receive SMS.
+* Create phone number (for SMS source) and get api keys from their [Admin Console](https://www.twilio.com/console/).
 
-Web site uses Twilio's python library to send SMS and verify phone numbers.
+* Create a messaging service and configure webhook to point to our server's 'api/sms' view to receive SMS.
+
+Usage:
+
+* Web site uses Twilio's python library to send SMS and verify phone numbers.
 
 ### Sendgrid (by Twilio)
 
 Purpose:
 
-* Send lots of emails
+* Send lots of emails.
 
-Get API key from [Admin Console](https://app.sendgrid.com/).
+Setup:
 
-Wet site uses Sendgrid's SMTP relay to use Django's existing email code easily.
+* Get API key from [Admin Console](https://app.sendgrid.com/).
+
+Usage:
+
+* Web site uses Sendgrid's SMTP relay to use Django's existing email code easily.

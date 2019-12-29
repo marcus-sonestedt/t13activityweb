@@ -33,7 +33,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                             onClick={() => createADR(model, user).then(reload)}>
                             Avboka?
                         </Button>
-                        : <Button variant='success' size='sm'
+                        : <Button variant='warning' size='sm'
                             onClick={() => cancelADR(delistRequest).then(reload)}>
                             Återboka
                         </Button>

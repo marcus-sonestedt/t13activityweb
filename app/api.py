@@ -8,9 +8,7 @@ from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-
-from app.models import *
-from app.serializers import *
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
 
 from rest_framework.views import APIView
 from rest_framework import authentication, generics, parsers, renderers, status
@@ -19,7 +17,13 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthentic
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from rest_framework import mixins
+
+from app.models import Activity, ActivityType, Event, EventType, Member, \
+    ActivityDelistRequest, RuleViolationException
+from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
+    AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
+    ActivityDelistRequestSerializer, EventActivitySerializer, ActivityDelistRequestListSerializer
 
 from twilio.rest import Client as TwilioClient
 
@@ -193,22 +197,6 @@ class ActivityTypeList(generics.ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class ActivityDelist(APIView):
-    permission_classes = [IsAdminUser]
-    authentication_classes = [authentication.SessionAuthentication]
-
-    def post(self, request, id):
-        activity = Activity.objects.select_related('assigned').get(id=id)
-        logger.info(
-            f"User {request.user.id} about to delist from activity {activity.id}")
-
-        if (activity.assigned.user != request.user):
-            return HttpResponseForbidden("Inte bokad av dig")
-
-        activity.assigned = None
-        activity.save()
-
-        return Response("Avbokad från " + activity.name)
 
 
 class ActivityEnlist(APIView):
@@ -220,13 +208,16 @@ class ActivityEnlist(APIView):
         logger.info(
             f"User {request.user.id} about to enlist on activity {activity.id}")
 
+        member = Member.objects.get(user=request.user)
+
+        if (activity.assigned == member):
+            return Response("Redan bokad på denna aktivitet")
+
         if activity.assigned is not None:
             return HttpResponseForbidden("Redan bokad av " + activity.assigned.fullname)
 
         if not activity.bookable:
             return HttpResponseForbidden("Aktiviteten är inte bokningsbar (i dåtid eller blockerad)")
-
-        member = Member.objects.get(user=request.user)
 
         activity.assigned = member
         activity.save()
@@ -234,7 +225,7 @@ class ActivityEnlist(APIView):
         return Response("Inbokad på " + activity.name)
 
 
-class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView):
+class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
@@ -247,19 +238,30 @@ class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView):
 
         return self.queryset.filter(activity__member__user=self.request.user)
 
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.create(request, *args, **kwargs)
+        except RuleViolationException as e:
+            return HttpResponseForbidden(e)
 
-class ActivityDelistRequestList(generics.ListCreateAPIView):
+
+class ActivityDelistRequestList(mixins.ListModelMixin, generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
-    queryset = ActivityDelistRequest.objects.select_related('activity')
-    serializer_class = ActivityDelistRequestSerializer
+    serializer_class = ActivityDelistRequestListSerializer
+    queryset = ActivityDelistRequest.objects \
+        .select_related('activity') \
+        .prefetch_related('activity__assigned')
 
     def get_queryset(self):
         if self.request.user.is_staff:
             return self.queryset.all()
 
         return self.queryset.filter(activity__member__user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class ReceiveSMS(APIView):
@@ -272,6 +274,7 @@ class ReceiveSMS(APIView):
         msgsid = self.serializer.object['MessagingServiceSid']
 
         if sid != settings.TWILIO_ACCOUNT_SID:
+            logger.warning("Got SMS via invalid SID\n" + self.serializer.object)
             raise HttpResponseForbidden('Invalid SID')
 
         body = self.serializer.object['Body']
@@ -282,7 +285,9 @@ class ReceiveSMS(APIView):
 
 
 class VerifyPhone(APIView):
-    _client = TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self._client = TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
     parser_classes = [parsers.JSONParser]
     permission_classes = [IsAuthenticated]
@@ -290,7 +295,7 @@ class VerifyPhone(APIView):
     def _start_verify(self, phone):
         logger.info(f"Creating verification for {phone}")
 
-        verification = _client.verify \
+        verification = self._client.verify \
             .services(settings.TWILIO_VERIFY_SID) \
             .verifications \
             .create(to=phone, channel='sms')
@@ -300,7 +305,7 @@ class VerifyPhone(APIView):
     def _check_verify(self, phone, code):
         logger.info(f"Checking verification for {phone}")
 
-        verification = _client.verify \
+        verification = self._client.verify \
             .services(settings.TWILIO_VERIFY_SID) \
             .verification_checks \
             .create(to=phone, code=code)
@@ -359,12 +364,13 @@ url_patterns = [
     re_path(r'activity_type/(?P<id>.+)', ActivityTypeList.as_view()),
 
     re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
-    re_path(r'activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
+    # re_path('activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path(r'activity_delist_request/(?P<id>.+)',
-            ActivityDelistRequestView.as_view()),
+    re_path('activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
+    re_path('activity_delist_request/create', ActivityDelistRequestView.as_view()),
 
     path('sms', ReceiveSMS.as_view()),
     re_path(r'phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
+
 ]

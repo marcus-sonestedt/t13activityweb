@@ -9,9 +9,14 @@ class MemberAdmin(admin.ModelAdmin):
 class ActivityTypeAdmin(admin.ModelAdmin):
     pass
 
+class ActivityInline(admin.TabularInline):
+    model = models.Activity
+
 @admin.register(models.Event)
 class EventAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        ActivityInline,
+    ]
 
 @admin.register(models.ActivityType)
 class ActivityTypeAdmin(admin.ModelAdmin):
@@ -22,5 +27,5 @@ class ActivityAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(models.ActivityDelistRequest)
-class ActivityAdmin(admin.ModelAdmin):
+class ActivityDelistRequestAdmin(admin.ModelAdmin):
     pass
