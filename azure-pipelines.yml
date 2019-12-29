@@ -56,8 +56,11 @@ steps:
     testResultsFiles: "**/TEST-*.xml"
 
 
-- powershell: >
-    Copy -Path '$(Build.SourcesDirectory)' -Recurse -Destination '$(Build.ArtifactStagingDirectory)' -Exclude @('*/node_modules/*', '*/env/*')
+- powershell: |
+     Add-Type -assembly "system.io.compression.filesystem"
+     $source = '$(Build.SourcesDirectory)'
+     $destination = Join-Path '$(Build.ArtifactStagingDirectory)' -ChildPath T13Site.zip
+     [io.compression.zipfile]::CreateFromDirectory($source, $destination)
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'copy build artifacts'
 
