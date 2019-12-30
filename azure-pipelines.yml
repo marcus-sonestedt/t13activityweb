@@ -57,10 +57,13 @@ steps:
 
 
 - powershell: |
-     Add-Type -assembly "system.io.compression.filesystem"
-     $source = '$(Build.SourcesDirectory)'
-     $destination = Join-Path '$(Build.ArtifactStagingDirectory)' -ChildPath T13Site.zip
-     [io.compression.zipfile]::CreateFromDirectory($source, $destination)
+    Add-Type -assembly "system.io.compression.filesystem"
+    $source = '$(Build.SourcesDirectory)'
+    $destination = Join-Path '$(Build.ArtifactStagingDirectory)' -ChildPath T13Site.zip
+    $exclude = @("node_modules")
+    $files = Get-ChildItem -Path $source -Exclude $exclude
+    Compress-Archive -Path $files -DestinationPath $destination -CompressionLevel Fastest
+
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'copy build artifacts'
 
