@@ -24,7 +24,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = [x.name for x in Event._meta.get_fields()] + \
+            ['activities_count', 'activities_available_count']
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
 

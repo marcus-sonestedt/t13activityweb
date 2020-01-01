@@ -60,28 +60,17 @@ class MyActivitiesList(generics.ListAPIView):
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type')
     serializer_class = EventSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        try:
-            id = self.kwargs['id']
-        except KeyError:
+        if 'upcoming' in self.kwargs:
+            return self.queryset.filter(start_date__gte=datetime.datetime.now())
+
+        if 'id' in self.kwargs:
+            return self.queryset.filter(id=self.kwargs['id'])
+
+        else:
             return self.queryset.all()
-
-        return self.queryset.filter(id=id)
-
-    @method_decorator(never_cache)
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-
-class UpcomingEventList(generics.ListAPIView):
-    queryset = Event.objects \
-                    .filter(start_date__gte=datetime.datetime.now()) \
-                    .select_related('type')
-    serializer_class = EventSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    read_only = True
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
@@ -353,8 +342,8 @@ url_patterns = [
     re_path(r'activity/(?P<id>.+)?', ActivityList.as_view()),
     re_path(r'event_activities/(?P<event_id>.+)', EventActivities.as_view()),
 
-    path('upcomingevents', UpcomingEventList.as_view()),
     path('events', EventList.as_view()),
+    re_path(r'events/(?P<upcoming>upcoming)', EventList.as_view()),
     re_path(r'events/(?P<id>.+)', EventList.as_view()),
 
     path('event_type', EventTypeList.as_view()),
@@ -364,11 +353,11 @@ url_patterns = [
     re_path(r'activity_type/(?P<id>.+)', ActivityTypeList.as_view()),
 
     re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
-    # re_path('activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
+    # re_path(r'activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path('activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
-    re_path('activity_delist_request/create', ActivityDelistRequestView.as_view()),
+    re_path(r'activity_delist_request/(?P<id>.+)', ActivityDelistRequestView.as_view()),
+    re_path(r'activity_delist_request/create', ActivityDelistRequestView.as_view()),
 
     path('sms', ReceiveSMS.as_view()),
     re_path(r'phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),

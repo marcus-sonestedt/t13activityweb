@@ -156,7 +156,10 @@ export const EventView = () => {
                     <p>{event.comment}</p>
                 </Col>
                 <Col md={12} lg={6}>
-                    <h3>Uppgifter</h3>
+                    <div className="model-header">
+                        <h3>Uppgifter</h3>
+                        <h4>({event.activities_count} totalt, {event.activities_available_count} lediga)</h4>
+                    </div>
                     <Table hover>
                         <thead>
                             <tr>

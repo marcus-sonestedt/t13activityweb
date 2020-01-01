@@ -136,6 +136,9 @@ export class T13Event implements IdValue {
     @Type(() => Activity)
     activities: Activity[] = [];
 
+    activities_count? : number;
+    activities_available_count? : number;
+
     date = () => {
         if (this.start_date.toDateString() === this.end_date.toDateString() ||this.end_date === null)
             return this.start_date.toLocaleDateString('sv-SE')

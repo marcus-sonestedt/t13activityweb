@@ -50,7 +50,7 @@ export const UpcomingEventsCalendar = (props: { events: PagedT13Events }) => {
         onView={v => {
             localStorage.setItem(LS_EVENTCAL_VIEW_KEY, JSON.stringify(v));
             setBCView(v);
-         }}
+        }}
     />
 }
 
@@ -70,7 +70,17 @@ export const UpcomingEventsTable = (props: {
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td className='nowrap'>{model.date()}</td>
                 <td>{type}</td>
-                <td></td>
+                <td>
+                    <a href={model.url()}>
+                        <span className='text'>{model.activities_count}
+                            <span className='text-tooltip'>Totalt antal uppgifter</span>
+                        </span>
+                        {' / '}
+                        <span className='text'>{model.activities_available_count}
+                            <span className='text-tooltip'>Lediga uppgifter</span>
+                        </span>
+                    </a>
+                </td>
             </tr>
         );
     }

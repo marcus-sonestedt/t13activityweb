@@ -15,8 +15,7 @@ const handleResponse = (action: string, url: string) => {
         if (resp instanceof Response) {
             if (resp.status < 300) {
                 resolve();
-            } else {
-                resp.text().then(
+            } else {                resp.text().then(
                     body => showErr(resp.statusText + ": " + body),
                     _ => showErr(resp.statusText));
             }

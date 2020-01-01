@@ -130,6 +130,13 @@ class Event(models.Model):
     modified = models.DateTimeField(auto_now=True)
     cancelled = models.BooleanField(default=False)
 
+    @property
+    def activities_count(self):
+        return self.activities.count()
+    @property
+    def activities_available_count(self):
+        return self.activities.filter(assigned=None).count()
+
     def __str__(self):
         return self.name
 
@@ -166,7 +173,7 @@ class Activity(models.Model):
     name = models.CharField(max_length=128)
     type = models.ForeignKey(
         ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='activities')
 
     assigned = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True)

@@ -37,3 +37,15 @@ footer {
 .model-header + * {
   clear:both
 }
+
+.text-tooltip {
+  display: none;
+  position: absolute;
+  padding: 3px;
+  border: 1px solid;
+  background: black;
+}
+
+.text:hover .text-tooltip {
+  display: block;
+}
