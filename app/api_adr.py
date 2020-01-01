@@ -1,0 +1,130 @@
+import datetime
+import logging
+
+from django.conf import settings
+from django.urls import path, re_path
+from django.apps import apps
+from django.views.decorators.cache import cache_page, cache_control, never_cache
+from django.views.decorators.vary import vary_on_cookie
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
+
+from rest_framework.views import APIView
+from rest_framework import authentication, generics, parsers, renderers, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.decorators import api_view
+from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework import mixins
+
+from app.models import Activity, ActivityType, Event, EventType, Member, \
+    ActivityDelistRequest, RuleViolationException
+
+from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
+    AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
+    ActivityDelistRequestSerializer, ActivityDelistRequestDeepSerializer, EventActivitySerializer
+
+from twilio.rest import Client as TwilioClient
+
+logger = logging.getLogger(__name__)
+
+
+class ActivityEnlist(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+
+    def post(self, request, id):
+        activity = Activity.objects.get(id=id)
+        logger.info(
+            f"User {request.user.id} about to enlist on activity {activity.id}")
+
+        member = Member.objects.get(user=request.user)
+
+        if (activity.assigned == member):
+            return Response("Redan bokad på denna aktivitet")
+
+        if activity.assigned is not None:
+            return HttpResponseForbidden("Redan bokad av " + activity.assigned.fullname)
+
+        if not activity.bookable:
+            return HttpResponseForbidden("Aktiviteten är inte bokningsbar (i dåtid eller blockerad)")
+
+        activity.assigned = member
+        activity.save()
+
+        return Response("Inbokad på " + activity.name)
+
+
+class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    parser_classes = [parsers.JSONParser]
+    queryset = ActivityDelistRequest.objects.select_related('activity').prefetch_related('activity__assigned')
+    serializer_class = ActivityDelistRequestSerializer
+
+    def get_queryset(self):
+        qs = self.queryset
+
+        if not self.request.user.is_staff:
+            qs = qs.filter(activity__assigned__user=self.request.user)
+
+        return qs.all()
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.create(request, *args, **kwargs)
+        except RuleViolationException as e:
+            return HttpResponseForbidden(e)
+
+
+class ActivityDelistRequestByActivityView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    queryset = ActivityDelistRequest.objects.select_related('activity').prefetch_related('activity__assigned')
+    serializer_class = ActivityDelistRequestDeepSerializer
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.serializer = self.serializer_class()
+
+    @method_decorator(never_cache)
+    def get(self, request, id):
+        qs = self.queryset    
+        if not self.request.user.is_staff:
+            qs = qs.filter(activity__assigned__user=self.request.user)
+
+        model = qs.get(activity=id)
+
+        return Response(self.serializer.to_representation(instance=model))
+
+class ActivityDelistRequestList(mixins.ListModelMixin, generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
+    parser_classes = [parsers.JSONParser]
+    serializer_class = ActivityDelistRequestDeepSerializer
+    queryset = ActivityDelistRequest.objects \
+        .select_related('activity') \
+        .prefetch_related('activity__assigned')
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return self.queryset.all()
+
+        return self.queryset.filter(activity__member__user=self.request.user)
+
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+##############################################################################
+
+url_patterns = [
+    re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
+
+    path('activity_delist_request', ActivityDelistRequestList.as_view()),
+    re_path(r'activity_delist_request/(?P<pk>[0-9]+)', ActivityDelistRequestView.as_view()),
+    re_path(r'activity_delist_request/create', ActivityDelistRequestView.as_view()),
+    re_path(r'activity_delist_request/activity/(?P<id>.+)', ActivityDelistRequestByActivityView.as_view()),
+]

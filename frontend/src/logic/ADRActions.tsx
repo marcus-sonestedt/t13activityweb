@@ -1,8 +1,17 @@
 import Cookies from 'universal-cookie';
 import { Activity, ActivityDelistRequest } from '../Models';
 import { UserContext } from '../App';
+import { deserialize } from 'class-transformer';
 
 const cookies = new Cookies();
+
+const getJsonHeaders = () => {
+    return {
+        'X-CSRFToken': cookies.get('csrftoken'),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+}
 
 const handleResponse = (action: string, url: string) => {
     return (resp: any) => new Promise((resolve: () => void, reject: () => void) => {
@@ -15,12 +24,13 @@ const handleResponse = (action: string, url: string) => {
         if (resp instanceof Response) {
             if (resp.status < 300) {
                 resolve();
-            } else {                resp.text().then(
+            } else {
+                resp.text().then(
                     body => showErr(resp.statusText + ": " + body),
                     _ => showErr(resp.statusText));
             }
         } else {
-            showErr(resp.toString());
+            showErr(resp?.toString() ?? 'okänt fel');
         }
     });
 }
@@ -38,11 +48,7 @@ export const createADR = async (model: Activity, user: UserContext) => {
     await fetch(url,
         {
             method: 'POST',
-            headers: {
-                'X-CSRFToken': cookies.get('csrftoken'),
-                'Content-Type': 'application/json',
-                'cache': 'no-cache'
-            },
+            headers: getJsonHeaders(),
             body: JSON.stringify({
                 member: user.memberId,
                 activity: model.id,
@@ -52,7 +58,24 @@ export const createADR = async (model: Activity, user: UserContext) => {
         .then(handler, handler);
 }
 
-export const cancelADR = async (model: ActivityDelistRequest) => {
+export async function cancelADRByActivity(activity_id: string) {
+    const url = ActivityDelistRequest.apiUrlForActivityId(activity_id);
+    const handler = handleResponse('radera', url)
+
+    await fetch(url,
+        {
+            method: 'GET',
+            headers: getJsonHeaders(),
+            cache: 'no-cache'
+        })
+        .then(resp => resp.text().then(json => {
+            const data = deserialize(ActivityDelistRequest, json);
+            return cancelADR(data);
+        }, handler), handler);
+        
+}
+
+export async function cancelADR(model: ActivityDelistRequest) {
     if (!window.confirm(`Vill du verkligen radera din avbokningsförfrågan för\n${model.activity}?`))
         return
 
@@ -61,11 +84,7 @@ export const cancelADR = async (model: ActivityDelistRequest) => {
     await fetch(model.apiUrl(),
         {
             method: 'DELETE',
-            headers: {
-                'X-CSRFToken': cookies.get('csrftoken'),
-                'Content-Type': 'application/json',
-                'cache': 'no-cache'
-            }
+            headers: getJsonHeaders(),
         })
         .then(handler, handler);
 };
@@ -85,11 +104,7 @@ export const approveADR = async (model: ActivityDelistRequest, user: UserContext
     await fetch(model.apiUrl(),
         {
             method: 'UPDATE',
-            headers: {
-                'X-CSRFToken': cookies.get('csrftoken'),
-                'Content-Type': 'application/json',
-                'cache': 'no-cache'
-            },
+            headers: getJsonHeaders(),
             body: JSON.stringify({
                 approved: true,
                 approved_by: user.memberId
@@ -114,11 +129,7 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
     await fetch(model.apiUrl(),
         {
             method: 'UPDATE',
-            headers: {
-                'X-CSRFToken': cookies.get('csrftoken'),
-                'Content-Type': 'application/json',
-                'cache': 'no-cache'
-            },
+            headers: getJsonHeaders(),
             body: JSON.stringify({
                 approved: false,
                 approved_by: user.memberId,

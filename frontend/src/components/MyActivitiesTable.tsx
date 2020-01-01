@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { Activity } from '../Models'
 import { userContext } from "../App"
-import { createADR, cancelADR } from "../logic/ADRActions";
+import { createADR, cancelADRByActivity } from "../logic/ADRActions";
 import './Table.css'
 
 export class MyActivitiesProps {
@@ -20,7 +20,6 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
 
     const renderRow = (model: Activity) => {
         const unlistPossible = model.event.start_date > today;
-        const delistRequest = model.delistRequest;
 
         return (
             <tr key={model.id} className='clickable-row' onClick={() => history.push(model.url())}>
@@ -30,13 +29,13 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                     {model.date()}<br/>{model.time()}
                 </td>
                 <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
-                    (delistRequest === null ?
+                    (!model.delist_requested ?
                         <Button variant='danger' size='sm'
-                            onClick={() => createADR(model, user).then(reload)}>
+                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); createADR(model, user).then(reload)}}>
                             Avboka?
                         </Button>
                         : <Button variant='warning' size='sm'
-                            onClick={() => cancelADR(delistRequest).then(reload)}>
+                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); cancelADRByActivity(model.id).then(reload)}}>
                             Återboka
                         </Button>
                     )}

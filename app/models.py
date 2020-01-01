@@ -199,6 +199,10 @@ class Activity(models.Model):
         now = datetime.date.today()
         return self.event.start_date >= now and self.event.start_date <= max_date
 
+    @property
+    def delist_requested(self):
+        return self.delist_requests.filter(member=self.assigned).count() > 0
+
     class Meta:
         ordering = ['start_time', 'end_time', 'name']
         verbose_name = 'Uppgift'

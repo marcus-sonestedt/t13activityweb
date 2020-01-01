@@ -23,7 +23,7 @@ from app.models import Activity, ActivityType, Event, EventType, Member, \
     ActivityDelistRequest, RuleViolationException
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
-    ActivityDelistRequestSerializer, EventActivitySerializer, ActivityDelistRequestListSerializer
+    EventActivitySerializer
 
 from twilio.rest import Client as TwilioClient
 
@@ -214,123 +214,6 @@ class ActivityEnlist(APIView):
         return Response("Inbokad på " + activity.name)
 
 
-class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [authentication.SessionAuthentication]
-    parser_classes = [parsers.JSONParser]
-    queryset = ActivityDelistRequest.objects.select_related('activity')
-    serializer_class = ActivityDelistRequestSerializer
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return self.queryset.all()
-
-        return self.queryset.filter(activity__member__user=self.request.user)
-
-    def post(self, request, *args, **kwargs):
-        try:
-            return self.create(request, *args, **kwargs)
-        except RuleViolationException as e:
-            return HttpResponseForbidden(e)
-
-
-class ActivityDelistRequestList(mixins.ListModelMixin, generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [authentication.SessionAuthentication]
-    parser_classes = [parsers.JSONParser]
-    serializer_class = ActivityDelistRequestListSerializer
-    queryset = ActivityDelistRequest.objects \
-        .select_related('activity') \
-        .prefetch_related('activity__assigned')
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return self.queryset.all()
-
-        return self.queryset.filter(activity__member__user=self.request.user)
-
-    @method_decorator(never_cache)
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-
-class ReceiveSMS(APIView):
-    parser_classes = [parsers.JSONParser, parsers.MultiPartParser, parsers.FormParser]
-    permission_classes = [AllowAny]
-
-    @method_decorator(csrf_exempt)
-    def post(self, request, *args, **kwargs):
-        sid = self.serializer.object['AccountSid']
-        msgsid = self.serializer.object['MessagingServiceSid']
-
-        if sid != settings.TWILIO_ACCOUNT_SID:
-            logger.warning("Got SMS via invalid SID\n" + self.serializer.object)
-            raise HttpResponseForbidden('Invalid SID')
-
-        body = self.serializer.object['Body']
-        from_ = self.serializer.object['From']
-        to = self.serializer.object['To']
-
-        logger.info(f'Received SMS from {from_} to {to} via {msgsid}: "{body}"')
-
-
-class VerifyPhone(APIView):
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
-        self._client = TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-
-    parser_classes = [parsers.JSONParser]
-    permission_classes = [IsAuthenticated]
-
-    def _start_verify(self, phone):
-        logger.info(f"Creating verification for {phone}")
-
-        verification = self._client.verify \
-            .services(settings.TWILIO_VERIFY_SID) \
-            .verifications \
-            .create(to=phone, channel='sms')
-
-        return verification
-
-    def _check_verify(self, phone, code):
-        logger.info(f"Checking verification for {phone}")
-
-        verification = self._client.verify \
-            .services(settings.TWILIO_VERIFY_SID) \
-            .verification_checks \
-            .create(to=phone, code=code)
-
-        return verification
-
-    def post(self, request, action, code=None):
-        member = request.user.member
-        if member.phone_number is None:
-            return HttpResponseForbidden("Member does not have a phone number")
-
-        if action == 'send_code':
-            v = self._start_verify(member.phone_number)
-            if v.sid is None:
-                return Response("Failed to create verify request, retry?", status=502)
-
-            logger.info(f"Successfully created verification for {member.phone_number}")
-
-            return Response('OK. Send the code for verification.')
-
-        elif action == 'verify_code':
-            c = self._check_verify(member.phone_number, code)
-            if c.status != 'approved':
-                return HttpResponseForbidden(c.status)
-
-            logger.info(f"{member.fullname}'s number {member.phone_number} has been verified!")
-            member.phone_verified = True
-            member.save()
-
-            return Response(c.status)
-
-        else:
-            return HttpResponseBadRequest('invalid action')
-
-
 ##############################################################################
 
 
@@ -340,27 +223,16 @@ url_patterns = [
     path('isloggedin', IsLoggedIn.as_view()),
 
     path('myactivities', MyActivitiesList.as_view()),
-    re_path(r'activity/(?P<id>.+)?', ActivityList.as_view()),
-    re_path(r'event_activities/(?P<event_id>.+)', EventActivities.as_view()),
+    re_path(r'^activity/(?P<id>[0-9]+)?', ActivityList.as_view()),
+    re_path(r'event_activities/(?P<event_id>[0-9]+)', EventActivities.as_view()),
 
     path('events', EventList.as_view()),
     re_path(r'events/(?P<upcoming>upcoming)', EventList.as_view()),
-    re_path(r'events/(?P<id>.+)', EventList.as_view()),
+    re_path(r'events/(?P<id>[0-9]+)', EventList.as_view()),
 
     path('event_type', EventTypeList.as_view()),
-    re_path(r'event_type/(?P<id>.+)', EventTypeList.as_view()),
+    re_path(r'event_type/(?P<id>[0-9]+)', EventTypeList.as_view()),
 
     path('activity_type', ActivityTypeList.as_view()),
-    re_path(r'activity_type/(?P<id>.+)', ActivityTypeList.as_view()),
-
-    re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
-    # re_path(r'activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
-
-    path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path(r'activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
-    re_path(r'activity_delist_request/create', ActivityDelistRequestView.as_view()),
-
-    path('sms', ReceiveSMS.as_view()),
-    re_path(r'phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
-
+    re_path(r'activity_type/(?P<id>[0-9]+)', ActivityTypeList.as_view()),
 ]

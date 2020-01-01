@@ -59,6 +59,8 @@ export class Activity implements IdValue {
     @Type(() => ActivityDelistRequest)
     delistRequest: ActivityDelistRequest | null = null;
 
+    delist_requested: boolean = false;
+
     time = () => {
         if (this.end_time === null || this.end_time === this.start_time)
             return this.start_time
@@ -181,6 +183,7 @@ export class ActivityDelistRequest implements IdValue {
     adminUrl = () => `/admin/app/delistrequest/${this.id}`
     apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id)
     static apiUrlForId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/${id}`
+    static apiUrlForActivityId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/activity/${id}`
     static apiUrlAll = () => `/api/activity_delist_request`
 }
 

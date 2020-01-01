@@ -94,11 +94,8 @@ export const EventView = () => {
                 headers: { 'X-CSRFToken': cookies.get('csrftoken') }
             })
             .then(r => {
-                if (r.status === 200)
-                    window.location.reload()
-                else {
-                    throw r.statusText;
-                }
+                if (r.status !== 200)
+                    throw r.statusText;                
             }, r => { throw r })
             .catch(e => {
                 console.error(e);
