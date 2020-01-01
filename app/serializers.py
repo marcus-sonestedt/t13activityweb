@@ -31,7 +31,7 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityType
-        fields = ('name', 'description', 'image')
+        fields = ('name', 'description', 'image', 'id')
 
 class EventActivitySerializer(serializers.ModelSerializer):
     type = ActivityTypeSerializer(required=False)

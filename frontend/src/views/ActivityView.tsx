@@ -1,5 +1,5 @@
 import { Activity, PagedActivities } from "../Models";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useMemo, useCallback } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { ActivityTypeComponent } from "./ActivityTypeView";
 import { useParams } from "react-router";
@@ -8,7 +8,8 @@ import DataProvider from "../components/DataProvider";
 import { NotFound } from "../components/NotFound";
 import { userContext } from "../App";
 
-export const ActivityComponent = (model: Activity | null) => {
+export const ActivityComponent = (props: { model: Activity | null }) => {
+    const { model } = props;
     const user = useContext(userContext);
 
     if (model === null)
@@ -23,8 +24,8 @@ export const ActivityComponent = (model: Activity | null) => {
             <div className='model-header'>
                 <a href={model.url()}><h1>{model.name}</h1></a>
                 {user.isStaff ?
-                <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
-                : null}
+                    <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                    : null}
             </div>
             <hr />
             {event}
@@ -38,29 +39,29 @@ export const ActivityComponent = (model: Activity | null) => {
 export const ActivityView = () => {
     const { id } = useParams();
     const [model, setModel] = useState<Activity | null>(null);
+    const url = useMemo(() => id === undefined ? '' : Activity.apiUrlFromId(id), [id]);
+    const ctorCallback = useCallback((json: string) => deserialize(PagedActivities, json), []);
+    const setModelCallback = useCallback(data => setModel(data.results[0]), []);
 
-    if (id === undefined)
+    if (id === undefined || id === null)
         return <NotFound />
 
-    return (
-        <Container>
+    return <Container>
+        <Row>
             <DataProvider<PagedActivities>
-                url={Activity.apiUrlFromId(id)}
-                ctor={t => deserialize(PagedActivities, t)}
-                onLoaded={x => setModel(x.results[0])}>
-                {model === null ? null :
-                    <Row>
-                        <Col>
-                            <ActivityComponent {...model} />
-                        </Col>
-                        <Col>
-                            <ActivityTypeComponent model={model.type} />
-                        </Col>
-                    </Row>
-                }
+                url={url}
+                ctor={ctorCallback}
+                onLoaded={setModelCallback}>
+                <Col md={12} lg={6}>
+                    <ActivityComponent model={model} />
+                </Col>
+                <Col md={12} lg={6}>
+                    <ActivityTypeComponent model={model?.type ?? null} />
+                </Col>
             </DataProvider>
-        </Container>
-    )
+        </Row>
+    </Container>
+
 }
 
 export default ActivityView;

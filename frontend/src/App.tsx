@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap'
-import { BrowserRouter, Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Navigation } from './components/Navigation'
 import { MemberHomeView } from './views/MemberHomeView'
 import { Welcome } from './views/WelcomeView'
@@ -34,7 +34,6 @@ export const UserConsumer = userContext.Consumer
 export const App = () => {
   const userJson = localStorage.getItem("user");
   const user = userJson !== null ? deserialize(UserContext, userJson) : new UserContext()
-
   const [state, setState] = useState<UserContext>(user);
 
   useEffect(() => {
@@ -103,13 +102,6 @@ export const App = () => {
     </UserProvider>
   );
 }
-
-export const Redirect2 =
-  (props: { from: string, toFunc: (url: string) => string }) => {
-    const location = useLocation();
-    const to = props.toFunc(location.pathname);
-    return <Redirect from={props.from} to={to} />
-  }
 
 const T13CookieConsent = (props:{isLoggedIn:boolean}) => {
   const {isLoggedIn} = props;

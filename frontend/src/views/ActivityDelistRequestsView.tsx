@@ -20,8 +20,8 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
         <span>av <a href={model.approver.url()}>{model.approver.fullname}</a></span>
 
     const approved = model.approved === true ? "JA"
-         : model.approved === false ?  "NEJ"
-         : "Ej besvarad";
+        : model.approved === false ? "NEJ"
+            : "Ej besvarad";
 
     return (
         <>
@@ -59,13 +59,23 @@ export const ActivityDelistRequestView = () => {
         }
 
         const renderRow = (model: ActivityDelistRequest) => {
-            return <tr key={model.id} onClick={e => rowClicked(e, model)}>
+            const cancelClicked = () => {
+                setCurrentReq(model);
+                setTimeout(() =>
+                    cancelADR(model).then(() => {
+                        if (currentReq === model) setCurrentReq(null);
+                        incReload();
+                    }, incReload), 10);
+            }
+
+            return <tr key={model.id} onClick={e => rowClicked(e, model)}
+                className={'clickable-row ' + (model === currentReq ? 'active' : undefined)}>
                 <td><a href={model.activity.event.url()}>{model.activity.event.name}</a></td>
                 <td><a href={model.activity.url()}>{model.activity.name}</a></td>
                 <td>{model.activity.event.date()}</td>
                 <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
                 <td>{model.member.id === user.memberId
-                    ? <Button variant='danger' size='sm' onClick={() => cancelADR(model).then(incReload)}>Avbryt</Button>
+                    ? <Button variant='danger' size='sm' onClick={cancelClicked}>Avbryt</Button>
                     : null}
                 </td>
             </tr>
@@ -84,7 +94,7 @@ export const ActivityDelistRequestView = () => {
                 <h4>{title}</h4>
             </td></tr>
 
-        return <Table>
+        return <Table hover striped>
             <thead>
                 <tr>
                     <th>Aktivitet</th>

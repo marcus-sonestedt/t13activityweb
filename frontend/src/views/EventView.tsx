@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Table, Container, Row, Col, Button } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
@@ -16,6 +16,7 @@ export const EventView = () => {
 
     const { id } = useParams();
     const user = useContext(userContext);
+    const history = useHistory();
 
     if (event !== null)
         activities.forEach(a => a.event = event);
@@ -96,7 +97,6 @@ export const EventView = () => {
                 if (r.status === 200)
                     window.location.reload()
                 else {
-                    r.text().then(t => console.error(t));
                     throw r.statusText;
                 }
             }, r => { throw r })
@@ -110,7 +110,7 @@ export const EventView = () => {
     const renderActivityRow = (model: Activity) => {
         const type = model.type !== null
             ? <a href={model.type.url()}>{model.type.name}</a>
-            : null;
+            : '-';
 
         const assigned = model.assigned !== null
             ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
@@ -118,8 +118,10 @@ export const EventView = () => {
             ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
             : null;
 
+        const rowClicked = () => history.push(model.url());
+
         return (
-            <tr key={model.id} className='linked'>
+            <tr key={model.id} className='linked' onClick={rowClicked}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
                 <td className='nowrap'>

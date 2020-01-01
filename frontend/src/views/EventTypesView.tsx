@@ -22,18 +22,20 @@ export const EventTypesView = () => {
             <Col md={12}>
                 <DataProvider<PagedEventTypes>
                     ctor={json => deserialize(PagedEventTypes, json)}
-                    url={T13EventType.apiUrlAll()+ `?page=${page}`}
+                    url={T13EventType.apiUrlAll() + `?page=${page}`}
                     onLoaded={setData}>
                     <h1>
                         <span className="table-title">Aktivitetstyper</span>
                         <span className="table-count">
-                        ({data.results.length}/{data.count})
+                            ({data.results.length}/{data.count})
                         </span>
-                     </h1>
+                    </h1>
                     <Table >
                         <thead>
-                            <th>Namn</th>
-                            <th>Beskrivning</th>
+                            <tr>
+                                <th>Namn</th>
+                                <th>Beskrivning</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data.results.map(renderRow)}

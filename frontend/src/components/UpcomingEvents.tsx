@@ -1,13 +1,15 @@
 import React, { useState, SyntheticEvent } from "react";
 import { Table, Button, Pagination } from 'react-bootstrap'
-import { PagedT13Events, T13Event } from '../Models'
+import { useHistory } from "react-router-dom";
 import RBC, { Calendar, momentLocalizer } from 'react-big-calendar'
-import { useHistory } from "react-router";
 import moment from 'moment'
 import 'moment/locale/sv';
+
+import { PagedT13Events, T13Event } from '../Models'
+import { pageItems } from "../views/MemberHomeView";
+
 import './Table.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { pageItems } from "../views/MemberHomeView";
 
 export interface MyProps {
     events: PagedT13Events;
@@ -60,13 +62,14 @@ export const UpcomingEventsTable = (props: {
 }) => {
     const { events, count = 10 } = props;
     const [page, setPage] = useState(1);
+    const history = useHistory();
 
     const renderRow = (model: T13Event) => {
-        const type = model.type === null ? null :
+        const type = model.type === null ? '-' :
             <a href={model.type.url()}>{model.type.name}</a>
 
         return (
-            <tr key={model.id}>
+            <tr key={model.id} className='clickable-row' onClick={() => history.push(model.url())}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td className='nowrap'>{model.date()}</td>
                 <td>{type}</td>
@@ -86,7 +89,7 @@ export const UpcomingEventsTable = (props: {
     }
 
     return <>
-        <Table>
+        <Table striped hover>
             <thead>
                 <tr>
                     <th>Namn</th>

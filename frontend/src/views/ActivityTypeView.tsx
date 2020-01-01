@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useCallback } from "react"
 import { Container, Row, Col, Image, Button } from "react-bootstrap"
-import { ActivityType, PagedActivityTypes } from "../Models"
 import { useParams } from "react-router";
-import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
+
+import { ActivityType, PagedActivityTypes } from "../Models"
+import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../App";
 
@@ -30,9 +31,11 @@ export const ActivityTypeComponent = (props: { model: ActivityType | null }) => 
 export const ActivityTypeView = () => {
     const { id } = useParams();
     const [model, setModel] = useState<ActivityType | null>(null);
+    const setModelCallback = useCallback(x => setModel(x.results[0]), []);
 
     if (id === undefined)
         return <NotFound />
+
 
     return <Container>
         <Row>
@@ -40,8 +43,9 @@ export const ActivityTypeView = () => {
                 <DataProvider<PagedActivityTypes>
                     ctor={json => deserialize(PagedActivityTypes, json)}
                     url={ActivityType.apiUrl(id)}
-                    onLoaded={x => setModel(x.results[0])}
-                    render={() => <ActivityTypeComponent model={model} />}/>
+                    onLoaded={setModelCallback}>
+                    <ActivityTypeComponent model={model} />
+                </DataProvider>
             </Col>
             <Col md={12} lg={4}>
                 {model !== null ? <Image src={model.image} /> : null}

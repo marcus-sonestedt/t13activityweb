@@ -249,6 +249,7 @@ class ActivityDelistRequestList(mixins.ListModelMixin, generics.GenericAPIView):
 
         return self.queryset.filter(activity__member__user=self.request.user)
 
+    @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -356,7 +357,7 @@ url_patterns = [
     # re_path(r'activity_delist/(?P<id>.+)', ActivityDelist.as_view()),
 
     path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path(r'activity_delist_request/(?P<id>.+)', ActivityDelistRequestView.as_view()),
+    re_path(r'activity_delist_request/(?P<pk>.+)', ActivityDelistRequestView.as_view()),
     re_path(r'activity_delist_request/create', ActivityDelistRequestView.as_view()),
 
     path('sms', ReceiveSMS.as_view()),

@@ -31,8 +31,10 @@ export const ActivityTypesView = () => {
                     </h1>
                     <Table >
                         <thead>
-                            <th>Namn</th>
-                            <th>Beskrivning</th>
+                            <tr>
+                                <th>Namn</th>
+                                <th>Beskrivning</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data.results.map(renderRow)}

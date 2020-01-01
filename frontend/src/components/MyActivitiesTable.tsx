@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { Button, Table } from 'react-bootstrap'
+import { useHistory } from "react-router-dom";
+
 import { Activity } from '../Models'
-import './Table.css'
 import { userContext } from "../App"
 import { createADR, cancelADR } from "../logic/ADRActions";
+import './Table.css'
 
 export class MyActivitiesProps {
     values: Activity[] = [];
@@ -12,7 +14,7 @@ export class MyActivitiesProps {
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
     const { values, reload } = props;
-
+    const history = useHistory();
     const user = useContext(userContext)
     const today = new Date();
 
@@ -21,7 +23,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
         const delistRequest = model.delistRequest;
 
         return (
-            <tr key={model.id}>
+            <tr key={model.id} className='clickable-row' onClick={() => history.push(model.url())}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td><a href={model.event.url()}>{model.event.name}</a></td>
                 <td className='nowrap'>

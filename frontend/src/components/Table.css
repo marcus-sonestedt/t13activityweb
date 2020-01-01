@@ -39,3 +39,11 @@ td:first-child {
 .nowrap {
     white-space: nowrap;
 }
+
+tr.clickable-row {
+    cursor: pointer;
+}
+
+tr.active td {
+    background-color: #1f1f28;
+}
