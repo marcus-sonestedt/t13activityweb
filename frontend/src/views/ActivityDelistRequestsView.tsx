@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react"
+import React, { useState, useContext, useCallback, useMemo } from "react"
 import { Container, Row, Col, Table, Button, Pagination } from "react-bootstrap";
 import { userContext } from "../App";
 import { ActivityDelistRequest, PagedADR } from '../Models';
@@ -6,6 +6,14 @@ import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import { pageItems } from "./MemberHomeView";
 import { cancelADR, rejectADR, approveADR } from "../logic/ADRActions"
+
+export const CancelAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) }) =>
+    <Button variant='outline-warning' size='sm' onClick={props.onClick}>
+        Återta
+        <div className='text-tooltip'>
+            Avbryt din begäran att avboka och återta dig uppgiften.
+        </div>
+    </Button>
 
 export const ActivityDelistRequestComponent = (props: { model: ActivityDelistRequest | null }) => {
     const { model } = props;
@@ -25,10 +33,10 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
 
     return (
         <>
-            <h4>Aktivitet:</h4><p>{model.activity.event.name}</p>
-            <h4>Uppgift:</h4><p>{model.activity.name}</p>
-            <h4>Godkänd:</h4><p>{approved} {approver}</p>
-            <h4>Anledning:</h4><p>{model.reason}</p>
+            <h4>Aktivitet</h4><p>{model.activity.event.name}</p>
+            <h4>Uppgift</h4><p>{model.activity.name}</p>
+            <h4>Godkänd</h4><p>{approved} {approver}</p>
+            <h4>Anledning</h4><p>{model.reason}</p>
         </>
     )
 }
@@ -45,6 +53,17 @@ export const ActivityDelistRequestView = () => {
         if (reload >= 0) // just to force reload of data
             setAllRequests(data);
     }, [reload]);
+
+    const myUnansweredRequests = useMemo(() =>
+        allRequests?.results.filter(r => r.member.id === user.memberId && r.approved === null), [allRequests, user]);
+    const myAnsweredRequests = useMemo(() =>
+        allRequests?.results.filter(r => r.member.id === user.memberId && r.approved !== null), [allRequests, user]);
+
+    const unhandledRequests = useMemo(() =>
+        allRequests?.results.filter(r => r.member.id !== user.memberId && r.approved === null), [allRequests, user]);
+    const myHandledRequests = useMemo(() =>
+        allRequests?.results.filter(r => r.approver !== null && r.approver.id === user.memberId), [allRequests, user]);
+
 
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
@@ -63,7 +82,7 @@ export const ActivityDelistRequestView = () => {
                 setCurrentReq(model);
                 setTimeout(() =>
                     cancelADR(model).then(() => {
-                        if (currentReq === model) setCurrentReq(null);
+                        setCurrentReq(null);
                         incReload();
                     }, incReload), 10);
             }
@@ -75,23 +94,15 @@ export const ActivityDelistRequestView = () => {
                 <td>{model.activity.event.date()}</td>
                 <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
                 <td>{model.member.id === user.memberId
-                    ? <Button variant='danger' size='sm' onClick={cancelClicked}>Avbryt</Button>
+                    ? <CancelAdrButton onClick={cancelClicked} />
                     : null}
                 </td>
             </tr>
         }
 
-        const myRequests = reqs.results.filter(r => r.member.id === user.memberId)
-
-        const unhandledRequests = reqs
-            .results.filter(r => r.member.id !== user.memberId && r.approved === null)
-
-        const myHandledRequests = reqs
-            .results.filter(r => r.approver !== null && r.approver.id === user.memberId)
-
-        const separator = (title: string) =>
+        const Separator = (props: { title: string }) =>
             <tr><td colSpan={5}>
-                <h4>{title}</h4>
+                <h4>{props.title}</h4>
             </td></tr>
 
         return <Table hover striped>
@@ -101,26 +112,26 @@ export const ActivityDelistRequestView = () => {
                     <th>Uppgift</th>
                     <th>Datum</th>
                     <th>Godkänd</th>
-                    <th></th>
+                    <th>Åtgärd</th>
                 </tr>
             </thead>
             <tbody>
-                {!user.isStaff ? null :
-                    separator(`Mina förfrågningar (${myRequests.length})`)
-                }
-                {myRequests.map(renderRow)}
+                <Separator title={`Mina obesvarade förfrågningar (${myUnansweredRequests?.length})`} />
+                {myUnansweredRequests?.map(renderRow)}
+                <Separator title={`Mina besvarade förfrågningar (${myAnsweredRequests?.length})`} />
+                {myAnsweredRequests?.map(renderRow)}
                 {!user.isStaff ? null : <>
-                    {separator(`Ohanterade förfrågningar (${unhandledRequests.length})`)}
-                    {unhandledRequests.map(renderRow)}
-                    {separator(`Förfrågningar hanterade av mig (${myHandledRequests.length})`)}
-                    {myHandledRequests.map(renderRow)}
+                    <Separator title={`Ohanterade förfrågningar (${unhandledRequests?.length})`} />
+                    {unhandledRequests?.map(renderRow)}
+                    <Separator title={`Förfrågningar hanterade av mig (${myHandledRequests?.length})`} />
+                    {myHandledRequests?.map(renderRow)}
                 </>}
             </tbody>
         </Table>
     }
 
     return (
-        <Container fluid>
+        <Container>
             <Row>
                 <Col md={12} lg={7}>
                     <h2>Avbokningsförfrågningar</h2>
@@ -135,15 +146,21 @@ export const ActivityDelistRequestView = () => {
                 </Col>
                 <Col md={12} lg={5}>
                     <h2>Detaljer</h2>
-                    <ActivityDelistRequestComponent model={currentReq} />
-                    {(currentReq === null || !user.isStaff) ? null :
-                        <div>
-                            <Button variant='success' onClick={() => approveADR(currentReq, user).then(incReload)}>
-                                Godkänn</Button>
-                            <Button variant='danger' onClick={() => rejectADR(currentReq, user).then(incReload)}>
-                                Avvisa</Button>
-                        </div>
-                    }
+                    <div className="div-group">
+                        {currentReq === null
+                            ? <p>Välj en begäran att visa</p>
+                            : <ActivityDelistRequestComponent model={currentReq} />}
+                        {(currentReq === null || !user.isStaff) ? null :
+                            <div className='align-right'>
+                                <span className="spacer">&nbsp;</span>
+                                <Button variant='success' onClick={() => approveADR(currentReq, user).then(incReload)}>
+                                    Godkänn</Button>
+                                <span className="spacer">&nbsp;</span>
+                                <Button variant='danger' onClick={() => rejectADR(currentReq, user).then(incReload)}>
+                                    Avvisa</Button>
+                            </div>
+                        }
+                    </div>
                 </Col>
             </Row>
         </Container>

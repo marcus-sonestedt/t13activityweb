@@ -23,8 +23,10 @@ export const ActivityTypeComponent = (props: { model: ActivityType | null }) => 
                 : null}
         </div>
         <hr />
-        <h4>Beskrivning:</h4>
-        <p>{model.description}</p>
+        <div className="div-group">
+            <h4>Beskrivning:</h4>
+            <p>{model.description}</p>
+        </div>
     </>)
 }
 

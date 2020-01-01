@@ -7,7 +7,7 @@ export const FAQView = () => {
         <Row>
             <Col>
                 <h1>Vad är detta?</h1>
-                <p>Bättre än en pärm i hyrkarten!</p>
+                <p className='div-group'>Bättre än en pärm i hyrkarten!</p>
             </Col>
         </Row>
 

@@ -7,8 +7,8 @@ import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../App";
 
-export const EventTypeComponent = (props: {model: T13EventType | null}) => {
-    const {model} = props;
+export const EventTypeComponent = (props: { model: T13EventType | null }) => {
+    const { model } = props;
     const user = useContext(userContext);
 
     if (model === null)
@@ -22,8 +22,10 @@ export const EventTypeComponent = (props: {model: T13EventType | null}) => {
                 : null}
         </div>
         <hr />
-        <h4>Beskrivning:</h4>
-        <p>{model.description}</p>
+        <div className="div-group">
+            <h4>Beskrivning:</h4>
+            <p>{model.description}</p>
+        </div>
     </>)
 }
 
@@ -46,7 +48,7 @@ export const EventTypeView = () => {
                     </DataProvider>
                 </Col>
                 <Col sm={12} md={6}>
-                    {model !== null ? <Image src={model.image}/> : null}
+                    {model !== null ? <Image src={model.image} /> : null}
                 </Col>
             </Row>
         </Container>

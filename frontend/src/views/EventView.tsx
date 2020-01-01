@@ -95,7 +95,7 @@ export const EventView = () => {
             })
             .then(r => {
                 if (r.status !== 200)
-                    throw r.statusText;                
+                    throw r.statusText;
             }, r => { throw r })
             .catch(e => {
                 console.error(e);
@@ -112,8 +112,8 @@ export const EventView = () => {
         const assigned = model.assigned !== null
             ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
             : model.bookable
-            ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
-            : null;
+                ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
+                : null;
 
         const rowClicked = () => history.push(model.url());
 
@@ -122,7 +122,7 @@ export const EventView = () => {
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
                 <td className='nowrap'>
-                    {model.date()}<br/>{model.time()}
+                    {model.date()}<br />{model.time()}
                 </td>
                 <td>{assigned}</td>
             </tr>
@@ -136,7 +136,7 @@ export const EventView = () => {
         <Container fluid>
             <Row>
                 <Col md={12}>
-                <div className="model-header">
+                    <div className="model-header">
                         <a href={event.url()}><h1>{event.name}</h1></a>
                         {user.isStaff ?
                             <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button></a>
@@ -147,12 +147,14 @@ export const EventView = () => {
             </Row>
             <Row>
                 <Col md={12} lg={6}>
-                    <h4>Datum: {event.date()}</h4>
-                    <h4>Typ: {eventType}</h4>
-                    <h5>Beskrivning:</h5>
-                    <p>{event.description}</p>
-                    <h5>Övrigt:</h5>
-                    <p>{event.comment}</p>
+                    <div className='div-group'>
+                        <h4>Datum: {event.date()}</h4>
+                        <h4>Typ: {eventType}</h4>
+                        <h5>Beskrivning:</h5>
+                        <p>{event.description}</p>
+                        <h5>Övrigt:</h5>
+                        <p>{event.comment}</p>
+                    </div>
                 </Col>
                 <Col md={12} lg={6}>
                     <div className="model-header">

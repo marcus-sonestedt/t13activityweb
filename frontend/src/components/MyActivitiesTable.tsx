@@ -6,6 +6,7 @@ import { Activity } from '../Models'
 import { userContext } from "../App"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
 import './Table.css'
+import { CancelAdrButton } from '../views/ActivityDelistRequestsView';
 
 export class MyActivitiesProps {
     values: Activity[] = [];
@@ -54,13 +55,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                                     "Du kan inte begära att avboka då du skulle få mindre än " + user.settings.minSignups + " uppgifter om det godkändes"}
                             </span>
                         </Button>
-                        : <Button variant='outline-warning' size='sm'
-                            onClick={buttonClick(() => cancelADRByActivity(activity.id))}>
-                            Återta
-                            <span className='text-tooltip'>
-                                Avbryt din begäran att avboka och återta dig uppgiften.
-                            </span>
-                        </Button>
+                        : <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))}/>
                     )
                 }
                 </td>

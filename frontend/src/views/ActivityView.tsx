@@ -28,10 +28,12 @@ export const ActivityComponent = (props: { model: Activity | null }) => {
                     : null}
             </div>
             <hr />
-            {event}
-            <h5>Datum: {model.date()}</h5>
-            <h4>Tid: {model.time()}</h4>
-            <p>{model.comment}</p>
+            <div className='div-group'>
+                {event}
+                <h5>Datum: {model.date()}</h5>
+                <h4>Tid: {model.time()}</h4>
+                <p>{model.comment}</p>
+            </div>
         </>
     )
 }

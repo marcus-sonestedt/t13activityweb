@@ -44,7 +44,7 @@ export const UpcomingEventsCalendar = (props: { events: PagedT13Events }) => {
         endAccessor="end_date"
         allDayAccessor={() => true}
         titleAccessor="name"
-        tooltipAccessor="name"
+        tooltipAccessor={x => `${x.name}\n${x.type?.name ?? ''}`}
         resourceAccessor={x => x.url()}
         onSelectEvent={eventClicked}
         components={components}

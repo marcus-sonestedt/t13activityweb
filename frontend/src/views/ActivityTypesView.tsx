@@ -26,7 +26,7 @@ export const ActivityTypesView = () => {
                     <h1>
                         <span className="table-title">Uppgiftstyper</span>
                         <span className="table-count">
-                            ({data.results.length}/{data.count})
+                            {data.results.length}/{data.count} st
                         </span>
                     </h1>
                     <Table >

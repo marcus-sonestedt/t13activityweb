@@ -27,7 +27,7 @@ export const EventTypesView = () => {
                     <h1>
                         <span className="table-title">Aktivitetstyper</span>
                         <span className="table-count">
-                            ({data.results.length}/{data.count})
+                            {data.results.length}/{data.count} st
                         </span>
                     </h1>
                     <Table >
