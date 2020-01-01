@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { Button, Table } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import './Table.css'
 
 export class MyActivitiesProps {
     values: Activity[] = [];
-    reload: () => void = () => {};
+    reload: () => void = () => { };
 }
 
 export const MyActivitiesTable = (props: MyActivitiesProps) => {
@@ -17,28 +17,52 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
     const history = useHistory();
     const user = useContext(userContext)
     const today = new Date();
+    const bookedCount = useMemo(() => values.filter(a => !a.delist_requested).length, [values])
+    const completedCount = useMemo(() => values.filter(a => a.completed === true).length, [values])
+
+    const canRequestUnlist = bookedCount > user.settings.minSignups
+
+    const buttonClick = (f: () => Promise<void>) =>
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
+            f().then(reload);
+        }
 
     const renderRow = (activity: Activity) => {
-        const unlistPossible = activity.event.start_date > today;
+        const eventInPast = activity.event.start_date <= today;
 
         return (
             <tr key={activity.id} className='clickable-row' onClick={() => history.push(activity.url())}>
                 <td><a href={activity.url()}>{activity.name}</a></td>
                 <td><a href={activity.event.url()}>{activity.event.name}</a></td>
                 <td className='nowrap'>
-                    {activity.date()}<br/>{activity.time()}
+                    {activity.date()}<br />{activity.time()}
                 </td>
-                <td>{!unlistPossible ? (activity.completed ? "✔" : "❌") :
+                <td>{eventInPast ?
+                    (activity.completed === null
+                        ? <span>Obekräftad <span role="img" aria-label="clock">⏰</span><span className="text-tooltip">Bra jobbat!</span></span>
+                        : activity.completed === true
+                            ? <span>Utförd <span role="img" aria-label="thumbsup">👍</span><span className="text-tooltip">Bra jobbat!</span></span>
+                            : <span>Missad <span role="img" aria-label="ohno">😨</span><span className="text-tooltip">Du missade din uppgift!</span></span>) :
                     (!activity.delist_requested ?
-                        <Button variant='danger' size='sm'
-                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); createADR(activity, user).then(reload)}}>
+                        <Button variant='outline-danger' size='sm' disabled={!canRequestUnlist}
+                            onClick={buttonClick(() => createADR(activity, user))}>
                             Avboka?
+                            <span className='text-tooltip'>
+                                {canRequestUnlist ?
+                                    "Begär att avboka uppgiften" :
+                                    "Du kan inte begära att avboka då du skulle få mindre än " + user.settings.minSignups + " uppgifter om det godkändes"}
+                            </span>
                         </Button>
-                        : <Button variant='warning' size='sm'
-                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); cancelADRByActivity(activity.id).then(reload)}}>
-                            Återboka
+                        : <Button variant='outline-warning' size='sm'
+                            onClick={buttonClick(() => cancelADRByActivity(activity.id))}>
+                            Återta
+                            <span className='text-tooltip'>
+                                Avbryt din begäran att avboka och återta dig uppgiften.
+                            </span>
                         </Button>
-                    )}
+                    )
+                }
                 </td>
             </tr>
         );
@@ -51,7 +75,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
         <div className="table-container">
             <h3>
                 <span className="table-title">Mina uppgifter</span>
-                <span className="table-count">({values.length} st)</span>
+                <span className="table-count">{values.length} totalt, {completedCount} utförda, {bookedCount} bokade</span>
             </h3>
             <Table striped>
                 <thead>
@@ -59,7 +83,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                         <th>Namn</th>
                         <th>Aktivitet</th>
                         <th>Tidpunkt</th>
-                        <th>Utförd</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -42,10 +42,16 @@ footer {
   display: none;
   position: absolute;
   padding: 3px;
+  margin-top: 2em;
+  margin-left: 5em;
   border: 1px solid;
-  background: black;
+  background-color: black;
+  opacity: 0;
+  transition: opacity 0s linear 1s;
 }
 
-.text:hover .text-tooltip {
+*:hover>.text-tooltip {
   display: block;
+  opacity: 1;
+  transition: opacity 0s linear 1s;
 }

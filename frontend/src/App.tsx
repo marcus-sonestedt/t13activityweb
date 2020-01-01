@@ -19,12 +19,16 @@ import ProfileView from './views/ProfileView';
 import { deserialize } from 'class-transformer';
 import CookieConsent from "react-cookie-consent";
 
-export class UserContext {
+export class UserContext {  
   isLoggedIn = false;
   isStaff = false;
   memberId = '';
   userId = '';
   fullname = '';
+  settings!: {
+    minSignups: number;
+    latestBookableDate: Date;
+  };
 }
 
 export const userContext = React.createContext(new UserContext());

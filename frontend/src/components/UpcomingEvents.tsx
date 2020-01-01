@@ -134,7 +134,7 @@ export const UpcomingEvents = (props: EventProps) => {
         <h3>
             <span className="table-title">{title}</span>
             <span className="table-count">
-                ({events.results.length}/{events.count})
+                Visar {events.results.length} / {events.count} st
                 &nbsp;
                 <Button variant='outline-info' size='sm'
                     onClick={toggleViewMode}>

@@ -16,7 +16,7 @@ export const Navigation = () => {
             <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
                     {!user.isLoggedIn ? null :
-                        <Nav.Link href="/frontend/delistrequests">Avbokningar</Nav.Link>
+                        <Nav.Link href="/frontend/delistrequests">Avbokningsförfrågningar</Nav.Link>
                     }
                     {!user.isStaff ? null
                         : <Nav.Link href="/admin">Administrera</Nav.Link>

@@ -41,7 +41,7 @@ export class Activity implements IdValue {
     end_time: string = '';
 
     weight: number = 1;
-    completed: boolean = false;
+    completed: boolean | null = null;
     bookable: boolean = false;
 
     @Type(() => ActivityType)
@@ -68,7 +68,7 @@ export class Activity implements IdValue {
         return this.start_time + " - " + this.end_time
     }
 
-    toString = () =>  `${this.name} - ${this.event.date()} - ${this.time()}` 
+    toString = () => `${this.name} - ${this.event.date()} - ${this.time()}`
 
     url = () => `/frontend/activity/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
@@ -138,11 +138,11 @@ export class T13Event implements IdValue {
     @Type(() => Activity)
     activities: Activity[] = [];
 
-    activities_count? : number;
-    activities_available_count? : number;
+    activities_count?: number;
+    activities_available_count?: number;
 
     date = () => {
-        if (this.start_date.toDateString() === this.end_date.toDateString() ||this.end_date === null)
+        if (this.start_date.toDateString() === this.end_date.toDateString() || this.end_date === null)
             return this.start_date.toLocaleDateString('sv-SE')
 
         return `${this.start_date.toLocaleDateString('sv-SE')} - ${this.end_date.toLocaleDateString('sv-SE')}`
@@ -165,18 +165,18 @@ export class ActivityDelistRequest implements IdValue {
     }
 
     id: string = '';
-    
+
     @Type(() => Member)
     member: Member;
 
     @Type(() => Activity)
     activity: Activity;
-    
+
     reason: string = '';
-    
+
     @Type(() => Member)
     approver: Member | null = null;
-    
+
     approved: boolean | null = null;
 
     url = () => `/frontend/delistrequest/${this.id}`

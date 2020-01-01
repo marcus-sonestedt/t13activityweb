@@ -185,7 +185,7 @@ class Activity(models.Model):
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
 
-    completed = models.BooleanField(default=False)
+    completed = models.BooleanField(default=None, null=True, blank=True)
     cancelled = models.BooleanField(default=False)
 
     @property
