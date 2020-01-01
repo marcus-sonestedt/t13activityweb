@@ -25,10 +25,7 @@ from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer
 
-from twilio.rest import Client as TwilioClient
-
 logger = logging.getLogger(__name__)
-
 
 class ClearAuthToken(ObtainAuthToken):
     permission_classes = [IsAuthenticated]

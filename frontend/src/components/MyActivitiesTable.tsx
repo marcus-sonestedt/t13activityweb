@@ -18,24 +18,24 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
     const user = useContext(userContext)
     const today = new Date();
 
-    const renderRow = (model: Activity) => {
-        const unlistPossible = model.event.start_date > today;
+    const renderRow = (activity: Activity) => {
+        const unlistPossible = activity.event.start_date > today;
 
         return (
-            <tr key={model.id} className='clickable-row' onClick={() => history.push(model.url())}>
-                <td><a href={model.url()}>{model.name}</a></td>
-                <td><a href={model.event.url()}>{model.event.name}</a></td>
+            <tr key={activity.id} className='clickable-row' onClick={() => history.push(activity.url())}>
+                <td><a href={activity.url()}>{activity.name}</a></td>
+                <td><a href={activity.event.url()}>{activity.event.name}</a></td>
                 <td className='nowrap'>
-                    {model.date()}<br/>{model.time()}
+                    {activity.date()}<br/>{activity.time()}
                 </td>
-                <td>{!unlistPossible ? (model.completed ? "✔" : "❌") :
-                    (!model.delist_requested ?
+                <td>{!unlistPossible ? (activity.completed ? "✔" : "❌") :
+                    (!activity.delist_requested ?
                         <Button variant='danger' size='sm'
-                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); createADR(model, user).then(reload)}}>
+                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); createADR(activity, user).then(reload)}}>
                             Avboka?
                         </Button>
                         : <Button variant='warning' size='sm'
-                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); cancelADRByActivity(model.id).then(reload)}}>
+                            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {e.stopPropagation(); cancelADRByActivity(activity.id).then(reload)}}>
                             Återboka
                         </Button>
                     )}

@@ -26,8 +26,6 @@ from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     ActivityDelistRequestSerializer, ActivityDelistRequestDeepSerializer, EventActivitySerializer
 
-from twilio.rest import Client as TwilioClient
-
 logger = logging.getLogger(__name__)
 
 
@@ -57,7 +55,7 @@ class ActivityEnlist(APIView):
         return Response("Inbokad på " + activity.name)
 
 
-class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
+class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
@@ -79,7 +77,7 @@ class ActivityDelistRequestView(generics.RetrieveUpdateDestroyAPIView, mixins.Cr
             return HttpResponseForbidden(e)
 
 
-class ActivityDelistRequestByActivityView(APIView):
+class ADRByActivityView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     queryset = ActivityDelistRequest.objects.select_related('activity').prefetch_related('activity__assigned')
@@ -99,7 +97,7 @@ class ActivityDelistRequestByActivityView(APIView):
 
         return Response(self.serializer.to_representation(instance=model))
 
-class ActivityDelistRequestList(mixins.ListModelMixin, generics.GenericAPIView):
+class ADRList(mixins.ListModelMixin, generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
@@ -123,8 +121,8 @@ class ActivityDelistRequestList(mixins.ListModelMixin, generics.GenericAPIView):
 url_patterns = [
     re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
 
-    path('activity_delist_request', ActivityDelistRequestList.as_view()),
-    re_path(r'activity_delist_request/(?P<pk>[0-9]+)', ActivityDelistRequestView.as_view()),
-    re_path(r'activity_delist_request/create', ActivityDelistRequestView.as_view()),
-    re_path(r'activity_delist_request/activity/(?P<id>.+)', ActivityDelistRequestByActivityView.as_view()),
+    path('activity_delist_request', ADRList.as_view()),
+    re_path(r'activity_delist_request/(?P<pk>[0-9]+)', ADRView.as_view()),
+    re_path(r'activity_delist_request/create', ADRView.as_view()),
+    re_path(r'activity_delist_request/activity/(?P<id>.+)', ADRByActivityView.as_view()),
 ]
