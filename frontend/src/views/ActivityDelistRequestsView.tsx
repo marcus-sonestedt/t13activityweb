@@ -154,10 +154,20 @@ export const ActivityDelistRequestView = () => {
                             <div className='align-right'>
                                 <span className="spacer">&nbsp;</span>
                                 <Button variant='success' onClick={() => approveADR(currentReq, user).then(incReload)}>
-                                    Godkänn</Button>
+                                    Godkänn
+                                    <span className='text-tooltip place-left'>
+                                        Godkänn avbokningen och frigör medlemmen från sitt åtagande.
+                                        Uppgiften kommer inte ha någon medlem tilldelad efter detta.
+                                    </span>
+                                    </Button>
                                 <span className="spacer">&nbsp;</span>
                                 <Button variant='danger' onClick={() => rejectADR(currentReq, user).then(incReload)}>
-                                    Avvisa</Button>
+                                    Avvisa
+                                    <span className='text-tooltip place-left'>
+                                        Avvisa denna avbokningsförfrågan. Du behöver ange en anledning
+                                        till varför du inte godtar anledningen som medlemmen angivit.
+                                    </span>
+                                    </Button>
                             </div>
                         }
                     </div>

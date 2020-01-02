@@ -21,8 +21,8 @@ export const Navigation = () => {
                             ({user.myDelistRequests}
                             {!user.isStaff ? null : `, ${user.unansweredDelistRequests}`}
                             <span className='text-tooltip'>
-                                Första siffran är antal av dina egna förfrågningar, 
-                                andra är totalt antal obesvarade från alla medlemmar.
+                                Första siffran är antal av dina egna förfrågningar.<br/>
+                                Den andra är totalt antal obesvarade från alla medlemmar.
                             </span>
                             )
                         </Nav.Link>
