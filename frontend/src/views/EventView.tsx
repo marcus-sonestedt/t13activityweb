@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
 import { useParams, useHistory } from 'react-router-dom';
-import { Table, Container, Row, Col, Button } from 'react-bootstrap'
+import { Table, Container, Row, Col, Button, Badge } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
 import '../components/Table.css'
@@ -105,7 +105,7 @@ export const EventView = () => {
     }
 
     const renderActivityRow = (model: Activity) => {
-        const type = model.type !== null
+            const type = model.type !== null
             ? <a href={model.type.url()}>{model.type.name}</a>
             : '-';
 
@@ -159,7 +159,7 @@ export const EventView = () => {
                 <Col md={12} lg={6}>
                     <div className="model-header">
                         <h3>Uppgifter</h3>
-                        <h4>({event.activities_count} totalt, {event.activities_available_count} lediga)</h4>
+                        <h3><Badge variant='secondary'>{event.activities_count} totalt, {event.activities_available_count} ledig(a)</Badge></h3>
                     </div>
                     <Table hover>
                         <thead>
