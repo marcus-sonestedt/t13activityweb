@@ -16,13 +16,12 @@ export const FAQView = () => {
     const renderFAQ = (model: FAQ) =>
         <Row key={model.id} id={`faq-${model.id}`}>
             <Col>
-                <h3>
-                    {model.question}
-                    &nbsp;
-                    <a href={model.url()}>#</a>
-                    &nbsp;
+                <div className='model-header'>
+                    <h3>
+                        <a href={model.url()}>{model.question}</a>
+                    </h3>
                     {user.isStaff ? <a href={model.adminUrl()}><Button variant='secondary' size='sm'>Editera</Button></a> : null}
-                </h3>
+                </div>
                 <p className='div-group'>{model.answer}</p>
             </Col>
         </Row>
@@ -34,11 +33,10 @@ export const FAQView = () => {
     }, [id]);
 
     return <Container>
-        <h1>
-            Vanliga frågor och svar
-            &nbsp;
+        <div className="model-header">
+            <h1>Vanliga frågor och svar</h1>
             {user.isStaff ? <a href={FAQ.adminCreateUrl}><Button variant='secondary'>Skapa ny</Button></a> : null}
-        </h1>
+        </div>
         <DataProvider<PagedFAQs>
             url={FAQ.apiUrlsForAll}
             ctor={(json) => deserialize(PagedFAQs, json)}
