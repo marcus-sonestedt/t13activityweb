@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import './Navigation.css'
-import { userContext } from "../App";
+import { userContext } from "./UserContext";
 
 export const Navigation = () => {
     const user = useContext(userContext);

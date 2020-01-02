@@ -1,9 +1,10 @@
 import React, { useState, useContext, useCallback, useMemo } from "react"
 import { Container, Row, Col, Table, Button, Pagination } from "react-bootstrap";
-import { userContext } from "../App";
-import { ActivityDelistRequest, PagedADR } from '../Models';
-import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
+
+import DataProvider from "../components/DataProvider";
+import { userContext } from "../components/UserContext";
+import { ActivityDelistRequest, PagedADR } from '../Models';
 import { pageItems } from "./MemberHomeView";
 import { cancelADR, rejectADR, approveADR } from "../logic/ADRActions"
 
@@ -64,16 +65,15 @@ export const ActivityDelistRequestView = () => {
     const myHandledRequests = useMemo(() =>
         allRequests?.results.filter(r => r.approver !== null && r.approver.id === user.memberId), [allRequests, user]);
 
-
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
             return
 
-        const rowClicked = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, req: ActivityDelistRequest) => {
-            if (e.target === null || e.currentTarget.tagName === 'a')
+        const rowClicked = (e: any, req: ActivityDelistRequest) => {
+            if (e.target === null || e.target['tagName'] === 'A')
                 return
 
-            e.preventDefault();
+            //e.preventDefault();
             setCurrentReq(req);
         }
 
@@ -148,7 +148,7 @@ export const ActivityDelistRequestView = () => {
                     <h2>Detaljer</h2>
                     <div className="div-group">
                         {currentReq === null
-                            ? <p>Välj en begäran att visa</p>
+                            ? <p>Välj en förfrågan att visa</p>
                             : <ActivityDelistRequestComponent model={currentReq} />}
                         {(currentReq === null || !user.isStaff) ? null :
                             <div className='align-right'>

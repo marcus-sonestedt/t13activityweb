@@ -4,8 +4,8 @@ import { UpcomingEvents } from "../components/UpcomingEvents";
 import DataProvider from "../components/DataProvider";
 import { PagedT13Events } from "../Models";
 import { deserialize } from "class-transformer";
+import { userContext } from "../components/UserContext";
 import './WelcomeView.css'
-import { userContext } from "../App";
 
 export const Welcome = () => {
     const [events, setEvents] = useState(new PagedT13Events());

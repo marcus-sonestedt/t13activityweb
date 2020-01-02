@@ -5,7 +5,7 @@ import { deserialize } from "class-transformer";
 import { useParams } from "react-router";
 import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
-import { userContext } from "../App";
+import { userContext } from "../components/UserContext";
 
 export const EventTypeComponent = (props: { model: T13EventType | null }) => {
     const { model } = props;

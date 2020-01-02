@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { Container, Row, Col } from "react-bootstrap"
-import { userContext } from "../App";
+import { userContext } from "../components/UserContext";
 
 export const ProfileView = () => {
     const user = useContext(userContext);

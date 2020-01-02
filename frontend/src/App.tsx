@@ -2,6 +2,10 @@ import './App.css';
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { deserialize } from 'class-transformer';
+import CookieConsent from "react-cookie-consent";
+
+
 import { Navigation } from './components/Navigation'
 import { MemberHomeView } from './views/MemberHomeView'
 import { Welcome } from './views/WelcomeView'
@@ -16,24 +20,7 @@ import { EventTypesView } from './views/EventTypesView';
 import { ActivityTypesView } from './views/ActivityTypesView';
 import FAQView from './views/FAQView';
 import ProfileView from './views/ProfileView';
-import { deserialize } from 'class-transformer';
-import CookieConsent from "react-cookie-consent";
-
-export class UserContext {  
-  isLoggedIn = false;
-  isStaff = false;
-  memberId = '';
-  userId = '';
-  fullname = '';
-  settings!: {
-    minSignups: number;
-    latestBookableDate: Date;
-  };
-}
-
-export const userContext = React.createContext(new UserContext());
-export const UserProvider = userContext.Provider
-export const UserConsumer = userContext.Consumer
+import { UserContext, UserProvider } from './components/UserContext';
 
 export const App = () => {
   const userJson = localStorage.getItem("user");

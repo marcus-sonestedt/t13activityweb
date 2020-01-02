@@ -1,6 +1,6 @@
 import Cookies from 'universal-cookie';
 import { Activity, ActivityDelistRequest } from '../Models';
-import { UserContext } from '../App';
+import { UserContext } from "../components/UserContext";
 import { deserialize } from 'class-transformer';
 
 const cookies = new Cookies();

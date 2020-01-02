@@ -5,7 +5,7 @@ import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
 import '../components/Table.css'
 import Cookies from 'universal-cookie';
-import { userContext } from "../App";
+import { userContext } from "../components/UserContext";
 
 export const EventView = () => {
     const [event, setEvent] = useState<T13Event | null>(null);

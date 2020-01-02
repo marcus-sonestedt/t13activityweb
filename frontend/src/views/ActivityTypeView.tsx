@@ -6,7 +6,7 @@ import { deserialize } from "class-transformer";
 import { ActivityType, PagedActivityTypes } from "../Models"
 import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
-import { userContext } from "../App";
+import { userContext } from "../components/UserContext";
 
 export const ActivityTypeComponent = (props: { model: ActivityType | null }) => {
     const user = useContext(userContext);

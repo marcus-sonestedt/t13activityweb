@@ -3,7 +3,7 @@ import { Button, Table } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 
 import { Activity } from '../Models'
-import { userContext } from "../App"
+import { userContext } from "./UserContext"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
 import './Table.css'
 import { CancelAdrButton } from '../views/ActivityDelistRequestsView';
