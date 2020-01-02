@@ -239,8 +239,8 @@ class ActivityDelistRequest(models.Model):
     class Meta:
         ordering = ['activity__date', 'activity__assigned']
         unique_together = [['member', 'activity']]
-        verbose_name = "Avbokningsbegäran"
-        verbose_name_plural = "Avbokningsbegäranden"
+        verbose_name = "Avbokning"
+        verbose_name_plural = "Avbokningar"
 
     def save(self, *args, **kwargs):
         if not self.id:

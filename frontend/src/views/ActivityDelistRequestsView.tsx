@@ -59,6 +59,7 @@ const AdrStatusBadge = (props: { model: ActivityDelistRequest }) => {
 
 export const ActivityDelistRequestComponent = (props: { model: ActivityDelistRequest | null }) => {
     const { model } = props;
+    const user = useContext(userContext);
 
     if (model === null)
         return null
@@ -74,7 +75,12 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
 
     return (
         <>
-            <h5>Aktivitet</h5>
+            <div className="model-header">
+                <h5>Aktivitet</h5>
+                {user.isStaff ?
+                    <a href={model.adminUrl()}><Button variant='secondary' size='sm'>Editera</Button></a>
+                    : null}
+            </div>
             <p>{model.activity.event.name}</p>
             <h5>Uppgift</h5>
             <p>{model.activity.name}</p>
@@ -111,7 +117,7 @@ export const ActivityDelistRequestView = () => {
     const unhandledRequests = useMemo(() =>
         allRequests?.results.filter(r => r.member.id !== user.memberId && r.approved === null), [allRequests, user]);
     const myHandledRequests = useMemo(() =>
-        allRequests?.results.filter(r => r.approver !== null && r.approver.id === user.memberId), [allRequests, user]);
+        allRequests?.results.filter(r => r.member.id !== user.memberId && r.approver !== null && r.approver.id !== user.memberId), [allRequests, user]);
 
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
@@ -166,14 +172,14 @@ export const ActivityDelistRequestView = () => {
                 </tr>
             </thead>
             <tbody>
-                <Separator title={`Mina obesvarade förfrågningar (${myUnansweredRequests?.length})`} />
+                <Separator title={`Mina obesvarade avbokningar (${myUnansweredRequests?.length})`} />
                 {myUnansweredRequests?.map(renderRow)}
-                <Separator title={`Mina besvarade förfrågningar (${myAnsweredRequests?.length})`} />
+                <Separator title={`Mina besvarade avbokningar (${myAnsweredRequests?.length})`} />
                 {myAnsweredRequests?.map(renderRow)}
                 {!user.isStaff ? null : <>
-                    <Separator title={`Ohanterade förfrågningar (${unhandledRequests?.length})`} />
+                    <Separator title={`Obesvarade avbokningar (${unhandledRequests?.length})`} />
                     {unhandledRequests?.map(renderRow)}
-                    <Separator title={`Förfrågningar hanterade av mig (${myHandledRequests?.length})`} />
+                    <Separator title={`Besvarade avbokningar (${myHandledRequests?.length})`} />
                     {myHandledRequests?.map(renderRow)}
                 </>}
             </tbody>
@@ -184,7 +190,7 @@ export const ActivityDelistRequestView = () => {
         <Container>
             <Row>
                 <Col md={12} lg={7}>
-                    <h2>Avbokningsförfrågningar</h2>
+                    <h2>Avbokningar</h2>
                     <DataProvider url={ActivityDelistRequest.apiUrlAll() + `?page=${page}`}
                         ctor={json => deserialize(PagedADR, json)}
                         onLoaded={reloadHandler}>
@@ -198,9 +204,9 @@ export const ActivityDelistRequestView = () => {
                     <h2>Detaljer</h2>
                     <div className="div-group">
                         {currentReq === null
-                            ? <p>Välj en förfrågan att visa</p>
+                            ? <p>Välj en avbokning att visa</p>
                             : <ActivityDelistRequestComponent model={currentReq} />}
-                        {(currentReq === null || !user.isStaff) ? null :
+                        {(currentReq === null || !user.isStaff || currentReq.member.id === user.memberId) ? null :
                             <div className='align-right'>
                                 <span className="spacer">&nbsp;</span>
                                 <ApproveAdrButton onClick={() => approveADR(currentReq, user).then(incReload)}

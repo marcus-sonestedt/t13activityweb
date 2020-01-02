@@ -17,7 +17,7 @@ export const Navigation = () => {
                 <Nav className="mr-auto">
                     {!user.isLoggedIn ? null :
                         <Nav.Link href="/frontend/delistrequest">
-                            Avbokningsförfrågningar
+                            Avbokningar
                             <span className='spacer'/>
                             <Badge variant='primary'>
                                 {user.myDelistRequests}
@@ -32,8 +32,8 @@ export const Navigation = () => {
                     {!user.isStaff ? null :
                         <Nav.Link href="/admin">Administrera</Nav.Link>
                     }
+                    <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>
                     <NavDropdown title="Info" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="/frontend/faq">Frågor &amp; svar</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item href="/frontend/eventtypes">Aktivitetstyper</NavDropdown.Item>
                         <NavDropdown.Item href="/frontend/activitytypes">Uppgiftstyper</NavDropdown.Item>
