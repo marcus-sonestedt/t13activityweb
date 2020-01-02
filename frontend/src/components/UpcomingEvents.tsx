@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment/locale/sv';
 
 import { PagedT13Events, T13Event } from '../Models'
-import { pageItems } from "../views/MemberHomeView";
+import { pageItems } from "../pages/MyActivitiesPage";
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Table.css'

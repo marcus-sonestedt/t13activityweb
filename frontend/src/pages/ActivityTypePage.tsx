@@ -30,7 +30,7 @@ export const ActivityTypeComponent = (props: { model: ActivityType | null }) => 
     </>)
 }
 
-export const ActivityTypeView = () => {
+export const ActivityTypePage = () => {
     const { id } = useParams();
     const [model, setModel] = useState<ActivityType | null>(null);
     const setModelCallback = useCallback(x => setModel(x.results[0]), []);
@@ -56,4 +56,4 @@ export const ActivityTypeView = () => {
     </Container>
 }
 
-export default [ActivityTypeView, ActivityTypeComponent];
+export default [ActivityTypePage, ActivityTypeComponent];

@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { Activity, ActivityDelistRequest } from '../Models';
 import { userContext } from "./UserContext"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
-import { CancelAdrButton, RequestAdrButton } from '../views/ActivityDelistRequestsView';
+import { CancelAdrButton, RequestAdrButton } from '../pages/ADRPage';
 import './Table.css'
 
 export const MyActivitiesTable = (props: {

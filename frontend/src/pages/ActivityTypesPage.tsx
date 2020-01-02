@@ -3,9 +3,9 @@ import { Container, Row, Col, Table, Pagination } from "react-bootstrap"
 import { PagedActivityTypes, ActivityType } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
-import { pageItems } from "./MemberHomeView";
+import { pageItems } from "./MyActivitiesPage";
 
-export const ActivityTypesView = () => {
+export const ActivityTypesPage = () => {
     const [data, setData] = useState<PagedActivityTypes>(new PagedActivityTypes());
     const [page, setPage] = useState(1);
 
@@ -48,4 +48,4 @@ export const ActivityTypesView = () => {
         </Row>
     </Container>
 }
-export default ActivityTypesView;
+export default ActivityTypesPage;

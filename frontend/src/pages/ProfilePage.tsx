@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { Container, Row, Col } from "react-bootstrap"
 import { userContext } from "../components/UserContext";
 
-export const ProfileView = () => {
+export const ProfilePage = () => {
     const user = useContext(userContext);
 
     return <Container>
@@ -19,4 +19,4 @@ export const ProfileView = () => {
     </Container>
 }
 
-export default ProfileView;
+export default ProfilePage;

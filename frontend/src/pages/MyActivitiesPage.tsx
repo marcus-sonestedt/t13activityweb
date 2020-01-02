@@ -25,7 +25,7 @@ export const pageItems = (count: number, pagesize: number,
 }
 
 
-export const MemberHomeView = () => {
+export const MyActiviesPage = () => {
     const [activities, setActivities] = useState(new PagedActivities());
     const [activitiesPage, setActivitiesPage] = useState(1);
 
@@ -75,4 +75,4 @@ export const MemberHomeView = () => {
     );
 }
 
-export default MemberHomeView;
+export default MyActiviesPage;

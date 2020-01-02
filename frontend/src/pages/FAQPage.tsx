@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 
 
 
-export const FAQView = () => {
+export const FAQPage = () => {
     const { id } = useParams();
     const [faqs, setFAQs] = useState<PagedFAQs>(new PagedFAQs());
     const user = useContext(userContext);
@@ -46,4 +46,4 @@ export const FAQView = () => {
     </Container>
 }
 
-export default FAQView;
+export default FAQPage;

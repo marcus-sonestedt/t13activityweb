@@ -6,7 +6,7 @@ import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import NotFound from "../components/NotFound";
 
-export const MemberView = () => {
+export const MemberPage = () => {
     const { id } = useParams();
     const [member, setMember] = useState<Member | null>(null)
     const setMemberCallback = useCallback((data:PagedMembers) => setMember(data.results[0]), []);

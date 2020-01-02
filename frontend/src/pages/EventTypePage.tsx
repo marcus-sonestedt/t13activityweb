@@ -29,7 +29,7 @@ export const EventTypeComponent = (props: { model: T13EventType | null }) => {
     </>)
 }
 
-export const EventTypeView = () => {
+export const EventTypePage = () => {
     const { id } = useParams();
     const [model, setModel] = useState<T13EventType | null>(null);
 
@@ -55,4 +55,4 @@ export const EventTypeView = () => {
     )
 }
 
-export default EventTypeView;
+export default EventTypePage;

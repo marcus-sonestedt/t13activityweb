@@ -37,15 +37,15 @@ class UserWithMemberAdmin(UserAdmin):
 class MemberAdmin(admin.ModelAdmin):
     readonly_fields = ['user']
 
-    def model_str(self, obj: User):
+    def user_link(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
         return mark_safe(f'<a href="{link}">{escape(obj.fullname + " (" + obj.user.__str__() + ")")}</a>')
 
-    model_str.short_description = 'Användare'
-    model_str.admin_order_field = 'user' # Make row sortable
+    user_link.short_description = 'Användare'
+    user_link.admin_order_field = 'user' # Make row sortable
 
     list_display = (
-        'model_str',
+        'user_link',
         'phone_number',
         'phone_verified',
         'email_verified'

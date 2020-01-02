@@ -5,7 +5,7 @@ import { deserialize } from "class-transformer";
 import DataProvider from "../components/DataProvider";
 import { userContext } from "../components/UserContext";
 import { ActivityDelistRequest, PagedADR } from '../Models';
-import { pageItems } from "./MemberHomeView";
+import { pageItems } from "./MyActivitiesPage";
 import { cancelADR, rejectADR, approveADR, deleteADR } from "../logic/ADRActions"
 import { useParams } from "react-router-dom";
 
@@ -92,7 +92,7 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
     )
 }
 
-export const ActivityDelistRequestView = () => {
+export const ActivityDelistRequestPage = () => {
     const { id } = useParams();
     const user = useContext(userContext);
 

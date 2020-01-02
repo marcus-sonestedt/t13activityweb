@@ -5,9 +5,9 @@ import DataProvider from "../components/DataProvider";
 import { PagedT13Events } from "../Models";
 import { deserialize } from "class-transformer";
 import { userContext } from "../components/UserContext";
-import './WelcomeView.css'
+import './WelcomePage.css'
 
-export const Welcome = () => {
+export const WelcomePage = () => {
     const [events, setEvents] = useState(new PagedT13Events());
     const user = useContext(userContext);
 
@@ -62,4 +62,4 @@ export const WelcomeText = () => (
 );
 
 
-export default Welcome;
+export default WelcomePage;

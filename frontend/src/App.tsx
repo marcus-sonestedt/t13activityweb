@@ -7,19 +7,19 @@ import CookieConsent from "react-cookie-consent";
 
 
 import { Navigation } from './components/Navigation'
-import { MemberHomeView } from './views/MemberHomeView'
-import { Welcome } from './views/WelcomeView'
-import { EventView } from './views/EventView'
+import { MyActiviesPage } from './pages/MyActivitiesPage'
+import { WelcomePage } from './pages/WelcomePage'
+import { EventPage } from './pages/EventPage'
 import { NotFound } from './components/NotFound'
-import { ActivityView } from './views/ActivityView';
-import { EventTypeView } from './views/EventTypeView';
-import { ActivityTypeView } from './views/ActivityTypeView';
-import { MemberView } from './views/MemberView';
-import { ActivityDelistRequestView } from './views/ActivityDelistRequestsView';
-import { EventTypesView } from './views/EventTypesView';
-import { ActivityTypesView } from './views/ActivityTypesView';
-import FAQView from './views/FAQView';
-import ProfileView from './views/ProfileView';
+import { ActivityPage} from './pages/ActivityPage';
+import { EventTypePage } from './pages/EventTypePage';
+import { ActivityTypePage } from './pages/ActivityTypePage';
+import { MemberPage } from './pages/MemberPage';
+import { ActivityDelistRequestPage } from './pages/ADRPage';
+import { EventTypesPage } from './pages/EventTypesPage';
+import { ActivityTypesPage } from './pages/ActivityTypesPage';
+import FAQPage from './pages/FAQPage';
+import ProfilePage from './pages/ProfilePage';
 import { UserContext, UserProvider } from './components/UserContext';
 
 export const App = () => {
@@ -60,29 +60,29 @@ export const App = () => {
         <main>
           <Switch>
             <Redirect exact from="/" to="/frontend/" />
-            <Route path="/frontend/event/:id/:name" component={EventView} />
-            <Route path="/frontend/activity/:id/:name" component={ActivityView} />
-            <Route path="/frontend/event_type/:id/:name" component={EventTypeView} />
-            <Route path="/frontend/activity_type/:id/:name" component={ActivityTypeView} />
+            <Route path="/frontend/event/:id/:name" component={EventPage} />
+            <Route path="/frontend/activity/:id/:name" component={ActivityPage} />
+            <Route path="/frontend/event_type/:id/:name" component={EventTypePage} />
+            <Route path="/frontend/activity_type/:id/:name" component={ActivityTypePage} />
 
-            <Route path="/frontend/activitytypes" component={ActivityTypesView} />
-            <Route path="/frontend/eventtypes" component={EventTypesView} />
-            <Route path="/frontend/faq/:id" component={FAQView} />
-            <Route path="/frontend/faq" component={FAQView} />
+            <Route path="/frontend/activitytypes" component={ActivityTypesPage} />
+            <Route path="/frontend/eventtypes" component={EventTypesPage} />
+            <Route path="/frontend/faq/:id" component={FAQPage} />
+            <Route path="/frontend/faq" component={FAQPage} />
 
-            <Route path="/frontend/member/:id" component={MemberView} />
-            <Route path="/frontend/delistrequest/:id" component={ActivityDelistRequestView} />
-            <Route path="/frontend/delistrequest" component={ActivityDelistRequestView} />
+            <Route path="/frontend/member/:id" component={MemberPage} />
+            <Route path="/frontend/delistrequest/:id" component={ActivityDelistRequestPage} />
+            <Route path="/frontend/delistrequest" component={ActivityDelistRequestPage} />
 
             {!state.isLoggedIn ?
               <>
-                <Route path="/frontend/welcome" component={Welcome} />
+                <Route path="/frontend/welcome" component={WelcomePage} />
                 <Redirect to="/frontend/welcome" />
               </>
               :
               <>
-                <Route path="/frontend/profile" component={ProfileView} />
-                <Route path="/frontend/home" component={MemberHomeView} />
+                <Route path="/frontend/profile" component={ProfilePage} />
+                <Route path="/frontend/home" component={MyActiviesPage} />
                 <Redirect exact from="/frontend/" to="/frontend/home" />
                 <Redirect exact from="/frontend/welcome" to="/frontend/home" />
               </>

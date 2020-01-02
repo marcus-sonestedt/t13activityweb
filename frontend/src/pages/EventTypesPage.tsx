@@ -3,10 +3,10 @@ import { Container, Row, Col, Table, Pagination } from "react-bootstrap"
 import { PagedEventTypes, T13EventType } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
-import { pageItems } from "./MemberHomeView";
+import { pageItems } from "./MyActivitiesPage";
 import "../components/Table.css"
 
-export const EventTypesView = () => {
+export const EventTypesPage = () => {
     const [data, setData] = useState<PagedEventTypes>(new PagedEventTypes());
     const [page, setPage] = useState(1);
 
@@ -49,4 +49,4 @@ export const EventTypesView = () => {
         </Row>
     </Container>
 }
-export default EventTypesView;
+export default EventTypesPage;

@@ -7,7 +7,7 @@ import '../components/Table.css'
 import Cookies from 'universal-cookie';
 import { userContext } from "../components/UserContext";
 
-export const EventView = () => {
+export const EventPage = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
     const [activities, setActivities] = useState<Activity[]>([]);
 
@@ -180,4 +180,4 @@ export const EventView = () => {
     )
 }
 
-export default EventView;
+export default EventPage;

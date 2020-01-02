@@ -1,7 +1,7 @@
 import { Activity, PagedActivities } from "../Models";
 import React, { useState, useContext, useMemo, useCallback } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { ActivityTypeComponent } from "./ActivityTypeView";
+import { ActivityTypeComponent } from "./ActivityTypePage";
 import { useParams } from "react-router";
 import { deserialize } from "class-transformer";
 import DataProvider from "../components/DataProvider";
@@ -38,7 +38,7 @@ export const ActivityComponent = (props: { model: Activity | null }) => {
     )
 }
 
-export const ActivityView = () => {
+export const ActivityPage = () => {
     const { id } = useParams();
     const [model, setModel] = useState<Activity | null>(null);
     const url = useMemo(() => id === undefined ? '' : Activity.apiUrlFromId(id), [id]);
@@ -66,4 +66,4 @@ export const ActivityView = () => {
 
 }
 
-export default ActivityView;
+export default ActivityPage;
