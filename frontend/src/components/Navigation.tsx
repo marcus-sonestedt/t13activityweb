@@ -16,10 +16,19 @@ export const Navigation = () => {
             <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
                     {!user.isLoggedIn ? null :
-                        <Nav.Link href="/frontend/delistrequests">Avbokningsförfrågningar</Nav.Link>
+                        <Nav.Link href="/frontend/delistrequests">
+                            Avbokningsförfrågningar
+                            ({user.myDelistRequests}
+                            {!user.isStaff ? null : `, ${user.unansweredDelistRequests}`}
+                            <span className='text-tooltip'>
+                                Första siffran är antal av dina egna förfrågningar, 
+                                andra är totalt antal obesvarade från alla medlemmar.
+                            </span>
+                            )
+                        </Nav.Link>
                     }
-                    {!user.isStaff ? null
-                        : <Nav.Link href="/admin">Administrera</Nav.Link>
+                    {!user.isStaff ? null :
+                        <Nav.Link href="/admin">Administrera</Nav.Link>
                     }
                     <NavDropdown title="Info" id="basic-nav-dropdown">
                         <NavDropdown.Item href="/frontend/faq">Frågor &amp; svar</NavDropdown.Item>

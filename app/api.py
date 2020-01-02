@@ -27,6 +27,7 @@ from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
 
 logger = logging.getLogger(__name__)
 
+
 class ClearAuthToken(ObtainAuthToken):
     permission_classes = [IsAuthenticated]
     schema = None
@@ -83,25 +84,49 @@ class IsLoggedIn(APIView):
     @method_decorator(vary_on_cookie)
     @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
     def get(self, request, format=None):
-        try:
-            member = Member.objects.get(user=request.user.id)
-        except Member.DoesNotExist:
-            member = None
-
-        user_id = request.user.id if request.user.is_authenticated else None
+        notifications = []
         config = apps.get_app_config('app')
 
-        return Response({
+        response_dict = {
             'isLoggedIn': request.user.is_authenticated,
             'isStaff': request.user.is_staff,
-            'userId': user_id,
-            'memberId': member.id if member else None,
-            'fullname': member.fullname if member else None,
             'settings': {
                 'minSignups': config.MIN_ACTIVITY_SIGNUPS,
                 'latestBookableDate': config.LATEST_BOOKABLE_DATE
-            }
+            },
+            'notifications': notifications
+        }
+
+        try:
+            member = Member.objects.get(user=request.user.id)
+
+            response_dict['myDelistRequests'] = \
+                ActivityDelistRequest.objects.filter(member=member).count()
+
+            if request.user.is_staff:
+                response_dict['unansweredDelistRequests'] = \
+                    ActivityDelistRequest.objects.filter(approved=None).exclude(member=member).count()
+
+            if not member.phone_verified:
+                notifications.append({
+                    'message': 'Ditt telefonnummer är inte verifierat än',
+                    'link': '/frontend/verify/phone'})
+
+            if not member.email_verified:
+                notifications.append({
+                    'message': 'Din emailaddress är inte verifierad än',
+                    'link': '/frontend/verify/email'})
+
+        except Member.DoesNotExist:
+            member = None
+
+        response_dict.update({
+            'userId': request.user.id if request.user.is_authenticated else None,
+            'memberId': member.id if member else None,
+            'fullname': member.fullname if member else None,
         })
+
+        return Response(response_dict)
 
 
 class EventActivities(generics.ListAPIView):
@@ -183,8 +208,6 @@ class ActivityTypeList(generics.ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-
-
 class ActivityEnlist(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
@@ -221,7 +244,8 @@ url_patterns = [
 
     path('myactivities', MyActivitiesList.as_view()),
     re_path(r'^activity/(?P<id>[0-9]+)?', ActivityList.as_view()),
-    re_path(r'event_activities/(?P<event_id>[0-9]+)', EventActivities.as_view()),
+    re_path(
+        r'event_activities/(?P<event_id>[0-9]+)', EventActivities.as_view()),
 
     path('events', EventList.as_view()),
     re_path(r'events/(?P<upcoming>upcoming)', EventList.as_view()),
