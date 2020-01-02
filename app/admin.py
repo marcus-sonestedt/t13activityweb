@@ -39,13 +39,16 @@ class MemberAdmin(admin.ModelAdmin):
 
     def model_str(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
-        return mark_safe(f'<a href="{link}">{escape(obj.user.__str__())}</a>')
+        return mark_safe(f'<a href="{link}">{escape(obj.fullname + " (" + obj.user.__str__() + ")")}</a>')
 
     model_str.short_description = 'Användare'
     model_str.admin_order_field = 'user' # Make row sortable
 
     list_display = (
         'model_str',
+        'phone_number',
+        'phone_verified',
+        'email_verified'
     )    
 
 
