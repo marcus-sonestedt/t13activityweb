@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from app.models import Attachment, Member, Event, EventType, Activity, ActivityType, ActivityDelistRequest
 
+
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
@@ -18,6 +19,7 @@ class EventTypeSerializer(serializers.ModelSerializer):
         model = EventType
         fields = '__all__'
 
+
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()
     coordinators = MemberSerializer()
@@ -27,10 +29,12 @@ class EventSerializer(serializers.ModelSerializer):
         fields = [x.name for x in Event._meta.get_fields()] + \
             ['activities_count', 'activities_available_count']
 
+
 class ActivityTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityType
         fields = ('name', 'description', 'image', 'id')
+
 
 class EventActivitySerializer(serializers.ModelSerializer):
     type = ActivityTypeSerializer(required=False)
@@ -41,15 +45,19 @@ class EventActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = [x.name for x in Activity._meta.get_fields()] + ['bookable', 'delist_requested']
+        fields = [x.name for x in Activity._meta.get_fields()] + \
+            ['bookable', 'delist_requested']
+
 
 class ActivitySerializer(EventActivitySerializer):
     event = EventSerializer(required=False)
+
 
 class ActivityDelistRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityDelistRequest
         fields = '__all__'
+
 
 class ActivityDelistRequestDeepSerializer(serializers.ModelSerializer):
     member = MemberSerializer()

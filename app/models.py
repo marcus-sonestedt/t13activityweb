@@ -27,15 +27,21 @@ class Member(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
-    fullname = models.CharField(max_length=120, blank=True)
-    email = models.EmailField(blank=True)
-
+    
     phone_number = models.CharField(max_length=20, blank=True)
     phone_verified = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
 
     comment = models.TextField(blank=True)
     membercard_number = models.CharField(max_length=20, blank=True)
+
+    @property
+    def fullname(self):
+        return f"{self.user.first_name} {self.user.last_name}"        
+
+    @property
+    def email(self):
+        return self.user.email
 
     class Meta:
         order_with_respect_to = 'user'
@@ -43,17 +49,7 @@ class Member(models.Model):
         verbose_name_plural = 'Medlemmar'
 
     def __str__(self):
-        if self.user:
-            self.fullname = f"{self.user.first_name} {self.user.last_name}"
-        return f"{self.fullname or 'Member'} ({self.user.email})"
-
-    def save(self, *args, **kwargs):
-        if self.user:
-            self.fullname = f"{self.user.first_name} {self.user.last_name}"
-            self.email = self.user.email
-
-        super(Member, self).save(*args, **kwargs)
-
+        return f"{self.fullname} ({self.user.email})"
 
 @receiver(post_save, sender=User)
 def user_saved(sender, instance, created, **kwargs):
