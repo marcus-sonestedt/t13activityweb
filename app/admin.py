@@ -1,5 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+
+from django.urls import reverse
+from django.utils.html import escape, mark_safe
 
 from app import models
 
@@ -13,11 +17,14 @@ def unregister(model):
 
 class MemberInline(admin.StackedInline):
     model = models.Member
-
-@unregister(User)
+    can_delete = False
+    verbose_name_plural = 'Medlem'
+    fk_name = 'user'
+    readonly_fields = ['user']
+    
 @admin.register(User)
-class UserWithMemberAdmin(admin.ModelAdmin):
-    model = User
+@unregister(User)
+class UserWithMemberAdmin(UserAdmin):
     inlines = [MemberInline]
 
     def get_inline_instances(self, request, obj=None):
@@ -28,7 +35,18 @@ class UserWithMemberAdmin(admin.ModelAdmin):
 
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ['user']
+
+    def model_str(self, obj: User):
+        link = reverse("admin:auth_user_change", args=[obj.user_id])
+        return mark_safe(f'<a href="{link}">{escape(obj.user.__str__())}</a>')
+
+    model_str.short_description = 'Användare'
+    model_str.admin_order_field = 'user' # Make row sortable
+
+    list_display = (
+        'model_str',
+    )    
 
 
 @admin.register(models.EventType)
