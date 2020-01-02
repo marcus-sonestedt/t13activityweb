@@ -17,6 +17,7 @@ import logging
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.staticfiles.finders import AppDirectoriesFinder
 
+
 logger = logging.getLogger(__name__)
 
 def get_env_value(env_variable):
@@ -231,7 +232,7 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-        },
+         },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
@@ -242,6 +243,7 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
         },
         'django.request': {
             'handlers': ['mail_admins'],

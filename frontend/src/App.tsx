@@ -70,7 +70,8 @@ export const App = () => {
             <Route path="/frontend/faq" component={FAQView} />
 
             <Route path="/frontend/member/:id" component={MemberView} />
-            <Route path="/frontend/delistrequests" component={ActivityDelistRequestView} />
+            <Route path="/frontend/delistrequest/:id" component={ActivityDelistRequestView} />
+            <Route path="/frontend/delistrequest" component={ActivityDelistRequestView} />
 
             {!state.isLoggedIn ?
               <>

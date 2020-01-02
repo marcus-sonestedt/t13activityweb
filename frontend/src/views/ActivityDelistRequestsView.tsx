@@ -1,12 +1,32 @@
 import React, { useState, useContext, useCallback, useMemo } from "react"
-import { Container, Row, Col, Table, Button, Pagination } from "react-bootstrap";
+import { Container, Row, Col, Table, Button, Pagination, Badge } from "react-bootstrap";
 import { deserialize } from "class-transformer";
 
 import DataProvider from "../components/DataProvider";
 import { userContext } from "../components/UserContext";
 import { ActivityDelistRequest, PagedADR } from '../Models';
 import { pageItems } from "./MemberHomeView";
-import { cancelADR, rejectADR, approveADR } from "../logic/ADRActions"
+import { cancelADR, rejectADR, approveADR, deleteADR } from "../logic/ADRActions"
+import { useParams } from "react-router-dom";
+
+export const RequestAdrButton = (props: {
+    onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void),
+    disabled: boolean
+}) => {
+    const user = useContext(userContext);
+
+    return (
+        <Button variant='outline-danger' size='sm' disabled={props.disabled} onClick={props.onClick}>
+            Avboka?
+            <div className='text-tooltip'>
+                {!props.disabled
+                    ? "Skapa en förfrågan om att att avboka dig från uppgiften"
+                    : "Du kan inte begära att avboka dig då du skulle få mindre än "
+                    + user.settings.minSignups + " uppgifter om det godkändes."}
+            </div>
+        </Button>
+    );
+}
 
 export const CancelAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) }) =>
     <Button variant='outline-warning' size='sm' onClick={props.onClick}>
@@ -15,6 +35,27 @@ export const CancelAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButt
             Avbryt din begäran att avboka och återta dig uppgiften.
         </div>
     </Button>
+
+export const DeleteAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) }) =>
+    <Button variant='outline-secondary' size='sm' onClick={props.onClick}>
+        Radera
+        <div className='text-tooltip'>
+            Radera denna avbegäran.
+        </div>
+    </Button>
+
+const AdrStatusBadge = (props: { model: ActivityDelistRequest }) => {
+    const { model } = props;
+    const approvedText = model.approved === true ? 'JA'
+        : model.approved === false ? 'NEJ'
+            : "-";
+
+    const approvedVariant = model.approved === true ? 'success'
+        : model.approved === false ? 'danger'
+            : 'dark';
+
+    return <Badge variant={approvedVariant}>{approvedText}</Badge>
+}
 
 export const ActivityDelistRequestComponent = (props: { model: ActivityDelistRequest | null }) => {
     const { model } = props;
@@ -26,34 +67,41 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
         return <p>Datafel, saknar uppgift</p>
 
     const approver = model.approver === null ? null :
-        <span>av <a href={model.approver.url()}>{model.approver.fullname}</a></span>
+        <span>
+            /<a href={model.approver.url()}>{model.approver.fullname}</a>
+        </span>
 
-    const approved = model.approved === true ? "JA"
-        : model.approved === false ? "NEJ"
-            : "Ej besvarad";
 
     return (
         <>
-            <h4>Aktivitet</h4><p>{model.activity.event.name}</p>
-            <h4>Uppgift</h4><p>{model.activity.name}</p>
-            <h4>Godkänd</h4><p>{approved} {approver}</p>
-            <h4>Anledning</h4><p>{model.reason}</p>
+            <h5>Aktivitet</h5>
+            <p>{model.activity.event.name}</p>
+            <h5>Uppgift</h5>
+            <p>{model.activity.name}</p>
+            <h5>Avbokningsanledning</h5>
+            <p>{model.reason}</p>
+            <h5>Status <AdrStatusBadge model={model} /></h5>
+            <div><p>{model.reject_reason}<br />{approver}</p></div>
         </>
     )
 }
 
 export const ActivityDelistRequestView = () => {
+    const { id } = useParams();
+    const user = useContext(userContext);
+
     const [currentReq, setCurrentReq] = useState<ActivityDelistRequest | null>(null);
     const [allRequests, setAllRequests] = useState<PagedADR | null>(null);
     const [page, setPage] = useState(1);
-    const user = useContext(userContext);
     const [reload, setReload] = useState(1);
 
+    const currentId = currentReq?.id.toString() ?? id;
     const incReload = useCallback(() => setReload(reload + 1), [reload])
     const reloadHandler = useCallback((data: PagedADR) => {
-        if (reload >= 0) // just to force reload of data
+        if (reload >= 0)
             setAllRequests(data);
-    }, [reload]);
+        setCurrentReq(data.results.find(r => r.id.toString() === currentId) ?? null);
+    }, [reload, currentId]);
 
     const myUnansweredRequests = useMemo(() =>
         allRequests?.results.filter(r => r.member.id === user.memberId && r.approved === null), [allRequests, user]);
@@ -87,22 +135,24 @@ export const ActivityDelistRequestView = () => {
                     }, incReload), 10);
             }
 
+            const deleteClicked = () => deleteADR(model).then(() => window.location.reload());
+
             return <tr key={model.id} onClick={e => rowClicked(e, model)}
                 className={'clickable-row ' + (model === currentReq ? 'active' : undefined)}>
                 <td><a href={model.activity.event.url()}>{model.activity.event.name}</a></td>
                 <td><a href={model.activity.url()}>{model.activity.name}</a></td>
                 <td>{model.activity.event.date()}</td>
-                <td>{model.approved === null ? null : (model.approved ? "JA" : "NEJ")}</td>
-                <td>{model.member.id === user.memberId
+                <td><AdrStatusBadge model={model} /></td>
+                <td>{model.member.id === user.memberId && model.approved !== true
                     ? <CancelAdrButton onClick={cancelClicked} />
-                    : null}
+                    : <DeleteAdrButton onClick={deleteClicked} />}
                 </td>
             </tr>
         }
 
         const Separator = (props: { title: string }) =>
             <tr><td colSpan={5}>
-                <h4>{props.title}</h4>
+                <h5>{props.title}</h5>
             </td></tr>
 
         return <Table hover striped>
@@ -111,7 +161,7 @@ export const ActivityDelistRequestView = () => {
                     <th>Aktivitet</th>
                     <th>Uppgift</th>
                     <th>Datum</th>
-                    <th>Godkänd</th>
+                    <th>Status</th>
                     <th>Åtgärd</th>
                 </tr>
             </thead>
@@ -153,21 +203,11 @@ export const ActivityDelistRequestView = () => {
                         {(currentReq === null || !user.isStaff) ? null :
                             <div className='align-right'>
                                 <span className="spacer">&nbsp;</span>
-                                <Button variant='success' onClick={() => approveADR(currentReq, user).then(incReload)}>
-                                    Godkänn
-                                    <span className='text-tooltip place-left'>
-                                        Godkänn avbokningen och frigör medlemmen från sitt åtagande.
-                                        Uppgiften kommer inte ha någon medlem tilldelad efter detta.
-                                    </span>
-                                    </Button>
+                                <ApproveAdrButton onClick={() => approveADR(currentReq, user).then(incReload)}
+                                    disabled={currentReq.approved === true} />
                                 <span className="spacer">&nbsp;</span>
-                                <Button variant='danger' onClick={() => rejectADR(currentReq, user).then(incReload)}>
-                                    Avvisa
-                                    <span className='text-tooltip place-left'>
-                                        Avvisa denna avbokningsförfrågan. Du behöver ange en anledning
-                                        till varför du inte godtar anledningen som medlemmen angivit.
-                                    </span>
-                                    </Button>
+                                <RejectAdrButton onClick={() => rejectADR(currentReq, user).then(incReload)}
+                                    disabled={currentReq.approved === false} />
                             </div>
                         }
                     </div>
@@ -176,3 +216,21 @@ export const ActivityDelistRequestView = () => {
         </Container>
     )
 }
+
+const ApproveAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>
+    <Button variant='success' onClick={props.onClick} disabled={props.disabled}>
+        Godkänn
+        <div className='text-tooltip place-left'>
+            Godkänn avbokningen och frigör medlemmen från sitt åtagande.
+            Uppgiften kommer inte ha någon medlem tilldelad efter detta.
+        </div>
+    </Button>
+
+const RejectAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>
+    <Button variant='danger' onClick={props.onClick} disabled={props.disabled}>
+        Avvisa
+        <div className='text-tooltip place-left'>
+            Avvisa denna avbokningsförfrågan. Du behöver ange en anledning
+            till varför du inte godtar anledningen som medlemmen angivit.
+        </div>
+    </Button>

@@ -43,7 +43,7 @@ def adr_approved(adr):
     log.info(f"ADR {adr} has been approved, sending email")
 
     send_mail('Avbokning godkänd',
-        f'''Hej {adr.assigned.fullname}
+        f'''Hej {adr.member.fullname}
         
         Din önskan om avbokning från {adr.activity}
         har blivit godkänd av {adr.approver.fullname}.
@@ -51,7 +51,7 @@ def adr_approved(adr):
         mvh
         /Team13 aktivitetswebb''',
         settings.DEFAULT_FROM_EMAIL,
-        [adr.assigned.user.email])
+        [adr.member.user.email])
 
     sms_target = adr.member.phone_number
 
@@ -68,7 +68,7 @@ def adr_rejected(adr):
     log.info(f"ADR {adr} has been rejected, sending email")
 
     send_mass_mail('Avbokning ej godkänd',
-            f'''Hej {adr.assigned.fullname},
+            f'''Hej {adr.member.fullname},
             
             Din önskan om avbokning från {adr.activity} 
             har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
@@ -79,7 +79,7 @@ def adr_rejected(adr):
             mvh
             /Team13 aktivitetswebb''',
             settings.DEFAULT_FROM_EMAIL,
-            [adr.assigned.user.email, adr.approved_by.user.email])
+            [adr.member.user.email, adr.approved_by.user.email])
 
     sms_target = adr.member.phone_number
 

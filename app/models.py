@@ -11,9 +11,12 @@ from django.apps import apps
 from django.core.mail import mail_managers, send_mail, send_mass_mail
 from django.conf import settings
 
+import logging
 import datetime
 
 from app import events
+
+logger = logging.getLogger(__name__)
 
 class RuleViolationException(BaseException):
     '''thrown when a model change violates rules set by the club'''
@@ -27,7 +30,7 @@ class Member(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    
+
     phone_number = models.CharField(max_length=20, blank=True)
     phone_verified = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
@@ -227,7 +230,7 @@ class ActivityDelistRequest(models.Model):
     reason = models.TextField(blank=True)
     approved = models.BooleanField(default=None, null=True, blank=True)
     approver = models.ForeignKey(Member, on_delete=models.SET_NULL,
-                                 blank=True, null=True, related_name='approvers')
+                                 blank=True, null=True, related_name='approvers')                                     
     reject_reason = models.TextField(blank=True)
 
     def __str__(self):
@@ -259,14 +262,14 @@ class ActivityDelistRequest(models.Model):
 
 @receiver(post_save, sender=ActivityDelistRequest)
 def save_activity_delist_request(sender, instance, created, **kwargs):
-    assigned = instance.activity.assigned
-
-    if assigned is None or 'approved' not in kwargs:
+    if instance.activity.assigned is None:
         return
 
-    if instance.approved is True:
+    if instance.approved is True and instance.activity.assigned == instance.member:
+        logger.info(f"Removing {instance.member} from {instance.activity}")
         instance.activity.assigned = None
         instance.activity.save()
         events.adr_approved(instance)
     elif instance.approved is False:
+        logger.info(f"Rejecting {instance.member} delist request from {instance.activity}")
         events.adr_rejected(instance)

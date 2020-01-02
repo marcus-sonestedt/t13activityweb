@@ -1,5 +1,5 @@
 import { useParams } from "react-router"
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Member, PagedMembers } from "../Models";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import DataProvider from "../components/DataProvider";
@@ -9,6 +9,7 @@ import NotFound from "../components/NotFound";
 export const MemberView = () => {
     const { id } = useParams();
     const [member, setMember] = useState<Member | null>(null)
+    const setMemberCallback = useCallback((data:PagedMembers) => setMember(data.results[0]), []);
 
     if (id === undefined)
         return <NotFound/>
@@ -20,12 +21,12 @@ export const MemberView = () => {
                     <DataProvider<PagedMembers>
                         url={Member.apiUrl(id)}
                         ctor={t => deserialize(PagedMembers, t)}
-                        onLoaded={x => setMember(x.results[0])}>
+                        onLoaded={setMemberCallback}>
                         {member === null ? null :
                             <>
                                 <h1>{member.fullname}</h1>
-                                <h3>{member.email}</h3>
-                                <h3>{member.phone}</h3>
+                                <h4>Email: <a href={`mailto:${member.email}`}>{member.email ?? '-'}</a></h4>
+                                <h4>Telefon: {member.phone ?? '-'}</h4>
                                 {member.image_url === null ? null :
                                     <Image src={member.image_url} />
                                 }

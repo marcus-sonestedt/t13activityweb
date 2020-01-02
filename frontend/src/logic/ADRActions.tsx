@@ -72,7 +72,7 @@ export async function cancelADRByActivity(activity_id: string) {
             const data = deserialize(ActivityDelistRequest, json);
             return cancelADR(data);
         }, handler), handler);
-        
+
 }
 
 export async function cancelADR(model: ActivityDelistRequest) {
@@ -89,13 +89,30 @@ export async function cancelADR(model: ActivityDelistRequest) {
         .then(handler, handler);
 };
 
+export async function deleteADR(model: ActivityDelistRequest) {
+    if (model.approved !== true) {
+        await cancelADR(model);
+        return;
+    }
+
+    const handler = handleResponse('radera', model.apiUrl())
+
+    await fetch(model.apiUrl(),
+        {
+            method: 'DELETE',
+            headers: getJsonHeaders(),
+        })
+        .then(handler, handler);
+};
+
+
 export const approveADR = async (model: ActivityDelistRequest, user: UserContext) => {
     if (!user.isStaff) {
         console.error("Cannot approve ADR unless user is staff")
         return;
     }
 
-    if (!window.confirm(`Godkänn avbokningsförfrågan för\n${model}?`)) {
+    if (!window.confirm(`Godkänn avbokningsförfrågan från ${model.member.fullname}\nför uppgiften '${model.activity.name}'?`)) {
         return;
     }
 
@@ -103,11 +120,11 @@ export const approveADR = async (model: ActivityDelistRequest, user: UserContext
 
     await fetch(model.apiUrl(),
         {
-            method: 'UPDATE',
+            method: 'PATCH',
             headers: getJsonHeaders(),
             body: JSON.stringify({
                 approved: true,
-                approved_by: user.memberId
+                approver: user.memberId
             })
         })
         .then(handler, handler);
@@ -119,7 +136,7 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
         return;
     }
 
-    var rejectReason = prompt(`Ange anledning att avvisa avbokningsförfrågan för\n${model}?`);
+    var rejectReason = prompt(`Ange din anledning att avvisa ${model.member.fullname}s\navbokningsförfrågan för uppgiften '${model.activity.name}'?`);
     if (rejectReason === null) {
         return;
     }
@@ -128,11 +145,11 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
 
     await fetch(model.apiUrl(),
         {
-            method: 'UPDATE',
+            method: 'PATCH',
             headers: getJsonHeaders(),
             body: JSON.stringify({
                 approved: false,
-                approved_by: user.memberId,
+                approver: user.memberId,
                 reject_reason: rejectReason
             })
         })

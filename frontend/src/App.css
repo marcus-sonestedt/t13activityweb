@@ -41,6 +41,7 @@ footer {
 .text-tooltip {
     display: block;
     position: absolute;
+    visibility: hidden;
     padding: 10px;
     margin-left: 5em;
     min-width: 20em;

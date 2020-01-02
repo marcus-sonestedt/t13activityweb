@@ -1,39 +1,43 @@
 import React, { useContext, useMemo } from "react";
-import { Button, Table } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 
-import { Activity } from '../Models'
+import { Activity, ActivityDelistRequest } from '../Models';
 import { userContext } from "./UserContext"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
+import { CancelAdrButton, RequestAdrButton } from '../views/ActivityDelistRequestsView';
 import './Table.css'
-import { CancelAdrButton } from '../views/ActivityDelistRequestsView';
 
-export class MyActivitiesProps {
-    values: Activity[] = [];
-    reload: () => void = () => { };
-}
-
-export const MyActivitiesTable = (props: MyActivitiesProps) => {
+export const MyActivitiesTable = (props: {
+    values: Activity[],
+    reload: () => void
+}) => {
     const { values, reload } = props;
     const history = useHistory();
     const user = useContext(userContext)
     const today = new Date();
     const bookedCount = useMemo(() => values.filter(a => !a.delist_requested).length, [values])
     const completedCount = useMemo(() => values.filter(a => a.completed === true).length, [values])
-
     const canRequestUnlist = bookedCount > user.settings.minSignups
 
-    const buttonClick = (f: () => Promise<void>) =>
-        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            e.stopPropagation();
-            f().then(reload);
-        }
+    const buttonClick = (f: () => Promise<void>) => (e: any) => {
+        e.stopPropagation();
+        f().then(reload);
+    }
+
 
     const renderRow = (activity: Activity) => {
         const eventInPast = activity.event.start_date <= today;
+        const rowClick = (e: any) => {
+            if (e.target?.tagName === 'A')
+                return
+
+            e.preventDefault();
+            history.push(activity.url());
+        }
 
         return (
-            <tr key={activity.id} className='clickable-row' onClick={() => history.push(activity.url())}>
+            <tr key={activity.id} className='clickable-row' onClick={rowClick}>
                 <td><a href={activity.url()}>{activity.name}</a></td>
                 <td><a href={activity.event.url()}>{activity.event.name}</a></td>
                 <td className='nowrap'>
@@ -45,19 +49,17 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                         : activity.completed === true
                             ? <span>Utförd <span role="img" aria-label="thumbsup">👍</span><span className="text-tooltip">Bra jobbat!</span></span>
                             : <span>Missad <span role="img" aria-label="ohno">😨</span><span className="text-tooltip">Du missade din uppgift!</span></span>) :
-                    (!activity.delist_requested ?
-                        <Button variant='outline-danger' size='sm' disabled={!canRequestUnlist}
-                            onClick={buttonClick(() => createADR(activity, user))}>
-                            Avboka?
-                            <span className='text-tooltip'>
-                                {canRequestUnlist ?
-                                    "Begär att avboka uppgiften" :
-                                    "Du kan inte begära att avboka då du skulle få mindre än " + user.settings.minSignups + " uppgifter om det godkändes"}
-                            </span>
-                        </Button>
-                        : <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))}/>
+                    (activity.delist_requests.length === 0
+                        ? <span>Bokad</span>
+                        : <a href={ActivityDelistRequest.urlForId(activity.delist_requests[0])}>Avbokningsfråga inlagd</a>
                     )
                 }
+                </td>
+                <td>
+                    {activity.delist_requests.length === 0
+                        ? <RequestAdrButton onClick={buttonClick(() => createADR(activity, user))} disabled={!canRequestUnlist} />
+                        : <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
+                    }
                 </td>
             </tr>
         );
@@ -79,6 +81,7 @@ export const MyActivitiesTable = (props: MyActivitiesProps) => {
                         <th>Aktivitet</th>
                         <th>Tidpunkt</th>
                         <th>Status</th>
+                        <th>Åtgärd</th>
                     </tr>
                 </thead>
                 <tbody>

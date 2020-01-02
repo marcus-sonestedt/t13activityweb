@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import { Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap'
 import './Navigation.css'
 import { userContext } from "./UserContext";
 
@@ -16,15 +16,17 @@ export const Navigation = () => {
             <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
                     {!user.isLoggedIn ? null :
-                        <Nav.Link href="/frontend/delistrequests">
+                        <Nav.Link href="/frontend/delistrequest">
                             Avbokningsförfrågningar
-                            ({user.myDelistRequests}
-                            {!user.isStaff ? null : `, ${user.unansweredDelistRequests}`}
-                            <span className='text-tooltip'>
-                                Första siffran är antal av dina egna förfrågningar.<br/>
-                                Den andra är totalt antal obesvarade från alla medlemmar.
-                            </span>
-                            )
+                            <span className='spacer'/>
+                            <Badge variant='primary'>
+                                {user.myDelistRequests}
+                                {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
+                                <div className='text-tooltip' style={{fontWeight:'normal'}}>
+                                    Första siffran är antal av dina egna förfrågningar.<br />
+                                    Den andra är totalt antal obesvarade från alla medlemmar.
+                                </div>                                
+                            </Badge>
                         </Nav.Link>
                     }
                     {!user.isStaff ? null :

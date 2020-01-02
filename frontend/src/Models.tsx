@@ -16,7 +16,7 @@ export interface IdValue {
 export class Member implements IdValue {
     id: string = "";
     fullname: string = "";
-    phone: string = "";
+    phone?: string;
     email: string = "";
     image_url: string | null = null;
 
@@ -56,8 +56,7 @@ export class Activity implements IdValue {
     @Type(() => Date)
     assigned_at: Date | null = null;
 
-    @Type(() => ActivityDelistRequest)
-    delistRequest: ActivityDelistRequest | null = null;
+    delist_requests: string[] = [];
 
     delist_requested: boolean = false;
 
@@ -159,6 +158,7 @@ export class PagedT13Events extends PagedValues<T13Event> {
 }
 
 export class ActivityDelistRequest implements IdValue {
+
     constructor(member: Member, activity: Activity) {
         this.member = member;
         this.activity = activity;
@@ -173,18 +173,21 @@ export class ActivityDelistRequest implements IdValue {
     activity: Activity;
 
     reason: string = '';
+    reject_reason?: string;
 
     @Type(() => Member)
     approver: Member | null = null;
 
     approved: boolean | null = null;
 
-    url = () => `/frontend/delistrequest/${this.id}`
-    adminUrl = () => `/admin/app/delistrequest/${this.id}`
-    apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id)
-    static apiUrlForId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/${id}`
-    static apiUrlForActivityId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/activity/${id}`
-    static apiUrlAll = () => `/api/activity_delist_request`
+    url = () => ActivityDelistRequest.urlForId(this.id);
+    adminUrl = () => `/admin/app/delistrequest/${this.id}`;
+    apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id);
+
+    static urlForId = (id:string) => `/frontend/delistrequest/${id}`;
+    static apiUrlForId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/${id}`;
+    static apiUrlForActivityId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/activity/${id}`;
+    static apiUrlAll = () => `/api/activity_delist_request`;
 }
 
 export class PagedADR extends PagedValues<ActivityDelistRequest>

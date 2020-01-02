@@ -3,19 +3,17 @@
     max-width: 100%;
 }
 
-.table-container :matches(h1,h2,h3)
-{
+.table-container :matches(h1, h2, h3) {
     width: 100%
 }
 
 td {
     white-space: no-wrap;
     color: white;
-    background-color:#0f0f18;
+    background-color: #0f0f18;
 }
 
-.table-count
-{
+.table-count {
     position: absolute;
     right: .5em;
 }
@@ -24,7 +22,7 @@ th {
     white-space: no-wrap;
     color: white;
     font-weight: bolder;
-    background-color:#1f1f28;
+    background-color: #1f1f28;
     font-size: large
 }
 
@@ -40,10 +38,14 @@ td:first-child {
     white-space: nowrap;
 }
 
-tr.clickable-row {
+.clickable-row {
     cursor: pointer;
 }
 
 tr.active td {
     background-color: #1f1f28;
+}
+
+button {
+    cursor: pointer
 }

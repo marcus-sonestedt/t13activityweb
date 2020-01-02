@@ -39,6 +39,11 @@ class ClearAuthToken(ObtainAuthToken):
         return Response("bye")
 
 
+class MemberList(generics.ListAPIView):        
+    queryset = Member.objects.select_related('user')
+    permission_classes = [IsAuthenticated]
+    serializer_class = MemberSerializer
+
 class MyActivitiesList(generics.ListAPIView):
     queryset = Activity.objects.select_related('type', 'event')
     permission_classes = [IsAuthenticated]
@@ -241,6 +246,8 @@ url_patterns = [
     path('login', obtain_auth_token),
     path('logout', ClearAuthToken.as_view()),
     path('isloggedin', IsLoggedIn.as_view()),
+
+    re_path(r'^member/(?P<pk>[0-9]+)?', MemberList.as_view()),
 
     path('myactivities', MyActivitiesList.as_view()),
     re_path(r'^activity/(?P<id>[0-9]+)?', ActivityList.as_view()),
