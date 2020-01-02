@@ -40,6 +40,7 @@ footer {
 
 .text-tooltip {
   display: block;
+  visibility: hidden;
   position: absolute;
   padding: 10px;
   margin-left: 5em;
@@ -48,12 +49,13 @@ footer {
   background-color: black;
   opacity: 0;
   transition: opacity 0.5s;
-  z-index: 1000;
+  z-index: 3000; /* must be >1000 to be on top of some calendar items */
+  color: white;
 }
 
 *:hover>.text-tooltip {
   visibility: visible;
-  opacity: 1;
+  opacity: 1 !important;
   transition: opacity 0.5s linear 1s;
 }
 

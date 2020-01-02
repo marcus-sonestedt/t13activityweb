@@ -8,8 +8,9 @@ import 'moment/locale/sv';
 import { PagedT13Events, T13Event } from '../Models'
 import { pageItems } from "../views/MemberHomeView";
 
-import './Table.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './Table.css'
+import './Calendar.css'
 
 export interface MyProps {
     events: PagedT13Events;

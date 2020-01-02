@@ -1,0 +1,29 @@
+.rbc-btn-group Button {
+    color: #ddd;
+    background-color: #234;
+}
+
+.rbc-toolbar button.rbc-active {
+    color: white;
+    background-color: #567;
+}
+
+.text-tooltip {
+    z-index: 3000;
+}
+
+.rbc-off-range-bg {
+    background-color: #123;
+    color: #ccc
+}
+
+.rbc-today {
+    background-color: #456;
+    color: #333;
+}
+
+.rbc-month-view,
+.rbc-time-view,
+.rbc-agenda-view {
+    background-color: #0f0f18;
+}
