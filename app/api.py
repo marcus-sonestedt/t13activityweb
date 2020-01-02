@@ -20,10 +20,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
 from app.models import Activity, ActivityType, Event, EventType, Member, \
-    ActivityDelistRequest, RuleViolationException
+    ActivityDelistRequest, RuleViolationException, FAQ
+
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
-    EventActivitySerializer
+    EventActivitySerializer, FAQSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -213,31 +214,12 @@ class ActivityTypeList(generics.ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class ActivityEnlist(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [authentication.SessionAuthentication]
 
-    def post(self, request, id):
-        activity = Activity.objects.get(id=id)
-        logger.info(
-            f"User {request.user.id} about to enlist on activity {activity.id}")
-
-        member = Member.objects.get(user=request.user)
-
-        if (activity.assigned == member):
-            return Response("Redan bokad på denna aktivitet")
-
-        if activity.assigned is not None:
-            return HttpResponseForbidden("Redan bokad av " + activity.assigned.fullname)
-
-        if not activity.bookable:
-            return HttpResponseForbidden("Aktiviteten är inte bokningsbar (i dåtid eller blockerad)")
-
-        activity.assigned = member
-        activity.save()
-
-        return Response("Inbokad på " + activity.name)
-
+class FAQList(generics.ListAPIView):
+    queryset = FAQ.objects.all()
+    serializer_class = FAQSerializer
+    permission_classes = [AllowAny]
+    read_only = True
 
 ##############################################################################
 
@@ -263,4 +245,6 @@ url_patterns = [
 
     path('activity_type', ActivityTypeList.as_view()),
     re_path(r'activity_type/(?P<id>[0-9]+)', ActivityTypeList.as_view()),
+
+    path('faq', FAQList.as_view())
 ]

@@ -18,7 +18,7 @@ export class Member implements IdValue {
     fullname: string = "";
     phone?: string;
     email: string = "";
-    image_url: string | null = null;
+    image_url?: string;
 
     url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/member/' + this.id;
@@ -194,6 +194,23 @@ export class PagedADR extends PagedValues<ActivityDelistRequest>
 {
     @Type(() => ActivityDelistRequest)
     results: ActivityDelistRequest[] = [];
+}
+
+export class FAQ implements IdValue {
+    id!: string;
+    question!: string;
+    answer!: string;
+
+    url = () => `/frontend/faq/${this.id}`;
+    adminUrl = () => `/admin/app/faq/${this.id}`;
+    static adminCreateUrl = '/admin/app/faq/add';
+    static apiUrlsForAll = '/api/faq';
+}
+
+export class PagedFAQs extends PagedValues<FAQ>
+{
+    @Type(() => FAQ)
+    results: FAQ[] = [];
 }
 
 export default {

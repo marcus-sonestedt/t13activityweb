@@ -32,7 +32,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         fetch(url, {
             signal: controller.signal,
             cache: "no-store",
-            headers: { accept: 'application/json' }
+            headers: { 'Accept': 'application/json' }
         })
             .then(r => {
                 if (r.status >= 300) {

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import Attachment, Member, Event, EventType, Activity, ActivityType, ActivityDelistRequest
+from app.models import Attachment, Member, Event, EventType, Activity, ActivityType, ActivityDelistRequest, FAQ
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
@@ -66,4 +66,9 @@ class ActivityDelistRequestDeepSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityDelistRequest
+        fields = '__all__'
+
+class FAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FAQ
         fields = '__all__'

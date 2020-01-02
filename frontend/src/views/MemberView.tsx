@@ -27,7 +27,7 @@ export const MemberView = () => {
                                 <h1>{member.fullname}</h1>
                                 <h4>Email: <a href={`mailto:${member.email}`}>{member.email ?? '-'}</a></h4>
                                 <h4>Telefon: {member.phone ?? '-'}</h4>
-                                {member.image_url === null ? null :
+                                {member.image_url === undefined ? null :
                                     <Image src={member.image_url} />
                                 }
                             </>

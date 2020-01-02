@@ -67,6 +67,7 @@ export const App = () => {
 
             <Route path="/frontend/activitytypes" component={ActivityTypesView} />
             <Route path="/frontend/eventtypes" component={EventTypesView} />
+            <Route path="/frontend/faq/:id" component={FAQView} />
             <Route path="/frontend/faq" component={FAQView} />
 
             <Route path="/frontend/member/:id" component={MemberView} />

@@ -273,3 +273,14 @@ def save_activity_delist_request(sender, instance, created, **kwargs):
     elif instance.approved is False:
         logger.info(f"Rejecting {instance.member} delist request from {instance.activity}")
         events.adr_rejected(instance)
+
+class FAQ(models.Model):
+    question = models.CharField(max_length=256)
+    answer = models.TextField()
+
+    class Meta:
+        verbose_name = 'Vanlig fråga'
+        verbose_name_plural = 'Vanliga frågor'
+
+    def __str__(self):
+        return f"{self.question[:40]}..."
