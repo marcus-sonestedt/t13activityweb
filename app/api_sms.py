@@ -35,7 +35,7 @@ class ReceiveSMS(APIView):
         msgsid = self.serializer.object['MessagingServiceSid']
 
         if sid != settings.TWILIO_ACCOUNT_SID:
-            logger.warning("Got SMS via invalid SID\n" + self.serializer.object)
+            logger.warning(f"Got SMS via invalid SID\n{self.serializer.object}")
             raise HttpResponseForbidden('Invalid SID')
 
         body = self.serializer.object['Body']
@@ -78,7 +78,7 @@ class VerifyPhone(APIView):
         if member.phone_number is None:
             return HttpResponseForbidden("Member does not have a phone number")
 
-        if action == 'send_code':
+        if action == 'send':
             v = self._start_verify(member.phone_number)
             if v.sid is None:
                 return Response("Failed to create verify request, retry?", status=502)
@@ -87,7 +87,7 @@ class VerifyPhone(APIView):
 
             return Response('OK. Send the code for verification.')
 
-        elif action == 'verify_code':
+        elif action == 'check':
             c = self._check_verify(member.phone_number, code)
             if c.status != 'approved':
                 return HttpResponseForbidden(c.status)
@@ -102,10 +102,46 @@ class VerifyPhone(APIView):
             return HttpResponseBadRequest('invalid action')
 
 
+class VerifyEmail(APIView):
+    parser_classes = [parsers.JSONParser]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, reqest, action, code):
+        member = request.user.member
+        
+        if action == 'check':
+            c = self._check_verify(member.email, code)
+            if c.status != 'approved':
+                return HttpResponseForbidden(c.status)
+            
+
+    def post(self, request, action, code=None):
+        member = request.user.member
+        if member.phone_number is None:
+            return HttpResponseForbidden("Member does not have a phone number")
+
+        if action == 'send':
+            v = self._start_verify(member.phone_number)
+            if v.sid is None:
+                return Response("Failed to create verify request, retry?", status=502)
+
+            logger.info(f"Successfully created verification for {member.phone_number}")
+
+            return Response('OK. Send the code for verification.')
+
+        elif action == 'check':
+            c = self._check_verify(member.phone_number, code)
+            if c.status != 'approved':
+                return HttpResponseForbidden(c.status)
+
+        else:
+            return HttpResponseBadRequest('invalid action')
+
 ##############################################################################
 
 
 url_patterns = [
     path('sms', ReceiveSMS.as_view()),
-    re_path(r'phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
+    re_path(r'verify/phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
+    re_path(r'verify/email/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyEmail.as_view()),
 ]

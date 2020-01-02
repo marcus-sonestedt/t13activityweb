@@ -11,7 +11,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = ('fullname', 'phone_number', 'id', 'email')
+        fields = ('fullname', 'phone_number', 'id', 'email', 'phone_verified', 'email_verified')
 
 
 class EventTypeSerializer(serializers.ModelSerializer):

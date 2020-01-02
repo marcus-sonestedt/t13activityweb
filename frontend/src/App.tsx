@@ -7,7 +7,7 @@ import CookieConsent from "react-cookie-consent";
 
 
 import { Navigation } from './components/Navigation'
-import { MyActiviesPage } from './pages/MyActivitiesPage'
+import { MyActiviesPage as MyActivitiesPage } from './pages/MyActivitiesPage'
 import { WelcomePage } from './pages/WelcomePage'
 import { EventPage } from './pages/EventPage'
 import { NotFound } from './components/NotFound'
@@ -21,6 +21,8 @@ import { ActivityTypesPage } from './pages/ActivityTypesPage';
 import FAQPage from './pages/FAQPage';
 import ProfilePage from './pages/ProfilePage';
 import { UserContext, UserProvider } from './components/UserContext';
+import VerifyPhonePage from './pages/VerifyPhonePage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 
 export const App = () => {
   const userJson = localStorage.getItem("user");
@@ -82,7 +84,11 @@ export const App = () => {
               :
               <>
                 <Route path="/frontend/profile" component={ProfilePage} />
-                <Route path="/frontend/home" component={MyActiviesPage} />
+                <Route path="/frontend/home" component={MyActivitiesPage} />
+
+                <Route path="/frontend/verify/phone" component={VerifyPhonePage} />
+                <Route path="/frontend/verify/email" component={VerifyEmailPage} />
+
                 <Redirect exact from="/frontend/" to="/frontend/home" />
                 <Redirect exact from="/frontend/welcome" to="/frontend/home" />
               </>
