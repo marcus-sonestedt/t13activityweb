@@ -40,10 +40,24 @@ class ClearAuthToken(ObtainAuthToken):
         return Response("bye")
 
 
-class MemberList(generics.ListAPIView):        
+class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):        
     queryset = Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
     serializer_class = MemberSerializer
+
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)    
+
+    def check_object_permissions(self, request, obj):
+        if request.method.upper() == 'PATCH' and request.user.member.id != obj.id:
+            return PermissionDenied("Can only PATCH self")
+        
+        return super().check_object_permissions(request, obj)
+
 
 class MyActivitiesList(generics.ListAPIView):
     queryset = Activity.objects.select_related('type', 'event')
@@ -52,9 +66,7 @@ class MyActivitiesList(generics.ListAPIView):
 
     def get_queryset(self):
         member = Member.objects.get(user=self.request.user)
-
-        return self.queryset \
-            .filter(assigned=member)
+        return self.queryset.filter(assigned=member)
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
@@ -229,7 +241,7 @@ url_patterns = [
     path('logout', ClearAuthToken.as_view()),
     path('isloggedin', IsLoggedIn.as_view()),
 
-    re_path(r'^member/(?P<pk>[0-9]+)?', MemberList.as_view()),
+    re_path(r'^member(/(?P<pk>[0-9]+)?)?', MemberList.as_view()),
 
     path('myactivities', MyActivitiesList.as_view()),
     re_path(r'^activity/(?P<id>[0-9]+)?', ActivityList.as_view()),

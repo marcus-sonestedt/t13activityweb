@@ -23,8 +23,7 @@ export const VerifyEmailPage = (props: {}) => {
         return {
             1: <CheckAddress onNext={() => setState(State.SendEmail)} />,
             2: <SendEmail onNext={() => setState(State.VerifyResult)} />,
-            3: <VerifyResult onNext={(ok: boolean) => setState(ok ? State.Success : State.Failure)}
-                onPrevious={() => setState(State.SendEmail)} />,
+            3: <VerifyResult onNext={(ok: boolean) => setState(ok ? State.Success : State.Failure)} />,
             4: <Success />,
             5: <Failure onRestart={() => setState(State.CheckAddress)} />
         }
@@ -65,8 +64,6 @@ const CheckAddress = (props: { onNext: () => void }) => {
         return () => controller.abort();
     }, [user.memberId])
 
-
-
     const onEmailChange = (e: FormEvent<HTMLInputElement>) => {
         const target = e.target as HTMLInputElement;
         setEmail(target.value);
@@ -84,7 +81,7 @@ const CheckAddress = (props: { onNext: () => void }) => {
                 </Form.Text>
             </Form.Group>
             <Button variant="success" onClick={props.onNext}>
-                Skicka verfieringsmail
+                Skicka verifieringsmail
             </Button>
         </Form>
     </div>
@@ -148,12 +145,22 @@ const SendEmail = (props: { onNext: () => void }) => {
     </div>
 }
 
-const VerifyResult = (props: { onNext: (ok: boolean) => void, onPrevious: () => void }) => {
+const VerifyResult = (props: { onNext: (ok: boolean) => void }) => {
+    const { onNext } = props;
     const user = useContext(userContext);
-    const [verified, setVerified] = useState<boolean | null>(null);
+
+    const [message, setMessage] = useState('Kontrollerar med servern...');
+    const [checking, setChecking] = useState(false);
+    const [recheck, setRecheck] = useState(0);
 
     useEffect(() => {
+        if (recheck > 120) {
+            setMessage("Ingen idé att vänta längre här");
+            return;
+        }
+
         const controller = new AbortController();
+        setChecking(true);
         fetch(`/api/member/${user.memberId}`,
             {
                 headers: {
@@ -162,29 +169,33 @@ const VerifyResult = (props: { onNext: (ok: boolean) => void, onPrevious: () => 
                 },
                 signal: controller.signal,
                 cache: "no-store"
-
             }).then(resp => {
-                if (resp.status >= 300) throw resp.statusText;
-                resp.json().then(member => {
-                    setVerified(member.email_verified);
-                })
-            });
+                if (resp.status >= 300)
+                    throw resp.statusText;
+                resp.json().then(data => {
+                    const verified = data.results[0].email_verified;
+                    setMessage(verified ? "Klart!" : "Ej verifierad.");
+                    if (verified === true) {
+                        setTimeout(() => onNext(true), 500);
+                    } else {
+                        setTimeout(() => setRecheck(recheck + 1), 1000);
+                    }
+                });
+            }).catch(e => {
+                if (e.name === 'AbortError') {
+                    console.debug("Silencing AbortError: " + e);
+                    return;
+                }
+                throw e;
+            }).finally(() => setChecking(false));
 
-        return controller.abort;
-    }, [user.memberId])
-
-    if (verified === null)
-        return <p>Väntar på svar...</p>
-
-    if (verified === true) {
-        props.onNext(true);
-        return null;
-    }
+        return () => controller.abort();
+    }, [user.memberId, onNext, recheck])
 
     return <>
-        <h3>Kunde inte verifiera</h3>
-        <Button onClick={() => props.onNext(false)} variant="danger">Avbryt</Button>
-        <Button onClick={props.onPrevious} variant="secondary">Försök igen?</Button>
+        <h3>{message}</h3>
+        <Button onClick={() => setRecheck(0)} variant="secondary" disabled={checking}>Kolla igen?</Button>
+        <Button onClick={() => onNext(false)} variant="danger">Avbryt?</Button>
     </>
 }
 

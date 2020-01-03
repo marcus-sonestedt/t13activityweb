@@ -36,7 +36,7 @@ class Member(models.Model):
     phone_verified = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
 
-    email_verification_code = models.CharField(max_length=40, blank=True)
+    email_verification_code = models.CharField(max_length=40, blank=True, null=True)
     email_verification_code_created = models.DateTimeField(null=True, blank=True)
 
     comment = models.TextField(blank=True)
@@ -64,8 +64,9 @@ def user_saved(sender, instance, created, **kwargs):
         instance.member = Member.objects.create(user=instance)
         instance.email = instance.username
         instance.save()
-    elif instance.username != instance.email:
+    elif instance.username != instance.email or 'email' in kwargs:
         instance.username = instance.email
+        instance.member.email_verified = False
         instance.save()
 
     instance.member.save()
@@ -74,6 +75,9 @@ def user_saved(sender, instance, created, **kwargs):
 def member_saved(sender, instance, created, **kwargs):
     if created:
         events.new_user_created(instance)
+    elif 'phone_number' in kwargs:
+        instance.phone_verified = False
+        instance.save()
 
 
 class Attachment(models.Model):

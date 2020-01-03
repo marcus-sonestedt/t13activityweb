@@ -45,13 +45,12 @@ class ReceiveSMS(APIView):
         from_ = self.serializer.object['From']
         to = self.serializer.object['To']
 
-        logger.info(
-            f'Received SMS from {from_} to {to} via {msgsid}: "{body}"')
+        logger.info(f'Received SMS from {from_} to {to} via {msgsid}: "{body}"')
 
 
 class VerifyPhone(APIView):
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._client = TwilioClient(
             settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
@@ -116,13 +115,17 @@ class VerifyEmail(APIView):
 
     def _check(self, member, code):
         if code != member.email_verification_code:
-            logger.warn(f"Incorret verification code {code} sent by {member}")
+            logger.warn(f"Incorrect verification code {code} sent by {member}")
+            return False
+
+        if (member.email_verification_code_created - datetime.datetime.now()).days >= 1:
+            logger.warn(f"Verification code {code} sent by {member} has expired.")
             return False
 
         logging.info(f"{member}'s email successfully verified")
-        member.email_verfied = True
-        member.email_verfication_code = None
-        member.email_verfication_code_created = None
+        member.email_verified = True
+        member.email_verification_code = None
+        member.email_verification_code_created = None
         member.save()
         return True
 
