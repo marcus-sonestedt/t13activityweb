@@ -208,11 +208,10 @@ const VerifyCode = (props: { setState: (state: State) => void}) => {
                 setTimeout(() => props.setState(status === '"approved"' ? State.Success : State.Failure), 1000);
                 return;
             }).catch(err => {
-                alert(`Något gick fel:\n${err}`);
                 console.error(err);
+                setMessage(`Något gick fel:\n${err}`);
             }).finally(() => {
-                setSubmitting(false);
-                ctrl.abort();
+                setSubmitting(false);               
             });
     };  
 

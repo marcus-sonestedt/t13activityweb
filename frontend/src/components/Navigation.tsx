@@ -43,7 +43,7 @@ export const Navigation = () => {
                         <>
                             <Nav.Link mr-sm={2} href="/frontend/profile">Hej {user.fullname}!</Nav.Link>
                             <Nav.Link mr-sm={2} href="/frontend/notifications">
-                                <Badge variant={user.notifications ? 'primary' : 'secondary'}>{user.notifications.length}
+                                <Badge variant={user.notifications.length ? 'primary' : 'secondary'}>{user.notifications.length}
                                     <div className='text-tooltip' style={{ fontWeight: 'normal' }}>
                                         Olästa notifieringar
                                     </div>
