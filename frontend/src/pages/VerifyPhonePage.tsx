@@ -55,17 +55,13 @@ const CheckPhoneNumber = (props: { onNext: () => void }) => {
 
             }).then(resp => {
                 if (resp.status >= 300) throw resp.statusText;
-                resp.json().then(member => {
-                    setPhone(member.phone_number);
+                resp.json().then(data => {
+                    setPhone(data.results[0].phone_number);
                 })
             });
 
-        return controller.abort;
+        return () => controller.abort();
     }, [user.memberId])
-
-    const onSubmit = () => {
-        props.onNext();
-    }
 
     const onPhoneChange = (e: FormEvent<HTMLInputElement>) => {
         const control = e.target as HTMLInputElement;
@@ -74,7 +70,7 @@ const CheckPhoneNumber = (props: { onNext: () => void }) => {
 
     return <div>
         <p>Först kollar vi att ditt telefonnummer är rätt:</p>
-        <Form onSubmit={onSubmit}>
+        <Form>
             <Form.Group controlId="formBasicPhoneNumber">
                 <Form.Label>Telefonnummer</Form.Label>
                 <Form.Control type="phone" placeholder="Hämtar ditt telefonnummer"
@@ -83,7 +79,7 @@ const CheckPhoneNumber = (props: { onNext: () => void }) => {
                     Vi skickar påminnelser och uppdateringar till din telefon.
                 </Form.Text>
             </Form.Group>
-            <Button variant="success" type="submit">
+            <Button variant="success" onClick={props.onNext}>
                 Skicka verfieringskod
             </Button>
         </Form>
@@ -93,6 +89,7 @@ const CheckPhoneNumber = (props: { onNext: () => void }) => {
 const SendCode = (props: { onNext: () => void }) => {
     const [attempt, setAttempt] = useState(1);
     const [message, setMessage] = useState('Skickar verifieringskod via SMS...');
+    const [sending, setSending] = useState(false);
 
     useEffect(() => {
         if (attempt > 5) {
@@ -100,8 +97,10 @@ const SendCode = (props: { onNext: () => void }) => {
             return;
         }
 
+        setSending(true);
+
         const controller = new AbortController();
-        fetch(`/api/verify/phone?attempt=${attempt}`,
+        fetch(`/api/verify/phone/send?attempt=${attempt}`,
             {
                 method: 'POST',
                 headers: {
@@ -110,7 +109,6 @@ const SendCode = (props: { onNext: () => void }) => {
                 },
                 signal: controller.signal,
                 cache: "no-store"
-
             }
         ).then(resp => {
             if (resp.status >= 300) {
@@ -121,20 +119,19 @@ const SendCode = (props: { onNext: () => void }) => {
 
             setMessage("SMS skickat!");
         })
-        .catch(err => {
-            console.error(err);
-            alert("Något gick fel: " + err);
-        });
-
-        return controller.abort;
+        .catch(err => { throw err })
+        .finally(() => setSending(false));
+        
+        return () => controller.abort();
     }, [attempt]);
 
     return <Form>
-        <p>{message}</p>
-        <Button variant="success" type="submit" onClick={props.onNext}>
+        <p>Status: {message}</p>
+        <Button variant="success" onClick={props.onNext} disabled={sending}>
             Jag fick en kod
         </Button>
-        <Button variant="warning" type="submit" onClick={() => setAttempt(attempt + 1)}>
+        <span className='spacer'/>
+        <Button variant="warning" onClick={() => setAttempt(attempt + 1)} disabled={sending}>
             Testa igen
         </Button>
     </Form>

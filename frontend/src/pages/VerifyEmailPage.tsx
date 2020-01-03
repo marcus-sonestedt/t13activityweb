@@ -57,35 +57,33 @@ const CheckAddress = (props: { onNext: () => void }) => {
 
             }).then(resp => {
                 if (resp.status >= 300) throw resp.statusText;
-                resp.json().then(member => {
-                    setEmail(member.email);
+                resp.json().then(data => {
+                    setEmail(data.results[0].email);
                 })
             });
 
-        return controller.abort;
+        return () => controller.abort();
     }, [user.memberId])
 
-    const onSubmit = () => {
-        props.onNext();
-    }
+
 
     const onEmailChange = (e: FormEvent<HTMLInputElement>) => {
-        const control = e.target as HTMLInputElement;
-        setEmail(control.value);
+        const target = e.target as HTMLInputElement;
+        setEmail(target.value);
     }
 
     return <div>
-        <p>Först kollar vi att din emailadress är rätt:</p>
-        <Form onSubmit={onSubmit}>
+        <p>Kolla att din emailadress är rätt innan vi skickar mailet.</p>
+        <Form>
             <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email-address</Form.Label>
-                <Form.Control type="phone" placeholder="Hämtar din emailaddress"
+                <Form.Control type="email" placeholder="Hämtar din emailaddress"
                     value={email} onChange={onEmailChange} />
                 <Form.Text className="text-muted">
-                    Vi skickar påminnelser och uppdateringar till din telefon.
+                    Vi skickar information, påminnelser och uppdateringar till din emailadress.
                 </Form.Text>
             </Form.Group>
-            <Button variant="success" type="submit">
+            <Button variant="success" onClick={props.onNext}>
                 Skicka verfieringsmail
             </Button>
         </Form>
@@ -95,15 +93,17 @@ const CheckAddress = (props: { onNext: () => void }) => {
 const SendEmail = (props: { onNext: () => void }) => {
     const [attempt, setAttempt] = useState(1);
     const [message, setMessage] = useState('Skickar verifieringsmail');
+    const [sending, setSending] = useState(false);
 
     useEffect(() => {
         if (attempt > 5) {
             setMessage("Det verkar gå dåligt. Försök senare eller kontakta kansliet.")
             return;
         }
+        setSending(true);
 
         const controller = new AbortController();
-        fetch(`/api/verify/email?attempt=${attempt}`,
+        fetch(`/api/verify/email/send?attempt=${attempt}`,
             {
                 method: 'POST',
                 headers: {
@@ -122,21 +122,29 @@ const SendEmail = (props: { onNext: () => void }) => {
             }
 
             setMessage("Mail skickat!");
-        });
+            resp.text().then(() => props.onNext());
+        })
+            .catch(err => {
+                console.error(err);
+                alert("Något gick fel: " + err);
+            })
+            .finally(() => setSending(false));
 
-        return controller.abort;
-    }, [attempt]);
+        return () => controller.abort();
+    }, [attempt, props]);
+
+    const disable = sending || attempt > 5;
 
     return <div>
         <Form>
             <p>{message}</p>
-            <Button variant="success" type="submit" onClick={props.onNext}>
-                Jag fick mailet, har klickat på länken.
-            </Button>
-            <Button variant="warning" type="submit" onClick={() => setAttempt(attempt + 1)}>
-                Inget mail. Skicka igen.
-            </Button>
         </Form>
+        <Button variant="success" onClick={props.onNext} disabled={disable}>
+            Jag fick mailet, har klickat på länken.
+            </Button>
+        <Button variant="warning" onClick={() => setAttempt(attempt + 1)} disabled={disable}>
+            Inget mail. Skicka igen.
+            </Button>
     </div>
 }
 

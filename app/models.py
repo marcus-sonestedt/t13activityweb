@@ -32,8 +32,12 @@ class Member(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     phone_number = models.CharField(max_length=20, blank=True)
+
     phone_verified = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
+
+    email_verification_code = models.CharField(max_length=40, blank=True)
+    email_verification_code_created = models.DateTimeField(null=True, blank=True)
 
     comment = models.TextField(blank=True)
     membercard_number = models.CharField(max_length=20, blank=True)

@@ -18,14 +18,14 @@ export const Navigation = () => {
                     {!user.isLoggedIn ? null :
                         <Nav.Link href="/frontend/delistrequest">
                             Avbokningar
-                            <span className='spacer'/>
-                            <Badge variant='primary'>
+                            <span className='spacer' />
+                            <Badge variant='secondary'>
                                 {user.myDelistRequests}
                                 {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
-                                <div className='text-tooltip' style={{fontWeight:'normal'}}>
+                                <div className='text-tooltip' style={{ fontWeight: 'normal' }}>
                                     Första siffran är antal av dina egna förfrågningar.<br />
                                     Den andra är totalt antal obesvarade från alla medlemmar.
-                                </div>                                
+                                </div>
                             </Badge>
                         </Nav.Link>
                     }
@@ -38,10 +38,17 @@ export const Navigation = () => {
                         <NavDropdown.Item href="/frontend/eventtypes">Aktivitetstyper</NavDropdown.Item>
                         <NavDropdown.Item href="/frontend/activitytypes">Uppgiftstyper</NavDropdown.Item>
                     </NavDropdown>
+
                     {!user.isLoggedIn ? null :
                         <>
-                            <Nav.Link mr-sm={2} href="/frontend/profile">
-                                Hej {user.fullname}!</Nav.Link>
+                            <Nav.Link mr-sm={2} href="/frontend/profile">Hej {user.fullname}!</Nav.Link>
+                            <Nav.Link mr-sm={2} href="/frontend/notifications">
+                                <Badge variant={user.notifications ? 'primary' : 'secondary'}>{user.notifications.length}
+                                    <div className='text-tooltip' style={{ fontWeight: 'normal' }}>
+                                        Olästa notifieringar
+                                    </div>
+                                </Badge>
+                            </Nav.Link>
                             <Nav.Link mr-sm={2} href="/app/logout">Logga ut</Nav.Link>
                         </>
                     }

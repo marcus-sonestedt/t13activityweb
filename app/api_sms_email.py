@@ -1,5 +1,4 @@
-import datetime
-import logging
+import datetime, logging, random, string
 
 from django.conf import settings
 from django.urls import path, re_path
@@ -8,7 +7,8 @@ from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
+from django.core.mail import send_mail, send_mass_mail
 
 from rest_framework.views import APIView
 from rest_framework import authentication, generics, parsers, renderers, status
@@ -20,6 +20,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
 from twilio.rest import Client as TwilioClient
+
+from app import events
 
 logger = logging.getLogger(__name__)
 
@@ -105,46 +107,53 @@ class VerifyPhone(APIView):
             return Response(c.status)
 
         else:
-            return HttpResponseBadRequest('invalid action')
+            return HttpResponseNotFound()
 
 
 class VerifyEmail(APIView):
     parser_classes = [parsers.JSONParser]
     permission_classes = [IsAuthenticated]
 
-    def get(self, reqest, action, code):
+    def _check(self, member, code):
+        if code != member.email_verification_code:
+            logger.warn(f"Incorret verification code {code} sent by {member}")
+            return False
+
+        logging.info(f"{member}'s email successfully verified")
+        member.email_verfied = True
+        member.email_verfication_code = None
+        member.email_verfication_code_created = None
+        member.save()
+        return True
+
+    def get(self, request, action, code):
         member = request.user.member
 
-        if action == 'check':
-            c = self._check_verify(member.email, code)
-            if c.status != 'approved':
-                return HttpResponseForbidden(c.status)
-            member.email_verfied = True
-            member.save()
-            return Redirect("/frontend/verify/email?state=Success")
+        if action == 'check':            
+            ok = self._check(member, code)
+            if request.headers['accept'] == 'application/json':
+                return Response(ok)
+            else:
+                return HttpResponseRedirect('/frontend/verify/email/VerifyResult')
+        else:
+            return HttpResponseNotFound()
 
     def post(self, request, action, code=None):
         member = request.user.member
-        if member.phone_number is None:
-            return HttpResponseForbidden("Member does not have a phone number")
 
         if action == 'send':
-            v = self._start_verify(member.phone_number)
-            if v.sid is None:
-                return Response("Failed to create verify request, retry?", status=502)
-
-            logger.info(
-                f"Successfully created verification for {member.phone_number}")
-
-            return Response('OK. Send the code for verification.')
+            chars = string.ascii_letters + string.digits
+            member.email_verification_code = ''.join(random.choice(chars) for i in range(40))            
+            member.email_verification_code_created = datetime.datetime.now()
+            member.save()
+            events.send_verification_email(member)
+            return Response(f'Email verification sent to {member.email} with code {member.email_verification_code}')
 
         elif action == 'check':
-            c = self._check_verify(member.phone_number, code)
-            if c.status != 'approved':
-                return HttpResponseForbidden(c.status)
-
+            return self.get(request, action, code)
+        
         else:
-            return HttpResponseBadRequest('invalid action')
+            return HttpResponseNotFound('invalid action')
 
 ##############################################################################
 

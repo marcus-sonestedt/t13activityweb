@@ -32,7 +32,8 @@ def new_user_created(member):
         to give them access, i.e. at least add them to the 'T13 Members'
         group if they are a legitimate member of the club.
 
-        See also https://macke.eu.pythonanywhere.com/admin/app/member/{member.id}/change/ to check their membership status & data.
+        See also https://macke.eu.pythonanywhere.com/admin/app/member/{member.id}/change/ 
+        to check their membership status & data.
 
         Best regards,
         /The Team13 website
@@ -124,3 +125,17 @@ def notify_upcoming_activity(activity):
             body=message,
             from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
+
+
+def send_verification_email(member):
+    send_mail(subject='Team13 email verification',
+        message=f'''Hej {member.fullname},
+
+        Klicka på länken för att verifiera din emailadress:
+        
+        https://eu.macke.pythonanywhere.com/api/verify/email/check/{member.email_verification_code}
+
+        mvh
+        /Team13''',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[member.email])
