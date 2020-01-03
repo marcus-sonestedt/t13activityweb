@@ -24,9 +24,9 @@ from twilio.rest import Client as TwilioClient
 logger = logging.getLogger(__name__)
 
 
-
 class ReceiveSMS(APIView):
-    parser_classes = [parsers.JSONParser, parsers.MultiPartParser, parsers.FormParser]
+    parser_classes = [parsers.JSONParser,
+                      parsers.MultiPartParser, parsers.FormParser]
     permission_classes = [AllowAny]
 
     @method_decorator(csrf_exempt)
@@ -35,20 +35,23 @@ class ReceiveSMS(APIView):
         msgsid = self.serializer.object['MessagingServiceSid']
 
         if sid != settings.TWILIO_ACCOUNT_SID:
-            logger.warning(f"Got SMS via invalid SID\n{self.serializer.object}")
+            logger.warning(
+                f"Got SMS via invalid SID\n{self.serializer.object}")
             raise HttpResponseForbidden('Invalid SID')
 
         body = self.serializer.object['Body']
         from_ = self.serializer.object['From']
         to = self.serializer.object['To']
 
-        logger.info(f'Received SMS from {from_} to {to} via {msgsid}: "{body}"')
+        logger.info(
+            f'Received SMS from {from_} to {to} via {msgsid}: "{body}"')
 
 
 class VerifyPhone(APIView):
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
-        self._client = TwilioClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        self._client = TwilioClient(
+            settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
     parser_classes = [parsers.JSONParser]
     permission_classes = [IsAuthenticated]
@@ -66,12 +69,12 @@ class VerifyPhone(APIView):
     def _check_verify(self, phone, code):
         logger.info(f"Checking verification for {phone}")
 
-        verification = self._client.verify \
+        verification_check = self._client.verify \
             .services(settings.TWILIO_VERIFY_SID) \
             .verification_checks \
             .create(to=phone, code=code)
 
-        return verification
+        return verification_check
 
     def post(self, request, action, code=None):
         member = request.user.member
@@ -83,18 +86,21 @@ class VerifyPhone(APIView):
             if v.sid is None:
                 return Response("Failed to create verify request, retry?", status=502)
 
-            logger.info(f"Successfully created verification for {member.phone_number}")
+            logger.info(
+                f"Successfully created verification for {member.phone_number}")
 
             return Response('OK. Send the code for verification.')
 
         elif action == 'check':
             c = self._check_verify(member.phone_number, code)
-            if c.status != 'approved':
-                return HttpResponseForbidden(c.status)
-
-            logger.info(f"{member.fullname}'s number {member.phone_number} has been verified!")
-            member.phone_verified = True
-            member.save()
+            if c.valid:
+                logger.info(
+                    f"{member.fullname}'s number {member.phone_number} has been verified!")
+                member.phone_verified = True
+                member.save()
+            else:
+                logger.info(
+                    f"{member.fullname}'s sent an invalid verification code!")
 
             return Response(c.status)
 
@@ -108,12 +114,14 @@ class VerifyEmail(APIView):
 
     def get(self, reqest, action, code):
         member = request.user.member
-        
+
         if action == 'check':
             c = self._check_verify(member.email, code)
             if c.status != 'approved':
                 return HttpResponseForbidden(c.status)
-            
+            member.email_verfied = True
+            member.save()
+            return Redirect("/frontend/verify/email?state=Success")
 
     def post(self, request, action, code=None):
         member = request.user.member
@@ -125,7 +133,8 @@ class VerifyEmail(APIView):
             if v.sid is None:
                 return Response("Failed to create verify request, retry?", status=502)
 
-            logger.info(f"Successfully created verification for {member.phone_number}")
+            logger.info(
+                f"Successfully created verification for {member.phone_number}")
 
             return Response('OK. Send the code for verification.')
 
@@ -142,6 +151,8 @@ class VerifyEmail(APIView):
 
 url_patterns = [
     path('sms', ReceiveSMS.as_view()),
-    re_path(r'verify/phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
-    re_path(r'verify/email/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyEmail.as_view()),
+    re_path(
+        r'verify/phone/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyPhone.as_view()),
+    re_path(
+        r'verify/email/(?P<action>[a-z]+)(/(?P<code>\w+))?', VerifyEmail.as_view()),
 ]

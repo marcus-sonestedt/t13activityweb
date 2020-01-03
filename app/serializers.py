@@ -11,7 +11,8 @@ class AttachmentSerializer(serializers.ModelSerializer):
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = ('fullname', 'phone_number', 'id', 'email', 'phone_verified', 'email_verified')
+        fields = ('fullname', 'phone_number', 'id', 'email',
+                  'phone_verified', 'email_verified')
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
@@ -67,6 +68,7 @@ class ActivityDelistRequestDeepSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityDelistRequest
         fields = '__all__'
+
 
 class FAQSerializer(serializers.ModelSerializer):
     class Meta:

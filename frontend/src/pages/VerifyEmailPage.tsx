@@ -94,9 +94,14 @@ const CheckAddress = (props: { onNext: () => void }) => {
 
 const SendEmail = (props: { onNext: () => void }) => {
     const [attempt, setAttempt] = useState(1);
-    const [mailSent, setMailSent] = useState(false);
+    const [message, setMessage] = useState('Skickar verifieringsmail');
 
     useEffect(() => {
+        if (attempt > 5) {
+            setMessage("Det verkar gå dåligt. Försök senare eller kontakta kansliet.")
+            return;
+        }
+
         const controller = new AbortController();
         fetch(`/api/verify/email?attempt=${attempt}`,
             {
@@ -110,20 +115,21 @@ const SendEmail = (props: { onNext: () => void }) => {
 
             }
         ).then(resp => {
-            if (resp.status >= 300) throw resp.statusText;
-            setMailSent(true);
+            if (resp.status >= 300) {
+                setMessage("Misslyckades med att skicka Mail: " + resp.statusText);
+                resp.text().then(console.error)
+                throw resp.statusText;
+            }
+
+            setMessage("Mail skickat!");
         });
 
         return controller.abort;
     }, [attempt]);
 
-
     return <div>
         <Form>
-            {!mailSent
-                ? <p>Då skickar vi ett bekräftelsemail ...</p>
-                : <p>Mail på väg</p>
-            }
+            <p>{message}</p>
             <Button variant="success" type="submit" onClick={props.onNext}>
                 Jag fick mailet, har klickat på länken.
             </Button>
@@ -188,7 +194,7 @@ const Failure = (props: { onRestart: () => void }) => {
         <h3>Något gick fel!</h3>
         <h1><span role="img" aria-label='thinking-face'>🤔</span></h1>
         <p>
-            Om din mailadress verkiligen är rätt, försök igen lite senare eller kontakta kansliet.
+            Om din emailaddress verkligen är rätt, försök igen lite senare eller kontakta kansliet.
         </p>
         <Button onClick={props.onRestart}>Försök igen</Button>
         <a href="/"><Button>Tillbaka till startsidan</Button></a>

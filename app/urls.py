@@ -3,9 +3,9 @@ from django.contrib.auth.views import LogoutView
 
 import app.views as views
 
-from app.api import url_patterns as core_urlpatterns
+from app.api_core import url_patterns as core_urlpatterns
 from app.api_adr import url_patterns as adr_urlpatterns
-from app.api_sms import url_patterns as sms_urlpatterns
+from app.api_sms_email import url_patterns as sms_urlpatterns
 
 urlpatterns = [
     path('', views.home, name='home'),
