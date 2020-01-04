@@ -2,7 +2,7 @@
 name: DevOps Task
 about: Something that doesn't directly affect the user experience
 title: ''
-labels: 'task'
+labels: 'devops'
 assignees: ''
 
 ---
