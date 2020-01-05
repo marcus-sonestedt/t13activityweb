@@ -8,6 +8,7 @@ import { ActivityDelistRequest, PagedADR } from '../Models';
 import { pageItems } from "./MyActivitiesPage";
 import { cancelADR, rejectADR, approveADR, deleteADR } from "../logic/ADRActions"
 import { useParams } from "react-router-dom";
+import { MarkDown } from '../components/Utilities';
 
 export const RequestAdrButton = (props: {
     onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void),
@@ -45,16 +46,13 @@ export const DeleteAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButt
     </Button>
 
 const AdrStatusBadge = (props: { model: ActivityDelistRequest }) => {
-    const { model } = props;
-    const approvedText = model.approved === true ? 'JA'
-        : model.approved === false ? 'NEJ'
-            : "-";
+    const approved = props.model.approved
+    const [ text, variant ] =
+         approved === true ? ['Bekräftad', 'success']
+        : approved === false ? ['Avvisad', 'danger']
+        : ['Obekräftad', 'dark'];
 
-    const approvedVariant = model.approved === true ? 'success'
-        : model.approved === false ? 'danger'
-            : 'dark';
-
-    return <Badge variant={approvedVariant}>{approvedText}</Badge>
+    return <Badge variant={variant as any}>{text}</Badge>
 }
 
 export const ActivityDelistRequestComponent = (props: { model: ActivityDelistRequest | null }) => {
@@ -85,9 +83,12 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
             <h5>Uppgift</h5>
             <p>{model.activity.name}</p>
             <h5>Avbokningsanledning</h5>
-            <p>{model.reason}</p>
+            <MarkDown source={model.reason} />
             <h5>Status <AdrStatusBadge model={model} /></h5>
-            <div><p>{model.reject_reason}<br />{approver}</p></div>
+            {model.approved !== false ? null : <>
+                <MarkDown source={model.reject_reason ?? ''} />
+                <p>/{approver}</p>
+            </>}
         </>
     )
 }
@@ -206,7 +207,7 @@ export const ActivityDelistRequestPage = () => {
                         {currentReq === null
                             ? <p>Välj en avbokning att visa</p>
                             : <ActivityDelistRequestComponent model={currentReq} />}
-                        {(currentReq === null || !user.isStaff || currentReq.member.id === user.memberId) ? null :
+                        {(currentReq === null || !user.isStaff) ? null :
                             <div className='align-right'>
                                 <span className="spacer">&nbsp;</span>
                                 <ApproveAdrButton onClick={() => approveADR(currentReq, user).then(incReload)}

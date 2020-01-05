@@ -1,37 +1,60 @@
 import { useParams } from "react-router"
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { Member, PagedMembers } from "../Models";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import { Container, Row, Col, Image, Button } from "react-bootstrap";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import NotFound from "../components/NotFound";
+import { userContext } from "../components/UserContext";
+
+export const MemberComponent = (props: { member?: Member }) => {
+    const { member } = props;
+
+    if (!member)
+        return null;
+
+    return <div>
+        <h1>{member.fullname}</h1>
+        <h4>Email:{' '}
+            <a href={`mailto:${member.email}`}>{member.email}</a>
+        </h4>
+        <h4>Telefon:{' '}
+            <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
+        </h4>
+        {member.image_url === undefined ? null :
+            <Image src={member.image_url} />
+        }
+    </div>
+}
 
 export const MemberPage = () => {
     const { id } = useParams();
-    const [member, setMember] = useState<Member | null>(null)
-    const setMemberCallback = useCallback((data:PagedMembers) => setMember(data.results[0]), []);
+    const user = useContext(userContext);
+    const [member, setMember] = useState<Member | undefined>();
+    const setMemberCallback = useCallback((data: PagedMembers) => setMember(data.results[0]), []);
 
     if (id === undefined)
-        return <NotFound/>
+        return <NotFound />
+
+    if (!user.isLoggedIn)
+        return <NotFound />
 
     return (
         <Container>
             <Row>
                 <Col>
+                    <div className="model-header">
+                        <h1>Medlem</h1>
+                        {user.isStaff ?
+                            <a href={Member.adminUrlForId(id)}><Button variant='secondary'>Editera</Button></a>
+                            : null}
+                    </div>
+                    <hr />
                     <DataProvider<PagedMembers>
-                        url={Member.apiUrl(id)}
-                        ctor={t => deserialize(PagedMembers, t)}
+                        url={Member.apiUrlForId(id)}
+                        ctor={json => deserialize(PagedMembers, json)}
                         onLoaded={setMemberCallback}>
-                        {member === null ? null :
-                            <>
-                                <h1>{member.fullname}</h1>
-                                <h4>Email: <a href={`mailto:${member.email}`}>{member.email ?? '-'}</a></h4>
-                                <h4>Telefon: {member.phone ?? '-'}</h4>
-                                {member.image_url === undefined ? null :
-                                    <Image src={member.image_url} />
-                                }
-                            </>
-                        }
+                        <MemberComponent member={member} />
                     </DataProvider>
                 </Col>
             </Row>

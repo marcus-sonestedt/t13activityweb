@@ -119,7 +119,7 @@ class IsLoggedIn(APIView):
             member = Member.objects.get(user=request.user.id)
 
             response_dict['myDelistRequests'] = \
-                ActivityDelistRequest.objects.filter(member=member).count()
+                ActivityDelistRequest.objects.filter(member=member, approved=None).count()
 
             if request.user.is_staff:
                 response_dict['unansweredDelistRequests'] = \

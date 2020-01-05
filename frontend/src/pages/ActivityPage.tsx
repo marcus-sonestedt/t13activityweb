@@ -32,8 +32,13 @@ export const ActivityComponent = (props: { model: Activity | null }) => {
             <div className='div-group'>
                 {event}
                 <h5>Datum {model.date()} Tid {model.time()}</h5>
+                {!model.assigned ? null : <>
+                    <h5>Tilldelad {' '}
+                        <a href={model.assigned.url()}>{model.assigned.fullname}</a>
+                    </h5>
+                </>}
                 <h5>Information</h5>
-                <MarkDown source={model.comment}/>
+                <MarkDown source={model.comment} />
             </div>
         </>
     )
@@ -60,7 +65,6 @@ export const ActivityPage = () => {
                 </Col>
                 <Col md={12} lg={6}>
                     <ActivityTypeComponent model={model?.type ?? null} />
-                    
                 </Col>
             </DataProvider>
         </Row>

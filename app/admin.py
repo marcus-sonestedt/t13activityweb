@@ -15,6 +15,10 @@ def unregister(model):
     return f2
 
 
+class ActivityInline(admin.TabularInline):
+    model = models.Activity
+
+
 class MemberInline(admin.StackedInline):
     model = models.Member
     can_delete = False
@@ -36,6 +40,7 @@ class UserWithMemberAdmin(UserAdmin):
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
     readonly_fields = ['user']
+    list_filter=['phone_verified', 'email_verified']
 
     def user_link(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
@@ -57,8 +62,6 @@ class ActivityTypeAdmin(admin.ModelAdmin):
     pass
 
 
-class ActivityInline(admin.TabularInline):
-    model = models.Activity
 
 
 @admin.register(models.Event)
@@ -73,12 +76,24 @@ class ActivityTypeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    pass
-
+    list_filter=['completed', 'cancelled']
+    list_display = (
+        'name',
+        'event',
+        'assigned',
+        'completed',
+        'cancelled'
+    )
+    
 
 @admin.register(models.ActivityDelistRequest)
 class ActivityDelistRequestAdmin(admin.ModelAdmin):
-    pass
+    list_filter=['approved']
+    list_display = (
+        'member',
+        'activity',
+        'approved'
+    )
 
 
 @admin.register(models.FAQ)

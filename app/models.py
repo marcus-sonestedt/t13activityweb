@@ -130,8 +130,7 @@ class Event(models.Model):
     image = models.ImageField(null=True, blank=True)
     type = models.ForeignKey(
         EventType, on_delete=models.SET_NULL, null=True, blank=True)
-    coordinators = models.ForeignKey(
-        Member, on_delete=models.SET_NULL, null=True, blank=True)
+    coordinators = models.ManyToManyField(Member, blank=True)
     attachments = models.ManyToManyField(Attachment, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -216,7 +215,7 @@ class Activity(models.Model):
         verbose_name_plural = 'Uppgifter'
 
     def __str__(self):
-        return self.name
+        return f"{self.event.name} - {self.name}"
 
     def save(self, *args, **kwargs):
         if 'assigned' in kwargs:
@@ -291,4 +290,7 @@ class FAQ(models.Model):
         verbose_name_plural = 'Vanliga frågor'
 
     def __str__(self):
-        return f"{self.question[:40]}..."
+        if len(self.question) > 40:
+            return f"{self.question[:37]} ..."
+
+        return self.question

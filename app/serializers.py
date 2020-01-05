@@ -12,7 +12,7 @@ class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = ('fullname', 'phone_number', 'id', 'email',
-                  'phone_verified', 'email_verified')
+                  'phone_verified', 'email_verified', 'user_id')
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class EventTypeSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()
-    coordinators = MemberSerializer()
+    coordinators = MemberSerializer(many=True)
 
     class Meta:
         model = Event

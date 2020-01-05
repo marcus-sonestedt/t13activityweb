@@ -107,7 +107,7 @@ export const EventPage = () => {
     }
 
     const renderActivityRow = (model: Activity) => {
-            const type = model.type !== null
+        const type = model.type !== null
             ? <a href={model.type.url()}>{model.type.name}</a>
             : '-';
 
@@ -132,7 +132,14 @@ export const EventPage = () => {
     }
 
     const eventType = event.type !== null ?
-        <a href={event.type.url()}>{event.type.name}</a> : null;
+        <a href={event.type.url()}>{event.type.name}</a> : '-';
+
+    const renderCoordinator = (member: Member) =>
+        <li>
+            <a href={member.url()}>{member.fullname}</a>{' - '}
+            <a href={`mailto:${member.email}`}>{member.email}</a>{' - '}
+            <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
+        </li>
 
     return (
         <Container fluid>
@@ -150,16 +157,31 @@ export const EventPage = () => {
             <Row>
                 <Col md={12} lg={6}>
                     <div className='div-group'>
-                        <h4>Datum: {event.date()}</h4>
-                        <h4>Typ: {eventType}</h4>
-                        <h5>Beskrivning:</h5>
-                        <MarkDown source={event.description}/>
+                        <h5>Datum {event.date()} Typ {eventType}</h5>
+                        {event.description ? <>
+                            <h5>Beskrivning</h5>
+                            <MarkDown source={event.description} />
+                        </> : null}
+                        {event.coordinators.length === 0
+                            ? <h5>Ingen koordinator än</h5>
+                            : <>
+                                <h5>Koordinator{event.coordinators.length > 1 ? 'er' : ''}</h5>
+                                <ul>{event.coordinators.map(renderCoordinator)}</ul>
+                            </>}
+                        {event.comment ? <>
+                            <h5>Övrig info</h5>
+                            <MarkDown source={event.comment} />
+                        </> : null}
                     </div>
                 </Col>
                 <Col md={12} lg={6}>
                     <div className="model-header">
                         <h3>Uppgifter</h3>
-                        <h3><Badge variant='secondary'>{event.activities_count} totalt, {event.activities_available_count} ledig(a)</Badge></h3>
+                        <h3><Badge variant='secondary'>
+                            {event.activities_count} totalt,
+                            {event.activities_available_count} ledig
+                            {event.activities_available_count !== 1 ? 'a' : ''}
+                        </Badge></h3>
                     </div>
                     <Table hover>
                         <thead>

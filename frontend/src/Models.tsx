@@ -15,14 +15,17 @@ export interface IdValue {
 
 export class Member implements IdValue {
     id: string = "";
+    user_id: string = "";
     fullname: string = "";
-    phone?: string;
+    phone_number?: string;
     email: string = "";
     image_url?: string;
 
     url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
-    adminUrl = () => '/admin/app/member/' + this.id;
-    static apiUrl = (id: string) => `/api/member/${id}`;
+    adminUrl = () => '/admin/auth/member/' + this.user_id;
+    apiUrl = () => Member.apiUrlForId(this.id);
+    static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
+    static apiUrlForId = (id: string) => `/api/member/${id}`;
 }
 
 export class PagedMembers extends PagedValues<Member> {
@@ -140,6 +143,9 @@ export class T13Event implements IdValue {
     activities_count?: number;
     activities_available_count?: number;
 
+    @Type(() => Member)
+    coordinators: Member[] = [];
+
     date = () => {
         if (this.start_date.toDateString() === this.end_date.toDateString() || this.end_date === null)
             return this.start_date.toLocaleDateString('sv-SE')
@@ -150,6 +156,7 @@ export class T13Event implements IdValue {
     url = () => `/frontend/event/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/event/${this.id}`;
     static apiUrl = (id: string) => `/api/event/${id}`;
+
 }
 
 export class PagedT13Events extends PagedValues<T13Event> {
