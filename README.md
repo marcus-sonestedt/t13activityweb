@@ -48,23 +48,19 @@ By default, uses the [SQLite](https://www.sqlite.org/) db during development, wh
 
 * Install [Python 3.7](https://www.python.org) or later
 
-* Create a virtual python environment
-
-```bash
-python -m venv env
-```
-
-* Activate it:
+* Create a virtual python environment and activate it
 
   * On Windows:
 
     ```cmd
+    python -m venv env  
     env/scripts/activate
     ```
 
   * On Linux:
 
     ```bash
+    virtualenv env
     source env/scripts/activate
     ```
 
