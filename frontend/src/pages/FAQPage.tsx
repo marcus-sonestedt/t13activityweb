@@ -1,12 +1,34 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect, useMemo } from "react"
 import { Container, Row, Col, Button } from "react-bootstrap"
 import DataProvider from "../components/DataProvider";
 import { deserialize } from 'class-transformer';
 import { PagedFAQs, FAQ } from "../Models";
 import { userContext } from "../components/UserContext";
 import { useParams } from "react-router-dom";
+import { Converter } from "showdown";
 
+// see https://github.com/showdownjs/showdown#valid-options
+const converter = new Converter({
+    headerLevelStart: 3,
+    simplifiedAutoLink: true,
+    openLinksInNewWindow: true,
+});
 
+const FAQComponent = (props: { model: FAQ }) => {
+    const { model } = props;
+    const user = useContext(userContext);
+    const html = useMemo(() => converter.makeHtml(model.answer), [model.answer]);
+
+    return <>
+        <div className='model-header'>
+            <h3>
+                <a href={model.url()}>{model.question}</a>
+            </h3>
+            {user.isStaff ? <a href={model.adminUrl()}><Button variant='secondary' size='sm'>Editera</Button></a> : null}
+        </div>
+        <div className='div-group' dangerouslySetInnerHTML={{ __html: html }} />
+    </>
+}
 
 export const FAQPage = () => {
     const { id } = useParams();
@@ -16,13 +38,7 @@ export const FAQPage = () => {
     const renderFAQ = (model: FAQ) =>
         <Row key={model.id} id={`faq-${model.id}`}>
             <Col>
-                <div className='model-header'>
-                    <h3>
-                        <a href={model.url()}>{model.question}</a>
-                    </h3>
-                    {user.isStaff ? <a href={model.adminUrl()}><Button variant='secondary' size='sm'>Editera</Button></a> : null}
-                </div>
-                <p className='div-group'>{model.answer}</p>
+                <FAQComponent model={model} />
             </Col>
         </Row>
 
