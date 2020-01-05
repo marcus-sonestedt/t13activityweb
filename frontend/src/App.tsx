@@ -81,12 +81,10 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
 
     <Route path="/frontend/activitytypes" component={ActivityTypesPage} />
     <Route path="/frontend/eventtypes" component={EventTypesPage} />
-    <Route path="/frontend/faq/:id" component={FAQPage} />
-    <Route path="/frontend/faq" component={FAQPage} />
+    <Route path="/frontend/faq/:id?" component={FAQPage} />
 
     <Route path="/frontend/member/:id" component={MemberPage} />
-    <Route path="/frontend/delistrequest/:id" component={ActivityDelistRequestPage} />
-    <Route path="/frontend/delistrequest" component={ActivityDelistRequestPage} />
+    <Route path="/frontend/delistrequest/:id?" component={ActivityDelistRequestPage} />
 
     {!props.isLoggedIn ?
       <>
@@ -102,8 +100,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
         <Route path="/frontend/notifications" component={NotificationsPage} />
 
         <Route path="/frontend/verify/phone" component={VerifyPhonePage} />
-        <Route path="/frontend/verify/email/:initialState" component={VerifyEmailPage} />
-        <Route path="/frontend/verify/email" component={VerifyEmailPage} />
+        <Route path="/frontend/verify/email/:initialState?" component={VerifyEmailPage} />
 
         <Route path="/frontend/welcome" render={() => <Redirect to="/frontend/home" />} />
         <Route path="/static/index.html" render={() => <Redirect to="/frontend/home" />} />
