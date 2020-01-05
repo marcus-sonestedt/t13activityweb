@@ -133,10 +133,17 @@ const Footer = () => {
     <footer className="footer mt-auto">
       <Container fluid>
         <Row className="my-footer">
-          <Col>
-            <p>Copyright &copy; Team13 GKRC and Marcus Sonestedt, {currentYear}.</p>
+          <Col lg={4} md={12}>
+            <p>
+              Copyright &copy; <a href="http://www.team13.se">Team13 GKRC</a>{' '}
+              and <a href="https://mackeblog.blogspot.com">Marcus Sonestedt</a>{' '}
+              2019-{currentYear}.
+            </p>
           </Col>
-          <Col>
+          <Col lg={4} md={12}>
+            <p>Running at <a href='https://eu.pythonanywhere.com'>eu.pythonanywhere.com</a>.</p>
+          </Col>
+          <Col lg={4} md={12}>
             <p>
               Developed with <a href="https://reactjs.org">React</a> and
               {' '}<a href="https:///www.djangoproject.com">Django</a> by

@@ -11,15 +11,15 @@ main>.container {
     padding: 15px 15px 0;
 }
 
-footer {
+footer * {
     margin: 0;
+    font-size: small;
 }
 
 .my-footer {
-    padding-top: 1em;
+    padding: .5em;
     text-align: center;
     background-color: black;
-    margin-bottom: 0;
 }
 
 .jumbotron {
