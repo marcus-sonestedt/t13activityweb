@@ -105,8 +105,8 @@ def notify_upcoming_activity(activity):
 
     message = f'''Hej!
 
-        Här kommer en påminnelse om att du är inbokad på uppgiften {activity} den {activity.date}
-        mellan {activity.start_time} och {activity.end_time}.
+        Här kommer en påminnelse om att du är inbokad på uppgiften {activity}
+        den {activity.date} mellan {activity.start_time} och {activity.end_time}.
 
         mvh /Team13'''
 

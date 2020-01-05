@@ -61,17 +61,18 @@ def signup(request):
             del form.fields['captcha']
 
         if form.is_valid():
-            form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
 
-            user = authenticate(username=username, password=raw_password)
-
+            user = form.save()
+            user.refresh_from_db()
+            user.member.phone_number = form.cleaned_data.get('phone_number')
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.email = username
             user.save()
 
+            user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('/')
     else:
