@@ -7,6 +7,7 @@ import { deserialize } from "class-transformer";
 import DataProvider from "../components/DataProvider";
 import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
+import { MarkDown } from "../components/Utilities";
 
 export const ActivityComponent = (props: { model: Activity | null }) => {
     const { model } = props;
@@ -30,9 +31,9 @@ export const ActivityComponent = (props: { model: Activity | null }) => {
             <hr />
             <div className='div-group'>
                 {event}
-                <h5>Datum: {model.date()}</h5>
-                <h4>Tid: {model.time()}</h4>
-                <p>{model.comment}</p>
+                <h5>Datum {model.date()} Tid {model.time()}</h5>
+                <h5>Information</h5>
+                <MarkDown source={model.comment}/>
             </div>
         </>
     )
@@ -59,6 +60,7 @@ export const ActivityPage = () => {
                 </Col>
                 <Col md={12} lg={6}>
                     <ActivityTypeComponent model={model?.type ?? null} />
+                    
                 </Col>
             </DataProvider>
         </Row>

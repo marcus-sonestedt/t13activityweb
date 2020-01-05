@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from "react"
 import { useParams, useHistory } from 'react-router-dom';
 import { Table, Container, Row, Col, Button, Badge } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
-import { PagedT13Events, T13Event, PagedActivities, Activity } from '../Models'
+import { PagedT13Events, T13Event, PagedActivities, Activity, Member } from '../Models'
 import '../components/Table.css'
 import Cookies from 'universal-cookie';
 import { userContext } from "../components/UserContext";
+import { MarkDown } from '../components/Utilities';
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -152,9 +153,7 @@ export const EventPage = () => {
                         <h4>Datum: {event.date()}</h4>
                         <h4>Typ: {eventType}</h4>
                         <h5>Beskrivning:</h5>
-                        <p>{event.description}</p>
-                        <h5>Övrigt:</h5>
-                        <p>{event.comment}</p>
+                        <MarkDown source={event.description}/>
                     </div>
                 </Col>
                 <Col md={12} lg={6}>

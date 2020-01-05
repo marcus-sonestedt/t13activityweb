@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../components/UserContext";
+import { MarkDown } from '../components/Utilities';
 
 export const EventTypeComponent = (props: { model: T13EventType | null }) => {
     const { model } = props;
@@ -24,7 +25,7 @@ export const EventTypeComponent = (props: { model: T13EventType | null }) => {
         <hr />
         <div className="div-group">
             <h4>Beskrivning:</h4>
-            <p>{model.description}</p>
+            <MarkDown source={model.description}/>
         </div>
     </>)
 }

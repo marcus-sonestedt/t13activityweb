@@ -7,6 +7,7 @@ import { ActivityType, PagedActivityTypes } from "../Models"
 import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../components/UserContext";
+import { MarkDown } from '../components/Utilities';
 
 export const ActivityTypeComponent = (props: { model: ActivityType | null }) => {
     const user = useContext(userContext);
@@ -25,7 +26,7 @@ export const ActivityTypeComponent = (props: { model: ActivityType | null }) => 
         <hr />
         <div className="div-group">
             <h4>Beskrivning:</h4>
-            <p>{model.description}</p>
+            <MarkDown source={model.description}/>
         </div>
     </>)
 }
