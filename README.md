@@ -2,8 +2,8 @@
 
 Website to help organizations &amp; clubs coordinate activities amongst their members, especially my local karting club.
 
-[Master: ![Build Status](https://lolworx.visualstudio.com/macke/_apis/build/status/marcusl.t13activityweb?branchName=master)](https://lolworx.visualstudio.com/macke/_build/latest?definitionId=1&branchName=master)
-[Dev: ![Build Status](https://lolworx.visualstudio.com/macke/_apis/build/status/marcusl.t13activityweb?branchName=dev)](https://lolworx.visualstudio.com/macke/_build/latest?definitionId=1&branchName=dev)
+[Master: ![Build Status](https://lolworx.visualstudio.com/Team13%20GKRC/_apis/build/status/marcusl.t13activityweb?branchName=master)](https://lolworx.visualstudio.com/Team13%20GKRC/_build/latest?definitionId=1&branchName=master)
+[Dev: ![Build Status](https://lolworx.visualstudio.com/Team13%20GKRC/_apis/build/status/marcusl.t13activityweb?branchName=dev)](https://lolworx.visualstudio.com/Team13%20GKRC/_build/latest?definitionId=1&branchName=dev)
 Release: ![Release status](https://lolworx.vsrm.visualstudio.com/_apis/public/Release/badge/5ac7801c-5d6e-4ee5-9f5c-e3326d62df94/1/1)
 
 Developed by [Marcus Sonestedt](https://www.github.com/marcusl) under the [Affero GPL license](https://en.wikipedia.org/wiki/Affero_General_Public_License).
