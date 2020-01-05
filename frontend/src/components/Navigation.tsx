@@ -7,10 +7,10 @@ export const Navigation = () => {
     const user = useContext(userContext);
 
     return (
-        <Navbar bg='dark' variant='dark'>
+        <Navbar bg='dark' variant='dark'  expand="lg">
             <Navbar.Brand href="/">
                 <img src="/static/logo192.png" alt="Team13 logo" />
-                GKRC Team13s aktivitetslista
+                Team13s aktivitetswebb
                 </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="justify-content-end">
@@ -29,16 +29,16 @@ export const Navigation = () => {
                             </Badge>
                         </Nav.Link>
                     }
-                    {!user.isStaff ? null :
-                        <Nav.Link href="/admin">Administrera</Nav.Link>
-                    }
-                    <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>
                     <NavDropdown title="Info" id="basic-nav-dropdown">
-                        <NavDropdown.Divider />
                         <NavDropdown.Item href="/frontend/eventtypes">Aktivitetstyper</NavDropdown.Item>
                         <NavDropdown.Item href="/frontend/activitytypes">Uppgiftstyper</NavDropdown.Item>
                     </NavDropdown>
-
+                </Nav>
+                <Nav>
+                    <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>
+                    {!user.isStaff ? null :
+                        <Nav.Link href="/admin">Administrera</Nav.Link>
+                    }
                     {!user.isLoggedIn ? null :
                         <>
                             <Nav.Link mr-sm={2} href="/frontend/profile">Hej {user.fullname}!</Nav.Link>
