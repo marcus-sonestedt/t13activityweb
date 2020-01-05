@@ -106,6 +106,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
         <Route path="/frontend/verify/email" component={VerifyEmailPage} />
 
         <Route path="/frontend/welcome" render={() => <Redirect to="/frontend/home" />} />
+        <Route path="/static/index.html" render={() => <Redirect to="/frontend/home" />} />
       </>
     }
     <Route component={NotFound} />
