@@ -49,6 +49,11 @@ class ActivityEnlist(APIView):
         if not activity.bookable:
             return HttpResponseForbidden("Aktiviteten är inte bokningsbar (i dåtid eller blockerad)")
 
+        adrs =  ActivityDelistRequest.objects.filter(member=member, activity=activity)
+        if adrs:
+            logger.info("Deleting delist requests for this member/activity")
+            adrs.delete()
+
         activity.assigned = member
         activity.save()
 
