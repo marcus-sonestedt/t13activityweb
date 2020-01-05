@@ -87,7 +87,7 @@ const CheckPhoneNumber = (props: { setState: (state: State) => void }) => {
             return;
         }
 
-        setMessage("Uppdaterar telefonnummer");
+        setMessage("Uppdaterar telefonnummer ...");
         setSending(true);
 
         fetch(`/api/member/${user.memberId}`,
@@ -117,7 +117,7 @@ const CheckPhoneNumber = (props: { setState: (state: State) => void }) => {
 
     return <div>
         <p>{message}</p>
-        <Form onSubmit={() => {}}>
+        <Form>
             <Form.Group controlId="formBasicPhoneNumber">
                 <Form.Label>Telefonnummer inkl. landskod (t.ex. +46701234567)</Form.Label>
                 <Form.Control type="phone" placeholder="Hämtar ditt telefonnummer"

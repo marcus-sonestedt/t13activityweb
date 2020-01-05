@@ -1,9 +1,9 @@
 import React, { useMemo, FormEvent, useEffect } from "react";
 import { useContext, useState } from "react"
+import { useParams } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { userContext } from "../components/UserContext"
 import Cookies from "universal-cookie";
-import { useParams } from "react-router-dom";
 
 enum State {
     CheckAddress = 1,
@@ -15,9 +15,12 @@ enum State {
 
 const cookies = new Cookies();
 
-export const VerifyEmailPage = (props: {}) => {
+export const VerifyEmailPage = () => {
     const { initialState } = useParams();
-    const [state, setState] = useState(initialState !== undefined ? parseInt(initialState) as State : State.CheckAddress);
+    const startState : State = initialState !== undefined
+        ? (State[initialState as string as keyof typeof State])
+        : State.CheckAddress;
+    const [state, setState] = useState(startState ?? State.CheckAddress);
 
     const stateForms: any = useMemo(() => {
         return {
@@ -42,6 +45,9 @@ export const VerifyEmailPage = (props: {}) => {
 const CheckAddress = (props: { onNext: () => void }) => {
     const user = useContext(userContext);
     const [email, setEmail] = useState('');
+    const [storedEmail, setStoredEmail] = useState('');
+    const [sending, setSending] = useState(false);
+    const [message, setMessage] = useState('Kolla att din emailadress är rätt innan vi skickar mailet.')
 
     useEffect(() => {
         const controller = new AbortController();
@@ -56,7 +62,9 @@ const CheckAddress = (props: { onNext: () => void }) => {
             }).then(resp => {
                 if (resp.status >= 300) throw resp.statusText;
                 resp.json().then(data => {
-                    setEmail(data.results[0].email);
+                    const email = data.results[0].email;
+                    setStoredEmail(email)
+                    setEmail(email);
                 })
             });
 
@@ -68,8 +76,42 @@ const CheckAddress = (props: { onNext: () => void }) => {
         setEmail(target.value);
     }
 
+    const onButtonClick = () => {
+        if (email === storedEmail) {
+            props.onNext();
+            return;
+        }
+
+        setMessage("Uppdaterar emailaddress ...");
+        setSending(true);
+
+        fetch(`/api/member/${user.memberId}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRFToken': cookies.get('csrftoken'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: user.memberId,
+                    email: email
+                }),
+                cache: "no-store"
+            }
+        ).then((resp) => {
+            if (resp.status >= 300) {
+                resp.text().then(console.error);
+                throw resp.statusText;
+            }
+        }).finally(() => {
+            setSending(false);
+            setTimeout(props.onNext, 100);
+        });
+    }
+
     return <div>
-        <p>Kolla att din emailadress är rätt innan vi skickar mailet.</p>
+        <p>{message}</p>
         <Form>
             <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email-address</Form.Label>
@@ -79,7 +121,7 @@ const CheckAddress = (props: { onNext: () => void }) => {
                     Vi skickar information, påminnelser och uppdateringar till din emailadress.
                 </Form.Text>
             </Form.Group>
-            <Button variant="success" onClick={props.onNext}>
+            <Button variant="success" onClick={onButtonClick} disabled={sending}>
                 Skicka verifieringsmail
             </Button>
         </Form>
@@ -88,7 +130,7 @@ const CheckAddress = (props: { onNext: () => void }) => {
 
 const SendEmail = (props: { onNext: () => void }) => {
     const [attempt, setAttempt] = useState(1);
-    const [message, setMessage] = useState('Skickar verifieringsmail');
+    const [message, setMessage] = useState('');
     const [sending, setSending] = useState(false);
 
     useEffect(() => {
@@ -96,6 +138,8 @@ const SendEmail = (props: { onNext: () => void }) => {
             setMessage("Det verkar gå dåligt. Försök senare eller kontakta kansliet.")
             return;
         }
+
+        setMessage('Skickar verifieringsmail');
         setSending(true);
 
         const controller = new AbortController();
@@ -118,13 +162,10 @@ const SendEmail = (props: { onNext: () => void }) => {
             }
 
             setMessage("Mail skickat!");
-            resp.text().then(() => props.onNext());
-        })
-            .catch(err => {
-                console.error(err);
-                alert("Något gick fel: " + err);
-            })
-            .finally(() => setSending(false));
+        }).catch(err => {
+            console.error(err);
+            alert("Något gick fel: " + err);
+        }).finally(() => setSending(false));
 
         return () => controller.abort();
     }, [attempt, props]);
@@ -134,13 +175,14 @@ const SendEmail = (props: { onNext: () => void }) => {
     return <div>
         <Form>
             <p>{message}</p>
+            <Button variant="success" onClick={props.onNext} disabled={disable}>
+                Jag fick mailet, har klickat på länken.
+            </Button>
+            <span className='spacer' />
+            <Button variant="warning" onClick={() => setAttempt(attempt + 1)} disabled={disable}>
+                Inget mail. Skicka igen.
+            </Button>
         </Form>
-        <Button variant="success" onClick={props.onNext} disabled={disable}>
-            Jag fick mailet, har klickat på länken.
-            </Button>
-        <Button variant="warning" onClick={() => setAttempt(attempt + 1)} disabled={disable}>
-            Inget mail. Skicka igen.
-            </Button>
     </div>
 }
 
@@ -174,9 +216,11 @@ const VerifyResult = (props: { onNext: (ok: boolean) => void }) => {
                 resp.json().then(data => {
                     const verified = data.results[0].email_verified;
                     setMessage(verified ? "Klart!" : "Ej verifierad.");
+
                     if (verified === true) {
                         setTimeout(() => onNext(true), 500);
                     } else {
+                        setMessage('Väntar lite...')
                         setTimeout(() => setRecheck(recheck + 1), 1000);
                     }
                 });
@@ -193,8 +237,8 @@ const VerifyResult = (props: { onNext: (ok: boolean) => void }) => {
 
     return <>
         <h3>{message}</h3>
-        <Button onClick={() => setRecheck(0)} variant="secondary" disabled={checking}>Kolla igen?</Button>
-        <Button onClick={() => onNext(false)} variant="danger">Avbryt?</Button>
+        <Button onClick={() => setRecheck(0)} variant="secondary" disabled={checking}>Kolla igen</Button>
+        <Button onClick={() => onNext(false)} variant="danger">Avbryt</Button>
     </>
 }
 
