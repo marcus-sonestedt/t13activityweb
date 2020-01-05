@@ -15,5 +15,5 @@ class Command(BaseCommand):
         msg = options.get('msg') or 'Test!'
         sms_client().messages.create(
             body=f"{msg} /Team13",
-            from_=settings.TWILIO_SMS_FROM_NUMBER,
+            from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
