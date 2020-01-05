@@ -81,4 +81,9 @@ footer * {
 .div-group {
     background-color: #0f0f18;
     padding: 10px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 5px;
 }

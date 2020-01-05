@@ -22,7 +22,7 @@ export class Member implements IdValue {
     image_url?: string;
 
     url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
-    adminUrl = () => '/admin/auth/member/' + this.user_id;
+    adminUrl = () => Member.adminUrlForId(this.user_id);
     apiUrl = () => Member.apiUrlForId(this.id);
     static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
     static apiUrlForId = (id: string) => `/api/member/${id}`;

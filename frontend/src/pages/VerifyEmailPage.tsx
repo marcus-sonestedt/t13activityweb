@@ -53,7 +53,6 @@ const CheckAddress = (props: { onNext: () => void }) => {
                 },
                 signal: controller.signal,
                 cache: "no-store"
-
             }).then(resp => {
                 if (resp.status >= 300) throw resp.statusText;
                 resp.json().then(data => {

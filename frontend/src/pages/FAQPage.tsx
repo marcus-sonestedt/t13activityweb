@@ -17,9 +17,13 @@ const FAQComponent = (props: { model: FAQ }) => {
             <h3>
                 <a href={model.url()}>{model.question}</a>
             </h3>
-            {user.isStaff ? <a href={model.adminUrl()}><Button variant='secondary' size='sm'>Editera</Button></a> : null}
+            {!user.isStaff ? null :
+                <a href={model.adminUrl()}>
+                    <Button variant='secondary' size='sm'>Editera</Button>
+                </a>
+            }
         </div>
-        <MarkDown source={model.answer} className='div-group'/>
+        <MarkDown source={model.answer} className='div-group' />
     </>
 }
 
@@ -29,11 +33,16 @@ export const FAQPage = () => {
     const user = useContext(userContext);
 
     const renderFAQ = (model: FAQ) =>
-        <Row key={model.id} id={`faq-${model.id}`}>
-            <Col>
-                <FAQComponent model={model} />
-            </Col>
-        </Row>
+        <div key={model.id} id={`faq-${model.id}`}>
+            <FAQComponent model={model} />
+        </div>
+
+    const renderQ = (model: FAQ) => {
+        const text = model.question.length > 40
+            ? model.question.substr(0, 37) + "..." : model.question;
+
+        return <li><a href={`#faq-${model.id}`}>{text}</a></li>
+    }
 
     useEffect(() => {
         if (id === undefined) return
@@ -42,15 +51,30 @@ export const FAQPage = () => {
     }, [id]);
 
     return <Container>
-        <div className="model-header">
-            <h1>Vanliga frågor och svar</h1>
-            {user.isStaff ? <a href={FAQ.adminCreateUrl}><Button variant='secondary'>Skapa ny</Button></a> : null}
-        </div>
+        <Row>
+            <Col>
+                <div className="model-header">
+                    <h1>Vanliga frågor och svar</h1>
+                    {user.isStaff ? <a href={FAQ.adminCreateUrl}><Button variant='secondary'>Skapa ny</Button></a> : null}
+                </div>
+                <hr />
+            </Col>
+        </Row>
         <DataProvider<PagedFAQs>
             url={FAQ.apiUrlsForAll}
             ctor={(json) => deserialize(PagedFAQs, json)}
             onLoaded={setFAQs}>
-            {faqs.results.map(renderFAQ)}
+            <Row>
+                <Col lg={4}>
+                    <p>{faqs.results.length} frågor &amp; svar</p>
+                    <ul>
+                        {faqs.results.map(renderQ)}
+                    </ul>
+                </Col>
+                <Col lg={8}>
+                    {faqs.results.map(renderFAQ)}
+                </Col>
+            </Row>
         </DataProvider>
     </Container>
 }
