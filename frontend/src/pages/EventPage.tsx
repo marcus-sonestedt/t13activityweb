@@ -87,6 +87,7 @@ export const EventPage = () => {
 
     const claimActivityClick = (
         e: React.MouseEvent<HTMLElement>, model: Activity) => {
+        e.stopPropagation();
         const cookies = new Cookies();
         fetch(`/api/activity_enlist/${model.id}`,
             {
