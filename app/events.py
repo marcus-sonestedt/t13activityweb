@@ -28,11 +28,11 @@ def new_user_created(member):
         The user {member.fullname} (username: '{user.username}', email:
         {user.email}) just registered themselves on the Team 13 website.
 
-        Go to https://eu.macke.pythonanywhere.com/admin/auth/user/{user.id}/change/'
+        Go to https://macke.eu.pythonanywhere.com/admin/auth/user/{user.id}/change/'
         to give them access, i.e. at least add them to the 'T13 Members'
         group if they are a legitimate member of the club.
 
-        See also https://macke.eu.pythonanywhere.com/admin/app/member/{member.id}/change/ 
+        See also https://macke.eu.pythonanywhere.com/admin/app/member/{member.id}/change/
         to check their membership status & data.
 
         Best regards,
@@ -45,7 +45,7 @@ def adr_approved(adr):
 
     send_mail('Avbokning godkänd',
         f'''Hej {adr.member.fullname}
-        
+
         Din önskan om avbokning från {adr.activity}
         har blivit godkänd av {adr.approver.fullname}.
 
@@ -70,13 +70,13 @@ def adr_rejected(adr):
 
     send_mass_mail('Avbokning ej godkänd',
             f'''Hej {adr.member.fullname},
-            
-            Din önskan om avbokning från {adr.activity} 
+
+            Din önskan om avbokning från {adr.activity}
             har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
             med följande meddelande:\n\n"{adr.reject_reason}"
 
             Vänligen tag kontakt om du har frågor.
-            
+
             mvh
             /Team13 aktivitetswebb''',
             settings.DEFAULT_FROM_EMAIL,
@@ -132,8 +132,8 @@ def send_verification_email(member):
         message=f'''Hej {member.fullname},
 
         Klicka på länken för att verifiera din emailadress:
-        
-        https://eu.macke.pythonanywhere.com/api/verify/email/check/{member.email_verification_code}
+
+        https://macke.eu.pythonanywhere.com/api/verify/email/check/{member.email_verification_code}
 
         mvh
         /Team13''',

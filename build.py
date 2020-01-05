@@ -12,21 +12,21 @@ def clean():
         shutil.rmtree(static_dir)
 
 def build():
-    run(('npm','run','build'), check=True, cwd='frontend',shell=True)
-    run(('python','manage.py','collectstatic'), check=True)
-    run(('python','manage.py','check'), check=True)
+    run(['npm','run','build'], check=True, cwd='frontend')
+    run(['python','manage.py','collectstatic'], check=True)
+    run(['python','manage.py','check'], check=True)
 
 def updatedb():
-    run(('python','manage.py','makemigrations'), check=True)
-    run(('python','manage.py','migrate'), check=True)
+    run(['python','manage.py','makemigrations'], check=True)
+    run(['python','manage.py','migrate'], check=True)
 
 def test():
     testEnv = os.environ.update({'CI':'true'})
     print("\n == NPM TEST")
-    run(('npm','run','test'), check=True, env=testEnv, cwd='frontend', shell=True)
+    run(['npm','run','test'], check=True, env=testEnv, cwd='frontend')
 
     print("\n == PYTHON TEST")
-    run(('python','manage.py','test', '--debug-mode'), check=True, env=testEnv)
+    run(['python','manage.py','test', '--debug-mode'], check=True, env=testEnv)
 
 if __name__ == '__main__':
     print("Working in " + ROOT_DIR + " ...")
