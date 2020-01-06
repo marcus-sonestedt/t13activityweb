@@ -26,7 +26,7 @@ export const VerifyEmailPage = () => {
         return {
             1: <CheckAddress onNext={() => setState(State.SendEmail)} />,
             2: <SendEmail onNext={() => setState(State.VerifyResult)} />,
-            3: <VerifyResult onNext={(ok: boolean) => setState(ok ? State.Success : State.Failure)} />,
+            3: <VerifyResult setState={setState} />,
             4: <Success />,
             5: <Failure onRestart={() => setState(State.CheckAddress)} />
         }
@@ -85,7 +85,7 @@ const CheckAddress = (props: { onNext: () => void }) => {
         setMessage("Uppdaterar emailaddress ...");
         setSending(true);
 
-        fetch(`/api/member/${user.memberId}`,
+        fetch(`/api/user/${user.userId}`,
             {
                 method: 'PATCH',
                 headers: {
@@ -94,8 +94,7 @@ const CheckAddress = (props: { onNext: () => void }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id: user.memberId,
-                    email: email
+                    email: email 
                 }),
                 cache: "no-store"
             }
@@ -186,8 +185,8 @@ const SendEmail = (props: { onNext: () => void }) => {
     </div>
 }
 
-const VerifyResult = (props: { onNext: (ok: boolean) => void }) => {
-    const { onNext } = props;
+const VerifyResult = (props: { setState: (state: State) => void }) => {
+    const { setState } = props;
     const user = useContext(userContext);
 
     const [message, setMessage] = useState('Kontrollerar med servern...');
@@ -218,7 +217,7 @@ const VerifyResult = (props: { onNext: (ok: boolean) => void }) => {
                     setMessage(verified ? "Klart!" : "Ej verifierad.");
 
                     if (verified === true) {
-                        setTimeout(() => onNext(true), 500);
+                        setTimeout(() => setState(State.Success), 500);
                     } else {
                         setMessage('Väntar lite...')
                         setTimeout(() => setRecheck(recheck + 1), 1000);
@@ -233,12 +232,16 @@ const VerifyResult = (props: { onNext: (ok: boolean) => void }) => {
             }).finally(() => setChecking(false));
 
         return () => controller.abort();
-    }, [user.memberId, onNext, recheck])
+    }, [user.memberId, setState, recheck])
 
     return <>
         <h3>{message}</h3>
-        <Button onClick={() => setRecheck(0)} variant="secondary" disabled={checking}>Kolla igen</Button>
-        <Button onClick={() => onNext(false)} variant="danger">Avbryt</Button>
+        <Button onClick={() => setState(State.CheckAddress)} variant="secondary" disabled={checking}>
+            Kolla igen
+        </Button>
+        <Button onClick={() => setState(State.Failure)} variant="danger">
+            Avbryt
+        </Button>
     </>
 }
 

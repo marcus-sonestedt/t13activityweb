@@ -4,11 +4,14 @@ import logging
 from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
+
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
 
 from rest_framework.views import APIView
 from rest_framework import authentication, generics, parsers, renderers, status
@@ -24,39 +27,10 @@ from app.models import Activity, ActivityType, Event, EventType, Member, \
 
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
-    EventActivitySerializer, FAQSerializer
+    EventActivitySerializer, FAQSerializer, UserSerializer
 
 logger = logging.getLogger(__name__)
 
-
-class ClearAuthToken(ObtainAuthToken):
-    permission_classes = [IsAuthenticated]
-    schema = None
-
-    def post(self, request):
-        deleted, _ = Token.objects.delete(user=self.serializer.object['user'])
-        if deleted == 0:
-            return Response("not logged in?", status=status.HTTP_410_GONE)
-        return Response("bye")
-
-
-class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):        
-    queryset = Member.objects.select_related('user')
-    permission_classes = [IsAuthenticated]
-    serializer_class = MemberSerializer
-
-    @method_decorator(never_cache)
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)    
-
-    def check_object_permissions(self, request, obj):
-        if request.method.upper() == 'PATCH' and request.user.member.id != obj.id:
-            return PermissionDenied("Can only PATCH self")
-        
-        return super().check_object_permissions(request, obj)
 
 
 class MyActivitiesList(generics.ListAPIView):
@@ -92,59 +66,6 @@ class EventList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-
-class IsLoggedIn(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    renderer_classes = (renderers.JSONRenderer,)
-    read_only = True
-
-    @method_decorator(cache_page(60*5))
-    @method_decorator(vary_on_cookie)
-    @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
-    def get(self, request, format=None):
-        notifications = []
-        config = apps.get_app_config('app')
-
-        response_dict = {
-            'isLoggedIn': request.user.is_authenticated,
-            'isStaff': request.user.is_staff,
-            'settings': {
-                'minSignups': config.MIN_ACTIVITY_SIGNUPS,
-                'latestBookableDate': config.LATEST_BOOKABLE_DATE
-            },
-            'notifications': notifications
-        }
-
-        try:
-            member = Member.objects.get(user=request.user.id)
-
-            response_dict['myDelistRequests'] = \
-                ActivityDelistRequest.objects.filter(member=member, approved=None).count()
-
-            if request.user.is_staff:
-                response_dict['unansweredDelistRequests'] = \
-                    ActivityDelistRequest.objects.filter(approved=None).exclude(member=member).count()
-
-            if not member.phone_verified:
-                notifications.append({
-                    'message': 'Ditt telefonnummer är inte verifierat än',
-                    'link': '/frontend/verify/phone'})
-
-            if not member.email_verified:
-                notifications.append({
-                    'message': 'Din emailaddress är inte verifierad än',
-                    'link': '/frontend/verify/email'})
-
-        except Member.DoesNotExist:
-            member = None
-
-        response_dict.update({
-            'userId': request.user.id if request.user.is_authenticated else None,
-            'memberId': member.id if member else None,
-            'fullname': member.fullname if member else None,
-        })
-
-        return Response(response_dict)
 
 
 class EventActivities(generics.ListAPIView):
@@ -237,12 +158,6 @@ class FAQList(generics.ListAPIView):
 
 
 url_patterns = [
-    path('login', obtain_auth_token),
-    path('logout', ClearAuthToken.as_view()),
-    path('isloggedin', IsLoggedIn.as_view()),
-
-    re_path(r'^member(/(?P<pk>[0-9]+)?)?', MemberList.as_view()),
-
     path('myactivities', MyActivitiesList.as_view()),
     re_path(r'^activity/(?P<id>[0-9]+)?', ActivityList.as_view()),
     re_path(

@@ -1,4 +1,4 @@
-import { Activity, PagedActivities } from "../Models";
+import { Activity, PagedActivities } from '../Models';
 import React, { useState, useContext, useMemo, useCallback } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { ActivityTypeComponent } from "./ActivityTypePage";
@@ -9,11 +9,10 @@ import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
 import { MarkDown } from "../components/Utilities";
 
-export const ActivityComponent = (props: { model: Activity | null }) => {
+export const ActivityComponent = (props: { model?: Activity }) => {
     const { model } = props;
-    const user = useContext(userContext);
 
-    if (model === null)
+    if (model === undefined)
         return null;
 
     const event = model.event !== null
@@ -22,13 +21,6 @@ export const ActivityComponent = (props: { model: Activity | null }) => {
 
     return (
         <>
-            <div className='model-header'>
-                <a href={model.url()}><h1>{model.name}</h1></a>
-                {user.isStaff ?
-                    <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
-                    : null}
-            </div>
-            <hr />
             <div className='div-group'>
                 {event}
                 <h5>Datum {model.date()} Tid {model.time()}</h5>
@@ -46,7 +38,8 @@ export const ActivityComponent = (props: { model: Activity | null }) => {
 
 export const ActivityPage = () => {
     const { id } = useParams();
-    const [model, setModel] = useState<Activity | null>(null);
+    const user = useContext(userContext);
+    const [model, setModel] = useState<Activity | undefined>();
     const url = useMemo(() => id === undefined ? '' : Activity.apiUrlFromId(id), [id]);
     const ctorCallback = useCallback((json: string) => deserialize(PagedActivities, json), []);
     const setModelCallback = useCallback(data => setModel(data.results[0]), []);
@@ -54,22 +47,41 @@ export const ActivityPage = () => {
     if (id === undefined || id === null)
         return <NotFound />
 
+    const Title = () => {
+        if (model === undefined)
+            return null;
+
+        return <>
+            <div className='model-header'>
+                <a href={model.url()}><h1>{model.name}</h1></a>
+                {user.isStaff ?
+                    <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                    : null}
+            </div>
+            <hr />
+        </>
+    }
+
     return <Container>
-        <Row>
-            <DataProvider<PagedActivities>
-                url={url}
-                ctor={ctorCallback}
-                onLoaded={setModelCallback}>
+        <DataProvider<PagedActivities>
+            url={url}
+            ctor={ctorCallback}
+            onLoaded={setModelCallback}>
+            <Row>
+                <Col>
+                    <Title/>
+                </Col>
+            </Row>
+            <Row>
                 <Col md={12} lg={6}>
                     <ActivityComponent model={model} />
                 </Col>
                 <Col md={12} lg={6}>
-                    <ActivityTypeComponent model={model?.type ?? null} />
+                    <ActivityTypeComponent model={model?.type} />
                 </Col>
-            </DataProvider>
-        </Row>
+            </Row>
+        </DataProvider>
     </Container>
-
 }
 
 export default ActivityPage;

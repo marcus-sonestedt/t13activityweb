@@ -1,11 +1,18 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
-from app.models import Attachment, Member, Event, EventType, Activity, ActivityType, ActivityDelistRequest, FAQ
+from app.models import Attachment, Member, Event, EventType, Activity, \
+    ActivityType, ActivityDelistRequest, FAQ
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         fields = ('uploader', 'comment', 'created')
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'first_name', 'last_name')
 
 
 class MemberSerializer(serializers.ModelSerializer):

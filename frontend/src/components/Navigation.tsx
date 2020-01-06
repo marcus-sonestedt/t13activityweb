@@ -3,6 +3,8 @@ import { Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap'
 import './Navigation.css'
 import { userContext } from "./UserContext";
 
+const HoverTooltip = () => {};
+
 export const Navigation = () => {
     const user = useContext(userContext);
 

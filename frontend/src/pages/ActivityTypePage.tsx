@@ -9,11 +9,11 @@ import NotFound from "../components/NotFound";
 import { userContext } from "../components/UserContext";
 import { MarkDown } from '../components/Utilities';
 
-export const ActivityTypeComponent = (props: { model: ActivityType | null }) => {
+export const ActivityTypeComponent = (props: { model?: ActivityType | null }) => {
     const user = useContext(userContext);
     const { model } = props;
 
-    if (model == null)
+    if (model === undefined || model === null)
         return null
 
     return (<>
