@@ -68,6 +68,7 @@ class ActivityTypeAdmin(admin.ModelAdmin):
 @admin.register(models.Event)
 class EventAdmin(admin.ModelAdmin):
     inlines = [ActivityInline, ]
+    list_filter=['type', 'cancelled']
 
 
 @admin.register(models.ActivityType)
@@ -77,10 +78,12 @@ class ActivityTypeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_filter=['completed', 'cancelled']
+    list_filter=['completed', 'cancelled', 'type']
     list_display = (
         'name',
+        'type',
         'event',
+        'date',
         'assigned',
         'completed',
         'cancelled'
@@ -93,7 +96,8 @@ class ActivityDelistRequestAdmin(admin.ModelAdmin):
     list_display = (
         'member',
         'activity',
-        'approved'
+        'approved',
+        'approver'
     )
 
 

@@ -18,11 +18,13 @@ from app import events
 
 logger = logging.getLogger(__name__)
 
+
 class RuleViolationException(BaseException):
     '''thrown when a model change violates rules set by the club'''
     pass
 
 # Create your models here, these will be tables in the SQL database.
+
 
 class Member(models.Model):
     '''A club member, extensions to user object'''
@@ -36,15 +38,17 @@ class Member(models.Model):
     phone_verified = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
 
-    email_verification_code = models.CharField(max_length=40, blank=True, null=True)
-    email_verification_code_created = models.DateTimeField(null=True, blank=True)
+    email_verification_code = models.CharField(
+        max_length=40, blank=True, null=True)
+    email_verification_code_created = models.DateTimeField(
+        null=True, blank=True)
 
     comment = models.TextField(blank=True)
     membercard_number = models.CharField(max_length=20, blank=True)
 
     @property
     def fullname(self):
-        return f"{self.user.first_name} {self.user.last_name}"        
+        return f"{self.user.first_name} {self.user.last_name}"
 
     @property
     def email(self):
@@ -56,15 +60,17 @@ class Member(models.Model):
         verbose_name_plural = 'Medlemmar'
 
     def __str__(self):
-        return f"{self.fullname} ({self.user.email})"
+        return f"{self.fullname} ({self.email})"
 
     def admin_task_summary(self):
         current_year = datetime.date.today().year
-        current_activities = Activity.objects.filter(assigned=self, \
-         event__start_date__year=current_year)
-        booked =  current_activities.count()
+        current_activities = Activity.objects.filter(assigned=self,
+                                                     event__start_date__year=current_year)
+        booked = current_activities.count()
         completed = current_activities.filter(completed=True).count()
+
         return f"{completed}/{booked}"
+
     admin_task_summary.short_description = 'Utförda/Bokade'
 
 
@@ -80,6 +86,7 @@ def user_saved(sender, instance, created, **kwargs):
         instance.save()
 
     instance.member.save()
+
 
 @receiver(post_save, sender=Member)
 def member_saved(sender, instance, created, **kwargs):
@@ -149,6 +156,7 @@ class Event(models.Model):
     @property
     def activities_count(self):
         return self.activities.count()
+
     @property
     def activities_available_count(self):
         return self.activities.filter(assigned=None).count()
@@ -189,7 +197,8 @@ class Activity(models.Model):
     name = models.CharField(max_length=128)
     type = models.ForeignKey(
         ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='activities')
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name='activities')
 
     assigned = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True)
@@ -247,7 +256,7 @@ class ActivityDelistRequest(models.Model):
     reason = models.TextField(blank=True)
     approved = models.BooleanField(default=None, null=True, blank=True)
     approver = models.ForeignKey(Member, on_delete=models.SET_NULL,
-                                 blank=True, null=True, related_name='approvers')                                     
+                                 blank=True, null=True, related_name='approvers')
     reject_reason = models.TextField(blank=True)
 
     def __str__(self):
@@ -272,10 +281,11 @@ class ActivityDelistRequest(models.Model):
 
             if booked_count - delist_req_count - 1 < config.MIN_ACTIVITY_SIGNUPS:
                 raise RuleViolationException(
-                    f'Cannot create delist request when member would be booked for less than' + 
-                     f'{config.MIN_ACTIVITY_SIGNUPS} activities if all outstanding request(s) are approved.')
+                    f'Cannot create delist request when member would be booked for less than' +
+                    f'{config.MIN_ACTIVITY_SIGNUPS} activities if all outstanding request(s) are approved.')
 
         super().save(*args, **kwargs)
+
 
 @receiver(post_save, sender=ActivityDelistRequest)
 def save_activity_delist_request(sender, instance, created, **kwargs):
@@ -288,8 +298,10 @@ def save_activity_delist_request(sender, instance, created, **kwargs):
         instance.activity.save()
         events.adr_approved(instance)
     elif instance.approved is False:
-        logger.info(f"Rejecting {instance.member} delist request from {instance.activity}")
+        logger.info(
+            f"Rejecting {instance.member} delist request from {instance.activity}")
         events.adr_rejected(instance)
+
 
 class FAQ(models.Model):
     question = models.CharField(max_length=256)
