@@ -77,8 +77,8 @@ def signup(request):
             return redirect('/')
     else:
         form = BootstrapUserCreationForm()
-        if 'localhost' in request.get_host() and 'captcha' in form.fields:
-            del form.fields['captcha']
+        #if 'localhost' in request.get_host() and 'captcha' in form.fields:
+        #    del form.fields['captcha']
 
     return render(request, 'signup.html', {
         'form': form,
@@ -95,11 +95,11 @@ class MyLoginView(LoginView):
     }
     redirect_authenticated_user = True
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
+#    def get_form(self, form_class=None):
+#        form = super().get_form(form_class)
 #        if 'localhost' in self.request.get_host() and 'captcha' in form.fields:
 #            del form.fields['captcha']
-        return form
+#        return form
 
     def dispatch(self, request, *args, **kwargs):
         self._request = request
