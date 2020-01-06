@@ -58,6 +58,16 @@ class Member(models.Model):
     def __str__(self):
         return f"{self.fullname} ({self.user.email})"
 
+    def admin_task_summary(self):
+        current_year = datetime.date.today().year
+        current_activities = Activity.objects.filter(assigned=self, \
+         event__start_date__year=current_year)
+        booked =  current_activities.count()
+        completed = current_activities.filter(completed=True).count()
+        return f"{completed}/{booked}"
+    admin_task_summary.short_description = 'Utförda/Bokade'
+
+
 @receiver(post_save, sender=User)
 def user_saved(sender, instance, created, **kwargs):
     if created:

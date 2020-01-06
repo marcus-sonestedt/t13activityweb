@@ -53,7 +53,8 @@ class MemberAdmin(admin.ModelAdmin):
         'user_link',
         'phone_number',
         'phone_verified',
-        'email_verified'
+        'email_verified',
+        'admin_task_summary'
     )    
 
 
