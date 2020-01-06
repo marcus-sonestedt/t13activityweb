@@ -38,32 +38,6 @@ footer * {
     clear: both
 }
 
-.text-tooltip {
-    display: block;
-    position: absolute;
-    visibility: hidden;
-    padding: 10px;
-    margin-left: 5em;
-    min-width: 20em;
-    border: 1px solid;
-    background-color: black;
-    opacity: 0;
-    transition: opacity 0.5s;
-    z-index: 3000;
-    /* must be >1000 to be on top of some calendar items, works so-so :-| */
-    color: white;
-}
-
-.text-tooltip.place-left {
-    margin-left: -20em;
-}
-
-*:hover>.text-tooltip {
-    visibility: visible;
-    opacity: 1 !important;
-    transition: opacity 0.5s linear 1s;
-}
-
 .spacer {
     margin: 0.5em
 }

@@ -15,28 +15,30 @@ from django.utils.translation import ugettext_lazy as _
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox, ReCaptchaV3
 
+captcha_attrs = {
+    'data-theme': 'dark',
+    'data-size': 'compact',
+}
+
 
 class BootstrapAuthenticationForm(AuthenticationForm):
-    """Authentication form which uses boostrap CSS & ReCaptcha."""
+    """Authentication form which uses bootstrap CSS & ReCaptcha."""
+
+    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        for field in self.fields.values():
+        for field in (f for f in self.fields.values() if f.label != 'captcha'):
             field.widget.attrs.update({'class': 'form-control'})
-
-#    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
 
 class BootstrapUserCreationForm(UserCreationForm):
-    """Signup form which uses Boostrap, ReCaptcha and adds some Member info"""
+    """Signup form which uses bootstrap css, ReCaptcha and adds some Member fields"""
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
 
-        for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
-
-    first_name = forms.CharField(        
+    first_name = forms.CharField(
         max_length=64,
         label="Förnamn",
         widget=forms.TextInput({
@@ -61,7 +63,11 @@ class BootstrapUserCreationForm(UserCreationForm):
         help_text="Måste vara på format: +46123456789"
     )
 
-#    captcha = ReCaptchaField(widget=ReCaptchaV3)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in (f for f in self.fields.values() if f.label != 'captcha'):
+            field.widget.attrs.update({'class': 'form-control'})
 
     def _post_clean(self):
         super()._post_clean()

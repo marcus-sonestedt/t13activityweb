@@ -8,10 +8,6 @@
     background-color: #567;
 }
 
-.text-tooltip {
-    z-index: 3000;
-}
-
 .rbc-off-range-bg {
     background-color: #123;
     color: #ccc

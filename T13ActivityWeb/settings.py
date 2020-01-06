@@ -89,8 +89,9 @@ for n in secret_names:
         print("    Disabling email")
         del EMAIL_HOST
 
-    if n.startswith('RECAPTCHA_'):
-        SILENCED_SYSTEM_CHECKS += 'captcha.recaptcha_test_key_error'
+    #if n.startswith('RECAPTCHA_'): 
+    #    logger.info("Disabling capcha test key warning")
+    #    SILENCED_SYSTEM_CHECKS += 'captcha.recaptcha_test_key_error'
 
     if n == 'SECRET_KEY':
         print('    WARNING: Using predefined SECRET_KEY, not ok in production!')
@@ -266,15 +267,17 @@ if not DEBUG:
     }
 
 # recaptcha
-RECAPTCHA_PROXY = {
+
+#proxy not requred if server can access internet
+#RECAPTCHA_PROXY = {
     #    'http': 'http://localhost:8000',
     #    'https': 'https://localhost:8000'
-}
+#}
 
 # https://developers.google.com/recaptcha/docs/v3#score
 RECAPTCHA_REQUIRED_SCORE = 0.5
 
-# default is www.google.xom
+# default is www.google.com
 #RECAPTCHA_DOMAIN = 'www.recaptcha.net'
 
 REST_FRAMEWORK = {

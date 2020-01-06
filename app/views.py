@@ -57,8 +57,8 @@ def about(request):
 def signup(request):
     if request.method == 'POST':
         form = BootstrapUserCreationForm(request.POST)
-        if 'localhost' in request.get_host() and 'captcha' in form.fields:
-            del form.fields['captcha']
+#        if 'localhost' in request.get_host() and 'captcha' in form.fields:
+#            del form.fields['captcha']
 
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -97,8 +97,8 @@ class MyLoginView(LoginView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        if 'localhost' in self.request.get_host() and 'captcha' in form.fields:
-            del form.fields['captcha']
+#        if 'localhost' in self.request.get_host() and 'captcha' in form.fields:
+#            del form.fields['captcha']
         return form
 
     def dispatch(self, request, *args, **kwargs):
