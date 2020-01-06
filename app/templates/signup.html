@@ -2,10 +2,10 @@
 
 {% block content %}
   <h2>Registrera nytt konto</h2>
-  <p>Använd den emailadress som du har lämnat till klubbens kansli tidigare</p>
+  <p>Använd den emailadress som du har lämnat till klubbens kansli tidigare.</p>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Registrera</button>
+    <button type="submit" class='btn btn-default btn-primary'>Registrera</button>
   </form>
 {% endblock %}

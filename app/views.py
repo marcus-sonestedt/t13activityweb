@@ -57,8 +57,6 @@ def about(request):
 def signup(request):
     if request.method == 'POST':
         form = BootstrapUserCreationForm(request.POST)
-#        if 'localhost' in request.get_host() and 'captcha' in form.fields:
-#            del form.fields['captcha']
 
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -77,8 +75,6 @@ def signup(request):
             return redirect('/')
     else:
         form = BootstrapUserCreationForm()
-#        if 'localhost' in request.get_host() and 'captcha' in form.fields:
-#            del form.fields['captcha']
 
     return render(request, 'signup.html', {
         'form': form,
@@ -94,16 +90,6 @@ class MyLoginView(LoginView):
         'year': datetime.now().year,
     }
     redirect_authenticated_user = True
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-#        if 'localhost' in self.request.get_host() and 'captcha' in form.fields:
-#            del form.fields['captcha']
-        return form
-
-    def dispatch(self, request, *args, **kwargs):
-        self._request = request
-        return super().dispatch(request, *args, **kwargs)
 
 
 @staff_member_required
