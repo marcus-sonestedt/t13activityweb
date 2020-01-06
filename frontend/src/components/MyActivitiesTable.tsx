@@ -6,8 +6,8 @@ import { Activity, ActivityDelistRequest } from '../Models';
 import { userContext } from "./UserContext"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
 import { CancelAdrButton, RequestAdrButton } from '../pages/ADRPage';
-import './Table.css'
 import { HoverTooltip } from "./Utilities";
+import './Table.css'
 
 export const MyActivitiesTable = (props: {
     values: Activity[],
@@ -26,6 +26,8 @@ export const MyActivitiesTable = (props: {
         f().then(reload);
     }
 
+    const highlightActivityMatch = window.location.search.match(/\?highlight-activity=([0-9]+)/);
+    const highlightActivityId = highlightActivityMatch ? highlightActivityMatch[1] : undefined;
 
     const renderRow = (activity: Activity) => {
         const eventInPast = activity.event.start_date <= today;
@@ -45,8 +47,10 @@ export const MyActivitiesTable = (props: {
                         ? ["Utförd", "Bra jobbat", '👍', 'thumbsup']
                         : ["Missad", "Du missade din uppgift! Du behöver boka en ny!", '😨', 'ohno']
 
+        const rowClassName = 'clickable-row ' + (activity.id.toString() === highlightActivityId ? 'active' : '');
+
         return (
-            <tr key={activity.id} className='clickable-row' onClick={rowClick}>
+            <tr key={activity.id} className={rowClassName} onClick={rowClick} >
                 <td>
                     <a href={activity.url()}>{activity.name}</a>
                     <br />

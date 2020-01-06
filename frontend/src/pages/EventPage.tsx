@@ -98,12 +98,13 @@ export const EventPage = () => {
             .then(r => {
                 if (r.status !== 200)
                     throw r.statusText;
+                history.push(`/frontend/home?highlight-activity=${model.id}`)
             }, r => { throw r })
             .catch(e => {
                 console.error(e);
                 alert("Något gick fel! :(\n" + e);
-            })
-            .finally(() => window.location.reload());
+                window.location.reload();
+            });
     }
 
     const renderActivityRow = (model: Activity) => {
@@ -135,7 +136,7 @@ export const EventPage = () => {
         <a href={event.type.url()}>{event.type.name}</a> : '-';
 
     const renderCoordinator = (member: Member) =>
-        <li>
+        <li key={member.id}>
             <a href={member.url()}>{member.fullname}</a>{' - '}
             <a href={`mailto:${member.email}`}>{member.email}</a>{' - '}
             <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
