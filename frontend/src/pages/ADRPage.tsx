@@ -8,7 +8,7 @@ import { ActivityDelistRequest, PagedADR } from '../Models';
 import { pageItems } from "./MyActivitiesPage";
 import { cancelADR, rejectADR, approveADR, deleteADR } from "../logic/ADRActions"
 import { useParams } from "react-router-dom";
-import { MarkDown } from '../components/Utilities';
+import { MarkDown, HoverTooltip } from '../components/Utilities';
 
 export const RequestAdrButton = (props: {
     onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void),
@@ -16,41 +16,53 @@ export const RequestAdrButton = (props: {
 }) => {
     const user = useContext(userContext);
 
+    const onSpanClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => { if (props.disabled) e.stopPropagation(); }
+
+    const onButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        console.info("Click!");
+        props.onClick(e);
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
     return (
-        <Button variant='outline-danger' size='sm' disabled={props.disabled} onClick={props.onClick}>
-            Avboka?
-            <div className='text-tooltip'>
-                {!props.disabled
-                    ? "Skapa en förfrågan om att att avboka dig från uppgiften"
-                    : "Du kan inte begära att avboka dig då du skulle få mindre än "
-                    + user.settings.minSignups + " uppgifter om det godkändes."}
-            </div>
-        </Button>
+        <HoverTooltip placement='bottom'
+            tooltip={!props.disabled
+                ? "Skapa en förfrågan om att att avboka dig från uppgiften"
+                : "Du kan inte begära att avboka dig då du skulle få mindre än "
+                + `${user.settings.minSignups} uppgifter om det godkändes.`}>
+            <span className="d-inline-block" onClick={onSpanClick}>
+                <Button variant='outline-danger' size='sm' disabled={props.disabled}
+                    onClick={onButtonClick} style={{ pointerEvents: props.disabled ? 'none' : 'auto' }}>
+                    Avboka?
+                </Button>
+            </span>
+        </HoverTooltip>
     );
 }
 
 export const CancelAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) }) =>
-    <Button variant='outline-warning' size='sm' onClick={props.onClick}>
-        Återta
-        <div className='text-tooltip'>
-            Avbryt din begäran att avboka och återta dig uppgiften.
-        </div>
-    </Button>
+    <HoverTooltip placement='bottom'
+        tooltip='Avbryt din begäran att avboka och återta dig uppgiften.'>
+        <Button variant='outline-warning' size='sm' onClick={props.onClick}>
+            Återta
+        </Button>
+    </HoverTooltip>
 
 export const DeleteAdrButton = (props: { onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) }) =>
-    <Button variant='outline-secondary' size='sm' onClick={props.onClick}>
-        Radera
-        <div className='text-tooltip'>
-            Radera denna avbegäran.
-        </div>
-    </Button>
+    <HoverTooltip placement='bottom'
+        tooltip='Radera denna avbegäran.'>
+        <Button variant='outline-secondary' size='sm' onClick={props.onClick}>
+            Radera
+        </Button>
+    </HoverTooltip>
 
 const AdrStatusBadge = (props: { model: ActivityDelistRequest }) => {
     const approved = props.model.approved
-    const [ text, variant ] =
-         approved === true ? ['Bekräftad', 'success']
-        : approved === false ? ['Avvisad', 'danger']
-        : ['Obekräftad', 'dark'];
+    const [text, variant] =
+        approved === true ? ['Bekräftad', 'success']
+            : approved === false ? ['Avvisad', 'danger']
+                : ['Obekräftad', 'dark'];
 
     return <Badge variant={variant as any}>{text}</Badge>
 }
@@ -225,19 +237,25 @@ export const ActivityDelistRequestPage = () => {
 }
 
 const ApproveAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>
-    <Button variant='success' onClick={props.onClick} disabled={props.disabled}>
-        Godkänn
-        <div className='text-tooltip place-left'>
-            Godkänn avbokningen och frigör medlemmen från sitt åtagande.
-            Uppgiften kommer inte ha någon medlem tilldelad efter detta.
-        </div>
-    </Button>
+    <HoverTooltip tooltip=
+        {'Godkänn avbokningen och frigör medlemmen från sitt åtagande.' +
+            'Uppgiften kommer inte ha någon medlem tilldelad efter detta.'}>
+        <span className="d-inline-block">
+            <Button variant='success' onClick={props.onClick} disabled={props.disabled}
+                style={{ pointerEvents: props.disabled ? 'none' : 'auto' }}>
+                Godkänn
+            </Button>
+        </span>
+    </HoverTooltip>
 
 const RejectAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>
-    <Button variant='danger' onClick={props.onClick} disabled={props.disabled}>
-        Avvisa
-        <div className='text-tooltip place-left'>
-            Avvisa denna avbokningsförfrågan. Du behöver ange en anledning
-            till varför du inte godtar anledningen som medlemmen angivit.
-        </div>
-    </Button>
+    <HoverTooltip tooltip={
+        'Avvisa denna avbokningsförfrågan. Du behöver ange en anledning' +
+        'till varför du inte godtar anledningen som medlemmen angivit.'}>
+        <span className="d-inline-block">
+            <Button variant='danger' onClick={props.onClick} disabled={props.disabled}
+                style={{ pointerEvents: props.disabled ? 'none' : 'auto' }}>
+                Avvisa
+            </Button>
+        </span>
+    </HoverTooltip>

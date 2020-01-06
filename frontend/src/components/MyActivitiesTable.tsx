@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import { Table } from 'react-bootstrap'
+import { Table, Col, Row } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 
 import { Activity, ActivityDelistRequest } from '../Models';
@@ -7,6 +7,7 @@ import { userContext } from "./UserContext"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
 import { CancelAdrButton, RequestAdrButton } from '../pages/ADRPage';
 import './Table.css'
+import { HoverTooltip } from "./Utilities";
 
 export const MyActivitiesTable = (props: {
     values: Activity[],
@@ -36,23 +37,42 @@ export const MyActivitiesTable = (props: {
             history.push(activity.url());
         }
 
+        const [text, tooltip, emoji, emojiLabel] =
+            !eventInPast ? ['', '', '', '']
+                : activity.completed === null
+                    ? ["Obekräftad", "Din närvaro har inte registrerats", '⏰', 'clock']
+                    : activity.completed === true
+                        ? ["Utförd", "Bra jobbat", '👍', 'thumbsup']
+                        : ["Missad", "Du missade din uppgift! Du behöver boka en ny!", '😨', 'ohno']
+
         return (
             <tr key={activity.id} className='clickable-row' onClick={rowClick}>
-                <td><a href={activity.url()}>{activity.name}</a></td>
-                <td><a href={activity.event.url()}>{activity.event.name}</a></td>
-                <td className='nowrap'>
-                    {activity.date()}<br />{activity.time()}
+                <td>
+                    <a href={activity.url()}>{activity.name}</a>
+                    <br />
+                    {activity.type !== null
+                        ? <a href={activity.type.url()} style={{ fontWeight: 'normal' }}>{activity.type.name}</a>
+                        : null}
                 </td>
-                <td>{eventInPast ?
-                    (activity.completed === null
-                        ? <span>Obekräftad <span role="img" aria-label="clock">⏰</span><span className="text-tooltip">Bra jobbat!</span></span>
-                        : activity.completed === true
-                            ? <span>Utförd <span role="img" aria-label="thumbsup">👍</span><span className="text-tooltip">Bra jobbat!</span></span>
-                            : <span>Missad <span role="img" aria-label="ohno">😨</span><span className="text-tooltip">Du missade din uppgift!</span></span>) :
-                    (activity.delist_requests.length === 0
+                <td>
+                    <a href={activity.event.url()}  style={{ fontWeight: 'bold' }}>{activity.event.name}</a>
+                    <br />
+                    {activity.event.type !== null
+                        ? <a href={activity.event.type.url()}>{activity.event.type.name}</a>
+                        : null}
+                </td>
+                <td className='nowrap'>
+                    {activity.date()}
+                    <br />
+                    {activity.time()}
+                </td>
+                <td>{eventInPast
+                    ? <HoverTooltip tooltip={tooltip}>
+                        <span>{text} <span role="img" aria-label={emojiLabel}>{emoji}</span></span>
+                    </HoverTooltip>
+                    : activity.delist_requests.length === 0
                         ? <span>Bokad</span>
                         : <a href={ActivityDelistRequest.urlForId(activity.delist_requests[0])}>Avbokningsfråga inlagd</a>
-                    )
                 }
                 </td>
                 <td>
@@ -70,15 +90,21 @@ export const MyActivitiesTable = (props: {
 
     return (
         <div className="table-container">
-            <h3>
-                <span className="table-title">Mina uppgifter</span>
-                <span className="table-count">{values.length} totalt, {completedCount} utförda, {bookedCount} bokade</span>
-            </h3>
-            <Table striped>
+            <Row>
+                <Col>
+                    <h1>Mina uppgifter</h1>
+                </Col>
+                <Col style={{ textAlign: 'right'}}>
+                    <h3>
+                        {values.length} totalt, {completedCount} utförda, {bookedCount} bokade
+                    </h3>
+                </Col>
+            </Row>
+            <Table striped responsive='lg'>
                 <thead>
                     <tr>
-                        <th>Namn</th>
-                        <th>Aktivitet</th>
+                        <th>Uppgift / Typ</th>
+                        <th>Aktivitet / Typ</th>
                         <th>Tidpunkt</th>
                         <th>Status</th>
                         <th>Åtgärd</th>

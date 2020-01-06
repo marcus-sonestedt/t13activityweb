@@ -178,12 +178,13 @@ export const EventPage = () => {
                     <div className="model-header">
                         <h3>Uppgifter</h3>
                         <h3><Badge variant='secondary'>
-                            {event.activities_count} totalt,
+                            {event.activities_count} totalt
+                            {', '}
                             {event.activities_available_count} ledig
                             {event.activities_available_count !== 1 ? 'a' : ''}
                         </Badge></h3>
                     </div>
-                    <Table hover>
+                    <Table hover striped responsive='lg'>
                         <thead>
                             <tr>
                                 <th>Beskrivning</th>

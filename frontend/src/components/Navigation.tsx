@@ -2,14 +2,13 @@ import React, { useContext } from "react";
 import { Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap'
 import './Navigation.css'
 import { userContext } from "./UserContext";
-
-const HoverTooltip = () => {};
+import { HoverTooltip } from "./Utilities";
 
 export const Navigation = () => {
     const user = useContext(userContext);
 
     return (
-        <Navbar bg='dark' variant='dark'  expand="lg">
+        <Navbar bg='dark' variant='dark' expand="lg">
             <Navbar.Brand href="/">
                 <img src="/static/logo192.png" alt="Team13 logo" />
                 Team13s aktivitetswebb
@@ -21,14 +20,15 @@ export const Navigation = () => {
                         <Nav.Link href="/frontend/delistrequest">
                             Avbokningar
                             <span className='spacer' />
-                            <Badge variant='secondary'>
-                                {user.myDelistRequests}
-                                {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
-                                <div className='text-tooltip' style={{ fontWeight: 'normal' }}>
-                                    Första siffran är antal av dina egna förfrågningar.<br />
-                                    Den andra är totalt antal obesvarade från alla medlemmar.
-                                </div>
-                            </Badge>
+                            <HoverTooltip tooltip={
+                                "Första siffran är antal av dina egna förfrågningar. \n" +
+                                "Den andra är totalt antal obesvarade från alla medlemmar."
+                            }>
+                                <Badge variant='secondary'>
+                                    {user.myDelistRequests}
+                                    {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
+                                </Badge>
+                            </HoverTooltip>
                         </Nav.Link>
                     }
                     <NavDropdown title="Info" id="basic-nav-dropdown">
@@ -45,11 +45,11 @@ export const Navigation = () => {
                         <>
                             <Nav.Link mr-sm={2} href="/frontend/profile">Hej {user.fullname}!</Nav.Link>
                             <Nav.Link mr-sm={2} href="/frontend/notifications">
-                                <Badge variant={user.notifications.length ? 'primary' : 'secondary'}>{user.notifications.length}
-                                    <div className='text-tooltip' style={{ fontWeight: 'normal' }}>
-                                        Olästa notifieringar
-                                    </div>
-                                </Badge>
+                                <HoverTooltip placement='left' tooltip='Olästa notifieringar'>
+                                    <Badge variant={user.notifications.length ? 'primary' : 'secondary'}>
+                                        {user.notifications.length}
+                                    </Badge>
+                                </HoverTooltip>
                             </Nav.Link>
                             <Nav.Link mr-sm={2} href="/app/logout">Logga ut</Nav.Link>
                         </>

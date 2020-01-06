@@ -1,5 +1,5 @@
 import React, { useState, SyntheticEvent } from "react";
-import { Table, Button, Pagination } from 'react-bootstrap'
+import { Table, Button, Pagination, Row, Col } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 import RBC, { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
@@ -11,6 +11,7 @@ import { pageItems } from "../pages/MyActivitiesPage";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Table.css'
 import './Calendar.css'
+import { HoverTooltip } from "./Utilities";
 
 export interface MyProps {
     events: PagedT13Events;
@@ -76,13 +77,13 @@ export const UpcomingEventsTable = (props: {
                 <td>{type}</td>
                 <td>
                     <a href={model.url()}>
-                        <span className='text'>{model.activities_count}
-                            <span className='text-tooltip'>Totalt antal uppgifter</span>
-                        </span>
+                        <HoverTooltip tooltip='Totalt antal uppgifter' placement='top'>
+                            <span>{model.activities_count}</span>
+                        </HoverTooltip>
                         {' / '}
-                        <span className='text'>{model.activities_available_count}
-                            <span className='text-tooltip'>Lediga uppgifter</span>
-                        </span>
+                        <HoverTooltip tooltip='Lediga uppgifter' placement='top'>
+                            <span>{model.activities_available_count}</span>
+                        </HoverTooltip>
                     </a>
                 </td>
             </tr>
@@ -132,17 +133,25 @@ export const UpcomingEvents = (props: EventProps) => {
     });
 
     return <div className="table-container">
-        <h3>
-            <span className="table-title">{title}</span>
-            <span className="table-count">
-                Visar {events.results.length} / {events.count} st
-                &nbsp;
-                <Button variant='outline-info' size='sm'
-                    onClick={toggleViewMode}>
-                    {viewMode ? 'Kalender' : 'Tabell'}
-                </Button>
-            </span>
-        </h3>
+        <Row>
+            <Col>
+                <h3>{title}</h3>
+            </Col>
+            <Col style={{ textAlign: 'center' }}>
+                <HoverTooltip tooltip='Byt mellan kalender och tabellvy' placement='left'>
+                    <Button variant='outline-info'
+                        onClick={toggleViewMode}>
+                        {viewMode ? 'Kalender' : 'Tabell'}
+                    </Button>
+                </HoverTooltip>
+            </Col>
+            <Col style={{ textAlign: 'right' }}>
+                <h5>
+                    Visar {events.results.length} / {events.count} st
+                        &nbsp;
+                </h5>
+            </Col>
+        </Row>
         <div style={{ height: height }}>
             {viewMode
                 ? <UpcomingEventsCalendar events={events} />
