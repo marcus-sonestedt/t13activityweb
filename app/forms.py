@@ -17,14 +17,13 @@ from captcha.widgets import ReCaptchaV2Checkbox, ReCaptchaV3
 
 captcha_attrs = {
     'data-theme': 'dark',
-    'data-size': 'compact',
 }
 
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses bootstrap CSS & ReCaptcha."""
 
-    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
+    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs), label='captcha')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

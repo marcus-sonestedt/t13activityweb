@@ -77,8 +77,8 @@ def signup(request):
             return redirect('/')
     else:
         form = BootstrapUserCreationForm()
-        if 'localhost' in request.get_host() and 'captcha' in form.fields:
-            del form.fields['captcha']
+#        if 'localhost' in request.get_host() and 'captcha' in form.fields:
+#            del form.fields['captcha']
 
     return render(request, 'signup.html', {
         'form': form,
