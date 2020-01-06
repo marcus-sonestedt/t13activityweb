@@ -86,17 +86,30 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
     return (
         <>
             <div className="model-header">
-                <h5>Aktivitet</h5>
+                <span>
+                    <h5>Avbokningsförfrågan</h5>
+                    <h5><span className='spacer'/><AdrStatusBadge model={model} /></h5>
+                </span>
                 {user.isStaff ?
-                    <a href={model.adminUrl()}><Button variant='secondary' size='sm'>Editera</Button></a>
+                    <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
                     : null}
             </div>
-            <p>{model.activity.event.name}</p>
-            <h5>Uppgift</h5>
-            <p>{model.activity.name}</p>
+            <h5>Medlem</h5>
+            <p>
+                <a href={model.member.url()}>{model.member.fullname}</a>
+                {' - '}
+                <a href={`tel:${model.member.phone_number}`}>{model.member.phone_number}</a>
+                {' - '}
+                <a href={`mailto:${model.member.email}`}>{model.member.email}</a>
+            </p>
+            <h5>Uppgift / Aktivitet</h5>
+            <p>
+                <a href={model.activity.url()}>{model.activity.name}</a>
+                {' - '}
+                <a href={model.activity.event.url()}>{model.activity.event.name}</a>
+            </p>
             <h5>Avbokningsanledning</h5>
             <MarkDown source={model.reason} />
-            <h5>Status <AdrStatusBadge model={model} /></h5>
             {model.approved !== false ? null : <>
                 <MarkDown source={model.reject_reason ?? ''} />
                 <p>/{approver}</p>
@@ -158,6 +171,7 @@ export const ActivityDelistRequestPage = () => {
 
             return <tr key={model.id} onClick={e => rowClicked(e, model)}
                 className={'clickable-row ' + (model === currentReq ? 'active' : undefined)}>
+                <td><a href={model.member.url()}>{model.member.fullname}</a></td>
                 <td><a href={model.activity.event.url()}>{model.activity.event.name}</a></td>
                 <td><a href={model.activity.url()}>{model.activity.name}</a></td>
                 <td>{model.activity.event.date()}</td>
@@ -170,13 +184,14 @@ export const ActivityDelistRequestPage = () => {
         }
 
         const Separator = (props: { title: string }) =>
-            <tr><td colSpan={5}>
+            <tr><td colSpan={10}>
                 <h5>{props.title}</h5>
             </td></tr>
 
         return <Table hover striped>
             <thead>
                 <tr>
+                    <th>Medlem</th>
                     <th>Aktivitet</th>
                     <th>Uppgift</th>
                     <th>Datum</th>
@@ -200,7 +215,7 @@ export const ActivityDelistRequestPage = () => {
     }
 
     return (
-        <Container>
+        <Container fluid>
             <Row>
                 <Col md={12} lg={7}>
                     <h2>Avbokningar</h2>
