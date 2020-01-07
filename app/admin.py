@@ -54,8 +54,9 @@ class MemberAdmin(admin.ModelAdmin):
         'phone_number',
         'phone_verified',
         'email_verified',
-        'task_summary'
-    )    
+        'task_summary',
+        'membercard_number'
+    )
 
 
 @admin.register(models.EventType)
