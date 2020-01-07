@@ -48,7 +48,7 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
-    def get_queryset(self):       
+    def get_queryset(self):
         return self.queryset.filter(id=self.request.user.id)
 
     @method_decorator(never_cache)
@@ -56,16 +56,16 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
         return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)    
+        return self.partial_update(request, *args, **kwargs)
 
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' and request.user.id != obj.id:
             raise PermissionDenied("Can only PATCH self")
-        
+
         return super().check_object_permissions(request, obj)
 
 
-class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):        
+class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
     queryset = Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
     serializer_class = MemberSerializer
@@ -73,7 +73,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
     def get_queryset(self):
         if 'pk' in self.kwargs:
             return self.queryset.filter(id=self.kwargs['pk'])
-        
+
         return self.queryset
 
     @method_decorator(never_cache)
@@ -81,13 +81,14 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
         return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)    
+        return self.partial_update(request, *args, **kwargs)
 
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' and request.user.member.id != obj.id:
             raise PermissionDenied("Can only PATCH self")
-        
+
         return super().check_object_permissions(request, obj)
+
 
 class IsLoggedIn(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -109,30 +110,37 @@ class IsLoggedIn(APIView):
                 'latestBookableDate': config.LATEST_BOOKABLE_DATE
             },
             'notifications': notifications,
-            'tasksSummary' : None
+            'tasksSummary': None
         }
 
         try:
             member = Member.objects.get(user=request.user.id)
 
             response_dict['myDelistRequests'] = \
-                ActivityDelistRequest.objects.filter(member=member, approved=None).count()
+                ActivityDelistRequest.objects.filter(
+                    member=member, approved=None).count()
 
             if request.user.is_staff:
                 response_dict['unansweredDelistRequests'] = \
-                    ActivityDelistRequest.objects.filter(approved=None).exclude(member=member).count()
+                    ActivityDelistRequest.objects.filter(
+                        approved=None).exclude(member=member).count()
 
             if not member.phone_verified:
                 notifications.append({
-                    'message': 'Ditt telefonnummer är inte verifierat än',
+                    'message': 'Ditt telefonnummer är inte verifierat. Klicka här för att göra det.',
                     'link': '/frontend/verify/phone'})
 
             if not member.email_verified:
                 notifications.append({
-                    'message': 'Din emailaddress är inte verifierad än',
+                    'message': 'Din emailaddress är inte verifierad. Klicka här för att göra det.',
                     'link': '/frontend/verify/email'})
 
-            response_dict['tasksSummary'] = member.task_summary.split('/')
+            (completed_tasks, booked_tasks) = map(int, member.task_summary.split('/'))
+            response_dict['tasksSummary'] = [completed_tasks, booked_tasks]
+            if booked_tasks < int(config.MIN_ACTIVITY_SIGNUPS):
+                notifications.append({
+                    'message': f'Du behöver boka dig på {int(config.MIN_ACTIVITY_SIGNUPS)-booked_tasks} uppgift(er) till för att kunna hämta ut ditt guldkort.',
+                    'link': '/frontend/home?tab=upcoming-events'})
 
         except Member.DoesNotExist:
             member = None

@@ -26,7 +26,7 @@ export const MainPage = () => {
 
     const taskBadgeVariant =
         user.tasksSummary[0] >= user.settings.minSignups ? 'success'
-            : user.tasksSummary[1] >= user.settings.minSignups ? 'primary'
+            : user.tasksSummary[1] >= user.settings.minSignups ? 'info'
                 : 'warning';
 
     const taskBadgeText = user.tasksSummary.join(' / ');
@@ -41,7 +41,7 @@ export const MainPage = () => {
                             Översikt
                             <span className='spacer' />
                             <HoverTooltip tooltip='Olästa notifieringar'>
-                                <Badge variant={user.notifications.length ? 'primary' : 'secondary'}>
+                                <Badge variant={user.notifications.length ? 'info' : 'secondary'}>
                                     {user.notifications.length}
                                 </Badge>
                             </HoverTooltip>

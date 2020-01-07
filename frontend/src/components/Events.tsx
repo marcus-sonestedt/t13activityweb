@@ -76,7 +76,9 @@ export const UpcomingEventsTable = (props: {
                 <td>{type}</td>
                 <td>
                     {model.has_bookable_activities
-                        ? '✔' : '❌'}
+                        ? <span role='img' aria-label='check' style={{color:'lightgreen'}}>✔</span>
+                        : <span role='img' aria-label='cross'>❌</span>
+                    }
                 </td>
             </tr>
         );
@@ -89,7 +91,7 @@ export const UpcomingEventsTable = (props: {
                     <th>Namn</th>
                     <th>Datum</th>
                     <th>Typ</th>
-                    <th>Lediga Uppgifter</th>
+                    <th>Bokningsbar</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,7 +99,7 @@ export const UpcomingEventsTable = (props: {
             </tbody>
         </Table>
         <Pagination>
-            <PageItems count={events.results.length} pageSize={10} currentPage={page} setFunc={setPage}/>
+            <PageItems count={events.results.length} pageSize={10} currentPage={page} setFunc={setPage} />
         </Pagination>
     </>
 }

@@ -14,7 +14,7 @@ export const NotificationsComponent = () => {
             <Row>
                 <Col sm='auto'>
                     <a href={n.link}>
-                        <Button variant='primary'>{n.message}.</Button>
+                        <Button variant='info'>{n.message}</Button>
                     </a>
                 </Col>
             </Row>

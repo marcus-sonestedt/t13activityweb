@@ -15,6 +15,7 @@ import logging
 import datetime
 
 from app import events
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +75,7 @@ class Member(models.Model):
 
     task_summary.short_description = 'Utförda/Bokade'
     task_summary = property(task_summary)
+
 
 @receiver(post_save, sender=User)
 def user_saved(sender, instance, created, **kwargs):
@@ -169,8 +171,13 @@ class Event(models.Model):
     def has_bookable_activities(self):
         if self.end_date < datetime.date.today():
             return False
-        return self.activities.filter(assigned=None).exists()
+
+        now = datetime.date.today()
+        return self.activities.filter(assigned=None) \
+            .filter(Q(earliest_bookable_date__gte=now) | Q(earliest_bookable_date=None)) \
+            .exists()
     has_bookable_activities.boolean = True
+    has_bookable_activities = property(has_bookable_activities)
 
     def __str__(self):
         return self.name
@@ -226,16 +233,18 @@ class Activity(models.Model):
     completed = models.BooleanField(default=None, null=True, blank=True)
     cancelled = models.BooleanField(default=False)
 
+    earliest_bookable_date = models.DateField(null=True, blank=True)
+
     @property
     def date(self):
         return self.event.start_date
 
     @property
     def bookable(self):
-        config = apps.get_app_config('app')
-        max_date = config.LATEST_BOOKABLE_DATE
         now = datetime.date.today()
-        return self.event.start_date >= now and self.event.start_date <= max_date
+        return self.event.end_date <= now and \
+            (self.earliest_bookable_date is None or
+                now >= self.earliest_bookable_date)
 
     @property
     def delist_requested(self):
@@ -292,6 +301,7 @@ class ActivityDelistRequest(models.Model):
             models.Index(fields=['approver']),
         ]
 
+
 @receiver(post_save, sender=ActivityDelistRequest)
 def save_activity_delist_request(sender, instance, created, **kwargs):
     if instance.activity.assigned is None:
@@ -328,6 +338,7 @@ class FAQ(models.Model):
 
         return self.question
 
+
 class InfoText(models.Model):
     key = models.CharField(max_length=32, primary_key=True)
     content = models.TextField()
@@ -335,8 +346,7 @@ class InfoText(models.Model):
     class Meta:
         verbose_name = 'Informationstext'
         verbose_name_plural = 'Informationstexter'
-        unique_together=['key']
+        unique_together = ['key']
 
     def __str__(self):
         return self.key
-

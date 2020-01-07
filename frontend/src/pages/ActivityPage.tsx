@@ -24,6 +24,11 @@ export const ActivityComponent = (props: { model?: Activity }) => {
             <div className='div-group'>
                 {event}
                 <h5>Datum {model.date()} Tid {model.time()}</h5>
+                {model.earliest_bookable_date
+                    ?
+                    <h5>Bokningsbar från {model.earliest_bookable_date}</h5>
+                    : null
+                }
                 {!model.assigned ? null : <>
                     <h5>Tilldelad {' '}
                         <a href={model.assigned.url()}>{model.assigned.fullname}</a>
@@ -69,7 +74,7 @@ export const ActivityPage = () => {
             onLoaded={setModelCallback}>
             <Row>
                 <Col>
-                    <Title/>
+                    <Title />
                 </Col>
             </Row>
             <Row>

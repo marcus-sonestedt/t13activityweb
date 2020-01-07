@@ -60,8 +60,10 @@ export class Activity implements IdValue {
     assigned_at: Date | null = null;
 
     delist_requests: string[] = [];
-
     delist_requested: boolean = false;
+
+    @Type(() => Date)
+    earliest_bookable_date?: Date;
 
     time = () => {
         if (this.end_time === null || this.end_time === this.start_time)
@@ -72,7 +74,7 @@ export class Activity implements IdValue {
 
     toString = () => `${this.name} - ${this.event.date()} - ${this.time()}`
 
-    url = () => `/frontend/activity/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
+    url = () => `/frontend/activity/${this.id}/${this.name.replace(/[ /\\?&+]/g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     apiUrl = () => Activity.apiUrlFromId(this.id);
     static apiUrlFromId = (id: string) => `/api/activity/${id}`;

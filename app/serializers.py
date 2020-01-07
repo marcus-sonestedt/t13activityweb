@@ -47,6 +47,7 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
 
 
 class EventActivitySerializer(serializers.ModelSerializer):
+    '''serializer used when fetching tasks for an event'''
     type = ActivityTypeSerializer(required=False)
     assigned = MemberSerializer(required=False)
     start_time = serializers.TimeField(format="%H:%M")
@@ -60,6 +61,7 @@ class EventActivitySerializer(serializers.ModelSerializer):
 
 
 class ActivitySerializer(EventActivitySerializer):
+    '''serializer used when fetching stand-alone tasks'''
     event = EventSerializer(required=False)
 
 
