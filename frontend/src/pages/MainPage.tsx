@@ -1,4 +1,4 @@
-import { Tab, Row, Col, Nav, Pagination, Badge } from "react-bootstrap"
+import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown } from "react-bootstrap"
 import React, { useState, useCallback, useContext } from "react";
 import { PagedActivities, PagedT13Events } from "../Models";
 import DataProvider from "../components/DataProvider";
@@ -39,6 +39,13 @@ export const MainPage = () => {
                             </HoverTooltip>
                         </Nav.Link>
                     </Nav.Item>
+                    <NavDropdown.Divider/>
+                    <Nav.Item>
+                        <Nav.Link eventKey="event-types">Aktivitetstyper</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="task-types">Uppgiftstyper</Nav.Link>
+                    </Nav.Item>
                 </Nav>
             </Col>
             <Col sm={1} />
@@ -53,7 +60,7 @@ export const MainPage = () => {
                     <Tab.Pane eventKey="upcoming-events">
                         <UpcomingEventsTab />
                     </Tab.Pane>
-                    <Tab.Pane eventKey="upcoming-events">
+                    <Tab.Pane eventKey="adrs">
                         <DelistRequestsTab />
                     </Tab.Pane>
                 </Tab.Content>
