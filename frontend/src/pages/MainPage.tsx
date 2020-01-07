@@ -20,13 +20,13 @@ export const MainPage = () => {
 
     const user = useContext(userContext);
     const history = useHistory();
-    const setQueryPage = (key:string) => {
+    const setQueryPage = (key: string) => {
         history.replace(`?tab=${key}`);
     }
 
     const taskBadgeVariant =
-        user.tasksSummary[0] >= user.settings.minSignups ? 'success'
-            : user.tasksSummary[1] >= user.settings.minSignups ? 'info'
+        user.tasksSummary[0] >= user.settings.minSignups ? 'secondary'
+            : user.tasksSummary[1] >= user.settings.minSignups ? 'success'
                 : 'warning';
 
     const taskBadgeText = user.tasksSummary.join(' / ');
@@ -64,7 +64,8 @@ export const MainPage = () => {
                             <HoverTooltip tooltip={
                                 "Antal obehandlade egna förfrågningar\n" +
                                 (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>
-                                <Badge variant='secondary'>
+                                <Badge variant={(user.myDelistRequests ||
+                                    user.unansweredDelistRequests) ? 'info' : 'secondary'}>
                                     {user.myDelistRequests}
                                     {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
                                 </Badge>

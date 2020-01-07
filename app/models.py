@@ -242,9 +242,8 @@ class Activity(models.Model):
     @property
     def bookable(self):
         now = datetime.date.today()
-        return self.event.end_date <= now and \
-            (self.earliest_bookable_date is None or
-                now >= self.earliest_bookable_date)
+        return self.event.end_date >= now and \
+            (self.earliest_bookable_date is None or now >= self.earliest_bookable_date)
 
     @property
     def delist_requested(self):

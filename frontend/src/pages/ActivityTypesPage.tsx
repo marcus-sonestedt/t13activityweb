@@ -21,7 +21,7 @@ export const TaskTypesComponent = () => {
     const [page, setPage] = useState(1);
 
     const renderRow = (model: ActivityType) => {
-        return <tr>
+        return <tr key={model.id}>
             <td><a href={model.url()}>{model.name}</a></td>
             <td>{model.description}</td>
         </tr>

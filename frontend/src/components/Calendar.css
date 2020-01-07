@@ -23,3 +23,11 @@
 .rbc-agenda-view {
     background-color: #0f0f18;
 }
+
+.event.locked a {
+    color: #f44;
+}
+
+.event a {
+    color: #ddf;
+}

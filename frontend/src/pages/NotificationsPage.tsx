@@ -10,7 +10,7 @@ export const NotificationsComponent = () => {
     // initially used only for verifying emails/phone number
 
     const renderRow = (n: { message: string, link: string }) => {
-        return <>
+        return <div key={n.link}>
             <Row>
                 <Col sm='auto'>
                     <a href={n.link}>
@@ -21,7 +21,7 @@ export const NotificationsComponent = () => {
             <Row>
                 &nbsp;
             </Row>
-        </>
+        </div>
     }
 
     return <>

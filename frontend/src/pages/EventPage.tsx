@@ -156,7 +156,7 @@ export const EventPage = () => {
                 </Col>
             </Row>
             <Row>
-                <Col md={12} lg={6}>
+                <Col md={12} lg={5}>
                     <div className='div-group'>
                         <h5>Datum {event.date()} Typ {eventType}</h5>
                         {event.description ? <>
@@ -175,7 +175,7 @@ export const EventPage = () => {
                         </> : null}
                     </div>
                 </Col>
-                <Col md={12} lg={6}>
+                <Col md={12} lg={7}>
                     <div className="model-header">
                         <h3>Uppgifter</h3>
                         <h3><Badge variant='secondary'>

@@ -11,7 +11,9 @@ export const Navigation = () => {
         <Navbar bg='dark' variant='dark' expand="lg">
             <Navbar.Brand href="/">
                 <HoverTooltip tooltip="Klubbens hemsida" placement='bottom'>
-                    <a href="http://www.team13.se"><img src="/static/logo192.png" alt="Team13 logo" /></a>
+                    <img src="/static/logo192.png" alt="Team13 logo"
+                        onClick={(e:any) => { e.preventDefault();
+                            window.location.href = "http://www.team13.se";}} />
                 </HoverTooltip>
                 <HoverTooltip tooltip="Aktivetslistans översikt" placement='bottom'>
                     <span>Team13s aktivitetswebb</span>

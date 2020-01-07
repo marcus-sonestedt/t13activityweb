@@ -1,16 +1,16 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, SyntheticEvent, useMemo } from "react";
 import { Table, Button, Pagination, Row, Col } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 import RBC, { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
 import 'moment/locale/sv';
 
+import { HoverTooltip, PageItems } from "./Utilities";
 import { PagedT13Events, T13Event } from '../Models'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Table.css'
 import './Calendar.css'
-import { HoverTooltip, PageItems } from "./Utilities";
 
 export interface MyProps {
     events: PagedT13Events;
@@ -19,10 +19,40 @@ export interface MyProps {
 
 const localizer = momentLocalizer(moment);
 
+const Check = () => <span role='img' aria-label='check' style={{ color: 'lightgreen' }}>✔</span>;
+const Cross = () => <span role='img' aria-label='cross'>❌</span>
+
 class MyAgendaEvent extends React.Component<any, {}> {
-    render = () =>
-        <a href={this.props.event.url()}>{this.props.event.name}</a>
+    render = () => {
+        const event = this.props.event;
+
+        return <div className={event.has_bookable_activities ? 'bookable' : 'locked'}>
+            <a href={event.url()}>
+                {event.name} - {event.type?.name}
+            </a>
+        </div>
+    }
 }
+class MyEvent extends React.Component<any, {}> {
+    render = () => {
+        const event = this.props.event;
+
+        const tooltip = <div>{event.name}
+            <br />{event.type?.name ?? ''}
+            <br />{event.has_bookable_activities
+                ? 'Har bokningsbara uppgifter' : 'Inga bokningsbara uppgifter'}
+        </div>
+
+        return <HoverTooltip tooltip={tooltip}>
+            <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}>
+                <a href={event.url()}>
+                    {event.name}
+                </a>
+            </div>
+        </HoverTooltip >
+    }
+}
+
 
 const LS_EVENTCAL_VIEW_KEY = 'eventcal-view';
 const LS_EVENTCAL_DATE_KEY = 'eventcal-range';
@@ -43,7 +73,10 @@ export const EventsCalendar = (props: { events: PagedT13Events }) => {
     const eventClicked = (event: T13Event, e: SyntheticEvent) =>
         history.push(event.url());
 
-    const components = { agenda: { event: MyAgendaEvent } }
+    const components = {
+        event: MyEvent,
+        agenda: { event: MyAgendaEvent }
+    }
 
     return <Calendar
         culture='sv-SE'
@@ -53,8 +86,6 @@ export const EventsCalendar = (props: { events: PagedT13Events }) => {
         endAccessor="end_date"
         allDayAccessor={() => true}
         titleAccessor="name"
-        tooltipAccessor={x => `${x.name}\n${x.type?.name ?? ''}`}
-        resourceAccessor={x => x.url()}
         onSelectEvent={eventClicked}
         components={components}
         defaultView={view}
@@ -70,12 +101,14 @@ export const EventsCalendar = (props: { events: PagedT13Events }) => {
     />
 }
 
-export const UpcomingEventsTable = (props: {
+export const EventsTable = (props: {
     events: PagedT13Events,
     count: number
 }) => {
     const { events, count = 10 } = props;
     const [page, setPage] = useState(1);
+    const [bookableFilter, setBookableFilter] = useState<boolean | null>(null);
+    const [typeFilter, setTypeFilter] = useState<string | null>(null);
     const history = useHistory();
 
     const renderRow = (model: T13Event) => {
@@ -87,15 +120,43 @@ export const UpcomingEventsTable = (props: {
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td className='nowrap'>{model.date()}</td>
                 <td>{type}</td>
-                <td>
-                    {model.has_bookable_activities
-                        ? <span role='img' aria-label='check' style={{ color: 'lightgreen' }}>✔</span>
-                        : <span role='img' aria-label='cross'>❌</span>
-                    }
-                </td>
+                <td style={{ textAlign: 'center' }}>{model.has_bookable_activities ? <Check /> : <Cross />}</td>
             </tr>
         );
     }
+
+    const toggleBookableFilter = () => {
+        const next = bookableFilter === null ? true :
+            bookableFilter === true ? false : null;
+        setBookableFilter(next);
+    }
+
+    const types = useMemo(() => {
+        const set = new Set(events.results.map(e => e.type?.name));
+        const values = new Array(set.size);
+        const x = set.values();
+        for (let i = 0; i < values.length; ++i)
+            values[i] = x.next().value;
+        return values;
+    }, [events]);
+
+    const toggleTypeFilter = () => {
+        let next = null;
+        if (typeFilter === null)
+            next = types[0];
+        else if (typeFilter === types[types.length - 1])
+            next = null;
+        else
+            next = types[types.findIndex(t => t === typeFilter) + 1];
+
+        setTypeFilter(next);
+    }
+
+    const filteredEvents = useMemo(() =>
+        events.results
+            .filter(e => bookableFilter === null ? true : bookableFilter === e.has_bookable_activities)
+            .filter(e => typeFilter === null ? true : typeFilter === e.type?.name)
+        , [events, typeFilter, bookableFilter]);
 
     return <>
         <Table striped hover>
@@ -103,16 +164,31 @@ export const UpcomingEventsTable = (props: {
                 <tr>
                     <th>Namn</th>
                     <th>Datum</th>
-                    <th>Typ</th>
-                    <th>Bokningsbar</th>
+                    <th>
+                        <Button onClick={toggleTypeFilter} size='sm'
+                            variant='secondary' block={true}>
+                            Typ{' '}<>{typeFilter?.toString()}</>
+                        </Button>
+                    </th>
+                    <th>
+                        <Button onClick={toggleBookableFilter} size='sm'
+                            variant='secondary' block={true}>
+                            Bokningsbar{' '}
+                            {bookableFilter === null ? null :
+                                bookableFilter === true ? <Check /> : <Cross />}
+                        </Button>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                {events.results.slice((page - 1) * count, page * count).map(renderRow)}
+                {filteredEvents
+                    .slice((page - 1) * count, page * count)
+                    .map(renderRow)}
             </tbody>
         </Table>
         <Pagination>
-            <PageItems count={events.results.length} pageSize={10} currentPage={page} setFunc={setPage} />
+            <PageItems count={filteredEvents.length} pageSize={10}
+                currentPage={page} setFunc={setPage} />
         </Pagination>
     </>
 }
@@ -162,7 +238,7 @@ export const EventsComponent = (props: EventProps) => {
         <div style={{ height: height }}>
             {viewMode
                 ? <EventsCalendar events={events} />
-                : <UpcomingEventsTable events={events} count={10} />
+                : <EventsTable events={events} count={10} />
             }
         </div>
     </div>
