@@ -13,6 +13,7 @@ export class UserContext {
   myDelistRequests = 0;
   unansweredDelistRequests = 0;
   notifications: { message:string, link:string}[] = [];
+  tasksSummary: number[] = [];
 }
 
 export const userContext = React.createContext(new UserContext());

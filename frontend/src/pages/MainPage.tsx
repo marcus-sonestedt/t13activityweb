@@ -1,6 +1,5 @@
 import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown } from "react-bootstrap"
 import React, { useState, useCallback, useContext } from "react";
-import { useParams } from "react-router-dom";
 import { deserialize } from "class-transformer";
 
 import { PagedActivities, PagedT13Events } from "../Models";
@@ -15,11 +14,19 @@ import { ActivityDelistRequestsComponent } from "./ADRPage";
 import { NotificationsComponent } from "./NotificationsPage";
 
 export const MainPage = () => {
-    const { page } = useParams();
+    const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
+    const tab = tabMatch ? tabMatch[1] : 'overview';
 
     const user = useContext(userContext);
 
-    return <Tab.Container defaultActiveKey={page ?? 'overview'}>
+    const taskBadgeVariant =
+        user.tasksSummary[0] >= user.settings.minSignups ? 'success'
+            : user.tasksSummary[1] >= user.settings.minSignups ? 'primary'
+                : 'warning';
+
+    const taskBadgeText = user.tasksSummary.join(' / ');
+
+    return <Tab.Container defaultActiveKey={tab}>
         <Row>
             <Col md='auto'>
                 <Nav variant="pills" className="flex-column">
@@ -35,7 +42,14 @@ export const MainPage = () => {
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="my-tasks">Uppgifter</Nav.Link>
+                        <Nav.Link eventKey="my-tasks">Uppgifter
+                        <span className='spacer' />
+                            <HoverTooltip tooltip={'Antal utförda/bokade uppgifter detta år'}>
+                                <Badge variant={taskBadgeVariant}>
+                                    {taskBadgeText}
+                                </Badge>
+                            </HoverTooltip>
+                        </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey="my-adrs">

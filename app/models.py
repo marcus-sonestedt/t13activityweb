@@ -62,7 +62,8 @@ class Member(models.Model):
     def __str__(self):
         return f"{self.fullname} ({self.email})"
 
-    def admin_task_summary(self):
+    def task_summary(self):
+        '''returns completed/booked activities for this year'''
         current_year = datetime.date.today().year
         current_activities = Activity.objects.filter(assigned=self,
                                                      event__start_date__year=current_year)
@@ -71,8 +72,8 @@ class Member(models.Model):
 
         return f"{completed}/{booked}"
 
-    admin_task_summary.short_description = 'Utförda/Bokade'
-
+    task_summary.short_description = 'Utförda/Bokade'
+    task_summary = property(task_summary)
 
 @receiver(post_save, sender=User)
 def user_saved(sender, instance, created, **kwargs):

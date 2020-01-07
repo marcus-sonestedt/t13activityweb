@@ -43,7 +43,7 @@ class ClearAuthToken(ObtainAuthToken):
         return Response("bye")
 
 
-class UserList(generics.ListAPIView, mixins.UpdateModelMixin):        
+class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
     queryset = User.objects
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
@@ -108,7 +108,8 @@ class IsLoggedIn(APIView):
                 'minSignups': config.MIN_ACTIVITY_SIGNUPS,
                 'latestBookableDate': config.LATEST_BOOKABLE_DATE
             },
-            'notifications': notifications
+            'notifications': notifications,
+            'tasksSummary' : request.user.member.task_summary.split('/')
         }
 
         try:

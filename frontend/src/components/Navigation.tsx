@@ -10,9 +10,13 @@ export const Navigation = () => {
     return (
         <Navbar bg='dark' variant='dark' expand="lg">
             <Navbar.Brand href="/">
-                <a href="http://www.team13.se"><img src="/static/logo192.png" alt="Team13 logo" /></a>
-                Team13s aktivitetswebb
-                </Navbar.Brand>
+                <HoverTooltip tooltip="Klubbens hemsida" placement='bottom'>
+                    <a href="http://www.team13.se"><img src="/static/logo192.png" alt="Team13 logo" /></a>
+                </HoverTooltip>
+                <HoverTooltip tooltip="Aktivetslistans översikt" placement='bottom'>
+                    <span>Team13s aktivitetswebb</span>
+                </HoverTooltip>
+            </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
