@@ -1,14 +1,13 @@
 import React, { useState, useContext, useCallback, useMemo } from "react"
+import { useParams } from "react-router-dom";
 import { Container, Row, Col, Table, Button, Pagination, Badge } from "react-bootstrap";
 import { deserialize } from "class-transformer";
 
 import DataProvider from "../components/DataProvider";
 import { userContext } from "../components/UserContext";
 import { ActivityDelistRequest, PagedADR } from '../Models';
-import { pageItems } from "./MyActivitiesPage";
 import { cancelADR, rejectADR, approveADR, deleteADR } from "../logic/ADRActions"
-import { useParams } from "react-router-dom";
-import { MarkDown, HoverTooltip } from '../components/Utilities';
+import { MarkDown, HoverTooltip, PageItems } from '../components/Utilities';
 
 export const RequestAdrButton = (props: {
     onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void),
@@ -88,7 +87,7 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
             <div className="model-header">
                 <span>
                     <h5>Avbokningsförfrågan</h5>
-                    <h5><span className='spacer'/><AdrStatusBadge model={model} /></h5>
+                    <h5><span className='spacer' /><AdrStatusBadge model={model} /></h5>
                 </span>
                 {user.isStaff ?
                     <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
@@ -224,7 +223,8 @@ export const ActivityDelistRequestPage = () => {
                         onLoaded={reloadHandler}>
                         {delistRequestsTable(allRequests)}
                         <Pagination>
-                            {pageItems(allRequests !== null ? allRequests.count : 0, 10, page, setPage)}
+                            <PageItems count={allRequests !== null ? allRequests.count : 0}
+                                pageSize={10} currentPage={page} setFunc={setPage} />
                         </Pagination>
                     </DataProvider>
                 </Col>

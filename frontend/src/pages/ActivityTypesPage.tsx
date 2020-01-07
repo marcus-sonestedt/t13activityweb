@@ -3,7 +3,7 @@ import { Container, Row, Col, Table, Pagination } from "react-bootstrap"
 import { PagedActivityTypes, ActivityType } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
-import { pageItems } from "./MyActivitiesPage";
+import { PageItems } from "../components/Utilities";
 
 export const ActivityTypesPage = () => {
     const [data, setData] = useState<PagedActivityTypes>(new PagedActivityTypes());
@@ -41,7 +41,7 @@ export const ActivityTypesPage = () => {
                         </tbody>
                     </Table>
                     <Pagination>
-                        {pageItems(data.count, 10, page, setPage)}
+                        <PageItems count={data.count} pageSize={10} currentPage={page} setFunc={setPage}/>
                     </Pagination>
                 </DataProvider>
             </Col>

@@ -7,7 +7,7 @@ import CookieConsent from "react-cookie-consent";
 
 
 import { Navigation } from './components/Navigation'
-import { MyActiviesPage as MyActivitiesPage } from './pages/MyActivitiesPage'
+import { MainPage } from './pages/MainPage'
 import { WelcomePage } from './pages/WelcomePage'
 import { EventPage } from './pages/EventPage'
 import { NotFound } from './components/NotFound'
@@ -93,8 +93,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
       </>
       :
       <>
-        <Route exact path="/frontend/" component={MyActivitiesPage} />
-        <Route path="/frontend/home" component={MyActivitiesPage} />
+        <Route path="/frontend/home" component={MainPage} />
 
         <Route path="/frontend/profile" component={ProfilePage} />
         <Route path="/frontend/notifications" component={NotificationsPage} />
@@ -102,6 +101,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
         <Route path="/frontend/verify/phone" component={VerifyPhonePage} />
         <Route path="/frontend/verify/email/:initialState?" component={VerifyEmailPage} />
 
+        <Route exact path="/frontend/" render={() => <Redirect to="/frontend/home" />} />
         <Route path="/frontend/welcome" render={() => <Redirect to="/frontend/home" />} />
         <Route path="/static/index.html" render={() => <Redirect to="/frontend/home" />} />
       </>

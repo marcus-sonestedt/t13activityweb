@@ -1,9 +1,11 @@
 import React, { useState } from "react"
 import { Container, Row, Col, Table, Pagination } from "react-bootstrap"
+import { deserialize } from "class-transformer";
+
 import { PagedEventTypes, T13EventType } from "../Models";
 import DataProvider from "../components/DataProvider";
-import { deserialize } from "class-transformer";
-import { pageItems } from "./MyActivitiesPage";
+import { PageItems } from "../components/Utilities";
+
 import "../components/Table.css"
 
 export const EventTypesPage = () => {
@@ -42,7 +44,7 @@ export const EventTypesPage = () => {
                         </tbody>
                     </Table>
                     <Pagination>
-                        {pageItems(data.count, 10, page, setPage)}
+                        <PageItems count={data.count} pageSize={10} currentPage={page} setFunc={setPage}/>
                     </Pagination>
                 </DataProvider>
             </Col>

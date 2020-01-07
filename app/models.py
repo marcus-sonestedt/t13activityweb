@@ -316,3 +316,5 @@ class FAQ(models.Model):
             return f"{self.question[:37]} ..."
 
         return self.question
+
+

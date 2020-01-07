@@ -6,12 +6,11 @@ import moment from 'moment'
 import 'moment/locale/sv';
 
 import { PagedT13Events, T13Event } from '../Models'
-import { pageItems } from "../pages/MyActivitiesPage";
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Table.css'
 import './Calendar.css'
-import { HoverTooltip } from "./Utilities";
+import { HoverTooltip, PageItems } from "./Utilities";
 
 export interface MyProps {
     events: PagedT13Events;
@@ -105,7 +104,7 @@ export const UpcomingEventsTable = (props: {
             </tbody>
         </Table>
         <Pagination>
-            {pageItems(events.results.length, 10, page, setPage)}
+            <PageItems count={events.results.length} pageSize={10} currentPage={page} setFunc={setPage}/>
         </Pagination>
     </>
 }
