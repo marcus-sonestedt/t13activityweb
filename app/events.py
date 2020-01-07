@@ -83,7 +83,7 @@ def adr_rejected(adr):
 
     sms_target = adr.member.phone_number
 
-    if sms_target is None:
+    if not sms_target:
         log.warning(f"No phone_number set for {adr.member}")
     else:
         log.info(f"Sending SMS to {sms_target}")
@@ -116,7 +116,7 @@ def notify_upcoming_activity(activity):
 
     sms_target = activity.assigned.phone_number
 
-    if sms_target is None:
+    if not sms_target:
         log.warning(f"No phone_number set for {activity.member}")
     else:
         log.info(f"Sending SMS to {sms_target}")
