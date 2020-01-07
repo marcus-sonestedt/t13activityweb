@@ -103,9 +103,13 @@ class ActivityDelistRequestAdmin(admin.ModelAdmin):
 
 @admin.register(models.FAQ)
 class FAQAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'question',
+        'answer_short',
+        'order'
+    )
 
 @admin.register(models.InfoText)
-class FAQAdmin(admin.ModelAdmin):
+class InfoTextAdmin(admin.ModelAdmin):
     pass
 

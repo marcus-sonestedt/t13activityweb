@@ -313,10 +313,16 @@ def save_activity_delist_request(sender, instance, created, **kwargs):
 class FAQ(models.Model):
     question = models.CharField(max_length=256)
     answer = models.TextField()
+    order = models.IntegerField(default=100)
+
+    def answer_short(self):
+        return self.answer[:40] + '...'
+    answer_short.short_description = 'Svar'
 
     class Meta:
         verbose_name = 'Vanlig fråga'
         verbose_name_plural = 'Vanliga frågor'
+        ordering = ['order', 'question']
 
     def __str__(self):
         if len(self.question) > 40:

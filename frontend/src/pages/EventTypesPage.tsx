@@ -35,7 +35,7 @@ export const EventTypesComponent = () => {
         url={T13EventType.apiUrlAll() + `?page=${page}`}
         onLoaded={setData}>
         <Row>
-            <Col><h1>AktivitestTyper</h1></Col>
+            <Col><h1>AktivitetsTyper</h1></Col>
             <Col style={{textAlign: 'right'}}><h3>{data.results.length}/{data.count} st</h3></Col>
         </Row>
         <Table >
