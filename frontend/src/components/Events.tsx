@@ -25,12 +25,20 @@ class MyAgendaEvent extends React.Component<any, {}> {
 }
 
 const LS_EVENTCAL_VIEW_KEY = 'eventcal-view';
+const LS_EVENTCAL_DATE_KEY = 'eventcal-range';
 
-export const UpcomingEventsCalendar = (props: { events: PagedT13Events }) => {
+export const EventsCalendar = (props: { events: PagedT13Events }) => {
     const { events } = props;
+
     const bcViewJson = localStorage.getItem(LS_EVENTCAL_VIEW_KEY);
     const bcViewStored = (bcViewJson === null ? 'month' : JSON.parse(bcViewJson)) as RBC.View;
-    const [bcView, setBCView] = useState<RBC.View>(bcViewStored);
+
+    const lsDateString = localStorage.getItem(LS_EVENTCAL_DATE_KEY);
+    const lsDateStored = lsDateString === null ? new Date() : new Date(lsDateString);
+
+    const [view, setView] = useState(bcViewStored);
+    const [date, setDate] = useState(lsDateStored);
+
     const history = useHistory();
     const eventClicked = (event: T13Event, e: SyntheticEvent) =>
         history.push(event.url());
@@ -49,10 +57,15 @@ export const UpcomingEventsCalendar = (props: { events: PagedT13Events }) => {
         resourceAccessor={x => x.url()}
         onSelectEvent={eventClicked}
         components={components}
-        view={bcView}
+        defaultView={view}
         onView={v => {
             localStorage.setItem(LS_EVENTCAL_VIEW_KEY, JSON.stringify(v));
-            setBCView(v);
+            setView(v);
+        }}
+        defaultDate={date}
+        onNavigate={date => {
+            localStorage.setItem(LS_EVENTCAL_DATE_KEY, date.toISOString());
+            setDate(date);
         }}
     />
 }
@@ -76,7 +89,7 @@ export const UpcomingEventsTable = (props: {
                 <td>{type}</td>
                 <td>
                     {model.has_bookable_activities
-                        ? <span role='img' aria-label='check' style={{color:'lightgreen'}}>✔</span>
+                        ? <span role='img' aria-label='check' style={{ color: 'lightgreen' }}>✔</span>
                         : <span role='img' aria-label='cross'>❌</span>
                     }
                 </td>
@@ -148,7 +161,7 @@ export const EventsComponent = (props: EventProps) => {
         </Row>
         <div style={{ height: height }}>
             {viewMode
-                ? <UpcomingEventsCalendar events={events} />
+                ? <EventsCalendar events={events} />
                 : <UpcomingEventsTable events={events} count={10} />
             }
         </div>
