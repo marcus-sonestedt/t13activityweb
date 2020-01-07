@@ -25,8 +25,7 @@ def new_user_created(member):
         f'New user {user.username} registered at T13 web',
         f'''Hi,
 
-        The user {member.fullname} (username: '{user.username}', email:
-        {user.email}) just registered themselves on the Team 13 website.
+        '{member.fullname}' (username/email: '{user.email}') just registered themselves on the Team 13 website.
 
         Go to https://macke.eu.pythonanywhere.com/admin/auth/user/{user.id}/change/'
         to give them access, i.e. at least add them to the 'T13 Members'
