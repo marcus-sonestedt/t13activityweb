@@ -7,6 +7,7 @@ from django.utils.html import escape, mark_safe
 
 from app import models
 
+
 def unregister(model):
     def f2(f):
         admin.site.unregister(model)
@@ -14,6 +15,9 @@ def unregister(model):
 
     return f2
 
+@admin.register(models.Attachment)
+class AttachmentAdmin(admin.ModelAdmin):
+    model = models.Attachment
 
 class ActivityInline(admin.TabularInline):
     model = models.Activity
@@ -25,7 +29,8 @@ class MemberInline(admin.StackedInline):
     verbose_name_plural = 'Medlem'
     fk_name = 'user'
     readonly_fields = ['user']
-    
+
+
 @admin.register(User)
 @unregister(User)
 class UserWithMemberAdmin(UserAdmin):
@@ -40,14 +45,14 @@ class UserWithMemberAdmin(UserAdmin):
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
     readonly_fields = ['user']
-    list_filter=['phone_verified', 'email_verified']
+    list_filter = ['phone_verified', 'email_verified']
 
     def user_link(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
         return mark_safe(f'<a href="{link}">{escape(obj.fullname + " (" + obj.user.__str__() + ")")}</a>')
 
     user_link.short_description = 'Användare'
-    user_link.admin_order_field = 'user' # Make row sortable
+    user_link.admin_order_field = 'user'  # Make row sortable
 
     list_display = (
         'user_link',
@@ -59,27 +64,46 @@ class MemberAdmin(admin.ModelAdmin):
     )
 
 
+class EventTypeAttachmentInline(admin.TabularInline):
+    model = models.EventType.attachments.through
+
+
 @admin.register(models.EventType)
-class ActivityTypeAdmin(admin.ModelAdmin):
-    pass
+class EventTypeAdmin(admin.ModelAdmin):
+    exclude = ['attachments']
+    inlines = [EventTypeAttachmentInline]
 
 
+class EventAttachmentInline(admin.TabularInline):
+    model = models.Event.attachments.through
 
 
 @admin.register(models.Event)
 class EventAdmin(admin.ModelAdmin):
-    inlines = [ActivityInline, ]
-    list_filter=['type', 'cancelled']
+    exclude = ['attachments']
+    inlines = [ActivityInline, EventAttachmentInline]
+    list_filter = ['type', 'cancelled']
+
+
+class ActivityTypeAttachmentInline(admin.TabularInline):
+    model = models.ActivityType.attachments.through
 
 
 @admin.register(models.ActivityType)
 class ActivityTypeAdmin(admin.ModelAdmin):
-    pass
+    exclude = ['attachments']
+    inlines = [ActivityTypeAttachmentInline]
+
+
+class ActivityAttachmentInline(admin.TabularInline):
+    model = models.Activity.attachments.through
 
 
 @admin.register(models.Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_filter=['completed', 'cancelled', 'type']
+    exclude = ['attachments']
+    inlines = [ActivityAttachmentInline]
+    list_filter = ['completed', 'cancelled', 'type']
     list_display = (
         'name',
         'type',
@@ -89,11 +113,11 @@ class ActivityAdmin(admin.ModelAdmin):
         'completed',
         'cancelled'
     )
-    
+
 
 @admin.register(models.ActivityDelistRequest)
 class ActivityDelistRequestAdmin(admin.ModelAdmin):
-    list_filter=['approved']
+    list_filter = ['approved']
     list_display = (
         'member',
         'activity',
@@ -110,7 +134,7 @@ class FAQAdmin(admin.ModelAdmin):
         'order'
     )
 
+
 @admin.register(models.InfoText)
 class InfoTextAdmin(admin.ModelAdmin):
     pass
-

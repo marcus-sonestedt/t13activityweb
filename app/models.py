@@ -116,6 +116,10 @@ class Attachment(models.Model):
         self.modified = timezone.now()
         return super(Attachment, self).save(*args, **kwargs)
 
+    class Meta:
+        verbose_name = 'Bifogad fil'
+        verbose_name_plural = 'Bifogade filer'
+
 
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -206,6 +210,8 @@ class Activity(models.Model):
         ActivityType, on_delete=models.SET_NULL, null=True, blank=True)
     event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name='activities')
+
+    attachments = models.ManyToManyField(Attachment, blank=True)
 
     assigned = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True)
