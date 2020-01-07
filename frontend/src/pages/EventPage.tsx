@@ -98,7 +98,7 @@ export const EventPage = () => {
             .then(r => {
                 if (r.status !== 200)
                     throw r.statusText;
-                history.push(`/frontend/home?highlight-activity=${model.id}`)
+                history.push(`/frontend/home?tab=my-tasks?highlight-task=${model.id}`)
             }, r => { throw r })
             .catch(e => {
                 console.error(e);

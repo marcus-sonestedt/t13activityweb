@@ -26,7 +26,7 @@ export const MyActivitiesTable = (props: {
         f().then(reload);
     }
 
-    const highlightActivityMatch = window.location.search.match(/[?&]highlight-activity=([0-9]+)/);
+    const highlightActivityMatch = window.location.search.match(/[?&]highlight-task=([0-9]+)/);
     const highlightActivityId = highlightActivityMatch ? highlightActivityMatch[1] : undefined;
 
     const renderRow = (activity: Activity) => {
