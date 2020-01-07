@@ -117,7 +117,7 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
     )
 }
 
-export const ActivityDelistRequestPage = () => {
+export const ActivityDelistRequestsComponent = () => {
     const { id } = useParams();
     const user = useContext(userContext);
 
@@ -214,41 +214,45 @@ export const ActivityDelistRequestPage = () => {
     }
 
     return (
-        <Container fluid>
-            <Row>
-                <Col md={12} lg={7}>
-                    <h2>Avbokningar</h2>
-                    <DataProvider url={ActivityDelistRequest.apiUrlAll() + `?page=${page}`}
-                        ctor={json => deserialize(PagedADR, json)}
-                        onLoaded={reloadHandler}>
-                        {delistRequestsTable(allRequests)}
-                        <Pagination>
-                            <PageItems count={allRequests !== null ? allRequests.count : 0}
-                                pageSize={10} currentPage={page} setFunc={setPage} />
-                        </Pagination>
-                    </DataProvider>
-                </Col>
-                <Col md={12} lg={5}>
-                    <h2>Detaljer</h2>
-                    <div className="div-group">
-                        {currentReq === null
-                            ? <p>Välj en avbokning att visa</p>
-                            : <ActivityDelistRequestComponent model={currentReq} />}
-                        {(currentReq === null || !user.isStaff) ? null :
-                            <div className='align-right'>
-                                <span className="spacer">&nbsp;</span>
-                                <ApproveAdrButton onClick={() => approveADR(currentReq, user).then(incReload)}
-                                    disabled={currentReq.approved === true} />
-                                <span className="spacer">&nbsp;</span>
-                                <RejectAdrButton onClick={() => rejectADR(currentReq, user).then(incReload)}
-                                    disabled={currentReq.approved === false} />
-                            </div>
-                        }
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+        <Row>
+            <Col md={12} lg={7}>
+                <h2>Avbokningar</h2>
+                <DataProvider url={ActivityDelistRequest.apiUrlAll() + `?page=${page}`}
+                    ctor={json => deserialize(PagedADR, json)}
+                    onLoaded={reloadHandler}>
+                    {delistRequestsTable(allRequests)}
+                    <Pagination>
+                        <PageItems count={allRequests !== null ? allRequests.count : 0}
+                            pageSize={10} currentPage={page} setFunc={setPage} />
+                    </Pagination>
+                </DataProvider>
+            </Col>
+            <Col md={12} lg={5}>
+                <h2>Detaljer</h2>
+                <div className="div-group">
+                    {currentReq === null
+                        ? <p>Välj en avbokning att visa</p>
+                        : <ActivityDelistRequestComponent model={currentReq} />}
+                    {(currentReq === null || !user.isStaff) ? null :
+                        <div className='align-right'>
+                            <span className="spacer">&nbsp;</span>
+                            <ApproveAdrButton onClick={() => approveADR(currentReq, user).then(incReload)}
+                                disabled={currentReq.approved === true} />
+                            <span className="spacer">&nbsp;</span>
+                            <RejectAdrButton onClick={() => rejectADR(currentReq, user).then(incReload)}
+                                disabled={currentReq.approved === false} />
+                        </div>
+                    }
+                </div>
+            </Col>
+        </Row>
     )
+}
+
+export const ActivityDelistRequestsPage = () => {
+    return <Container fluid>
+        <ActivityDelistRequestsComponent />
+    </Container>
 }
 
 const ApproveAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>

@@ -15,7 +15,7 @@ import { ActivityPage } from './pages/ActivityPage';
 import { EventTypePage } from './pages/EventTypePage';
 import { ActivityTypePage } from './pages/ActivityTypePage';
 import { MemberPage } from './pages/MemberPage';
-import { ActivityDelistRequestPage } from './pages/ADRPage';
+import { ActivityDelistRequestsPage } from './pages/ADRPage';
 import { EventTypesPage } from './pages/EventTypesPage';
 import { ActivityTypesPage } from './pages/ActivityTypesPage';
 import FAQPage from './pages/FAQPage';
@@ -84,7 +84,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
     <Route path="/frontend/faq/:id?" component={FAQPage} />
 
     <Route path="/frontend/member/:id" component={MemberPage} />
-    <Route path="/frontend/delistrequest/:id?" component={ActivityDelistRequestPage} />
+    <Route path="/frontend/delistrequest/:id?" component={ActivityDelistRequestsPage} />
 
     {!props.isLoggedIn ?
       <>
@@ -93,7 +93,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
       </>
       :
       <>
-        <Route path="/frontend/home" component={MainPage} />
+        <Route path="/frontend/home/:page?" component={MainPage} />
 
         <Route path="/frontend/profile" component={ProfilePage} />
         <Route path="/frontend/notifications" component={NotificationsPage} />

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Nav, Navbar, NavDropdown, Badge } from 'react-bootstrap'
-import './Navigation.css'
+import { Nav, Navbar, Badge } from 'react-bootstrap'
 import { userContext } from "./UserContext";
 import { HoverTooltip } from "./Utilities";
+import './Navigation.css'
 
 export const Navigation = () => {
     const user = useContext(userContext);
@@ -31,10 +31,6 @@ export const Navigation = () => {
                             </HoverTooltip>
                         </Nav.Link>
                     }
-                    <NavDropdown title="Info" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="/frontend/eventtypes">Aktivitetstyper</NavDropdown.Item>
-                        <NavDropdown.Item href="/frontend/activitytypes">Uppgiftstyper</NavDropdown.Item>
-                    </NavDropdown>
                 </Nav>
                 <Nav>
                     <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>
