@@ -5,19 +5,24 @@ import { deserialize } from "class-transformer";
 import { PagedActivities, PagedT13Events } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { MyActivitiesTable } from "../components/MyActivitiesTable";
-import { PageItems, HoverTooltip, MarkDown, ErrorBoundary, InfoText } from "../components/Utilities";
-import UpcomingEvents from "../components/UpcomingEvents";
+import { PageItems, HoverTooltip, ErrorBoundary, InfoText } from "../components/Utilities";
+import EventsComponent from "../components/Events";
 import { userContext } from "../components/UserContext";
 import { TaskTypesComponent } from "./ActivityTypesPage";
 import { EventTypesComponent } from "./EventTypesPage";
 import { ActivityDelistRequestsComponent } from "./ADRPage";
 import { NotificationsComponent } from "./NotificationsPage";
+import { useHistory } from "react-router-dom";
 
 export const MainPage = () => {
     const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
     const tab = tabMatch ? tabMatch[1] : 'overview';
 
     const user = useContext(userContext);
+    const history = useHistory();
+    const setQueryPage = (key:string) => {
+        history.replace(`?tab=${key}`);
+    }
 
     const taskBadgeVariant =
         user.tasksSummary[0] >= user.settings.minSignups ? 'success'
@@ -26,7 +31,8 @@ export const MainPage = () => {
 
     const taskBadgeText = user.tasksSummary.join(' / ');
 
-    return <Tab.Container defaultActiveKey={tab}>
+    return <Tab.Container defaultActiveKey={tab}
+        onSelect={setQueryPage}>
         <Row>
             <Col md='auto'>
                 <Nav variant="pills" className="flex-column">
@@ -67,7 +73,7 @@ export const MainPage = () => {
                     </Nav.Item>
                     <NavDropdown.Divider />
                     <Nav.Item>
-                        <Nav.Link eventKey="upcoming-events">Kommade händelser</Nav.Link>
+                        <Nav.Link eventKey="upcoming-events">Aktiviteter</Nav.Link>
                     </Nav.Item>
                     <NavDropdown.Divider />
                     <Nav.Item>
@@ -164,7 +170,7 @@ const UpcomingEventsTab = () => {
         ctor={t => deserialize(PagedT13Events, t)}
         url={`/api/events?page_size=${EVENTS_PAGE_SIZE}`}
         onLoaded={setEvents}>
-        <UpcomingEvents events={events} />
+        <EventsComponent events={events} title='Aktiviteter' />
     </DataProvider>
 }
 

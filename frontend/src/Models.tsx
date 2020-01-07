@@ -142,6 +142,7 @@ export class T13Event implements IdValue {
 
     activities_count?: number;
     activities_available_count?: number;
+    has_bookable_activities?: boolean;
 
     @Type(() => Member)
     coordinators: Member[] = [];

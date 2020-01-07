@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Image, Alert } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { deserialize } from 'class-transformer';
 import CookieConsent from "react-cookie-consent";

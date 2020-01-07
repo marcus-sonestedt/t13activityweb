@@ -162,6 +162,12 @@ class Event(models.Model):
     def activities_available_count(self):
         return self.activities.filter(assigned=None).count()
 
+    def has_bookable_activities(self):
+        if self.end_date < datetime.date.today():
+            return False
+        return self.activities.filter(assigned=None).exists()
+    has_bookable_activities.boolean = True
+
     def __str__(self):
         return self.name
 
@@ -233,6 +239,11 @@ class Activity(models.Model):
         ordering = ['start_time', 'end_time', 'name']
         verbose_name = 'Uppgift'
         verbose_name_plural = 'Uppgifter'
+        indexes = [
+            models.Index(fields=['assigned']),
+            models.Index(fields=['event']),
+            models.Index(fields=['event', 'assigned'])
+        ]
 
     def __str__(self):
         return f"{self.event.name} - {self.name}"
@@ -274,25 +285,6 @@ class ActivityDelistRequest(models.Model):
             models.Index(fields=['member', 'activity']),
             models.Index(fields=['approver']),
         ]
-
-    def save(self, *args, **kwargs):
-        if not self.id:
-            config = apps.get_containing_app_config('app')
-
-            # TODO: fix & test this logic
-
-            booked_count = Activity.objects.filter(
-                assigned=self.member).count()
-            delist_req_count = ActivityDelistRequest.objects.filter(
-                member=self.member, approved=None).count()
-
-            if booked_count - delist_req_count - 1 < config.MIN_ACTIVITY_SIGNUPS:
-                raise RuleViolationException(
-                    f'Cannot create delist request when member would be booked for less than' +
-                    f'{config.MIN_ACTIVITY_SIGNUPS} activities if all outstanding request(s) are approved.')
-
-        super().save(*args, **kwargs)
-
 
 @receiver(post_save, sender=ActivityDelistRequest)
 def save_activity_delist_request(sender, instance, created, **kwargs):

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Nav, Navbar, Badge } from 'react-bootstrap'
+import { Nav, Navbar } from 'react-bootstrap'
 import { userContext } from "./UserContext";
 import { HoverTooltip } from "./Utilities";
 import './Navigation.css'

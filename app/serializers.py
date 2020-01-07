@@ -37,7 +37,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [x.name for x in Event._meta.get_fields()] + \
-            ['activities_count', 'activities_available_count']
+            ['has_bookable_activities']
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):

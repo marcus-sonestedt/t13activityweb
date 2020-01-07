@@ -75,15 +75,8 @@ export const UpcomingEventsTable = (props: {
                 <td className='nowrap'>{model.date()}</td>
                 <td>{type}</td>
                 <td>
-                    <a href={model.url()}>
-                        <HoverTooltip tooltip='Totalt antal uppgifter' placement='top'>
-                            <span>{model.activities_count}</span>
-                        </HoverTooltip>
-                        {' / '}
-                        <HoverTooltip tooltip='Lediga uppgifter' placement='top'>
-                            <span>{model.activities_available_count}</span>
-                        </HoverTooltip>
-                    </a>
+                    {model.has_bookable_activities
+                        ? '✔' : '❌'}
                 </td>
             </tr>
         );
@@ -96,7 +89,7 @@ export const UpcomingEventsTable = (props: {
                     <th>Namn</th>
                     <th>Datum</th>
                     <th>Typ</th>
-                    <th>Uppgifter</th>
+                    <th>Lediga Uppgifter</th>
                 </tr>
             </thead>
             <tbody>
@@ -117,7 +110,7 @@ export interface EventProps {
 
 const LS_CALMODE_KEY = "event-calendar-mode";
 
-export const UpcomingEvents = (props: EventProps) => {
+export const EventsComponent = (props: EventProps) => {
     const { events, title = 'Kommande händelser', height = '75vh' } = props;
 
     const storedViewModeJson = localStorage.getItem(LS_CALMODE_KEY);
@@ -160,5 +153,5 @@ export const UpcomingEvents = (props: EventProps) => {
     </div>
 }
 
-export default UpcomingEvents;
+export default EventsComponent;
 
