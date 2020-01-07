@@ -94,7 +94,7 @@ class IsLoggedIn(APIView):
     renderer_classes = (renderers.JSONRenderer,)
     read_only = True
 
-    @method_decorator(cache_page(60*5))
+    @method_decorator(cache_page(60))
     @method_decorator(vary_on_cookie)
     @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
     def get(self, request, format=None):
@@ -109,7 +109,7 @@ class IsLoggedIn(APIView):
                 'latestBookableDate': config.LATEST_BOOKABLE_DATE
             },
             'notifications': notifications,
-            'tasksSummary' : request.user.member.task_summary.split('/')
+            'tasksSummary' : None
         }
 
         try:
@@ -131,6 +131,8 @@ class IsLoggedIn(APIView):
                 notifications.append({
                     'message': 'Din emailaddress är inte verifierad än',
                     'link': '/frontend/verify/email'})
+
+            response_dict['tasksSummary'] = member.task_summary.split('/')
 
         except Member.DoesNotExist:
             member = None

@@ -13,17 +13,16 @@ export const NotificationsComponent = () => {
         return <>
             <Row>
                 <Col sm='auto'>
-                    <a href={n.link}><Button variant='primary'>Länk</Button></a>
-                </Col>
-                <Col sm='auto'>
-                    <span>{n.message}</span>
+                    <a href={n.link}>
+                        <Button variant='primary'>{n.message}.</Button>
+                    </a>
                 </Col>
             </Row>
             <Row>
                 &nbsp;
             </Row>
         </>
-    }   
+    }
 
     return <>
         {user.notifications.map(renderRow)}

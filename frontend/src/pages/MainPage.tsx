@@ -1,11 +1,11 @@
-import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown } from "react-bootstrap"
+import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown, Jumbotron } from "react-bootstrap"
 import React, { useState, useCallback, useContext } from "react";
 import { deserialize } from "class-transformer";
 
 import { PagedActivities, PagedT13Events } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { MyActivitiesTable } from "../components/MyActivitiesTable";
-import { PageItems, HoverTooltip } from "../components/Utilities";
+import { PageItems, HoverTooltip, MarkDown, ErrorBoundary, InfoText } from "../components/Utilities";
 import UpcomingEvents from "../components/UpcomingEvents";
 import { userContext } from "../components/UserContext";
 import { TaskTypesComponent } from "./ActivityTypesPage";
@@ -80,36 +80,47 @@ export const MainPage = () => {
             </Col>
             <Col sm={0} md={1} />
             <Col sm={11} md={9}>
-                <Tab.Content>
-                    <Tab.Pane eventKey="overview">
-                        <OverviewTab />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="my-tasks">
-                        <MyTasksTab />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="upcoming-events">
-                        <UpcomingEventsTab />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="my-adrs">
-                        <ActivityDelistRequestsComponent />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="event-types">
-                        <EventTypesComponent />
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="task-types">
-                        <TaskTypesComponent />
-                    </Tab.Pane>
-                </Tab.Content>
+                <ErrorBoundary>
+                    <Tab.Content>
+                        <Tab.Pane eventKey="overview">
+                            <OverviewTab />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="my-tasks">
+                            <MyTasksTab />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="upcoming-events">
+                            <UpcomingEventsTab />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="my-adrs">
+                            <ActivityDelistRequestsComponent />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="event-types">
+                            <EventTypesComponent />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="task-types">
+                            <TaskTypesComponent />
+                        </Tab.Pane>
+                    </Tab.Content>
+                </ErrorBoundary>
             </Col>
         </Row>
     </Tab.Container >
 }
 
 const OverviewTab = () => {
-    return <>
-        <h1>Vroom</h1>
-        <NotificationsComponent />
-    </>
+    const user = useContext(userContext);
+    return <Row>
+        <Col>
+            <Jumbotron>
+                <InfoText textKey='overview' />
+            </Jumbotron>
+            <h4>Meddelanden</h4>
+            {!user.notifications.length
+                ? <p>Inga olästa notiser</p>
+                : <NotificationsComponent />}
+        </Col>
+    </Row>
+
 
 }
 

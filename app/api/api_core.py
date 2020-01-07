@@ -5,7 +5,7 @@ from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 
@@ -22,9 +22,11 @@ from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
+from app import models
 from app.models import Activity, ActivityType, Event, EventType, Member, \
     ActivityDelistRequest, RuleViolationException, FAQ
 
+from app import serializers
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer, FAQSerializer, UserSerializer
@@ -154,6 +156,13 @@ class FAQList(generics.ListAPIView):
     permission_classes = [AllowAny]
     read_only = True
 
+
+class InfoTextList(generics.RetrieveAPIView):
+    queryset = models.InfoText.objects.all()
+    serializer_class = serializers.InfoTextSerializer
+    permission_classes = [AllowAny]
+    read_only = True
+
 ##############################################################################
 
 
@@ -173,5 +182,6 @@ url_patterns = [
     path('activity_type', ActivityTypeList.as_view()),
     re_path(r'activity_type/(?P<id>[0-9]+)', ActivityTypeList.as_view()),
 
-    path('faq', FAQList.as_view())
+    path('faq', FAQList.as_view()),
+    re_path(r'infotext/(?P<pk>\w+)', InfoTextList.as_view())
 ]

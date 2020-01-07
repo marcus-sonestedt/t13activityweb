@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from app import models
 from app.models import Attachment, Member, Event, EventType, Activity, \
     ActivityType, ActivityDelistRequest, FAQ
 
@@ -8,6 +9,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         fields = ('uploader', 'comment', 'created')
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -80,4 +82,10 @@ class ActivityDelistRequestDeepSerializer(serializers.ModelSerializer):
 class FAQSerializer(serializers.ModelSerializer):
     class Meta:
         model = FAQ
+        fields = '__all__'
+
+
+class InfoTextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.InfoText
         fields = '__all__'

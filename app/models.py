@@ -268,6 +268,12 @@ class ActivityDelistRequest(models.Model):
         unique_together = [['member', 'activity']]
         verbose_name = "Avbokning"
         verbose_name_plural = "Avbokningar"
+        indexes = [
+            models.Index(fields=['member']),
+            models.Index(fields=['activity']),
+            models.Index(fields=['member', 'activity']),
+            models.Index(fields=['approver']),
+        ]
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -318,4 +324,15 @@ class FAQ(models.Model):
 
         return self.question
 
+class InfoText(models.Model):
+    key = models.CharField(max_length=32, primary_key=True)
+    content = models.TextField()
+
+    class Meta:
+        verbose_name = 'Informationstext'
+        verbose_name_plural = 'Informationstexter'
+        unique_together=['key']
+
+    def __str__(self):
+        return self.key
 

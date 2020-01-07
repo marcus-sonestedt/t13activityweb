@@ -6,6 +6,7 @@ import { PagedT13Events } from "../Models";
 import { deserialize } from "class-transformer";
 import { userContext } from "../components/UserContext";
 import './WelcomePage.css'
+import { MarkDown, InfoText } from "../components/Utilities";
 
 export const WelcomePage = () => {
     const [events, setEvents] = useState(new PagedT13Events());
@@ -19,8 +20,9 @@ export const WelcomePage = () => {
             <Row className="welcome">
                 <Col md={12} lg={6}>
                     <Jumbotron>
-                        <WelcomeText />
-                        <div style={{textAlign:'center'}}>
+                        <InfoText textKey='welcome' />
+                        <br/>
+                        <div style={{ textAlign: 'center' }}>
                             <Image src='/static/t13logo.jpg' className="App-logo" alt="team13 logo" fluid />
                         </div>
                         <div className="buttonContainer">
@@ -47,19 +49,5 @@ export const WelcomePage = () => {
         </Container>
     );
 }
-
-export const WelcomeText = () => (
-    <div>
-        <h2>Välkommen till Team13's webbaktivitetslista!</h2>
-        <p>
-            Har du inget konto kan du <a href="/app/signup">skapa ett nytt</a> med den e-mailadress som du registrerat hos klubben.
-
-            Kontakta klubbens kansli på&nbsp;
-            <a href="mailto:info@team13.se">info@team13.se</a>
-            om du behöver hjälp.
-        </p>
-    </div>
-);
-
 
 export default WelcomePage;

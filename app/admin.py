@@ -104,3 +104,8 @@ class ActivityDelistRequestAdmin(admin.ModelAdmin):
 @admin.register(models.FAQ)
 class FAQAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(models.InfoText)
+class FAQAdmin(admin.ModelAdmin):
+    pass
+
