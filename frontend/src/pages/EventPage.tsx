@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useMemo } from "react"
 import { useParams, useHistory } from 'react-router-dom';
 import { Table, Container, Row, Col, Button, Badge } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
@@ -73,6 +73,10 @@ export const EventPage = () => {
         return function cleanup() { controller.abort(); }
     }, [id]);
 
+    const memberAlreadyBooked = useMemo(() =>
+        activities.filter(a => a.assigned?.id === user.memberId).length
+        , [activities, user.memberId]);
+
     if (error !== '')
         return (
             <Container>
@@ -114,7 +118,7 @@ export const EventPage = () => {
 
         const assigned = model.assigned !== null
             ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-            : model.bookable
+            : (!memberAlreadyBooked && model.bookable)
                 ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
                 : null;
 
@@ -178,7 +182,8 @@ export const EventPage = () => {
                 <Col md={12} lg={7}>
                     <div className="model-header">
                         <h3>Uppgifter</h3>
-                        <h3><Badge variant='secondary'>
+                        <h3><Badge
+                            variant={(event.activities_available_count && !memberAlreadyBooked) ? 'success' : 'dark'}>
                             {event.activities_count} totalt
                             {', '}
                             {event.activities_available_count} ledig

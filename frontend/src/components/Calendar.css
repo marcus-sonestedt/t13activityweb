@@ -25,7 +25,8 @@
 }
 
 .event.locked a {
-    color: #f44;
+    color: #600;
+    font-style: italic;
 }
 
 .event a {
