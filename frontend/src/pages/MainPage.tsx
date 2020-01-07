@@ -12,6 +12,7 @@ import { userContext } from "../components/UserContext";
 import { TaskTypesComponent } from "./ActivityTypesPage";
 import { EventTypesComponent } from "./EventTypesPage";
 import { ActivityDelistRequestsComponent } from "./ADRPage";
+import { NotificationsComponent } from "./NotificationsPage";
 
 export const MainPage = () => {
     const { page } = useParams();
@@ -23,7 +24,15 @@ export const MainPage = () => {
             <Col md='auto'>
                 <Nav variant="pills" className="flex-column">
                     <Nav.Item>
-                        <Nav.Link eventKey="overview">Översikt</Nav.Link>
+                        <Nav.Link eventKey="overview">
+                            Översikt
+                            <span className='spacer' />
+                            <HoverTooltip tooltip='Olästa notifieringar'>
+                                <Badge variant={user.notifications.length ? 'primary' : 'secondary'}>
+                                    {user.notifications.length}
+                                </Badge>
+                            </HoverTooltip>
+                        </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey="my-tasks">Uppgifter</Nav.Link>
@@ -79,11 +88,15 @@ export const MainPage = () => {
                 </Tab.Content>
             </Col>
         </Row>
-    </Tab.Container>
+    </Tab.Container >
 }
 
 const OverviewTab = () => {
-    return <p>Vroom</p>
+    return <>
+        <h1>Vroom</h1>
+        <NotificationsComponent />
+    </>
+
 }
 
 const MyTasksTab = () => {

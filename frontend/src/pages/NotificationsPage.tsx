@@ -4,32 +4,41 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import { userContext } from '../components/UserContext';
 
-export const NotificationsPage = () => {
+export const NotificationsComponent = () => {
     const user = useContext(userContext);
 
     // initially used only for verifying emails/phone number
 
-    const renderRow = (n: { message: string, link: string }) =>
-        <>
+    const renderRow = (n: { message: string, link: string }) => {
+        return <>
             <Row>
-                <Col>
+                <Col sm='auto'>
+                    <a href={n.link}><Button variant='primary'>Länk</Button></a>
+                </Col>
+                <Col sm='auto'>
                     <span>{n.message}</span>
-                    <span className='spacer'/>
-                    <a href={n.link}><Button variant='primary'>Gå</Button></a>
                 </Col>
             </Row>
             <Row>
                 &nbsp;
             </Row>
         </>
+    }   
 
+    return <>
+        {user.notifications.map(renderRow)}
+    </>
+}
+
+export const NotificationsPage = () => {
+    const user = useContext(userContext);
     return <Container>
         <Row>
             <Col>
                 <h2>{user.notifications.length} notifiering(ar)</h2>
             </Col>
         </Row>
-        {user.notifications.map(renderRow)}
+        <NotificationsComponent />
     </Container>
 }
 
