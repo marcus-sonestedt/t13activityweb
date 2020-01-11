@@ -9,12 +9,14 @@ export const Navigation = () => {
 
     return (
         <Navbar bg='dark' variant='dark' expand="lg">
-            <Navbar.Brand href="/">
+            <Navbar.Text>
                 <HoverTooltip tooltip="Klubbens hemsida" placement='bottom'>
-                    <img src="/static/logo192.png" alt="Team13 logo"
-                        onClick={(e:any) => { e.preventDefault();
-                            window.location.href = "http://www.team13.se";}} />
+                    <a href="http://www.team13.se">
+                        <img src="/static/logo192.png" alt="Team13 logo" />
+                    </a>
                 </HoverTooltip>
+            </Navbar.Text>
+            <Navbar.Brand href="/">
                 <HoverTooltip tooltip="Aktivetslistans översikt" placement='bottom'>
                     <span>Team13s aktivitetswebb</span>
                 </HoverTooltip>
