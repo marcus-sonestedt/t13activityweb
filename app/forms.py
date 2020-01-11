@@ -5,7 +5,7 @@ Definition of forms.
 import re
 
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import forms as auth_forms
 from django.contrib.auth import (
     authenticate, get_user_model, password_validation,
 )
@@ -20,11 +20,7 @@ captcha_attrs = {
 }
 
 
-class BootstrapAuthenticationForm(AuthenticationForm):
-    """Authentication form which uses bootstrap CSS & ReCaptcha."""
-
-    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs), label='captcha')
-
+class BootstrapMixin():
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -32,7 +28,14 @@ class BootstrapAuthenticationForm(AuthenticationForm):
             field.widget.attrs.update({'class': 'form-control'})
 
 
-class BootstrapUserCreationForm(UserCreationForm):
+class MyAuthenticationForm(auth_forms.AuthenticationForm, BootstrapMixin):
+    """Authentication form which uses bootstrap CSS & ReCaptcha."""
+
+    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs), label='captcha')
+
+
+
+class MyUserCreationForm(auth_forms.UserCreationForm, BootstrapMixin):
     """Signup form which uses bootstrap css, ReCaptcha and adds some Member fields"""
 
     captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
@@ -62,12 +65,6 @@ class BootstrapUserCreationForm(UserCreationForm):
         help_text="Måste vara på format: +46123456789"
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        for field in (f for f in self.fields.values() if f.label != 'captcha'):
-            field.widget.attrs.update({'class': 'form-control'})
-
     def _post_clean(self):
         super()._post_clean()
 
@@ -81,3 +78,17 @@ class BootstrapUserCreationForm(UserCreationForm):
         if phone_number and not re.match(r"\+[0-9]{10,15}", phone_number):
             self.add_error('last_name',
                            "Måste börja med landskod (+46) och sen bara innehålla siffror!")
+
+
+
+class MyResetPasswordForm(auth_forms.PasswordResetForm, BootstrapMixin):
+    captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
+    pass
+
+class MyPasswordChangeForm(auth_forms.PasswordChangeForm, BootstrapMixin):
+    #captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
+    pass
+
+class MySetPasswordForm(auth_forms.SetPasswordForm, BootstrapMixin):
+    #captcha = ReCaptchaField(widget=ReCaptchaV3(attrs=captcha_attrs))
+    pass

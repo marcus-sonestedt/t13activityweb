@@ -2,20 +2,22 @@
 Definition of views.
 """
 
-from datetime import datetime
+import datetime
 import logging
-import app.excel
+
+from django.urls import path, re_path, include
 
 from django.shortcuts import render
 from django.http import HttpRequest
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import views as auth_views
 from django.shortcuts import render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods
 
-from app.forms import BootstrapUserCreationForm, BootstrapAuthenticationForm
+from app import forms
 from app.excel import importDataFromExcel
+import app.excel
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +26,7 @@ def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
     return redirect('/frontend/home' if request.user.is_authenticated else '/frontend/welcome')
+
 
 def contact(request):
     """Renders the contact page."""
@@ -35,7 +38,7 @@ def contact(request):
             'title': 'Contact',
             'message': '''For web site technical issues, contact marcus.s.lindblom@gmail.com\r\n\r\n
                 For issues w.r.t. the club, events and tasks, contat info@team13.se.''',
-            'year': datetime.now().year,
+            'year': datetime.date.today().year
         }
     )
 
@@ -49,14 +52,14 @@ def about(request):
         {
             'title': 'About',
             'message': 'En weppapplikation som hjälper Team 13 att hantera aktivitetslistor och uppgifter åt sina medlemmar.',
-            'year': datetime.now().year,
+            'year': datetime.date.today().year
         }
     )
 
 
 def signup(request):
     if request.method == 'POST':
-        form = BootstrapUserCreationForm(request.POST)
+        form = forms.MyUserCreationForm(request.POST)
 
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -74,7 +77,7 @@ def signup(request):
             login(request, user)
             return redirect('/')
     else:
-        form = BootstrapUserCreationForm()
+        form = forms.MyUserCreationForm()
 
     return render(request, 'signup.html', {
         'form': form,
@@ -82,34 +85,101 @@ def signup(request):
     })
 
 
-class MyLoginView(LoginView):
+class MyLoginView(auth_views.LoginView):
     template_name = 'login.html'
-    authentication_form = BootstrapAuthenticationForm
+    authentication_form = forms.MyAuthenticationForm
     extra_context = {
         'title': 'Logga in',
-        'year': datetime.now().year,
+        'year': datetime.date.today().year
     }
     redirect_authenticated_user = True
+
+
+class MyPasswordResetView(auth_views.PasswordResetView):
+    '''ask for password reset by email'''
+    form_class = forms.MyResetPasswordForm
+    extra_content = {'year': datetime.date.today().year}
+
+
+class MyPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    '''reset email sent'''
+    extra_content = {'year': datetime.date.today().year}
+
+
+class MyPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    '''user inputs new password'''
+    form_class = forms.MySetPasswordForm
+    extra_content = {'year': datetime.date.today().year}
+
+
+class MyPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    '''password has been reset'''
+    extra_content = {'year': datetime.date.today().year}
+
+
+class MyPasswordChangeView(auth_views.PasswordChangeView):
+    '''change password when logged in'''
+    form_class = forms.MyPasswordChangeForm
+    extra_content = {'year': datetime.date.today().year}
+
+
+class MyPasswordChangeDoneView(auth_views.PasswordChangeDoneView):
+    '''confirm password change'''
+    extra_content = {'year': datetime.date.today().year}
 
 
 @staff_member_required
 @require_http_methods(['GET', 'POST'])
 def excelImport(request):
     msgs = []
+    success = None
 
     if request.method == 'POST':
+        success = True
         for file in request.files:
             try:
                 importDataFromExcel(file, request.user)
+                msgs.append(f'{file.name}: Imported successfully')
             except Exception as e:
                 logger.warning(e)
                 msgs.append(f'{file.name}: {e}')
+                success = False
+        else:
+            success = None
 
     return render(
         request,
         'excelImport.html',
         {'year': datetime.date.today().year,
          'messages': msgs,
-         'success': None
+         'success': success
          }
     )
+
+
+url_patterns = [
+    path('', home, name='home'),
+    path('contact/', contact, name='contact'),
+    path('about/', about, name='about'),
+
+    path('signup/', signup, name="signup"),
+    path('login/', MyLoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/frontend/welcome'), name='logout'),
+
+    re_path(r'password_reset/$', MyPasswordResetView.as_view(),
+            name="password_reset"),
+    path('password_reset/done/', MyPasswordResetDoneView.as_view(),
+         name="password_reset_done"),
+
+    re_path(r'password_reset/confirm/(?P<uidb64>\w+)/(?P<token>[^/]+)$',
+            MyPasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('password_reset/complete/', MyPasswordResetCompleteView.as_view(),
+         name="password_reset_complete"),
+
+    re_path(r'change_password/$', MyPasswordChangeView.as_view(),
+            name="password_change"),
+    path('change_password/done/', MyPasswordChangeDoneView.as_view(),
+         name="password_change_done"),
+
+    path('excel_import/', excelImport, name='excel_import')
+]
