@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from "react"
-import { Container, Row, Col } from "react-bootstrap"
+import { Container, Row, Col, Button } from "react-bootstrap"
 import { userContext } from "../components/UserContext";
 import DataProvider from "../components/DataProvider";
 import { Member, PagedMembers } from "../Models";
@@ -13,7 +13,7 @@ export const ProfilePage = () => {
     const setMemberCallback = useCallback((data: PagedMembers) => setMember(data.results[0]), []);
 
     if (!user.isLoggedIn)
-        return <NotFound/>
+        return <NotFound />
 
     return <Container>
         <Row>
@@ -28,7 +28,10 @@ export const ProfilePage = () => {
                 </DataProvider>
             </Col>
             <Col>
-                <p>Arbete pågår</p>
+                <h2>Inställningar</h2>
+                <a href="/app/change_password/">
+                    <Button>Ändra lösenord</Button>
+                </a>
             </Col>
         </Row>
     </Container>

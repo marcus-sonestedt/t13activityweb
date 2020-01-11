@@ -14,7 +14,7 @@ export const MemberComponent = (props: { member?: Member }) => {
         return null;
 
     return <div>
-        <h1>{member.fullname}</h1>
+        <h3>Namn: {member.fullname}</h3>
         <h4>Email:{' '}
             <a href={`mailto:${member.email}`}>{member.email}</a>
         </h4>
