@@ -137,10 +137,15 @@ class IsLoggedIn(APIView):
 
             (completed_tasks, booked_tasks) = map(int, member.task_summary.split('/'))
             response_dict['tasksSummary'] = [completed_tasks, booked_tasks]
+
             if booked_tasks < int(config.MIN_ACTIVITY_SIGNUPS):
                 notifications.append({
                     'message': f'Du behöver boka dig på {int(config.MIN_ACTIVITY_SIGNUPS)-booked_tasks} uppgift(er) till för att kunna hämta ut ditt guldkort.',
                     'link': '/frontend/home?tab=upcoming-events'})
+            elif member.membercard_number == None or member.membercard_number == '':
+                notifications.append({
+                    'message': f'Du är redo att hämta ut ditt guldkort på hyrkarten / kansliet!',
+                    'link': 'http://www.team13.se/kontakta-oss'})
 
         except Member.DoesNotExist:
             member = None
