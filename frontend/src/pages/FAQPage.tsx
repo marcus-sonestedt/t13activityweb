@@ -19,7 +19,7 @@ const FAQComponent = (props: { model: FAQ }) => {
             </h3>
             {!user.isStaff ? null :
                 <a href={model.adminUrl()}>
-                    <Button variant='secondary' size='sm'>Editera</Button>
+                    <Button variant='outline-secondary' size='sm'>Editera</Button>
                 </a>
             }
         </div>
@@ -55,7 +55,11 @@ export const FAQPage = () => {
             <Col>
                 <div className="model-header">
                     <h1>Vanliga frågor och svar</h1>
-                    {user.isStaff ? <a href={FAQ.adminCreateUrl}><Button variant='secondary'>Skapa ny</Button></a> : null}
+                    {user.isStaff ?
+                        <a href={FAQ.adminCreateUrl}>
+                            <Button variant='outline-secondary'>Skapa ny</Button>
+                        </a> : null
+                    }
                 </div>
                 <hr />
             </Col>

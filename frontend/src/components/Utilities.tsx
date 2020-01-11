@@ -118,7 +118,7 @@ export const InfoText = (props: { textKey: string }) => {
 
     const editButton = user.isStaff
         ? <a href={`/admin/app/infotext/${props.textKey}/change/`}>
-            <Button variant='secondary'>Editera</Button>
+            <Button variant='outline-secondary'>Editera</Button>
         </a>
         : null;
 

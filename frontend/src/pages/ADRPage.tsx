@@ -90,7 +90,7 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
                     <h5><span className='spacer' /><AdrStatusBadge model={model} /></h5>
                 </span>
                 {user.isStaff ?
-                    <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                    <a href={model.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
                     : null}
             </div>
             <h5>Medlem</h5>

@@ -19,7 +19,7 @@ export const EventTypeComponent = (props: { model: T13EventType | null }) => {
         <div className="model-header">
             <h1>{model.name}</h1>
             {user.isStaff ?
-                <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                <a href={model.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
                 : null}
         </div>
         <hr />

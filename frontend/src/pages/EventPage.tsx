@@ -153,7 +153,7 @@ export const EventPage = () => {
                     <div className="model-header">
                         <a href={event.url()}><h1>{event.name}</h1></a>
                         {user.isStaff ?
-                            <a href={event.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                            <a href={event.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
                             : null}
                     </div>
                     <hr />

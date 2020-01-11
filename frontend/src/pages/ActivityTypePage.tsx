@@ -20,7 +20,7 @@ export const ActivityTypeComponent = (props: { model?: ActivityType | null }) =>
         <div className="model-header">
             <a href={model.url()}><h2>{model.name}</h2></a>
             {user.isStaff ?
-                <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                <a href={model.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
                 : null}
         </div>
         <hr />

@@ -60,7 +60,7 @@ export const ActivityPage = () => {
             <div className='model-header'>
                 <a href={model.url()}><h1>{model.name}</h1></a>
                 {user.isStaff ?
-                    <a href={model.adminUrl()}><Button variant='secondary'>Editera</Button></a>
+                    <a href={model.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
                     : null}
             </div>
             <hr />
