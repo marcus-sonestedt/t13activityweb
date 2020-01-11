@@ -8,8 +8,6 @@ import { MyActivitiesTable } from "../components/MyActivitiesTable";
 import { PageItems, HoverTooltip, ErrorBoundary, InfoText } from "../components/Utilities";
 import EventsComponent from "../components/Events";
 import { userContext } from "../components/UserContext";
-import { TaskTypesComponent } from "./ActivityTypesPage";
-import { EventTypesComponent } from "./EventTypesPage";
 import { ActivityDelistRequestsComponent } from "./ADRPage";
 import { NotificationsComponent } from "./NotificationsPage";
 import { useHistory } from "react-router-dom";
@@ -74,19 +72,12 @@ export const MainPage = () => {
                     </Nav.Item>
                     <NavDropdown.Divider />
                     <Nav.Item>
-                        <Nav.Link eventKey="upcoming-events">Aktiviteter</Nav.Link>
+                        <Nav.Link eventKey="upcoming-events">Aktivitetskalender</Nav.Link>
                     </Nav.Item>
                     <NavDropdown.Divider />
-                    <Nav.Item>
-                        <Nav.Link eventKey="event-types">Aktivitetstyper</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="task-types">Uppgiftstyper</Nav.Link>
-                    </Nav.Item>
                 </Nav>
             </Col>
-            <Col sm={0} md={1} />
-            <Col sm={11} md={9}>
+            <Col sm={12} md={10}>
                 <ErrorBoundary>
                     <Tab.Content>
                         <Tab.Pane eventKey="overview">
@@ -100,12 +91,6 @@ export const MainPage = () => {
                         </Tab.Pane>
                         <Tab.Pane eventKey="my-adrs">
                             <ActivityDelistRequestsComponent />
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="event-types">
-                            <EventTypesComponent />
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="task-types">
-                            <TaskTypesComponent />
                         </Tab.Pane>
                     </Tab.Content>
                 </ErrorBoundary>

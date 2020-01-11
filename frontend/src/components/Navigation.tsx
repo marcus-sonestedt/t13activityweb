@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Nav, Navbar } from 'react-bootstrap'
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { userContext } from "./UserContext";
 import { HoverTooltip } from "./Utilities";
 import './Navigation.css'
@@ -26,6 +26,14 @@ export const Navigation = () => {
                 </Nav>
                 <Nav>
                     <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>
+                    <NavDropdown title="Detaljer" id='details-dropdown'>
+                        <NavDropdown.Item href="/frontend/eventtypes">
+                            Aktivitetstyper
+                        </NavDropdown.Item>
+                        <NavDropdown.Item href="/frontend/activitytypes">
+                            Uppgiftstyper
+                        </NavDropdown.Item>
+                    </NavDropdown>
                     {!user.isStaff ? null :
                         <Nav.Link href="/admin">Administrera</Nav.Link>
                     }
