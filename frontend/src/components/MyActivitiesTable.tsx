@@ -19,7 +19,7 @@ export const MyActivitiesTable = (props: {
     const today = new Date();
     const bookedCount = useMemo(() => values.filter(a => !a.delist_requested).length, [values])
     const completedCount = useMemo(() => values.filter(a => a.completed === true).length, [values])
-    const canRequestUnlist = bookedCount > user.settings.minSignups
+    const canRequestUnlist = bookedCount > user.minSignups
 
     const buttonClick = (f: () => Promise<void>) => (e: any) => {
         e.stopPropagation();

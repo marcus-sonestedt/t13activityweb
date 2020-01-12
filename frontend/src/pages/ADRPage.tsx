@@ -29,7 +29,7 @@ export const RequestAdrButton = (props: {
             tooltip={!props.disabled
                 ? "Skapa en förfrågan om att att avboka dig från uppgiften"
                 : "Du kan inte begära att avboka dig då du skulle få mindre än "
-                + `${user.settings.minSignups} uppgifter om det godkändes.`}>
+                + `${user.minSignups} uppgifter om det godkändes.`}>
             <span className="d-inline-block" onClick={onSpanClick}>
                 <Button variant='outline-danger' size='sm' disabled={props.disabled}
                     onClick={onButtonClick} style={{ pointerEvents: props.disabled ? 'none' : 'auto' }}>
