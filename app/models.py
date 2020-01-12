@@ -158,24 +158,37 @@ class Event(models.Model):
     attachments = models.ManyToManyField(Attachment, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    cancelled = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False, verbose_name='Inställd')
 
-    @property
+    def date(self):
+        if self.start_date == self.end_date:
+            return str(self.start_date)
+        else:
+            return f'{self.start_date} - {self.end_date}'
+    
+    date.short_description = 'Datum'
+    date = property(date)
+
     def activities_count(self):
         return self.activities.count()
+    
+    activities_count.short_description = 'Uppgifter'
+    activities_count = property(activities_count)
 
-    @property
     def activities_available_count(self):
-        return self.activities.filter(assigned=None).count()
+        today = datetime.date.today()
+        return self.activities.filter(assigned=None) \
+            .filter(Q(earliest_bookable_date__gte=today) | Q(earliest_bookable_date=None)) \
+            .count()
+    
+    activities_available_count.short_description = 'Lediga uppgifter'
+    activities_available_count = property(activities_available_count)
 
     def has_bookable_activities(self):
         if self.end_date < datetime.date.today():
             return False
-
-        now = datetime.date.today()
-        return self.activities.filter(assigned=None) \
-            .filter(Q(earliest_bookable_date__gte=now) | Q(earliest_bookable_date=None)) \
-            .exists()
+        return bool(self.activities_available_count)
+    
     has_bookable_activities.boolean = True
     has_bookable_activities = property(has_bookable_activities)
 
@@ -230,8 +243,9 @@ class Activity(models.Model):
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
 
-    completed = models.BooleanField(default=None, null=True, blank=True)
-    cancelled = models.BooleanField(default=False)
+    confirmed = models.BooleanField(default=False, verbose_name='Bekräftad')
+    completed = models.BooleanField(default=None, null=True, blank=True, verbose_name='Utförd')
+    cancelled = models.BooleanField(default=False, verbose_name='Inställd')
 
     earliest_bookable_date = models.DateField(null=True, blank=True)
 

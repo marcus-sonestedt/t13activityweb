@@ -6,7 +6,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('file', type=str, help="Excel file path")
-        parser.add_argument('--year', type=int, default=2019, help="Year of data")
+        parser.add_argument('--year', type=int, help="Year of data")
 
     def handle(self, *args, **options):
         with open(options['file'], 'rb') as file:
