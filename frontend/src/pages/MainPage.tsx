@@ -150,7 +150,7 @@ const MyTasksTab = () => {
 
 const UpcomingEventsTab = () => {
     const [events, setEvents] = useState(new PagedT13Events());
-    const EVENTS_PAGE_SIZE = 100;
+    const EVENTS_PAGE_SIZE = 150; // ~100-120 events/year typically
 
     return <DataProvider< PagedT13Events >
         ctor={t => deserialize(PagedT13Events, t)}
