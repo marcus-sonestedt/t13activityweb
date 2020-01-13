@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { Container, Row, Col, Image, Button } from 'react-bootstrap'
 import { T13EventType, PagedEventTypes } from "../Models";
 import { deserialize } from "class-transformer";
@@ -33,6 +33,7 @@ export const EventTypeComponent = (props: { model: T13EventType | null }) => {
 export const EventTypePage = () => {
     const { id } = useParams();
     const [model, setModel] = useState<T13EventType | null>(null);
+    const setModelCallback = useCallback((data:PagedEventTypes) => setModel(data.results[0]), []);
 
     if (id === undefined)
         return <NotFound />
@@ -43,7 +44,7 @@ export const EventTypePage = () => {
                 <Col sm={12} md={6}>
                     <DataProvider<PagedEventTypes>
                         ctor={t => deserialize(PagedEventTypes, t)}
-                        onLoaded={x => setModel(x.results[0])}
+                        onLoaded={setModelCallback}
                         url={T13EventType.apiUrl(id)}                    >
                         <EventTypeComponent model={model} />
                     </DataProvider>
