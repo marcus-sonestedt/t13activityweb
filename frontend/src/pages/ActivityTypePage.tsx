@@ -26,7 +26,14 @@ export const ActivityTypeComponent = (props: { model?: ActivityType | null }) =>
         <hr />
         <div className="div-group">
             <h4>Beskrivning:</h4>
-            <MarkDown source={model.description}/>
+            <MarkDown source={model.description} />
+            <h4>Ersättningar:</h4>
+            <ul>
+                {model.fee_reimbursed ? <li><span role='img' aria-label='money'>💰</span> Funktionärsersättning</li> : null}
+                {model.food_included ? <li><span role='img' aria-label='food'>🍔</span> Mat</li> : null}
+                {model.rental_kart ? <li><span role='img' aria-label='racecar'>🏎</span> Hyrkart</li> : null}
+            </ul>
+            {!model.fee_reimbursed && model.food_included && !model.rental_kart ? <p>-</p> : null}
         </div>
     </>)
 }

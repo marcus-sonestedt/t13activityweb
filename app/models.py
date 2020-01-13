@@ -131,10 +131,6 @@ class EventType(models.Model):
     image = models.ImageField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, blank=True)
 
-    fee_reimbursed = models.BooleanField(default=False)
-    food_included = models.BooleanField(default=False)
-    rental_kart = models.BooleanField(default=False)
-
     def __str__(self):
         return self.name
 
@@ -215,10 +211,15 @@ class ActivityType(models.Model):
     image = models.ImageField(null=True, blank=True)
     attachments = models.ManyToManyField(Attachment, blank=True)
 
+    fee_reimbursed = models.BooleanField(default=False)
+    food_included = models.BooleanField(default=False)
+    rental_kart = models.BooleanField(default=False)
+
     def __str__(self):
         return self.name
 
     class Meta:
+        ordering = ['name']
         verbose_name = 'Uppgiftstyp'
         verbose_name_plural = 'Uppgiftstyper'
 
@@ -243,7 +244,7 @@ class Activity(models.Model):
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
 
-    confirmed = models.BooleanField(default=False, verbose_name='Bekräftad')
+    confirmed = models.BooleanField(default=False, verbose_name='Påminnelse bekräftad')
     completed = models.BooleanField(default=None, null=True, blank=True, verbose_name='Utförd')
     cancelled = models.BooleanField(default=False, verbose_name='Inställd')
 
