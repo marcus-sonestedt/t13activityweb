@@ -81,7 +81,7 @@ def signup(request):
 
     return render(request, 'signup.html', {
         'form': form,
-        'year': datetime.now().year
+        'year': datetime.date.today().year
     })
 
 
