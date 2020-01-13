@@ -19,7 +19,7 @@ import { ActivityDelistRequestsPage } from './pages/ADRPage';
 import { EventTypesPage } from './pages/EventTypesPage';
 import { ActivityTypesPage } from './pages/ActivityTypesPage';
 import FAQPage from './pages/FAQPage';
-import ProfilePage from './pages/ProfilePage';
+import MyProfilePage from './pages/MyProfilePage';
 import { UserContext, UserProvider } from './components/UserContext';
 import VerifyPhonePage from './pages/VerifyPhonePage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
@@ -96,7 +96,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
       <>
         <Route path="/frontend/home/:page?" component={MainPage} />
 
-        <Route path="/frontend/profile" component={ProfilePage} />
+        <Route path="/frontend/myprofile" component={MyProfilePage} />
         <Route path="/frontend/notifications" component={NotificationsPage} />
 
         <Route path="/frontend/verify/phone" component={VerifyPhonePage} />

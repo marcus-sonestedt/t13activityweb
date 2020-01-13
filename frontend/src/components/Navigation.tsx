@@ -8,7 +8,7 @@ export const Navigation = () => {
     const user = useContext(userContext);
 
     return (
-        <Navbar bg='dark' variant='dark' expand="lg">
+        <Navbar bg='dark' variant='dark' expand="lg" collapseOnSelect>
             <Navbar.Text>
                 <HoverTooltip tooltip="Klubbens hemsida" placement='bottom'>
                     <a href="http://www.team13.se">
@@ -24,7 +24,9 @@ export const Navigation = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
-                    <p>{' '}</p>
+                    {!user.isStaff ? <p>{' '}</p> :
+                        <Nav.Link href="/admin">Administrera</Nav.Link>
+                    }
                 </Nav>
                 <Nav>
                     <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>
@@ -36,12 +38,9 @@ export const Navigation = () => {
                             Uppgiftstyper
                         </NavDropdown.Item>
                     </NavDropdown>
-                    {!user.isStaff ? null :
-                        <Nav.Link href="/admin">Administrera</Nav.Link>
-                    }
                     {!user.isLoggedIn ? null :
                         <>
-                            <Nav.Link mr-sm={2} href="/frontend/profile">Hej {user.fullname}!</Nav.Link>
+                            <Nav.Link mr-sm={2} href="/frontend/myprofile">Hej {user.fullname}!</Nav.Link>
                             <Nav.Link mr-sm={2} href="/app/logout">Logga ut</Nav.Link>
                         </>
                     }
