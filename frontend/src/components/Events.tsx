@@ -109,6 +109,8 @@ export const EventsTable = (props: {
     const [page, setPage] = useState(1);
     const [bookableFilter, setBookableFilter] = useState<boolean | null>(null);
     const [typeFilter, setTypeFilter] = useState<string | null>(null);
+    const [year, setYear] = useState(new Date().getFullYear());
+
     const history = useHistory();
 
     const renderRow = (model: T13Event) => {
@@ -156,28 +158,51 @@ export const EventsTable = (props: {
         events.results
             .filter(e => bookableFilter === null ? true : bookableFilter === e.has_bookable_activities)
             .filter(e => typeFilter === null ? true : typeFilter === e.type?.name)
-        , [events, typeFilter, bookableFilter]);
+            .filter(e => e.start_date.getFullYear() === year || e.end_date.getFullYear() === year)
+        , [events, typeFilter, bookableFilter, year]);
+
+
+    const YearHeader = () =>
+        <>
+            Datum{' '}
+            <Button onClick={() => setYear(year - 1)} size='sm' variant='outline-info'>-</Button>
+            <HoverTooltip tooltip="Aktivitetens datum. Klicka för att gå till nuvarande år."
+                placement='bottom'>
+                <Button onClick={() => setYear(new Date().getFullYear())} size='sm' variant='outline-info'>
+                    {year}
+                </Button>
+            </HoverTooltip>
+            <Button onClick={() => setYear(year + 1)} size='sm' variant='outline-info'>+</Button>
+        </>
+
+    const TypeHeader = () =>
+        <HoverTooltip tooltip="Typ av aktivitet. Klicka för att filtrera."
+            placement='bottom'>
+            <Button onClick={toggleTypeFilter} size='sm'
+                variant='outline-info' block={true}>
+                Typ{' '}{typeFilter?.toString()}
+            </Button>
+        </HoverTooltip>
+
+    const BookableHeader = () =>
+        <HoverTooltip tooltip="Om aktiviteten har lediga uppgifter samt kan bokas idag."
+            placement='bottom'>
+            <Button onClick={toggleBookableFilter} size='sm'
+                variant='outline-info' block={true}>
+                Bokningsbar{' '}
+                {bookableFilter === null ? null :
+                    bookableFilter === true ? <Check /> : <Cross />}
+            </Button>
+        </HoverTooltip>
 
     return <>
-        <Table striped hover>
+        <Table striped hover size='sm' responsive>
             <thead>
                 <tr>
                     <th>Namn</th>
-                    <th>Datum</th>
-                    <th>
-                        <Button onClick={toggleTypeFilter} size='sm'
-                            variant='secondary' block={true}>
-                            Typ{' '}<>{typeFilter?.toString()}</>
-                        </Button>
-                    </th>
-                    <th>
-                        <Button onClick={toggleBookableFilter} size='sm'
-                            variant='secondary' block={true}>
-                            Bokningsbar{' '}
-                            {bookableFilter === null ? null :
-                                bookableFilter === true ? <Check /> : <Cross />}
-                        </Button>
-                    </th>
+                    <th><YearHeader /></th>
+                    <th><TypeHeader /></th>
+                    <th><BookableHeader /></th>
                 </tr>
             </thead>
             <tbody>
@@ -185,9 +210,9 @@ export const EventsTable = (props: {
                     .slice((page - 1) * count, page * count)
                     .map(renderRow)}
             </tbody>
-        </Table>
+        </Table >
         <Pagination>
-            <PageItems count={filteredEvents.length} pageSize={10}
+            <PageItems count={filteredEvents.length} pageSize={15}
                 currentPage={page} setFunc={setPage} />
         </Pagination>
     </>
@@ -224,7 +249,7 @@ export const EventsComponent = (props: EventProps) => {
                 <HoverTooltip tooltip='Byt mellan kalender och tabellvy' placement='left'>
                     <Button variant='outline-info'
                         onClick={toggleViewMode}>
-                        {viewMode ? 'Kalender' : 'Tabell'}
+                        {!viewMode ? 'Kalender' : 'Tabell'}
                     </Button>
                 </HoverTooltip>
             </Col>

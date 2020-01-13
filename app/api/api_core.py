@@ -56,18 +56,20 @@ class EventList(generics.ListAPIView):
 
     def get_queryset(self):
         if 'upcoming' in self.kwargs:
-            return self.queryset.filter(start_date__gte=datetime.datetime.now())
+            today = datetime.date.today()
+            return self.queryset.filter(
+                start_date__gte=today,
+                start_date__year=today.year)
 
         if 'id' in self.kwargs:
             return self.queryset.filter(id=self.kwargs['id'])
 
-        else:
-            return self.queryset.all()
+        year = self.request.query_params.get('year', datetime.date.today().year)
+        return self.queryset.filter(start_date__year=year)            
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
 
 
 class EventActivities(generics.ListAPIView):

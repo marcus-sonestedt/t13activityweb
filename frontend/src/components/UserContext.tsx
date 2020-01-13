@@ -6,14 +6,12 @@ export class UserContext {
   memberId = '';
   userId = '';
   fullname = '';
-  settings!: {
-    minSignups: number;
-    latestBookableDate: Date;
-  };
+  minSignups = 0;
   myDelistRequests = 0;
   unansweredDelistRequests = 0;
   notifications: { message:string, link:string}[] = [];
-  tasksSummary: number[] = [];
+  completedTasks = 0;
+  bookedTasks = 0;
 }
 
 export const userContext = React.createContext(new UserContext());

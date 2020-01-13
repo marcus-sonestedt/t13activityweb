@@ -15,9 +15,11 @@ def unregister(model):
 
     return f2
 
+
 @admin.register(models.Attachment)
 class AttachmentAdmin(admin.ModelAdmin):
     model = models.Attachment
+
 
 class ActivityInline(admin.TabularInline):
     model = models.Activity
@@ -78,11 +80,33 @@ class EventAttachmentInline(admin.TabularInline):
     model = models.Event.attachments.through
 
 
+class CoordinatorFilter(admin.SimpleListFilter):
+    title = 'Koordinator'
+    parameter_name = 'coordinator'
+
+    def lookups(self, request, model_admin):
+        staff = models.Member.objects.filter(user__is_staff=True)
+        staff = [(m.id, m.fullname) for m in staff]
+        staff.append((0, 'Ingen'))
+        return staff
+        
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        elif self.value() == '0':
+            return queryset.filter(coordinators=None)
+        else:
+            return queryset.filter(coordinators=self.value())
+
+
 @admin.register(models.Event)
 class EventAdmin(admin.ModelAdmin):
     exclude = ['attachments']
     inlines = [ActivityInline, EventAttachmentInline]
-    list_filter = ['type', 'cancelled']
+    list_filter = ['type','cancelled', CoordinatorFilter]
+    list_display = ['name', 'type', 'cancelled', 'start_date',
+                    'activities_available_count', 'activities_count', ]
 
 
 class ActivityTypeAttachmentInline(admin.TabularInline):
@@ -103,16 +127,9 @@ class ActivityAttachmentInline(admin.TabularInline):
 class ActivityAdmin(admin.ModelAdmin):
     exclude = ['attachments']
     inlines = [ActivityAttachmentInline]
-    list_filter = ['completed', 'cancelled', 'type']
-    list_display = (
-        'name',
-        'type',
-        'event',
-        'date',
-        'assigned',
-        'completed',
-        'cancelled'
-    )
+    list_filter = ['completed', 'cancelled', 'type', 'event']
+    list_display = ('name', 'type', 'event',  'date',
+                    'assigned',  'confirmed', 'completed', 'cancelled')
 
 
 @admin.register(models.ActivityDelistRequest)

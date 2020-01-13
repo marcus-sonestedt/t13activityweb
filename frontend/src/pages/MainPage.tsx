@@ -22,12 +22,9 @@ export const MainPage = () => {
         history.replace(`?tab=${key}`);
     }
 
-    const taskBadgeVariant =
-        user.tasksSummary[0] >= user.settings.minSignups ? 'secondary'
-            : user.tasksSummary[1] >= user.settings.minSignups ? 'success'
-                : 'warning';
+    const taskBadgeVariant = user.bookedTasks >= user.minSignups ? 'success': 'warning';
 
-    const taskBadgeText = user.tasksSummary.join(' / ');
+    const taskBadgeText = `${user.completedTasks} / ${user.bookedTasks}`
 
     return <Tab.Container defaultActiveKey={tab}
         onSelect={setQueryPage}>
@@ -150,7 +147,7 @@ const MyTasksTab = () => {
 
 const UpcomingEventsTab = () => {
     const [events, setEvents] = useState(new PagedT13Events());
-    const EVENTS_PAGE_SIZE = 100;
+    const EVENTS_PAGE_SIZE = 150; // ~100-120 events/year typically
 
     return <DataProvider< PagedT13Events >
         ctor={t => deserialize(PagedT13Events, t)}
