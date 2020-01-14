@@ -51,7 +51,7 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityType
-        fields = ('name', 'description', 'image', 'id', 'attachments')
+        fields = '__all__'
 
 
 class EventActivitySerializer(serializers.ModelSerializer):

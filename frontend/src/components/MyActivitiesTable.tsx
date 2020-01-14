@@ -30,7 +30,7 @@ export const MyActivitiesTable = (props: {
     const highlightActivityId = highlightActivityMatch ? highlightActivityMatch[1] : undefined;
 
     const renderRow = (activity: Activity) => {
-        const eventInPast = activity.event.end_date <= today;
+        const eventInPast = activity.event.end_date < today;
         const rowClick = (e: any) => {
             if (e.target?.tagName === 'A')
                 return

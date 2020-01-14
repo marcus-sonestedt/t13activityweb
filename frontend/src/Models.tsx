@@ -117,6 +117,10 @@ export class ActivityType implements IdValue {
     @Type(() => Attachment)
     attachments: Attachment[] = []
 
+    fee_reimbursed = false;
+    food_included = false;
+    rental_kart = false;
+
     url = () => `/frontend/activity_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
