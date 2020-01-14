@@ -1,15 +1,22 @@
 import React from "react";
+import { Member } from "../Models";
 
 export class UserContext {
   isLoggedIn = false;
   isStaff = false;
+
+  member? : Member;
+
   memberId = '';
   userId = '';
   fullname = '';
   minSignups = 0;
+
   myDelistRequests = 0;
   unansweredDelistRequests = 0;
+
   notifications: { message:string, link:string}[] = [];
+
   completedTasks = 0;
   bookedTasks = 0;
 }

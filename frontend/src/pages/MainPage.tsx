@@ -15,16 +15,12 @@ import { useHistory } from "react-router-dom";
 export const MainPage = () => {
     const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
     const tab = tabMatch ? tabMatch[1] : 'overview';
-
     const user = useContext(userContext);
     const history = useHistory();
-    const setQueryPage = (key: string) => {
-        history.replace(`?tab=${key}`);
-    }
-
-    const taskBadgeVariant = user.bookedTasks >= user.minSignups ? 'success': 'warning';
-
+    const setQueryPage = (key: string) => { history.replace(`?tab=${key}`); }
+    const taskBadgeVariant = user.bookedTasks >= user.minSignups ? 'success' : 'warning';
     const taskBadgeText = `${user.completedTasks} / ${user.bookedTasks}`
+    const verified = user.member?.email_verified && user.member?.phone_verified;
 
     return <Tab.Container defaultActiveKey={tab}
         onSelect={setQueryPage}>
@@ -42,36 +38,37 @@ export const MainPage = () => {
                             </HoverTooltip>
                         </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="my-tasks">Uppgifter
-                        <span className='spacer' />
-                            <HoverTooltip tooltip={'Antal utförda/bokade uppgifter detta år'}>
-                                <Badge variant={taskBadgeVariant}>
-                                    {taskBadgeText}
-                                </Badge>
-                            </HoverTooltip>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="my-adrs">
-                            Avbokningar
+                    {verified ? <>
+                        <Nav.Item>
+                            <Nav.Link eventKey="my-tasks">Uppgifter
                             <span className='spacer' />
-                            <HoverTooltip tooltip={
-                                "Antal obehandlade egna förfrågningar\n" +
-                                (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>
-                                <Badge variant={(user.myDelistRequests ||
-                                    user.unansweredDelistRequests) ? 'info' : 'secondary'}>
-                                    {user.myDelistRequests}
-                                    {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
-                                </Badge>
-                            </HoverTooltip>
-                        </Nav.Link>
-                    </Nav.Item>
-                    <NavDropdown.Divider />
-                    <Nav.Item>
-                        <Nav.Link eventKey="upcoming-events">Aktivitetskalender</Nav.Link>
-                    </Nav.Item>
-                    <NavDropdown.Divider />
+                                <HoverTooltip tooltip={'Antal utförda/bokade uppgifter detta år'}>
+                                    <Badge variant={taskBadgeVariant}>
+                                        {taskBadgeText}
+                                    </Badge>
+                                </HoverTooltip>
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey="my-adrs">
+                                Avbokningar
+                                <span className='spacer' />
+                                <HoverTooltip tooltip={
+                                    "Antal obehandlade egna förfrågningar\n" +
+                                    (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>
+                                    <Badge variant={(user.myDelistRequests ||
+                                        user.unansweredDelistRequests) ? 'info' : 'secondary'}>
+                                        {user.myDelistRequests}
+                                        {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
+                                    </Badge>
+                                </HoverTooltip>
+                            </Nav.Link>
+                        </Nav.Item>
+                        <NavDropdown.Divider />
+                        <Nav.Item>
+                            <Nav.Link eventKey="upcoming-events">Aktivitetskalender</Nav.Link>
+                        </Nav.Item>
+                    </> : null}
                 </Nav>
             </Col>
             <Col sm={12} md={10}>
@@ -80,15 +77,17 @@ export const MainPage = () => {
                         <Tab.Pane eventKey="overview">
                             <OverviewTab />
                         </Tab.Pane>
-                        <Tab.Pane eventKey="my-tasks">
-                            <MyTasksTab />
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="upcoming-events">
-                            <UpcomingEventsTab />
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="my-adrs">
-                            <ActivityDelistRequestsComponent />
-                        </Tab.Pane>
+                        {verified ? <>
+                            <Tab.Pane eventKey="my-tasks">
+                                <MyTasksTab />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="upcoming-events">
+                                <UpcomingEventsTab />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="my-adrs">
+                                <ActivityDelistRequestsComponent />
+                            </Tab.Pane>
+                        </> : null}
                     </Tab.Content>
                 </ErrorBoundary>
             </Col>

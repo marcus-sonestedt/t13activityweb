@@ -15,6 +15,7 @@ class Notification():
 class NotificationData():
     def __init__(self, member: models.Member):
         self.isLoggedIn = member is not None
+
         if not self.isLoggedIn:
             return
 
@@ -52,14 +53,16 @@ class NotificationData():
     def compute_notifications(self):
         self.notifications = []
 
+        verified = self.member.phone_verified and self.member.email_verified
+
         if self.member.phone_number and not self.member.phone_verified:
             self.notifications.append(Notification(
-                'Ditt telefonnummer är inte verifierat.',
+                'Ditt telefonnummer behöver verifieras! Klicka här för att åtgärda.',
                 '/frontend/verify/phone'))
 
         if not self.member.email_verified:
             self.notifications.append(Notification(
-                'Din emailaddress är inte verifierad.',
+                'Din emailaddress behöver verifieras! Klicka här för att åtgärda.',
                 '/frontend/verify/email'))
 
         if self.bookedTasks < self.minSignups:
@@ -67,7 +70,7 @@ class NotificationData():
                 f'Du behöver boka dig på {self.minSignups-self.bookedTasks} uppgift(er) till för att kunna hämta ut ditt guldkort.',
                 '/frontend/home?tab=upcoming-events'))
 
-        elif not self.hasMemberCard:
+        elif not self.hasMemberCard and verified:
             self.notifications.append(Notification(
                 'Du kan hämta ut ditt guldkort på hyrkarten / kansliet!',
                 'http://www.team13.se/kontakta-oss'))
@@ -79,21 +82,22 @@ class NotificationSerializer(drf_serializers.Serializer):
 
 
 class NotificationDataSerializer(drf_serializers.Serializer):
-    notifications = NotificationSerializer(many=True)
-    member = serializers.MemberSerializer()
-
-    minSignups = drf_serializers.IntegerField()
-
-    isStaff = drf_serializers.BooleanField()
     isLoggedIn = drf_serializers.BooleanField()
 
-    memberId = drf_serializers.IntegerField()
-    userId = drf_serializers.IntegerField()
-    fullname = drf_serializers.CharField()
+    notifications = NotificationSerializer(many=True, required=False)
+    member = serializers.MemberSerializer(required=False)
 
-    hasMemberCard = drf_serializers.BooleanField()
-    completedTasks = drf_serializers.IntegerField()
-    bookedTasks = drf_serializers.IntegerField()
+    minSignups = drf_serializers.IntegerField(required=False)
 
-    myDelistRequests = drf_serializers.IntegerField()
-    unansweredDelistRequests = drf_serializers.IntegerField()
+    isStaff = drf_serializers.BooleanField(required=False)
+
+    memberId = drf_serializers.IntegerField(required=False)
+    userId = drf_serializers.IntegerField(required=False)
+    fullname = drf_serializers.CharField(required=False)
+
+    hasMemberCard = drf_serializers.BooleanField(required=False)
+    completedTasks = drf_serializers.IntegerField(required=False)
+    bookedTasks = drf_serializers.IntegerField(required=False)
+
+    myDelistRequests = drf_serializers.IntegerField(required=False)
+    unansweredDelistRequests = drf_serializers.IntegerField(required=False)

@@ -1,31 +1,38 @@
-import React, { useContext, useState, useCallback } from "react"
-import { Container, Row, Col, Button } from "react-bootstrap"
+import React, { useContext } from "react"
+import { Container, Row, Col, Button, Badge } from "react-bootstrap"
 import { userContext } from "../components/UserContext";
-import DataProvider from "../components/DataProvider";
-import { Member, PagedMembers } from "../Models";
-import { deserialize } from "class-transformer";
-import { MemberComponent } from "./MemberPage";
 import NotFound from "../components/NotFound";
 
 export const ProfilePage = () => {
     const user = useContext(userContext);
-    const [member, setMember] = useState<Member | undefined>();
-    const setMemberCallback = useCallback((data: PagedMembers) => setMember(data.results[0]), []);
+    const member = user.member;
 
-    if (!user.isLoggedIn)
+    if (!user.isLoggedIn || !member)
         return <NotFound />
 
     return <Container>
         <Row>
             <Col>
                 <h1>Min profil</h1>
-                <DataProvider<PagedMembers>
-                    url={Member.apiUrlForId(user.memberId)}
-                    ctor={json => deserialize(PagedMembers, json)}
-                    onLoaded={setMemberCallback}>
-                    <MemberComponent member={member} />
+                <div>
+                    <h3>Namn: {member.fullname}</h3>
+                    <h4>Email:{' '}
+                        <a href={`mailto:${member.email}`}>{member.email}</a>
+                        {' '}
+                        {member.email_verified
+                            ? <Badge variant='success'>Verifierad</Badge>
+                            : <Button variant='warning' href="/frontend/verify/email">Behöver verifieras!</Button>}
+                    </h4>
+                    <h4>Telefon:{' '}
+                        <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
+                        {' '}
+                        {member.phone_verified
+                            ? <Badge variant='success'>Verifierat</Badge>
+                            : <Button variant='warning' href="/frontend/verify/phone">Behöver verifieras!</Button>}
+                    </h4>
                     <h4>Roll: {user.isStaff ? 'Personal' : 'Medlem'}</h4>
-                </DataProvider>
+                    {/*} {!member.image_url ? null : <Image src={member.image_url} /> } */}
+                </div>
             </Col>
             <Col>
                 <h2>Inställningar</h2>

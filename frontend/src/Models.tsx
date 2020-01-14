@@ -21,6 +21,9 @@ export class Member implements IdValue {
     email: string = "";
     image_url?: string;
 
+    email_verified = false;
+    phone_verified = false;
+
     url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => Member.adminUrlForId(this.user_id);
     apiUrl = () => Member.apiUrlForId(this.id);
