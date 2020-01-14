@@ -8,6 +8,7 @@ import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../components/UserContext";
 import { MarkDown } from '../components/Utilities';
+import { Attachments } from "../components/AttachmentComponent";
 
 export const ActivityTypeComponent = (props: { model?: ActivityType | null }) => {
     const user = useContext(userContext);
@@ -27,6 +28,7 @@ export const ActivityTypeComponent = (props: { model?: ActivityType | null }) =>
         <div className="div-group">
             <h4>Beskrivning:</h4>
             <MarkDown source={model.description}/>
+            <Attachments models={model.attachments} />
         </div>
     </>)
 }

@@ -8,6 +8,7 @@ import DataProvider from "../components/DataProvider";
 import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
 import { MarkDown } from "../components/Utilities";
+import { Attachments } from '../components/AttachmentComponent';
 
 export const ActivityComponent = (props: { model?: Activity }) => {
     const { model } = props;
@@ -36,6 +37,7 @@ export const ActivityComponent = (props: { model?: Activity }) => {
                 </>}
                 <h5>Information</h5>
                 <MarkDown source={model.comment} />
+                <Attachments models={model.attachments} />
             </div>
         </>
     )

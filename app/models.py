@@ -47,9 +47,10 @@ class Member(models.Model):
     comment = models.TextField(blank=True)
     membercard_number = models.CharField(max_length=20, blank=True)
 
-    @property
     def fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
+    fullname.short_description = 'Namn'
+    fullname = property(fullname)
 
     @property
     def email(self):
@@ -148,14 +149,18 @@ class Event(models.Model):
     '''Groups a set of activities'''
     name = models.CharField(max_length=40)
     description = models.TextField(blank=True)
+
     start_date = models.DateField()
     end_date = models.DateField()
+
     comment = models.TextField(blank=True)
     image = models.ImageField(null=True, blank=True)
     type = models.ForeignKey(
         EventType, on_delete=models.SET_NULL, null=True, blank=True)
+
     coordinators = models.ManyToManyField(Member, blank=True)
     attachments = models.ManyToManyField(Attachment, blank=True)
+
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     cancelled = models.BooleanField(default=False, verbose_name='Inställd')

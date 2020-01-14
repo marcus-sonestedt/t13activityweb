@@ -7,6 +7,9 @@ import DataProvider from "../components/DataProvider";
 import NotFound from "../components/NotFound";
 import { userContext } from "../components/UserContext";
 import { MarkDown } from '../components/Utilities';
+import { Attachments } from "../components/AttachmentComponent";
+
+
 
 export const EventTypeComponent = (props: { model: T13EventType | null }) => {
     const { model } = props;
@@ -24,8 +27,9 @@ export const EventTypeComponent = (props: { model: T13EventType | null }) => {
         </div>
         <hr />
         <div className="div-group">
-            <h4>Beskrivning:</h4>
-            <MarkDown source={model.description}/>
+            <h4>Beskrivning</h4>
+            <MarkDown source={model.description} />
+            <Attachments models={model.attachments} />
         </div>
     </>)
 }
@@ -33,7 +37,7 @@ export const EventTypeComponent = (props: { model: T13EventType | null }) => {
 export const EventTypePage = () => {
     const { id } = useParams();
     const [model, setModel] = useState<T13EventType | null>(null);
-    const setModelCallback = useCallback((data:PagedEventTypes) => setModel(data.results[0]), []);
+    const setModelCallback = useCallback((data: PagedEventTypes) => setModel(data.results[0]), []);
 
     if (id === undefined)
         return <NotFound />

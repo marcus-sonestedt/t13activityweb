@@ -65,7 +65,7 @@ class EventList(generics.ListAPIView):
             return self.queryset.filter(id=self.kwargs['id'])
 
         year = self.request.query_params.get('year', datetime.date.today().year)
-        return self.queryset.filter(start_date__year=year)            
+        return self.queryset.filter(start_date__year=year)
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):

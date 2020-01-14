@@ -5,16 +5,10 @@ from app.models import Attachment, Member, Event, EventType, Activity, \
     ActivityType, ActivityDelistRequest, FAQ
 
 
-class AttachmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Attachment
-        fields = ('uploader', 'comment', 'created')
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'username', 'first_name', 'last_name')
+        fields = ('id', 'email', 'first_name', 'last_name')
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -24,7 +18,19 @@ class MemberSerializer(serializers.ModelSerializer):
                   'phone_verified', 'email_verified', 'user_id')
 
 
+
+class AttachmentSerializer(serializers.ModelSerializer):
+    uploader = UserSerializer()
+
+    class Meta:
+        model = Attachment
+        fields = '__all__'
+
+
+
 class EventTypeSerializer(serializers.ModelSerializer):
+    attachments = AttachmentSerializer(many=True)
+
     class Meta:
         model = EventType
         fields = '__all__'
@@ -41,9 +47,11 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
+    attachments = AttachmentSerializer(many=True)
+
     class Meta:
         model = ActivityType
-        fields = ('name', 'description', 'image', 'id')
+        fields = ('name', 'description', 'image', 'id', 'attachments')
 
 
 class EventActivitySerializer(serializers.ModelSerializer):

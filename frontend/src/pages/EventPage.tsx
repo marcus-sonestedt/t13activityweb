@@ -7,6 +7,7 @@ import '../components/Table.css'
 import Cookies from 'universal-cookie';
 import { userContext } from "../components/UserContext";
 import { MarkDown } from '../components/Utilities';
+import { Attachments } from "../components/AttachmentComponent";
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -173,6 +174,7 @@ export const EventPage = () => {
                                 <h5>Koordinator{event.coordinators.length > 1 ? 'er' : ''}</h5>
                                 <ul>{event.coordinators.map(renderCoordinator)}</ul>
                             </>}
+                        <Attachments models={event.attachments} />
                         {event.comment ? <>
                             <h5>Övrig info</h5>
                             <MarkDown source={event.comment} />

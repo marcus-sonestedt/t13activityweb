@@ -33,6 +33,25 @@ export class PagedMembers extends PagedValues<Member> {
     results: Member[] = [];
 }
 
+export class User implements IdValue
+{
+    id = '';
+    emali = '';
+    first_name = '';
+    last_name = '';
+}
+
+export class Attachment implements IdValue
+{
+    id = '';
+    file = '';
+    comment = '';
+    uploader?: User;
+
+    created?: Date;
+    modified?: Date;
+}
+
 export class Activity implements IdValue {
     id: string = "";
     name: string = "";
@@ -65,6 +84,9 @@ export class Activity implements IdValue {
     @Type(() => Date)
     earliest_bookable_date?: Date;
 
+    @Type(() => Attachment)
+    attachments: Attachment[] = []
+
     time = () => {
         if (this.end_time === null || this.end_time === this.start_time)
             return this.start_time
@@ -92,6 +114,9 @@ export class ActivityType implements IdValue {
     description: string = "";
     image: string = "";
 
+    @Type(() => Attachment)
+    attachments: Attachment[] = []
+
     url = () => `/frontend/activity_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
@@ -110,6 +135,8 @@ export class T13EventType implements IdValue {
     name: string = "";
     description: string = "";
     image: string = "";
+    @Type(() => Attachment)
+    attachments: Attachment[] = []
 
     url = () => `/frontend/event_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
@@ -127,6 +154,9 @@ export class T13Event implements IdValue {
     name: string = "";
     description: string = "";
     comment: string = "";
+
+    @Type(() => Attachment)
+    attachments: Attachment[] = []
 
     @Type(() => Date)
     start_date: Date = new Date(0);
