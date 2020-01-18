@@ -4,10 +4,10 @@ import { Table, Container, Row, Col, Button, Badge } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity, Member } from '../Models'
 import '../components/Table.css'
-import Cookies from 'universal-cookie';
 import { userContext } from "../components/UserContext";
 import { MarkDown } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
+import { claimActivity } from '../logic/TaskActions';
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -90,38 +90,30 @@ export const EventPage = () => {
     if (event === null)
         return <Container><p>Laddar ...</p></Container>
 
-
-    const claimActivityClick = (
-        e: React.MouseEvent<HTMLElement>, model: Activity) => {
-        e.stopPropagation();
-        const cookies = new Cookies();
-        fetch(`/api/activity_enlist/${model.id}`,
-            {
-                method: 'POST',
-                headers: { 'X-CSRFToken': cookies.get('csrftoken') }
-            })
-            .then(r => {
-                if (r.status !== 200)
-                    throw r.statusText;
-                history.push(`/frontend/home?tab=my-tasks?highlight-task=${model.id}`)
-            }, r => { throw r })
-            .catch(e => {
-                console.error(e);
-                alert("Något gick fel! :(\n" + e);
-                window.location.reload();
-            });
+    const createClaimHandler = (model: Activity, self: boolean) => {
+        return (e: React.MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
+            claimActivity(model, self, history);
+        }
     }
+
+    const bookButtons = (model: Activity) => <>
+        {memberAlreadyBooked ? null :
+            <Button onClick={createClaimHandler(model, true)}>Boka själv</Button>}
+        <Button onClick={createClaimHandler(model, false)}>Boka underhuggare</Button>
+    </>
 
     const renderActivityRow = (model: Activity) => {
         const type = model.type !== null
             ? <a href={model.type.url()}>{model.type.name}</a>
             : '-';
 
-        const assigned = model.assigned !== null
-            ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-            : (!memberAlreadyBooked && model.bookable)
-                ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
-                : null;
+        const assigned =
+            model.assigned !== null
+                ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
+                : model.bookable
+                    ? bookButtons(model)
+                    : null
 
         const rowClicked = () => history.push(model.url());
 

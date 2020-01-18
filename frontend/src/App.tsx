@@ -25,6 +25,8 @@ import VerifyPhonePage from './pages/VerifyPhonePage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { ErrorBoundary} from './components/Utilities';
+import { EnlistByProxyPage } from './pages/EnlistByProxyPage';
+import { EditProfilePage } from './pages/EditProfilePage';
 
 export const App = () => {
   const userJson = localStorage.getItem("user");
@@ -89,7 +91,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
 
     {!props.isLoggedIn ?
       <>
-        <Route path="/frontend/welcome" component={WelcomePage} />
+        <Route path="/frontend/welcome" component={WelcomePage} />        
         <Redirect to="/frontend/welcome" />
       </>
       :
@@ -101,6 +103,10 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
 
         <Route path="/frontend/verify/phone" component={VerifyPhonePage} />
         <Route path="/frontend/verify/email/:initialState?" component={VerifyEmailPage} />
+
+        <Route path="/frontend/enlist_by_proxy/:activityId" component={EnlistByProxyPage} />
+        <Route path="/frontend/profile/edit/:id" component={EditProfilePage} />
+        <Route path="/frontend/profile/create" component={EditProfilePage} />
 
         <Route exact path="/frontend/" render={() => <Redirect to="/frontend/home" />} />
         <Route path="/frontend/welcome" render={() => <Redirect to="/frontend/home" />} />
@@ -139,7 +145,7 @@ const Footer = () => {
             </p>
           </Col>
           <Col lg={4} md={12}>
-            <p>Running at <a href='https://eu.pythonanywhere.com'>eu.pythonanywhere.com</a>.</p>
+            <p>Hosted at <a href='https://eu.pythonanywhere.com'>eu.pythonanywhere.com</a>.</p>
           </Col>
           <Col lg={4} md={12}>
             <p>

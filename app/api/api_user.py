@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
@@ -46,12 +47,13 @@ class ClearAuthToken(ObtainAuthToken):
 
 
 class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
-    queryset = User.objects
+    queryset = User.objects.select_related('proxy', 'member')
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(id=self.request.user.id)
+        return self.queryset.filter(
+            Q(id=self.request.user.id) | Q(member__proxy__user=self.request.user))
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
@@ -61,8 +63,11 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
         return self.partial_update(request, *args, **kwargs)
 
     def check_object_permissions(self, request, obj):
-        if request.method.upper() == 'PATCH' and request.user.id != obj.id:
-            raise PermissionDenied("Can only PATCH self")
+        if request.method.upper() == 'PATCH' and \
+            (request.user.id != obj.id or
+                (obj.member.proxy.user.id == request.user.id and obj.password == '')):
+            raise PermissionDenied(
+                "Can only PATCH yourself or your proxies without password")
 
         return super().check_object_permissions(request, obj)
 

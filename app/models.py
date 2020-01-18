@@ -28,9 +28,10 @@ class RuleViolationException(BaseException):
 
 
 class Member(models.Model):
-    '''A club member, extensions to user object'''
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+    '''A club member or a member's proxy'''
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -47,8 +48,12 @@ class Member(models.Model):
     comment = models.TextField(blank=True)
     membercard_number = models.CharField(max_length=20, blank=True)
 
+    proxy = models.ManyToManyField('self',  blank=True,
+                                   verbose_name="Huvudman", related_name='proxies')
+
     def fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
+
     fullname.short_description = 'Namn'
     fullname = property(fullname)
 
@@ -166,13 +171,13 @@ class Event(models.Model):
             return str(self.start_date)
         else:
             return f'{self.start_date} - {self.end_date}'
-    
+
     date.short_description = 'Datum'
     date = property(date)
 
     def activities_count(self):
         return self.activities.count()
-    
+
     activities_count.short_description = 'Uppgifter'
     activities_count = property(activities_count)
 
@@ -181,7 +186,7 @@ class Event(models.Model):
         return self.activities.filter(assigned=None) \
             .filter(Q(earliest_bookable_date__gte=today) | Q(earliest_bookable_date=None)) \
             .count()
-    
+
     activities_available_count.short_description = 'Lediga uppgifter'
     activities_available_count = property(activities_available_count)
 
@@ -189,7 +194,7 @@ class Event(models.Model):
         if self.end_date < datetime.date.today():
             return False
         return bool(self.activities_available_count)
-    
+
     has_bookable_activities.boolean = True
     has_bookable_activities = property(has_bookable_activities)
 
@@ -241,6 +246,9 @@ class Activity(models.Model):
 
     assigned = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True)
+    assigned_for_proxy = models.ForeignKey(
+        Member, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='assigned_via_proxies')
     assigned_at = models.DateTimeField(null=True, blank=True)
 
     start_time = models.TimeField(blank=True, null=True)
@@ -249,8 +257,10 @@ class Activity(models.Model):
     comment = models.TextField(blank=True)
     weight = models.FloatField(default=1.0)
 
-    confirmed = models.BooleanField(default=False, verbose_name='Påminnelse bekräftad')
-    completed = models.BooleanField(default=None, null=True, blank=True, verbose_name='Utförd')
+    confirmed = models.BooleanField(
+        default=False, verbose_name='Påminnelse bekräftad')
+    completed = models.BooleanField(
+        default=None, null=True, blank=True, verbose_name='Utförd')
     cancelled = models.BooleanField(default=False, verbose_name='Inställd')
 
     earliest_bookable_date = models.DateField(null=True, blank=True)

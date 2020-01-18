@@ -15,20 +15,22 @@ export interface IdValue {
 
 export class Member implements IdValue {
     id: string = "";
-    user_id: string = "";
+    user_id?: string = "";
     fullname: string = "";
     phone_number?: string;
     email: string = "";
     image_url?: string;
+    comment?: string;
 
     email_verified = false;
     phone_verified = false;
 
     url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
-    adminUrl = () => Member.adminUrlForId(this.user_id);
+    adminUrl = () => this.user_id ? Member.adminUrlForId(this.user_id) : null;
     apiUrl = () => Member.apiUrlForId(this.id);
     static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
     static apiUrlForId = (id: string) => `/api/member/${id}`;
+
 }
 
 export class PagedMembers extends PagedValues<Member> {
@@ -77,7 +79,7 @@ export class Activity implements IdValue {
 
     @Type(() => Member)
     assigned: Member | null = null;
-
+    assigned_for_proxy?: number;
     @Type(() => Date)
     assigned_at: Date | null = null;
 
