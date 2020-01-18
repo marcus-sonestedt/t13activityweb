@@ -29,6 +29,6 @@
     font-style: italic;
 }
 
-.event a {
-    color: #ddf;
+.event>a {
+    color: #ddf !important;
 }

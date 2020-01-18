@@ -66,8 +66,10 @@ export class Activity implements IdValue {
     end_time: string = '';
 
     weight: number = 1;
+    
     completed: boolean | null = null;
     bookable: boolean = false;
+    cancelled: boolean = false;
 
     @Type(() => ActivityType)
     type: ActivityType | null = null;
@@ -185,6 +187,8 @@ export class T13Event implements IdValue {
 
     @Type(() => Member)
     coordinators: Member[] = [];
+
+    cancelled: boolean = false;
 
     date = () => {
         if (this.start_date.toDateString() === this.end_date.toDateString() || this.end_date === null)

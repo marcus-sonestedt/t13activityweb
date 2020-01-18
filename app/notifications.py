@@ -35,7 +35,7 @@ class NotificationData():
         self.compute_notifications()
 
     def count_badges(self):
-        (ct, bt) = map(int, self.member.task_summary.split('/'))
+        (ct, bt) = map(float, self.member.task_summary.split('/'))
         self.completedTasks = ct
         self.bookedTasks = bt
 
