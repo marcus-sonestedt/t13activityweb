@@ -24,16 +24,19 @@ export const ActivityComponent = (props: { model?: Activity }) => {
         <>
             <div className='div-group'>
                 {event}
-                <h5>Datum {model.date()} Tid {model.time()}</h5>
-                {model.earliest_bookable_date
-                    ?
-                    <HoverTooltip tooltip="Den här uppgiften kan inte bokas förrän tidigast detta datum.">
-                        <h5>Bokningsbar från {model.earliest_bookable_date}</h5>
+                <h5>Datum: {model.date()}</h5>
+                {!model.time() ? null : <h5>Tid: {model.time()}</h5>}
+                {model.earliest_bookable_date ?
+                    <HoverTooltip tooltip="Den här uppgiften kan inte bokas förrän tidigast detta datum."
+                        placement='bottom'>
+                        <h5>
+                            <>Bokningsbar från <u>{model.earliest_bookable_date.toLocaleDateString('sv-SE')}</u></>
+                        </h5>
                     </HoverTooltip>
-                    : null
-                }
-                <HoverTooltip tooltip="En uppgift kan räknas som fler eller färre än en, beroende på omfattning/ansvar.">
-                    <h5>Vikt: {model.weight}</h5>
+                    : null}
+                <HoverTooltip tooltip="En uppgift kan räknas som fler eller färre än en, beroende på omfattning/ansvar."
+                    placement='bottom'>
+                    <h5>Vikt: <b>{model.weight}</b></h5>
                 </HoverTooltip>
                 <h5>Tilldelad: {' '}
                     {!model.assigned
