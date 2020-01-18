@@ -4,10 +4,10 @@ import { Table, Container, Row, Col, Button, Badge } from 'react-bootstrap'
 import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity, Member } from '../Models'
 import '../components/Table.css'
-import Cookies from 'universal-cookie';
 import { userContext } from "../components/UserContext";
 import { MarkDown } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
+import { claimActivity } from '../logic/ADRActions';
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -94,28 +94,15 @@ export const EventPage = () => {
     const claimActivityClick = (
         e: React.MouseEvent<HTMLElement>, model: Activity) => {
         e.stopPropagation();
-        const cookies = new Cookies();
-        fetch(`/api/activity_enlist/${model.id}`,
-            {
-                method: 'POST',
-                headers: { 'X-CSRFToken': cookies.get('csrftoken') }
-            })
-            .then(r => {
-                if (r.status !== 200)
-                    throw r.statusText;
-                history.push(`/frontend/home?tab=my-tasks?highlight-task=${model.id}`)
-            }, r => { throw r })
-            .catch(e => {
-                console.error(e);
-                alert("Något gick fel! :(\n" + e);
-                window.location.reload();
-            });
+        claimActivity(model, history);
     }
 
     const renderActivityRow = (model: Activity) => {
         const type = model.type !== null
             ? <a href={model.type.url()}>{model.type.name}</a>
             : '-';
+
+        const className = model.assigned?.id === user.memberId ? 'my-task' : null;
 
         const assigned = model.assigned !== null
             ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
@@ -126,7 +113,7 @@ export const EventPage = () => {
         const rowClicked = () => history.push(model.url());
 
         return (
-            <tr key={model.id} className='linked' onClick={rowClicked}>
+            <tr key={model.id} className={'linked ' + className} onClick={rowClicked}>
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
                 <td className='nowrap'>
@@ -163,22 +150,24 @@ export const EventPage = () => {
             <Row>
                 <Col md={12} lg={5}>
                     <div className='div-group'>
-                        <h5>Datum {event.date()} Typ {eventType}</h5>
+                        <h5>Datum {event.date()}</h5>
+                        <h5>Typ {eventType}</h5>
                         {event.description ? <>
                             <h5>Beskrivning</h5>
                             <MarkDown source={event.description} />
                         </> : null}
                         {event.coordinators.length === 0
-                            ? <h5>Ingen koordinator än</h5>
+                            ? <>
+                                <h5>Ingen koordinator</h5>
+                                <p>Kolla med kanslet på <a href="mailto:info@team13.se">info@team13.se</a>.</p>
+                            </>
                             : <>
                                 <h5>Koordinator{event.coordinators.length > 1 ? 'er' : ''}</h5>
                                 <ul>{event.coordinators.map(renderCoordinator)}</ul>
                             </>}
                         <Attachments models={event.attachments} />
-                        {event.comment ? <>
-                            <h5>Övrig info</h5>
-                            <MarkDown source={event.comment} />
-                        </> : null}
+                        <h5>Övrig info</h5>
+                        {event.comment ? <MarkDown source={event.comment} /> : <p>¯\_(ツ)_/¯</p>}
                     </div>
                 </Col>
                 <Col md={12} lg={7}>

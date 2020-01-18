@@ -156,4 +156,23 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
         .then(handler, handler);
 };
 
+
+export const claimActivity = (model: Activity, history:any) => {
+    fetch(`/api/activity_enlist/${model.id}`,
+        {
+            method: 'POST',
+            headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+        })
+        .then(r => {
+            if (r.status !== 200)
+                throw r.statusText;
+            history.push(`/frontend/home?tab=my-tasks?highlight-task=${model.id}`)
+        }, r => { throw r })
+        .catch(e => {
+            console.error(e);
+            alert("Något gick fel! :(\n" + e);
+            window.location.reload();
+        });
+}
+
 export default {}
