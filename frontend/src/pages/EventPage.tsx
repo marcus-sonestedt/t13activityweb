@@ -5,9 +5,10 @@ import { deserialize } from "class-transformer";
 import { PagedT13Events, T13Event, PagedActivities, Activity, Member } from '../Models'
 import '../components/Table.css'
 import { userContext } from "../components/UserContext";
-import { MarkDown } from '../components/Utilities';
+import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
 import { claimActivity } from '../logic/ADRActions';
+import { Reimbursements } from "./ActivityTypePage";
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event | null>(null);
@@ -119,6 +120,13 @@ export const EventPage = () => {
                 <td className='nowrap'>
                     {model.date()}<br />{model.time()}
                 </td>
+                <td>
+                    {model.weight === 1 ? null :
+                        <HoverTooltip tooltip="Denna aktivitet räknas som flera">
+                            <span className='weight'>{model.weight}</span>
+                        </HoverTooltip>}
+                    {' '}
+                    <Reimbursements model={model.type} /></td>
                 <td>{assigned}</td>
             </tr>
         )
@@ -187,6 +195,7 @@ export const EventPage = () => {
                                 <th>Beskrivning</th>
                                 <th>Typ</th>
                                 <th>Tid</th>
+                                <th>Övrigt</th>
                                 <th>Tilldelad</th>
                             </tr>
                         </thead>

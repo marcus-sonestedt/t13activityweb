@@ -4,7 +4,7 @@ import { deserialize } from "class-transformer";
 
 import { PagedEventTypes, T13EventType } from "../Models";
 import DataProvider from "../components/DataProvider";
-import { PageItems } from "../components/Utilities";
+import { PageItems, MarkDown } from '../components/Utilities';
 
 import "../components/Table.css"
 
@@ -26,7 +26,7 @@ export const EventTypesComponent = () => {
     const renderRow = (model: T13EventType) => {
         return <tr key={model.id}>
             <td><a href={model.url()}>{model.name}</a></td>
-            <td>{model.description}</td>
+            <td><MarkDown source={model.description}/></td>
         </tr>
     }
 

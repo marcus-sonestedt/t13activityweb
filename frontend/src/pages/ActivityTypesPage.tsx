@@ -3,7 +3,8 @@ import { Container, Row, Col, Table, Pagination } from "react-bootstrap"
 import { PagedActivityTypes, ActivityType } from "../Models";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
-import { PageItems } from "../components/Utilities";
+import { PageItems,MarkDown } from "../components/Utilities";
+import { Reimbursements } from './ActivityTypePage';
 
 export const ActivityTypesPage = () => {
     return <Container className="table-container">
@@ -23,7 +24,8 @@ export const TaskTypesComponent = () => {
     const renderRow = (model: ActivityType) => {
         return <tr key={model.id}>
             <td><a href={model.url()}>{model.name}</a></td>
-            <td>{model.description}</td>
+            <td><MarkDown source={model.description}/></td>
+            <td><Reimbursements model={model}/></td>
         </tr>
     }
 
@@ -43,6 +45,7 @@ export const TaskTypesComponent = () => {
                 <tr>
                     <th>Namn</th>
                     <th>Beskrivning</th>
+                    <th>Ersättningar</th>
                 </tr>
             </thead>
             <tbody>
