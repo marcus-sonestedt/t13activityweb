@@ -1,4 +1,4 @@
-django >= 2.1.6, < 3.0
+django >= 2.2.9, < 3.0
 djangorestframework
 pillow
 pytest
@@ -7,3 +7,4 @@ django-recaptcha
 pylint
 openpyxl
 twilio
+pipupgrade

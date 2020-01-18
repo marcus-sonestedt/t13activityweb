@@ -171,7 +171,7 @@ or any another method recommended [here](https://stackoverflow.com/questions/272
 
 ```bash
 python -m pip install pipupgrade
-python -m pip upgrade --latest --yes
+python -m pipupgrade --latest --yes
 ```
 
 ## Third-party services
