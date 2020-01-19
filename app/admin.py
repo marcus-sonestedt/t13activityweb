@@ -23,6 +23,7 @@ class AttachmentAdmin(admin.ModelAdmin):
 
 class ActivityInline(admin.TabularInline):
     model = models.Activity
+    extra = 0
 
 
 class MemberInline(admin.StackedInline):
@@ -44,8 +45,25 @@ class UserWithMemberAdmin(UserAdmin):
         return super().get_inline_instances(request, obj)
 
 
+class MemberActivityInline(admin.TabularInline):
+    model = models.Activity
+    verbose_name_plural = 'Aktiviteter'
+    fk_name = 'assigned'
+    extra = 0
+    exclude = ['assigned_at', 'attachments', 'comment']
+
+
+class MemberADRInline(admin.TabularInline):
+    model = models.ActivityDelistRequest
+    verbose_name_plural = 'Avboknigsförfrågningar'
+    fk_name = 'member'
+    readonly_fields = ['member', 'activity']
+    extra = 0
+
+
 @admin.register(models.Member)
 class MemberAdmin(admin.ModelAdmin):
+    inlines = [MemberActivityInline, MemberADRInline]
     readonly_fields = ['user']
     list_filter = ['phone_verified', 'email_verified']
 
@@ -78,6 +96,7 @@ class EventTypeAdmin(admin.ModelAdmin):
 
 class EventAttachmentInline(admin.TabularInline):
     model = models.Event.attachments.through
+    extra = 0
 
 
 class CoordinatorFilter(admin.SimpleListFilter):
@@ -89,7 +108,6 @@ class CoordinatorFilter(admin.SimpleListFilter):
         staff = [(m.id, m.fullname) for m in staff]
         staff.append((0, 'Ingen'))
         return staff
-        
 
     def queryset(self, request, queryset):
         if self.value() is None:
@@ -104,13 +122,14 @@ class CoordinatorFilter(admin.SimpleListFilter):
 class EventAdmin(admin.ModelAdmin):
     exclude = ['attachments']
     inlines = [ActivityInline, EventAttachmentInline]
-    list_filter = ['type','cancelled', CoordinatorFilter]
+    list_filter = ['type', 'cancelled', CoordinatorFilter]
     list_display = ['name', 'type', 'cancelled', 'start_date',
                     'activities_available_count', 'activities_count', ]
 
 
 class ActivityTypeAttachmentInline(admin.TabularInline):
     model = models.ActivityType.attachments.through
+    extra = 0
 
 
 @admin.register(models.ActivityType)
@@ -121,6 +140,7 @@ class ActivityTypeAdmin(admin.ModelAdmin):
 
 class ActivityAttachmentInline(admin.TabularInline):
     model = models.Activity.attachments.through
+    extra = 0
 
 
 @admin.register(models.Activity)

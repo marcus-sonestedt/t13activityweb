@@ -18,7 +18,6 @@ export const RequestAdrButton = (props: {
     const onSpanClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => { if (props.disabled) e.stopPropagation(); }
 
     const onButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        console.info("Click!");
         props.onClick(e);
         e.stopPropagation();
         e.preventDefault();
@@ -100,6 +99,12 @@ export const ActivityDelistRequestComponent = (props: { model: ActivityDelistReq
                 <a href={`tel:${model.member.phone_number}`}>{model.member.phone_number}</a>
                 {' - '}
                 <a href={`mailto:${model.member.email}`}>{model.member.email}</a>
+                {' '}
+                {!user.isStaff ? null : 
+                    <Button variant='outline-secondary' href={model.member.adminUrl()} size='sm'>
+                        Info
+                    </Button> 
+                 }
             </p>
             <h5>Uppgift / Aktivitet</h5>
             <p>

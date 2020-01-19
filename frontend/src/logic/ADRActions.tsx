@@ -55,7 +55,8 @@ export const createADR = async (model: Activity, user: UserContext) => {
                 reason: reason
             })
         })
-        .then(handler, handler);
+        .then(handler, handler)
+        .finally(() => window.location.reload)
 }
 
 export async function cancelADRByActivity(activity_id: string) {
