@@ -192,7 +192,7 @@ export class T13Event implements IdValue {
 
     date = () => {
         if (this.start_date.toDateString() === this.end_date.toDateString() || this.end_date === null)
-            return this.start_date.toLocaleDateString('sv-SE')
+            return this.start_date.toLocaleDateString('sv-SE') + ' ' + this.start_date.toLocaleDateString('sv-SE', {weekday:'long'})
 
         return `${this.start_date.toLocaleDateString('sv-SE')} - ${this.end_date.toLocaleDateString('sv-SE')}`
     }
