@@ -9,16 +9,33 @@ import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
 import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from '../components/AttachmentComponent';
+import { getJsonHeaders } from '../logic/ADRActions';
 
 export const ActivityComponent = (props: { model?: Activity }) => {
     const { model } = props;
 
-    if (model === undefined)
+    if (!model)
         return null;
 
     const event = model.event !== null
         ? <h3>Händelse: <a href={model.event.url()}>{model.event.name}</a></h3>
         : null;
+
+    const editComment = async () => {
+        var comment = window.prompt("Uppdatera kommentaren:", model.comment);
+        if (!comment) return;
+
+        await fetch(model.apiUrl(),
+        {
+            method: 'PATCH',
+            headers: getJsonHeaders(),
+            body: JSON.stringify({
+                comment: comment,
+            })
+        })
+        .catch(e => alert("Något gick fel:\n\n" + e))
+        .finally(() => window.location.reload());
+    }
 
     return (
         <>
@@ -43,7 +60,7 @@ export const ActivityComponent = (props: { model?: Activity }) => {
                         ? <Button variant='primary' href={model.event.url()} size='sm'>Boka?</Button>
                         : <a href={model.assigned.url()}>{model.assigned.fullname}</a>}
                 </h5>
-                <h5>Information</h5>
+                <h5>Kommentar <Button variant='outline-secondary' onClick={editComment}>Editera</Button></h5>
                 {model.comment ? <MarkDown source={model.comment} /> : <p>¯\_(ツ)_/¯</p>}
                 <Attachments models={model.attachments} />
             </div>

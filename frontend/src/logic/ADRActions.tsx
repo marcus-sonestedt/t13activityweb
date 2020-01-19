@@ -5,7 +5,7 @@ import { deserialize } from 'class-transformer';
 
 const cookies = new Cookies();
 
-const getJsonHeaders = () => {
+export const getJsonHeaders = () => {
     return {
         'X-CSRFToken': cookies.get('csrftoken'),
         'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
         return;
     }
 
-    var rejectReason = prompt(`Ange din anledning att avvisa ${model.member.fullname}s\navbokningsförfrågan för uppgiften '${model.activity.name}'?`);
+    var rejectReason = window.prompt(`Ange din anledning att avvisa ${model.member.fullname}s\navbokningsförfrågan för uppgiften '${model.activity.name}'?`);
     if (rejectReason === null) {
         return;
     }

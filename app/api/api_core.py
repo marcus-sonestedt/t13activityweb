@@ -4,7 +4,7 @@ import logging
 from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
@@ -91,25 +91,41 @@ class EventActivities(generics.ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class ActivityList(generics.ListAPIView):
+class ActivityList(generics.ListAPIView, mixins.UpdateModelMixin):
     queryset = Activity.objects
     serializer_class = ActivitySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    read_only = True
 
     def get_queryset(self):
         try:
-            id = self.kwargs['id']
+            pk = self.kwargs['pk']
         except KeyError:
             return self.queryset
 
         return self.queryset \
-            .filter(id=id) \
+            .filter(id=pk) \
             .select_related('type', 'event', 'assigned')
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+    def patch(self, request, pk):
+        activity = self.get_queryset().first()
+        
+        if not activity:
+            raise ObjectDoesNotExist()
+
+        if not self.request.user.is_staff and \
+            (not activity.assigned or activity.assigned.user != self.request.user):
+            raise PermissionDenied("Can only modify comment if staff that you are assigned to")       
+
+        if list(request.data.keys()) != ['comment']:
+            print(request.data.keys())
+            raise PermissionDenied("Can only modify 'comment' of an activity via API")
+
+        return self.partial_update(request, pk)
+
 
 
 class EventTypeList(generics.ListAPIView):
@@ -170,7 +186,7 @@ class InfoTextList(generics.RetrieveAPIView):
 
 url_patterns = [
     path('myactivities', MyActivitiesList.as_view()),
-    re_path(r'^activity/(?P<id>[0-9]+)?', ActivityList.as_view()),
+    re_path(r'^activity/(?P<pk>[0-9]+)?', ActivityList.as_view()),
     re_path(
         r'event_activities/(?P<event_id>[0-9]+)', EventActivities.as_view()),
 
