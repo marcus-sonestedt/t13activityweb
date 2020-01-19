@@ -63,9 +63,6 @@ class MyEvent extends React.Component<any, {}> {
                 ? 'Har bokningsbara uppgifter' : 'Inga bokningsbara uppgifter'}
         </div>
 
-        console.log(typeIndex);
-        console.log(bgColor);
-
         return <HoverTooltip tooltip={tooltip}>
             <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}
                 style={{ backgroundColor: bgColor }}>
