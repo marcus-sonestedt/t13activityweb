@@ -35,9 +35,8 @@ def contact(request):
         request,
         'contact.html',
         {
-            'title': 'Contact',
-            'message': '''For web site technical issues, contact marcus.s.lindblom@gmail.com\r\n\r\n
-                For issues w.r.t. the club, events and tasks, contat info@team13.se.''',
+            'title': 'Kontakt',
+            'message': ''' ''',
             'year': datetime.date.today().year
         }
     )

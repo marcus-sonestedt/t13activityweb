@@ -8,8 +8,8 @@
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                <h4>Logga in med dina uppgifter, eller
-                    <a href="{% url 'signup' %}">Registrera dig</a>
+                <h4>Logga in med dina uppgifter, eller<br/>
+                    <a href="{% url 'signup' %}">registrera dig</a>
                     om du inte gjort det redan.
                 </h4>
                 {{form.as_p}}                
@@ -29,7 +29,12 @@
         </section>
     </div>
     <div class="col-md-4">
-        <section id="socialLoginForm"></section>
+        <section id="socialLoginForm">
+            <h4>Logga in via extern tjänst</h4>
+            <p>Vi kommer förhoppningsvis stödja login via Google, Facebook, Twitter och
+            annat framöver, så slipper du komma ihåg lösenordet hit.</p>
+            <p>När det är klart kan du göra det här. :-)</p>
+        </section>
     </div>
 </div>
 
