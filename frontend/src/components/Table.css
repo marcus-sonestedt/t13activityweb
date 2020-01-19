@@ -50,3 +50,24 @@ tr.active td {
 button {
     cursor: pointer
 }
+
+td>a {
+    color: #4488ff
+}
+
+.event-table>td:first-child>a {
+    color: #88bbff !important
+}
+
+.event-table>td:first-child>a:hover {
+    color: #0000ff !important
+}
+
+tr.my-task * {
+    background-color: #024
+}
+
+td:not(:first-child),
+th:not(:first-child) {
+    text-align: center;
+}

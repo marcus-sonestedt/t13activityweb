@@ -7,7 +7,7 @@ import { deserialize } from "class-transformer";
 import DataProvider from "../components/DataProvider";
 import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
-import { MarkDown } from "../components/Utilities";
+import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from '../components/AttachmentComponent';
 
 export const ActivityComponent = (props: { model?: Activity }) => {
@@ -24,19 +24,27 @@ export const ActivityComponent = (props: { model?: Activity }) => {
         <>
             <div className='div-group'>
                 {event}
-                <h5>Datum {model.date()} Tid {model.time()}</h5>
-                {model.earliest_bookable_date
-                    ?
-                    <h5>Bokningsbar från {model.earliest_bookable_date}</h5>
-                    : null
-                }
-                {!model.assigned ? null : <>
-                    <h5>Tilldelad {' '}
-                        <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-                    </h5>
-                </>}
+                <h5>Datum: {model.date()}</h5>
+                {!model.time() ? null : <h5>Tid: {model.time()}</h5>}
+                {model.earliest_bookable_date ?
+                    <HoverTooltip tooltip="Den här uppgiften kan inte bokas förrän tidigast detta datum."
+                        placement='bottom'>
+                        <h5>
+                            <>Bokningsbar från <u>{model.earliest_bookable_date.toLocaleDateString('sv-SE')}</u></>
+                        </h5>
+                    </HoverTooltip>
+                    : null}
+                <HoverTooltip tooltip="En uppgift kan räknas som fler eller färre än en, beroende på omfattning/ansvar."
+                    placement='bottom'>
+                    <h5>Vikt: <b>{model.weight}</b></h5>
+                </HoverTooltip>
+                <h5>Tilldelad: {' '}
+                    {!model.assigned
+                        ? <Button variant='primary' href={model.event.url()} size='sm'>Boka?</Button>
+                        : <a href={model.assigned.url()}>{model.assigned.fullname}</a>}
+                </h5>
                 <h5>Information</h5>
-                <MarkDown source={model.comment} />
+                {model.comment ? <MarkDown source={model.comment} /> : <p>¯\_(ツ)_/¯</p>}
                 <Attachments models={model.attachments} />
             </div>
         </>

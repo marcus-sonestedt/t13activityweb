@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-export const deleteProxy = (proxy: Member, userName: string) => {
+export const disconnectProxy = (proxy: Member, userName: string) => {
     if (!window.confirm(`Vill verkligen du ta bort möjligheten för ${proxy.fullname}\n` +
         `att åta sig uppgifter för din (${userName}) egen räkning?`))
         return;

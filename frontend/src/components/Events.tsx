@@ -18,24 +18,44 @@ export interface MyProps {
 }
 
 const localizer = momentLocalizer(moment);
+const msecPerWeek = 7 * 24 * 60 * 60 * 1000;
 
 const Check = () => <span role='img' aria-label='check' style={{ color: 'lightgreen' }}>✔</span>;
 const Cross = () => <span role='img' aria-label='cross'>❌</span>
 
+function hsv2rgb(h: number, s: number, v: number) {
+    let f = (n: number, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+    return [f(5), f(3), f(1)];
+}
+
+const intToRgb = (i: number) => {
+    const [r, g, b] = hsv2rgb(i * 563456223.0 % 360, 0.8, 0.4);
+    const [rr, gg, bb] = [Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255)]
+    return `#${(rr).toString(16)}${(gg).toString(16)}${(bb).toString(16)}`
+}
+
+
 class MyAgendaEvent extends React.Component<any, {}> {
     render = () => {
         const event = this.props.event;
+        const typeIndex = parseInt(event.type?.id) + 1 ?? 0;
+        const bgColor = intToRgb(typeIndex);
 
-        return <div className={event.has_bookable_activities ? 'bookable' : 'locked'}>
+        return <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}
+            style={{ backgroundColor: bgColor }}>
             <a href={event.url()}>
-                {event.name} - {event.type?.name}
+                {event.name} {event.type ? ' - ' : null} {event.type?.name}
             </a>
         </div>
     }
 }
+
 class MyEvent extends React.Component<any, {}> {
     render = () => {
         const event = this.props.event;
+
+        const typeIndex = parseInt(event.type?.id) + 1 ?? 0;
+        const bgColor = intToRgb(typeIndex);
 
         const tooltip = <div>{event.name}
             <br />{event.type?.name ?? ''}
@@ -43,11 +63,13 @@ class MyEvent extends React.Component<any, {}> {
                 ? 'Har bokningsbara uppgifter' : 'Inga bokningsbara uppgifter'}
         </div>
 
+        console.log(typeIndex);
+        console.log(bgColor);
+
         return <HoverTooltip tooltip={tooltip}>
-            <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}>
-                <a href={event.url()}>
-                    {event.name}
-                </a>
+            <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}
+                style={{ backgroundColor: bgColor }}>
+                <a href={event.url()}>{event.name}</a>
             </div>
         </HoverTooltip >
     }
@@ -78,10 +100,14 @@ export const EventsCalendar = (props: { events: PagedT13Events }) => {
         agenda: { event: MyAgendaEvent }
     }
 
+    const weekOrShorterEvents = useMemo(() => events.results.filter((e: T13Event) =>
+        (e.end_date.getTime() - e.start_date.getTime()) <= msecPerWeek),
+        [events]);
+
     return <Calendar
         culture='sv-SE'
         localizer={localizer}
-        events={events.results}
+        events={weekOrShorterEvents}
         startAccessor="start_date"
         endAccessor="end_date"
         allDayAccessor={() => true}
@@ -117,9 +143,13 @@ export const EventsTable = (props: {
         const type = model.type === null ? '-' :
             <a href={model.type.url()}>{model.type.name}</a>
 
+        const typeIndex = parseInt(model?.type?.id ?? '0') + 1 ?? 0;
+        const bgColor = intToRgb(typeIndex);
+
         return (
-            <tr key={model.id} className='clickable-row' onClick={() => history.push(model.url())}>
-                <td><a href={model.url()}>{model.name}</a></td>
+            <tr key={model.id} className='clickable-row'
+                onClick={() => history.push(model.url())}>
+                <td style={{ backgroundColor: bgColor }}><a href={model.url()}>{model.name}</a></td>
                 <td className='nowrap'>{model.date()}</td>
                 <td>{type}</td>
                 <td style={{ textAlign: 'center' }}>{model.has_bookable_activities ? <Check /> : <Cross />}</td>
@@ -196,7 +226,7 @@ export const EventsTable = (props: {
         </HoverTooltip>
 
     return <>
-        <Table striped hover size='sm' responsive>
+        <Table striped hover size='sm' responsive className='event-table'>
             <thead>
                 <tr>
                     <th>Namn</th>
@@ -212,7 +242,7 @@ export const EventsTable = (props: {
             </tbody>
         </Table >
         <Pagination>
-            <PageItems count={filteredEvents.length} pageSize={15}
+            <PageItems count={filteredEvents.length} pageSize={count}
                 currentPage={page} setFunc={setPage} />
         </Pagination>
     </>
@@ -263,7 +293,7 @@ export const EventsComponent = (props: EventProps) => {
         <div style={{ height: height }}>
             {viewMode
                 ? <EventsCalendar events={events} />
-                : <EventsTable events={events} count={10} />
+                : <EventsTable events={events} count={20} />
             }
         </div>
     </div>

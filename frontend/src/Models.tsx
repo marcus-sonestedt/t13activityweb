@@ -15,7 +15,7 @@ export interface IdValue {
 
 export class Member implements IdValue {
     id: string = "";
-    user_id?: string = "";
+    user_id: string = "";
     fullname: string = "";
     phone_number?: string;
     email: string = "";
@@ -26,7 +26,7 @@ export class Member implements IdValue {
     phone_verified = false;
 
     url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
-    adminUrl = () => this.user_id ? Member.adminUrlForId(this.user_id) : null;
+    adminUrl = () => Member.adminUrlForId(this.user_id);
     apiUrl = () => Member.apiUrlForId(this.id);
     static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
     static apiUrlForId = (id: string) => `/api/member/${id}`;
@@ -68,8 +68,10 @@ export class Activity implements IdValue {
     end_time: string = '';
 
     weight: number = 1;
+    
     completed: boolean | null = null;
     bookable: boolean = false;
+    cancelled: boolean = false;
 
     @Type(() => ActivityType)
     type: ActivityType | null = null;
@@ -187,6 +189,8 @@ export class T13Event implements IdValue {
 
     @Type(() => Member)
     coordinators: Member[] = [];
+
+    cancelled: boolean = false;
 
     date = () => {
         if (this.start_date.toDateString() === this.end_date.toDateString() || this.end_date === null)

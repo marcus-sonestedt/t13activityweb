@@ -3,6 +3,7 @@ Definition of models.
 """
 
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -74,10 +75,10 @@ class Member(models.Model):
         current_year = datetime.date.today().year
         current_activities = Activity.objects.filter(assigned=self,
                                                      event__start_date__year=current_year)
-        booked = current_activities.count()
+        booked_weight = current_activities.aggregate(Sum('weight'))['weight__sum']
         completed = current_activities.filter(completed=True).count()
 
-        return f"{completed}/{booked}"
+        return f"{completed}/{booked_weight}"
 
     task_summary.short_description = 'Utförda/Bokade'
     task_summary = property(task_summary)

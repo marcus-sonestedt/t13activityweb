@@ -19,7 +19,7 @@ export const MyActivitiesTable = (props: {
     const today = new Date();
     const bookedCount = useMemo(() => values.filter(a => !a.delist_requested).length, [values])
     const completedCount = useMemo(() => values.filter(a => a.completed === true).length, [values])
-    const canRequestUnlist = bookedCount > user.minSignups
+    const canRequestUnlist = !user.hasMemberCard || bookedCount > user.minSignups
 
     const buttonClick = (f: () => Promise<void>) => (e: any) => {
         e.stopPropagation();
@@ -30,7 +30,9 @@ export const MyActivitiesTable = (props: {
     const highlightActivityId = highlightActivityMatch ? highlightActivityMatch[1] : undefined;
 
     const renderRow = (activity: Activity) => {
+        const eventActive = activity.event.start_date >= today && activity.event.end_date <= today;
         const eventInPast = activity.event.end_date < today;
+
         const rowClick = (e: any) => {
             if (e.target?.tagName === 'A')
                 return
@@ -40,12 +42,15 @@ export const MyActivitiesTable = (props: {
         }
 
         const [text, tooltip, emoji, emojiLabel] =
-            !eventInPast ? ['', '', '', '']
-                : activity.completed === null
-                    ? ["Obekräftad", "Din närvaro har inte registrerats", '⏰', 'clock']
-                    : activity.completed === true
-                        ? ["Utförd", "Bra jobbat", '👍', 'thumbsup']
-                        : ["Missad", "Du missade din uppgift! Du behöver boka en ny!", '😨', 'ohno']
+            eventActive
+                ? ['Aktiv', 'Uppgiften pågår!', '🎉', 'party-popper']
+                : !eventInPast
+                    ? ['', '', '', '']
+                    : activity.completed === null
+                        ? ["Obekräftad", "Din närvaro har inte bekräftats än.", '📒', 'ledger']
+                        : activity.completed === true
+                            ? ["Utförd", "Bra jobbat", '🏆', 'cup']
+                            : ["Missad", "Du missade din uppgift! Du behöver boka en ny!", '😨', 'ohno']
 
         const rowClassName = 'clickable-row ' + (activity.id.toString() === highlightActivityId ? 'active' : '');
 
@@ -59,7 +64,7 @@ export const MyActivitiesTable = (props: {
                         : null}
                 </td>
                 <td>
-                    <a href={activity.event.url()}  style={{ fontWeight: 'bold' }}>{activity.event.name}</a>
+                    <a href={activity.event.url()} style={{ fontWeight: 'bold' }}>{activity.event.name}</a>
                     <br />
                     {activity.event.type !== null
                         ? <a href={activity.event.type.url()}>{activity.event.type.name}</a>
@@ -70,7 +75,7 @@ export const MyActivitiesTable = (props: {
                     <br />
                     {activity.time()}
                 </td>
-                <td>{eventInPast
+                <td>{(eventInPast || eventActive)
                     ? <HoverTooltip tooltip={tooltip}>
                         <span>{text} <span role="img" aria-label={emojiLabel}>{emoji}</span></span>
                     </HoverTooltip>
@@ -98,7 +103,7 @@ export const MyActivitiesTable = (props: {
                 <Col>
                     <h1>Mina uppgifter</h1>
                 </Col>
-                <Col style={{ textAlign: 'right'}}>
+                <Col style={{ textAlign: 'right' }}>
                     <h3>
                         {values.length} totalt, {completedCount} utförda, {bookedCount} bokade
                     </h3>

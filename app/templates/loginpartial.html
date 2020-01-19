@@ -2,18 +2,18 @@
 <form id="logoutForm" action="/app/logout/" method="post" class="navbar-right">
     {% csrf_token %}
     <ul class="nav navbar-nav navbar-right">
-        <li><span class="navbar-brand">Hello {{ user.username }}!</span></li>
         {% if user.is_staff %}
-        <li><a href="/admin/">Admin</a></li>
+            <li class="nav-item"><a class="nav-link" href="/admin/">Administrera</a></li>
         {% endif %}
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li class='nav-item'><a class="nav-link" href='/frontend/profile'>Hej {{ user.username }}!</a></li>
+        <li class="nav-item"><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Logga ut</a></li>
     </ul>
 </form>
 
 {% else %}
 
 <ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'login' %}">Log in</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Logga in</a></li>
 </ul>
 
 {% endif %}
