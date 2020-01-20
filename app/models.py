@@ -35,18 +35,24 @@ class Member(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    phone_number = models.CharField(max_length=20, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True,
+        verbose_name="Telefonnnummer")
 
-    phone_verified = models.BooleanField(default=False)
-    email_verified = models.BooleanField(default=False)
+    phone_verified = models.BooleanField(default=False,
+        verbose_name="Telefonnummer verifierat")
+    email_verified = models.BooleanField(default=False,
+        verbose_name="Emailaddress verifierad")
 
     email_verification_code = models.CharField(
-        max_length=40, blank=True, null=True)
+        max_length=40, blank=True, null=True, verbose_name="Email-verifieringskod")
     email_verification_code_created = models.DateTimeField(
-        null=True, blank=True)
+        null=True, blank=True, verbose_name="Email-verifieringskod skapad")
 
-    comment = models.TextField(blank=True)
-    membercard_number = models.CharField(max_length=20, blank=True)
+    comment = models.TextField(blank=True, verbose_name="Kommentar")
+    membercard_number = models.CharField(max_length=64, blank=True,
+        verbose_name="Guldkortsnummer")
+
+    min_signup_bias = models.IntegerField(default=0, verbose_name="Justeringsfaktor för åtaganaden")
 
     def fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -68,9 +74,12 @@ class Member(models.Model):
     def task_summary(self):
         '''returns completed/booked activities for this year'''
         current_year = datetime.date.today().year
-        current_activities = Activity.objects.filter(assigned=self,
-                                                     event__start_date__year=current_year)
-        booked_weight = current_activities.aggregate(Sum('weight'))['weight__sum']
+        current_activities = Activity.objects \
+            .filter(assigned=self,
+                    event__start_date__year=current_year)
+        booked_weight = current_activities.aggregate(Sum('weight')) \
+            .get('weight__sum', 0) or 0
+        booked_weight += self.min_signup_bias
         completed = current_activities.filter(completed=True).count()
 
         return f"{completed}/{booked_weight}"
