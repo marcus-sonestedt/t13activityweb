@@ -48,6 +48,8 @@ class Member(models.Model):
     comment = models.TextField(blank=True)
     membercard_number = models.CharField(max_length=20, blank=True)
 
+    min_signup_bias = models.IntegerField(default=0, verbose_name="Justeringsfaktor för åtaganaden")
+
     def fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
     fullname.short_description = 'Namn'
@@ -71,6 +73,7 @@ class Member(models.Model):
         current_activities = Activity.objects.filter(assigned=self,
                                                      event__start_date__year=current_year)
         booked_weight = current_activities.aggregate(Sum('weight'))['weight__sum']
+        booked_weight += min_signup_bias
         completed = current_activities.filter(completed=True).count()
 
         return f"{completed}/{booked_weight}"
