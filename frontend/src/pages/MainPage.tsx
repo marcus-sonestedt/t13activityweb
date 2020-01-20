@@ -1,4 +1,4 @@
-import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown, Jumbotron } from "react-bootstrap"
+import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown, Jumbotron, Alert } from "react-bootstrap"
 import React, { useState, useCallback, useContext } from "react";
 import { deserialize } from "class-transformer";
 
@@ -38,37 +38,35 @@ export const MainPage = () => {
                             </HoverTooltip>
                         </Nav.Link>
                     </Nav.Item>
-                    {verified ? <>
-                        <Nav.Item>
-                            <Nav.Link eventKey="my-tasks">Uppgifter
+                    <Nav.Item>
+                        <Nav.Link eventKey="my-tasks">Uppgifter
+                        <span className='spacer' />
+                            <HoverTooltip tooltip={'Antal utförda/bokade uppgifter detta år'}>
+                                <Badge variant={taskBadgeVariant}>
+                                    {taskBadgeText}
+                                </Badge>
+                            </HoverTooltip>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="my-adrs">
+                            Avbokningar
                             <span className='spacer' />
-                                <HoverTooltip tooltip={'Antal utförda/bokade uppgifter detta år'}>
-                                    <Badge variant={taskBadgeVariant}>
-                                        {taskBadgeText}
-                                    </Badge>
-                                </HoverTooltip>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="my-adrs">
-                                Avbokningar
-                                <span className='spacer' />
-                                <HoverTooltip tooltip={
-                                    "Antal obehandlade egna förfrågningar\n" +
-                                    (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>
-                                    <Badge variant={(user.myDelistRequests ||
-                                        user.unansweredDelistRequests) ? 'info' : 'secondary'}>
-                                        {user.myDelistRequests}
-                                        {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
-                                    </Badge>
-                                </HoverTooltip>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <NavDropdown.Divider />
-                        <Nav.Item>
-                            <Nav.Link eventKey="upcoming-events">Aktivitetskalender</Nav.Link>
-                        </Nav.Item>
-                    </> : null}
+                            <HoverTooltip tooltip={
+                                "Antal obehandlade egna förfrågningar\n" +
+                                (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>
+                                <Badge variant={(user.myDelistRequests ||
+                                    user.unansweredDelistRequests) ? 'info' : 'secondary'}>
+                                    {user.myDelistRequests}
+                                    {!user.isStaff ? null : ` / ${user.unansweredDelistRequests}`}
+                                </Badge>
+                            </HoverTooltip>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <NavDropdown.Divider />
+                    <Nav.Item>
+                        <Nav.Link eventKey="upcoming-events">Aktivitetskalender</Nav.Link>
+                    </Nav.Item>
                 </Nav>
             </Col>
             <Col sm={12} md={10}>
@@ -77,22 +75,28 @@ export const MainPage = () => {
                         <Tab.Pane eventKey="overview">
                             <OverviewTab />
                         </Tab.Pane>
-                        {verified ? <>
-                            <Tab.Pane eventKey="my-tasks">
-                                <MyTasksTab />
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="upcoming-events">
-                                <UpcomingEventsTab />
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="my-adrs">
-                                <ActivityDelistRequestsComponent />
-                            </Tab.Pane>
-                        </> : null}
+                        <Tab.Pane eventKey="my-tasks">
+                            {verified ? <MyTasksTab /> : <UnverifiedNotice />}
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="upcoming-events">
+                            {verified ? <UpcomingEventsTab /> : <UnverifiedNotice />}
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="my-adrs">
+                            {verified ? <ActivityDelistRequestsComponent /> : <UnverifiedNotice />}
+                        </Tab.Pane>
                     </Tab.Content>
                 </ErrorBoundary>
             </Col>
         </Row>
     </Tab.Container >
+}
+
+const UnverifiedNotice = () => 
+{
+    return <Alert variant='warning'>
+        Du måste verifera både din email-address och ditt telefonnummer
+        innan du kan boka något!
+    </Alert>
 }
 
 const OverviewTab = () => {
@@ -146,13 +150,15 @@ const MyTasksTab = () => {
 
 const UpcomingEventsTab = () => {
     const [events, setEvents] = useState(new PagedT13Events());
+
     const EVENTS_PAGE_SIZE = 150; // ~100-120 events/year typically
 
     return <DataProvider< PagedT13Events >
         ctor={t => deserialize(PagedT13Events, t)}
         url={`/api/events?page_size=${EVENTS_PAGE_SIZE}`}
         onLoaded={setEvents}>
-        <EventsComponent events={events} title='Aktiviteter' />
+        <EventsComponent events={events} title='Aktiviteter'
+            showBookableStatus={true} />
     </DataProvider>
 }
 

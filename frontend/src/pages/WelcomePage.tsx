@@ -42,7 +42,8 @@ export const WelcomePage = () => {
                         url={"/api/events/upcoming?page_size=50"}
                         onLoaded={setEvents}>
                         <EventsComponent events={events}
-                            title="Kommande aktiviteter" />
+                            title="Kommande händelser"
+                            showBookableStatus={false}/>
                     </DataProvider>
                 </Col>
             </Row>
