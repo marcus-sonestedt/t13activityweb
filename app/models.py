@@ -276,8 +276,12 @@ class Activity(models.Model):
             (self.earliest_bookable_date is None or now >= self.earliest_bookable_date)
 
     @property
-    def delist_requested(self):
-        return self.delist_requests.filter(member=self.assigned).count() > 0
+    def active_delist_request(self):
+        try:
+            return self.delist_requests.get(approved=None)
+        except ActivityDelistRequest.DoesNotExist:
+            return None
+
 
     class Meta:
         ordering = ['start_time', 'end_time', 'name']

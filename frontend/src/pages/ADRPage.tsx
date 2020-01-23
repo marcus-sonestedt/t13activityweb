@@ -5,7 +5,7 @@ import { deserialize } from "class-transformer";
 
 import DataProvider from "../components/DataProvider";
 import { userContext } from "../components/UserContext";
-import { ActivityDelistRequest, PagedADR } from '../Models';
+import { ActivityDelistRequest, PagedADR, Member, Activity } from '../Models';
 import { cancelADR, rejectADR, approveADR, deleteADR } from "../logic/ADRActions"
 import { MarkDown, HoverTooltip, PageItems } from '../components/Utilities';
 
@@ -65,21 +65,24 @@ const AdrStatusBadge = (props: { model: ActivityDelistRequest }) => {
     return <Badge variant={variant as any}>{text}</Badge>
 }
 
-export const ActivityDelistRequestComponent = (props: { model: ActivityDelistRequest | null }) => {
+export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRequest | null }) => {
     const { model } = props;
     const user = useContext(userContext);
 
-    if (model === null)
+    if (!model )
         return null
 
-    if (model.activity === null)
+    if (!(model.activity instanceof Activity))
         return <p>Datafel, saknar uppgift</p>
 
-    const approver = model.approver === null ? null :
+    if (!(model.member instanceof Member))
+        return <p>Datafel, saknar medlem</p>
+
+    const approver = (model.approver instanceof Member) ?
         <span>
             /<a href={model.approver.url()}>{model.approver.fullname}</a>
         </span>
-
+        : null;
 
     return (
         <>
@@ -139,15 +142,27 @@ export const ActivityDelistRequestsComponent = () => {
         setCurrentReq(data.results.find(r => r.id.toString() === currentId) ?? null);
     }, [reload, currentId]);
 
+    const memberMatch = useCallback((r:ActivityDelistRequest)  => {
+        if (!(r.member instanceof Member))
+            return false;
+        return r.member.id === user.memberId;
+    }, [user]);
+
+    const approverMatch = useCallback((r:ActivityDelistRequest)  => {
+        if (!(r.approver instanceof Member))
+            return false;
+        return r.approver.id === user.memberId;
+    }, [user]);
+
     const myUnansweredRequests = useMemo(() =>
-        allRequests?.results.filter(r => r.member.id === user.memberId && r.approved === null), [allRequests, user]);
+        allRequests?.results.filter(r => memberMatch(r) && r.approved === null), [allRequests, memberMatch]);
     const myAnsweredRequests = useMemo(() =>
-        allRequests?.results.filter(r => r.member.id === user.memberId && r.approved !== null), [allRequests, user]);
+        allRequests?.results.filter(r => memberMatch(r) && r.approved !== null), [allRequests,  memberMatch]);
 
     const unhandledRequests = useMemo(() =>
-        allRequests?.results.filter(r => r.member.id !== user.memberId && r.approved === null), [allRequests, user]);
+        allRequests?.results.filter(r => !memberMatch(r) && r.approved === null), [allRequests,  memberMatch]);
     const myHandledRequests = useMemo(() =>
-        allRequests?.results.filter(r => r.member.id !== user.memberId && r.approver !== null && r.approver.id !== user.memberId), [allRequests, user]);
+        allRequests?.results.filter(r => !memberMatch(r) && approverMatch(r)), [allRequests,  memberMatch, approverMatch]);
 
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
@@ -172,6 +187,9 @@ export const ActivityDelistRequestsComponent = () => {
             }
 
             const deleteClicked = () => deleteADR(model).then(() => window.location.reload());
+
+            if (!(model.member instanceof Member) || !(model.activity instanceof Activity))
+                return null;
 
             return <tr key={model.id} onClick={e => rowClicked(e, model)}
                 className={'clickable-row ' + (model === currentReq ? 'active' : undefined)}>

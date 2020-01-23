@@ -55,8 +55,8 @@ td>a {
     color: #4488ff
 }
 
-.event-table>td:first-child>a {
-    color: #88bbff !important
+td:first-child>a {
+    color: #ffffff !important
 }
 
 .event-table>td:first-child>a:hover {

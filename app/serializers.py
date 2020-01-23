@@ -54,6 +54,12 @@ class ActivityTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ActivityDelistRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityDelistRequest
+        fields = '__all__'
+
+
 class EventActivitySerializer(serializers.ModelSerializer):
     '''serializer used when fetching tasks for an event'''
     type = ActivityTypeSerializer(required=False)
@@ -61,11 +67,12 @@ class EventActivitySerializer(serializers.ModelSerializer):
     start_time = serializers.TimeField(format="%H:%M")
     end_time = serializers.TimeField(format="%H:%M")
     bookable = serializers.BooleanField()
+    active_delist_request = ActivityDelistRequestSerializer(required=False)
 
     class Meta:
         model = Activity
         fields = [x.name for x in Activity._meta.get_fields()] + \
-            ['bookable', 'delist_requested']
+            ['bookable',  'active_delist_request']
 
 
 class ActivitySerializer(EventActivitySerializer):
@@ -73,13 +80,7 @@ class ActivitySerializer(EventActivitySerializer):
     event = EventSerializer(required=False)
 
 
-class ActivityDelistRequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ActivityDelistRequest
-        fields = '__all__'
-
-
-class ActivityDelistRequestDeepSerializer(serializers.ModelSerializer):
+class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):
     member = MemberSerializer()
     activity = ActivitySerializer()
     approver = MemberSerializer(required=False)

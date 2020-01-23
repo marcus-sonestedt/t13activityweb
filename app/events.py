@@ -23,19 +23,15 @@ def new_user_created(member):
     user = member.user
     mail_managers(
         f'New user {user.username} registered at T13 web',
-        f'''Hi,
+        f'''Hej admin!
 
-        '{member.fullname}' (username/email: '{user.email}') just registered themselves on the Team 13 website.
+        '{user.first_name} {user.last_name}' har precis registrerat sig på  Team 13's webbapplikation.
 
         Go to https://macke.eu.pythonanywhere.com/admin/auth/user/{user.id}/change/'
-        to give them access, i.e. at least add them to the 'T13 Members'
-        group if they are a legitimate member of the club.
+        för att kolla status och se om de är legitima, samt justera deras status om det behövs
 
-        See also https://macke.eu.pythonanywhere.com/admin/app/member/{member.id}/change/
-        to check their membership status & data.
-
-        Best regards,
-        /The Team13 website
+        mvh,
+        /Team13's aktivitetswebb
         ''')
 
 

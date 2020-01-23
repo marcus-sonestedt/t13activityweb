@@ -82,8 +82,8 @@ export class Activity implements IdValue {
     @Type(() => Date)
     assigned_at: Date | null = null;
 
-    delist_requests: string[] = [];
-    delist_requested: boolean = false;
+    @Type(() => ActivityDelistRequest)
+    active_delist_request?: ActivityDelistRequest;
 
     @Type(() => Date)
     earliest_bookable_date?: Date;
@@ -217,26 +217,19 @@ export class PagedT13Events extends PagedValues<T13Event> {
 }
 
 export class ActivityDelistRequest implements IdValue {
-
-    constructor(member: Member, activity: Activity) {
-        this.member = member;
-        this.activity = activity;
-    }
-
     id: string = '';
 
     @Type(() => Member)
-    member: Member;
+    member?: Member | string;
 
     @Type(() => Activity)
-    activity: Activity;
+    activity?: Activity | string;
 
     reason: string = '';
     reject_reason?: string;
 
     @Type(() => Member)
-    approver: Member | null = null;
-
+    approver?: Member | string;
     approved: boolean | null = null;
 
     url = () => ActivityDelistRequest.urlForId(this.id);
