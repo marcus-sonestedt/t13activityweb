@@ -1,11 +1,11 @@
 import Cookies from 'universal-cookie';
-import { Activity, ActivityDelistRequest } from '../Models';
+import { Activity, ActivityDelistRequest, Member } from '../Models';
 import { UserContext } from "../components/UserContext";
 import { deserialize } from 'class-transformer';
 
 const cookies = new Cookies();
 
-const getJsonHeaders = () => {
+export const getJsonHeaders = () => {
     return {
         'X-CSRFToken': cookies.get('csrftoken'),
         'Content-Type': 'application/json',
@@ -113,7 +113,12 @@ export const approveADR = async (model: ActivityDelistRequest, user: UserContext
         return;
     }
 
-    if (!window.confirm(`Godkänn avbokningsförfrågan från ${model.member.fullname}\nför uppgiften '${model.activity.name}'?`)) {
+    if (!(model.member instanceof Member) || !(model.activity instanceof Activity)) {
+        console.error("member and/or activity property of ADR not fully populated.")
+        return;
+    }
+
+    if (!window.confirm(`Godkänn avbokningsförfrågan från ${model.member?.fullname}\nför uppgiften '${model.activity?.name}'?`)) {
         return;
     }
 
@@ -137,7 +142,13 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
         return;
     }
 
-    var rejectReason = prompt(`Ange din anledning att avvisa ${model.member.fullname}s\navbokningsförfrågan för uppgiften '${model.activity.name}'?`);
+    if (!(model.member instanceof Member) || !(model.activity instanceof Activity)) {
+        console.error("member and/or activity property of ADR not fully populated.")
+        return;
+    }
+
+
+    var rejectReason = window.prompt(`Ange din anledning att avvisa ${model.member.fullname}s\navbokningsförfrågan för uppgiften '${model.activity.name}'?`);
     if (rejectReason === null) {
         return;
     }
@@ -158,7 +169,7 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
 };
 
 
-export const claimActivity = (model: Activity, history:any) => {
+export const claimActivity = (model: Activity, history: any) => {
     fetch(`/api/activity_enlist/${model.id}`,
         {
             method: 'POST',

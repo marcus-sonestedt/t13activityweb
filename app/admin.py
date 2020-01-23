@@ -32,6 +32,8 @@ class MemberInline(admin.StackedInline):
     verbose_name_plural = 'Medlem'
     fk_name = 'user'
     readonly_fields = ['user']
+    exclude= ['created', 'updated', 'email_verification_code',
+        'email_verification_code_created']
 
 
 @admin.register(User)
@@ -82,6 +84,9 @@ class MemberAdmin(admin.ModelAdmin):
         'task_summary',
         'membercard_number'
     )
+
+    exclude= ['created', 'updated', 'email_verification_code',
+        'email_verification_code_created']
 
 
 class EventTypeAttachmentInline(admin.TabularInline):

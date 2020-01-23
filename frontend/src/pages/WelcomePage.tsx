@@ -39,10 +39,11 @@ export const WelcomePage = () => {
                 <Col md={12} lg={6}>
                     <DataProvider< PagedT13Events >
                         ctor={t => deserialize(PagedT13Events, t)}
-                        url={"/api/events/upcoming?page_size=50"}
+                        url={"/api/events/upcoming?page_size=150"}
                         onLoaded={setEvents}>
                         <EventsComponent events={events}
-                            title="Kommande aktiviteter" />
+                            title="Kommande händelser"
+                            showBookableStatus={false}/>
                     </DataProvider>
                 </Col>
             </Row>

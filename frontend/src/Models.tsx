@@ -1,5 +1,6 @@
 import { Type } from "class-transformer";
 import "reflect-metadata"
+import { isoWeek } from './components/Utilities';
 
 export class PagedValues<T>
 {
@@ -38,16 +39,14 @@ export class PagedMembers extends PagedValues<Member> {
     results: Member[] = [];
 }
 
-export class User implements IdValue
-{
+export class User implements IdValue {
     id = '';
     emali = '';
     first_name = '';
     last_name = '';
 }
 
-export class Attachment implements IdValue
-{
+export class Attachment implements IdValue {
     id = '';
     file = '';
     comment = '';
@@ -68,7 +67,7 @@ export class Activity implements IdValue {
     end_time: string = '';
 
     weight: number = 1;
-    
+
     completed: boolean | null = null;
     bookable: boolean = false;
     cancelled: boolean = false;
@@ -85,8 +84,8 @@ export class Activity implements IdValue {
     @Type(() => Date)
     assigned_at: Date | null = null;
 
-    delist_requests: string[] = [];
-    delist_requested: boolean = false;
+    @Type(() => ActivityDelistRequest)
+    active_delist_request?: ActivityDelistRequest;
 
     @Type(() => Date)
     earliest_bookable_date?: Date;
@@ -193,10 +192,19 @@ export class T13Event implements IdValue {
     cancelled: boolean = false;
 
     date = () => {
-        if (this.start_date.toDateString() === this.end_date.toDateString() || this.end_date === null)
-            return this.start_date.toLocaleDateString('sv-SE')
+        const startDate = this.start_date.toLocaleDateString('sv-SE');
+        const endDate = this.end_date?.toLocaleDateString('sv-SE')
 
-        return `${this.start_date.toLocaleDateString('sv-SE')} - ${this.end_date.toLocaleDateString('sv-SE')}`
+        if (startDate === endDate || !this.end_date) {
+            const weekday = this.start_date.toLocaleDateString('sv-SE', { weekday: 'long' })
+            return `${startDate} ${weekday} v${isoWeek(this.start_date)}`;
+        }
+
+        const range = `${startDate} - ${endDate}`
+        const startWeek = isoWeek(this.start_date);
+        const endWeek = isoWeek(this.end_date);
+
+        return startWeek === endWeek ? `${range} v${startWeek}` : range;
     }
 
     url = () => `/frontend/event/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
@@ -211,33 +219,26 @@ export class PagedT13Events extends PagedValues<T13Event> {
 }
 
 export class ActivityDelistRequest implements IdValue {
-
-    constructor(member: Member, activity: Activity) {
-        this.member = member;
-        this.activity = activity;
-    }
-
     id: string = '';
 
     @Type(() => Member)
-    member: Member;
+    member?: Member | string;
 
     @Type(() => Activity)
-    activity: Activity;
+    activity?: Activity | string;
 
     reason: string = '';
     reject_reason?: string;
 
     @Type(() => Member)
-    approver: Member | null = null;
-
+    approver?: Member | string;
     approved: boolean | null = null;
 
     url = () => ActivityDelistRequest.urlForId(this.id);
     adminUrl = () => `/admin/app/activitydelistrequest/${this.id}`;
     apiUrl = () => ActivityDelistRequest.apiUrlForId(this.id);
 
-    static urlForId = (id:string) => `/frontend/delistrequest/${id}`;
+    static urlForId = (id: string) => `/frontend/delistrequest/${id}`;
     static apiUrlForId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/${id}`;
     static apiUrlForActivityId = (id: string) => `${ActivityDelistRequest.apiUrlAll()}/activity/${id}`;
     static apiUrlAll = () => `/api/activity_delist_request`;
@@ -270,3 +271,4 @@ export default {
     Member, Activity, ActivityType, T13Event, T13EventType,
     PagedT13Events, PagedMembers, PagedActivities, PagedEventTypes
 };
+

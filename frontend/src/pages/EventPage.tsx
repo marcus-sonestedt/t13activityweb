@@ -109,16 +109,22 @@ export const EventPage = () => {
             ? <a href={model.type.url()}>{model.type.name}</a>
             : '-';
 
+        const className = model.assigned?.id === user.memberId ? 'my-task' : null;
+
         const assigned =
             model.assigned !== null
-                ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
+                ? <>
+                    <a href={model.assigned.url()}>{model.assigned.fullname}</a>
+                    {model.active_delist_request ? <>
+                        <span className='spacer' />
+                        {bookButtons(model)}
+                    </> : null}
+                </>
                 : model.bookable
                     ? bookButtons(model)
-                    : null
+                    : null;
 
         const rowClicked = () => history.push(model.url());
-        
-        const className = model.assigned?.id === user.memberId ? 'my-task' : null;
 
         return (
             <tr key={model.id} className={'linked ' + className} onClick={rowClicked}>

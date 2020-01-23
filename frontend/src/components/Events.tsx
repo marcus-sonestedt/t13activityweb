@@ -50,36 +50,43 @@ class MyAgendaEvent extends React.Component<any, {}> {
     }
 }
 
-class MyEvent extends React.Component<any, {}> {
-    render = () => {
-        const event = this.props.event;
+const MyEvent = (props: { event: any, showBookableStatus?: boolean }) => {
+    const { event, showBookableStatus } = props;
 
-        const typeIndex = parseInt(event.type?.id) + 1 ?? 0;
-        const bgColor = intToRgb(typeIndex);
+    const typeIndex = parseInt(event.type?.id) + 1 ?? 0;
+    const bgColor = intToRgb(typeIndex);
 
-        const tooltip = <div>{event.name}
-            <br />{event.type?.name ?? ''}
-            <br />{event.has_bookable_activities
-                ? 'Har bokningsbara uppgifter' : 'Inga bokningsbara uppgifter'}
-        </div>
+    const tooltip = <div>{event.name}
+        <br />{event.type?.name ?? ''}
+        <br />
+        {!showBookableStatus ? null :
+            event.has_bookable_activities
+                ? 'Har bokningsbara uppgifter'
+                : 'Inga bokningsbara uppgifter'
+        }
+    </div>
 
-        console.log(typeIndex);
-        console.log(bgColor);
-
-        return <HoverTooltip tooltip={tooltip}>
-            <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}
-                style={{ backgroundColor: bgColor }}>
-                <a href={event.url()}>{event.name}</a>
-            </div>
-        </HoverTooltip >
+    let className = 'event';
+    if (showBookableStatus) {
+        className += ' ' + (event.has_bookable_activities ? 'bookable' : 'locked')
     }
+
+    return <HoverTooltip tooltip={tooltip}>
+        <div className={className}
+            style={{ backgroundColor: bgColor }}>
+            <a href={event.url()}>{event.name}</a>
+        </div>
+    </HoverTooltip >
 }
 
 
 const LS_EVENTCAL_VIEW_KEY = 'eventcal-view';
 const LS_EVENTCAL_DATE_KEY = 'eventcal-range';
 
-export const EventsCalendar = (props: { events: PagedT13Events }) => {
+export const EventsCalendar = (props: {
+    events: PagedT13Events,
+    showBookableStatus?: boolean
+}) => {
     const { events } = props;
 
     const bcViewJson = localStorage.getItem(LS_EVENTCAL_VIEW_KEY);
@@ -129,9 +136,10 @@ export const EventsCalendar = (props: { events: PagedT13Events }) => {
 
 export const EventsTable = (props: {
     events: PagedT13Events,
-    count: number
+    count: number,
+    showBookableStatus?: boolean
 }) => {
-    const { events, count = 10 } = props;
+    const { events, count = 10, showBookableStatus } = props;
     const [page, setPage] = useState(1);
     const [bookableFilter, setBookableFilter] = useState<boolean | null>(null);
     const [typeFilter, setTypeFilter] = useState<string | null>(null);
@@ -152,7 +160,9 @@ export const EventsTable = (props: {
                 <td style={{ backgroundColor: bgColor }}><a href={model.url()}>{model.name}</a></td>
                 <td className='nowrap'>{model.date()}</td>
                 <td>{type}</td>
-                <td style={{ textAlign: 'center' }}>{model.has_bookable_activities ? <Check /> : <Cross />}</td>
+                {showBookableStatus ?
+                    <td style={{ textAlign: 'center' }}>{model.has_bookable_activities ? <Check /> : <Cross />}</td>
+                    : null}
             </tr>
         );
     }
@@ -232,7 +242,8 @@ export const EventsTable = (props: {
                     <th>Namn</th>
                     <th><YearHeader /></th>
                     <th><TypeHeader /></th>
-                    <th><BookableHeader /></th>
+                    {showBookableStatus ?
+                        <th><BookableHeader /></th> : null}
                 </tr>
             </thead>
             <tbody>
@@ -251,13 +262,15 @@ export const EventsTable = (props: {
 export interface EventProps {
     events: PagedT13Events;
     title?: string,
-    height?: string
+    height?: string,
+    showBookableStatus?: boolean
 }
 
 const LS_CALMODE_KEY = "event-calendar-mode";
 
 export const EventsComponent = (props: EventProps) => {
-    const { events, title = 'Kommande händelser', height = '75vh' } = props;
+    const { events, title = 'Kommande händelser', height = '75vh',
+        showBookableStatus } = props;
 
     const storedViewModeJson = localStorage.getItem(LS_CALMODE_KEY);
     const storedViewMode = storedViewModeJson === null
@@ -292,8 +305,8 @@ export const EventsComponent = (props: EventProps) => {
         </Row>
         <div style={{ height: height }}>
             {viewMode
-                ? <EventsCalendar events={events} />
-                : <EventsTable events={events} count={20} />
+                ? <EventsCalendar events={events} showBookableStatus={showBookableStatus} />
+                : <EventsTable events={events} count={15} showBookableStatus={showBookableStatus} />
             }
         </div>
     </div>
