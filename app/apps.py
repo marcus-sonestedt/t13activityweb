@@ -8,4 +8,4 @@ class ActivityListAppConfig(AppConfig):
 
     # app specific settings, should probably be in a db config object
     # and show on start page
-    MIN_ACTIVITY_SIGNUPS = 4
+    MIN_ACTIVITY_SIGNUPS = 5
