@@ -257,7 +257,7 @@ class Activity(models.Model):
     end_time = models.TimeField(blank=True, null=True)
 
     comment = models.TextField(blank=True)
-    weight = models.FloatField(default=1.0)
+    weight = models.IntegerField(default=1)
 
     confirmed = models.BooleanField(default=False, verbose_name='Påminnelse bekräftad')
     completed = models.BooleanField(default=None, null=True, blank=True, verbose_name='Utförd')
