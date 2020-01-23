@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from "react";
 import { Table, Col, Row } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 
-import { Activity, ActivityDelistRequest } from '../Models';
+import { Activity } from '../Models';
 import { userContext } from "./UserContext"
 import { createADR, cancelADRByActivity } from "../logic/ADRActions";
 import { CancelAdrButton, RequestAdrButton } from '../pages/ADRPage';
@@ -17,7 +17,7 @@ export const MyActivitiesTable = (props: {
     const history = useHistory();
     const user = useContext(userContext)
     const today = new Date();
-    const bookedCount = useMemo(() => values.filter(a => !a.delist_requested).length, [values])
+    const bookedCount = useMemo(() => values.filter(a => a.active_delist_request?.member !== user.memberId).length, [values, user.memberId])
     const completedCount = useMemo(() => values.filter(a => a.completed === true).length, [values])
     const canRequestUnlist = !user.hasMemberCard || bookedCount > user.minSignups
 
@@ -54,6 +54,8 @@ export const MyActivitiesTable = (props: {
 
         const rowClassName = 'clickable-row ' + (activity.id.toString() === highlightActivityId ? 'active' : '');
 
+        const myADR = activity.active_delist_request?.member === user.memberId;
+
         return (
             <tr key={activity.id} className={rowClassName} onClick={rowClick} >
                 <td>
@@ -79,15 +81,17 @@ export const MyActivitiesTable = (props: {
                     ? <HoverTooltip tooltip={tooltip}>
                         <span>{text} <span role="img" aria-label={emojiLabel}>{emoji}</span></span>
                     </HoverTooltip>
-                    : activity.delist_requests.length === 0
-                        ? <span>Bokad</span>
-                        : <a href={ActivityDelistRequest.urlForId(activity.delist_requests[0])}>Avbokningsfråga inlagd</a>
+                    : (myADR && activity.active_delist_request)
+                        ? <a href={activity.active_delist_request.url()}>
+                            Avbokningsfråga inlagd
+                        </a>
+                        : <span>Bokad</span>
                 }
                 </td>
                 <td>
-                    {activity.delist_requests.length === 0
-                        ? <RequestAdrButton onClick={buttonClick(() => createADR(activity, user))} disabled={!canRequestUnlist} />
-                        : <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
+                    {myADR
+                        ? <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
+                        : <RequestAdrButton onClick={buttonClick(() => createADR(activity, user))} disabled={!canRequestUnlist} />
                     }
                 </td>
             </tr>

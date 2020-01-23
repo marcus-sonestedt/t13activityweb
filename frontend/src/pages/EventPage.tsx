@@ -105,11 +105,21 @@ export const EventPage = () => {
 
         const className = model.assigned?.id === user.memberId ? 'my-task' : null;
 
-        const assigned = model.assigned !== null
-            ? <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-            : (!memberAlreadyBooked && model.bookable)
-                ? <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>Boka</Button>
-                : null;
+        const ClaimButton = (props: { text: string }) =>
+            <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>{props.text}</Button>
+
+        const assigned =
+            model.assigned !== null
+                ? <>
+                    <a href={model.assigned.url()}>{model.assigned.fullname}</a>
+                    {model.active_delist_request ? <>
+                        <span className='spacer' />
+                        <ClaimButton text='Överta' />
+                    </> : null}
+                </>
+                : model.bookable
+                    ? <ClaimButton text='Boka' />
+                    : null;
 
         const rowClicked = () => history.push(model.url());
 

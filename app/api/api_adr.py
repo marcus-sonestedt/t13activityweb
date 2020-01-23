@@ -40,16 +40,19 @@ class ActivityEnlist(APIView):
 
         member = Member.objects.get(user=request.user)
 
-        if (activity.assigned == member):
-            return Response("Redan bokad på denna aktivitet")
+        if activity.assigned == member:
+            return Response("Du är redan bokad på denna uppgift")
 
         if activity.assigned is not None:
-            return HttpResponseForbidden("Redan bokad av " + activity.assigned.fullname)
+            if activity.active_delist_request is None:
+                return HttpResponseForbidden("Uppgiften är redan bokad av " + activity.assigned.fullname)
+            else:
+                logger.info("Transferring activity due to active ADR.")
 
         if not activity.bookable:
-            return HttpResponseForbidden("Aktiviteten är inte bokningsbar (i dåtid eller blockerad)")
+            return HttpResponseForbidden("Aktiviteten är inte bokningsbar")
 
-        adrs =  ActivityDelistRequest.objects.filter(member=member, activity=activity)
+        adrs = ActivityDelistRequest.objects.filter(activity=activity, approved=None)
         if adrs:
             logger.info("Deleting delist requests for this member/activity")
             adrs.delete()
@@ -64,7 +67,9 @@ class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
-    queryset = ActivityDelistRequest.objects.select_related('activity').prefetch_related('activity__assigned')
+    queryset = ActivityDelistRequest.objects \
+        .select_related('activity') \
+        .prefetch_related('activity__assigned')
     serializer_class = ActivityDelistRequestSerializer
 
     def get_queryset(self):
@@ -85,7 +90,9 @@ class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
 class ADRByActivityView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
-    queryset = ActivityDelistRequest.objects.select_related('activity').prefetch_related('activity__assigned')
+    queryset = ActivityDelistRequest.objects \
+        .select_related('activity') \
+        .prefetch_related('activity__assigned')
     serializer_class = ActivityDelistRequestDeepSerializer
 
     def __init__(self, *args, **kwargs):
