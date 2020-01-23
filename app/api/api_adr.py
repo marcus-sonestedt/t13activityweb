@@ -39,6 +39,8 @@ class ActivityEnlist(APIView):
             f"User {request.user.id} about to enlist on activity {activity.id}")
 
         member = Member.objects.get(user=request.user)
+        if not member.email_verified or not member.phone_verified:
+            return HttpResponseForbidden("Måste verifiera email och telefon innan bokning!")
 
         if activity.assigned == member:
             return Response("Du är redan bokad på denna uppgift")
