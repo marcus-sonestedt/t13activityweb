@@ -4,8 +4,8 @@ import logging
 from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.core.exceptions import PermissionDenied, FieldDoesNotExist
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 
@@ -28,6 +28,8 @@ from app.models import Activity, ActivityType, Event, EventType, Member, \
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer, FAQSerializer, UserSerializer
+
+from app import serializers
 
 from app.notifications import NotificationData, NotificationDataSerializer
 
@@ -70,7 +72,6 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
 class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
     queryset = Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
-    serializer_class = MemberSerializer
 
     def get_queryset(self):
         if 'pk' in self.kwargs:
@@ -78,12 +79,24 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
 
         return self.queryset
 
+    def get_serializer_class(self):        
+        if self.request.method.upper() == 'PATCH':
+            return serializers.MemberPatchSerializer
+        else:
+            return serializers.MemberSerializer
+
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+        try:
+            return self.partial_update(request, *args, **kwargs)
+        except FieldDoesNotExist:
+            return HttpResponseBadRequest('Field not found on model')
+        except Member.DoesNotExist:
+            return HttpResponseNotFound()
+
 
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' and request.user.member.id != obj.id:
@@ -91,13 +104,34 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
 
         return super().check_object_permissions(request, obj)
 
+    def perform_update(self, serializer):
+        if len(serializer.validated_data) == 0:
+            raise FieldDoesNotExist()
+
+        member = Member.objects.get(id = self.kwargs['pk'])
+
+        for k,v in serializer.validated_data.items():
+            try:
+                setattr(member, k, v) # has support for value really stored on User, such as fullname and email
+            except Exception as e:
+                logging.error(traceback.format_exc())
+                logger.error("Failed to set " + k + ' = ' + v + ' on ' + str(member))
+                raise
+
+        if 'phone_number' in serializer.validated_data:
+            member.phone_verified = False
+        if 'email' in serializer.validated_data:
+            member.email_verified = False
+
+        member.save()
+
+
 
 class IsLoggedIn(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     renderer_classes = (renderers.JSONRenderer,)
     read_only = True
 
-    @method_decorator(cache_page(60))
     @method_decorator(vary_on_cookie)
     @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
     def get(self, request, format=None):

@@ -17,9 +17,13 @@ class MemberSerializer(serializers.ModelSerializer):
         fields = ('fullname', 'phone_number', 'id', 'email',
                   'phone_verified', 'email_verified', 'user_id')
 
+class MemberPatchSerializer(serializers.Serializer):
+    fullname = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    phone_number = serializers.CharField(required=False)
 
 
-class AttachmentSerializer(serializers.ModelSerializer):
+class AttachmentSerializer(serializers.Serializer):
     uploader = UserSerializer()
 
     class Meta:

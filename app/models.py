@@ -5,7 +5,7 @@ Definition of models.
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.apps import apps
@@ -54,14 +54,27 @@ class Member(models.Model):
 
     min_signup_bias = models.IntegerField(default=0, verbose_name="Justeringsfaktor för åtaganaden")
 
-    def fullname(self):
+    def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
-    fullname.short_description = 'Namn'
-    fullname = property(fullname)
 
-    @property
-    def email(self):
+    def set_fullname(self, value: str):
+        parts = value.split(' ', 1)
+        self.user.first_name = parts[0]
+        if len (parts) > 1:
+            self.user.last_name = parts[1]
+        self.user.save()
+
+    get_fullname.short_description = 'Namn'
+    fullname = property(get_fullname, set_fullname)
+
+    def get_email(self):
         return self.user.email
+   
+    def set_email(self, value):
+        self.user.email = value
+        self.user.save()
+
+    email = property(get_email, set_email)
 
     class Meta:
         order_with_respect_to = 'user'
@@ -88,26 +101,31 @@ class Member(models.Model):
     task_summary = property(task_summary)
 
 
+
 @receiver(post_save, sender=User)
 def user_saved(sender, instance, created, **kwargs):
     if created:
         instance.member = Member.objects.create(user=instance)
         instance.email = instance.username
         instance.save()
-    elif instance.username != instance.email or 'email' in kwargs:
-        instance.username = instance.email
-        instance.member.email_verified = False
-        instance.save()
+    else:
+        if instance.username != instance.email or 'email' in kwargs:
+            instance.username = instance.email
+            instance.member.email_verified = False
+            instance.save()
 
     instance.member.save()
 
-
 @receiver(post_save, sender=Member)
 def member_saved(sender, instance, created, **kwargs):
+    print(kwargs)
     if created:
         events.new_user_created(instance)
-    elif 'phone_number' in kwargs:
-        instance.phone_verified = False
+        return
+
+    if 'email' in kwargs:
+        instance.user.username = instance.user.email = instance.email
+        instance.email_verified = False
         instance.save()
 
 

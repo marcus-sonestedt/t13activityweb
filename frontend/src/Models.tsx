@@ -25,9 +25,17 @@ export class Member implements IdValue {
     email_verified = false;
     phone_verified = false;
 
-    url = () => `/frontend/member/${this.id}/${this.fullname.replace(/ /g, '-').toLowerCase()}`;
+    url = () => Member.urlForId(this.id, this.fullname);
     adminUrl = () => Member.adminUrlForId(this.user_id);
     apiUrl = () => Member.apiUrlForId(this.id);
+
+    static urlForId = (id: string, fullname?: string) => {
+        const r = `/frontend/member/${id}`
+        if (fullname)
+            return `${r}/${fullname.replace(/ /g, '-').toLowerCase()}`;
+        else
+            return r
+    }
     static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
     static apiUrlForId = (id: string) => `/api/member/${id}`;
 }
