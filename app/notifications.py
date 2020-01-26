@@ -85,7 +85,7 @@ class NotificationDataSerializer(drf_serializers.Serializer):
     isLoggedIn = drf_serializers.BooleanField()
 
     notifications = NotificationSerializer(many=True, required=False)
-    member = serializers.MemberSerializer(required=False)
+    member = serializers.MemberReadySerializer(required=False)
 
     minSignups = drf_serializers.IntegerField(required=False)
 

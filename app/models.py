@@ -36,12 +36,12 @@ class Member(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     phone_number = models.CharField(max_length=20, blank=True,
-        verbose_name="Telefonnnummer")
+                                    verbose_name="Telefonnnummer")
 
     phone_verified = models.BooleanField(default=False,
-        verbose_name="Telefonnummer verifierat")
+                                         verbose_name="Telefonnummer verifierat")
     email_verified = models.BooleanField(default=False,
-        verbose_name="Emailaddress verifierad")
+                                         verbose_name="Emailaddress verifierad")
 
     email_verification_code = models.CharField(
         max_length=40, blank=True, null=True, verbose_name="Email-verifieringskod")
@@ -50,9 +50,10 @@ class Member(models.Model):
 
     comment = models.TextField(blank=True, verbose_name="Kommentar")
     membercard_number = models.CharField(max_length=64, blank=True,
-        verbose_name="Guldkortsnummer")
+                                         verbose_name="Guldkortsnummer")
 
-    min_signup_bias = models.IntegerField(default=0, verbose_name="Justeringsfaktor för åtaganaden")
+    min_signup_bias = models.IntegerField(
+        default=0, verbose_name="Justeringsfaktor för åtaganaden")
 
     def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -60,7 +61,7 @@ class Member(models.Model):
     def set_fullname(self, value: str):
         parts = value.split(' ', 1)
         self.user.first_name = parts[0]
-        if len (parts) > 1:
+        if len(parts) > 1:
             self.user.last_name = parts[1]
         self.user.save()
 
@@ -69,7 +70,7 @@ class Member(models.Model):
 
     def get_email(self):
         return self.user.email
-   
+
     def set_email(self, value):
         self.user.email = value
         self.user.save()
@@ -84,22 +85,34 @@ class Member(models.Model):
     def __str__(self):
         return f"{self.fullname} ({self.email})"
 
-    def task_summary(self):
+    @property
+    def year_activities(self):
         '''returns completed/booked activities for this year'''
         current_year = datetime.date.today().year
-        current_activities = Activity.objects \
+        return Activity.objects \
             .filter(assigned=self,
                     event__start_date__year=current_year)
-        booked_weight = current_activities.aggregate(Sum('weight')) \
-            .get('weight__sum', 0) or 0
-        booked_weight += self.min_signup_bias
-        completed = current_activities.filter(completed=True).count()
 
-        return f"{completed}/{booked_weight}"
+    @property
+    def completed_weight(self):
+        return self.year_activities \
+            .filter(completed=True) \
+            .aggregate(Sum('weight')) \
+            .get('weight__sum', 0) or 0
+
+    @property
+    def booked_weight(self):
+        booked_weight = self.year_activities \
+            .aggregate(Sum('weight')) \
+            .get('weight__sum', 0) or 0
+        return booked_weight + self.min_signup_bias
+
+    def task_summary(self):
+        '''returns completed/booked activities for this year'''
+        return f"{self.completed_weight}/{self.booked_weight}"
 
     task_summary.short_description = 'Utförda/Bokade'
     task_summary = property(task_summary)
-
 
 
 @receiver(post_save, sender=User)
@@ -116,9 +129,9 @@ def user_saved(sender, instance, created, **kwargs):
 
     instance.member.save()
 
+
 @receiver(post_save, sender=Member)
 def member_saved(sender, instance, created, **kwargs):
-    print(kwargs)
     if created:
         events.new_user_created(instance)
         return
@@ -194,13 +207,13 @@ class Event(models.Model):
             return str(self.start_date)
         else:
             return f'{self.start_date} - {self.end_date}'
-    
+
     date.short_description = 'Datum'
     date = property(date)
 
     def activities_count(self):
         return self.activities.count()
-    
+
     activities_count.short_description = 'Uppgifter'
     activities_count = property(activities_count)
 
@@ -209,7 +222,7 @@ class Event(models.Model):
         return self.activities.filter(assigned=None) \
             .filter(Q(earliest_bookable_date__gte=today) | Q(earliest_bookable_date=None)) \
             .count()
-    
+
     activities_available_count.short_description = 'Lediga uppgifter'
     activities_available_count = property(activities_available_count)
 
@@ -217,7 +230,7 @@ class Event(models.Model):
         if self.end_date < datetime.date.today():
             return False
         return bool(self.activities_available_count)
-    
+
     has_bookable_activities.boolean = True
     has_bookable_activities = property(has_bookable_activities)
 
@@ -277,8 +290,10 @@ class Activity(models.Model):
     comment = models.TextField(blank=True)
     weight = models.IntegerField(default=1)
 
-    confirmed = models.BooleanField(default=False, verbose_name='Påminnelse bekräftad')
-    completed = models.BooleanField(default=None, null=True, blank=True, verbose_name='Utförd')
+    confirmed = models.BooleanField(
+        default=False, verbose_name='Påminnelse bekräftad')
+    completed = models.BooleanField(
+        default=None, null=True, blank=True, verbose_name='Utförd')
     cancelled = models.BooleanField(default=False, verbose_name='Inställd')
 
     earliest_bookable_date = models.DateField(null=True, blank=True)
@@ -299,7 +314,6 @@ class Activity(models.Model):
             return self.delist_requests.get(approved=None)
         except ActivityDelistRequest.DoesNotExist:
             return None
-
 
     class Meta:
         ordering = ['start_time', 'end_time', 'name']

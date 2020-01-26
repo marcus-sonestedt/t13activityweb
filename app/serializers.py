@@ -14,14 +14,23 @@ class UserSerializer(serializers.ModelSerializer):
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
-        fields = ('fullname', 'phone_number', 'id', 'email',
-                  'phone_verified', 'email_verified', 'user_id')
+        fields = ['fullname', 'phone_number', 'id', 'email',
+                  'phone_verified', 'email_verified', 'user_id']
+
+
+class MemberReadySerializer(MemberSerializer):
+    booked_weight_year = serializers.IntegerField(required=False)    
+
+    class Meta:
+        model = Member
+        fields = MemberSerializer.Meta.fields + ['booked_weight_year', 'membercard_number']
+
 
 class MemberPatchSerializer(serializers.Serializer):
     fullname = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     phone_number = serializers.CharField(required=False)
-
+    membercard_number = serializers.CharField(required=False, allow_blank=True)
 
 class AttachmentSerializer(serializers.Serializer):
     uploader = UserSerializer()

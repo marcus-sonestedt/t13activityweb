@@ -114,6 +114,7 @@ export const ProfilePage = () => {
                         : <ShowPhone />}
                     </h4>
                     <h4>Roll: {user.isStaff ? 'Personal' : 'Medlem'}</h4>
+                    <h4>Guldkortsnummer: {user.member?.membercard_number}</h4>
                     {/*} {!member.image_url ? null : <Image src={member.image_url} /> } */}
                 </div>
             </Col>

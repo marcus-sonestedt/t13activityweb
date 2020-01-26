@@ -201,5 +201,5 @@ url_patterns = [
     re_path(r'activity_type/(?P<id>[0-9]+)', ActivityTypeList.as_view()),
 
     path('faq', FAQList.as_view()),
-    re_path(r'infotext/(?P<pk>\w+)', InfoTextList.as_view())
+    re_path(r'infotext/(?P<pk>[\w-]+)', InfoTextList.as_view())
 ]

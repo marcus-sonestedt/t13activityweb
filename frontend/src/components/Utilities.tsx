@@ -126,14 +126,10 @@ export const InfoText = (props: { textKey: string }) => {
         url={`/api/infotext/${props.textKey}`}
         ctor={x => JSON.parse(x).content}
         onLoaded={setInfoText}>
-        <Row>
-            <Col>
-                <MarkDown source={infoText} />
-            </Col>
-            <Col md='auto'>
-                {editButton}
-            </Col>
-        </Row>
+        <>
+            <MarkDown source={infoText} />
+            {editButton}
+        </>
     </DataProvider >
 }
 
