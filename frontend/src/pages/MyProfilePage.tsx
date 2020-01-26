@@ -92,7 +92,7 @@ export const ProfilePage = () => {
     }
     return <Container>
         <Row>
-            <Col>
+            <Col lg={8} md={12}>
                 <h1>Min profil</h1>
                 <div>
                     <h3>{nameEdit
@@ -118,7 +118,7 @@ export const ProfilePage = () => {
                     {/*} {!member.image_url ? null : <Image src={member.image_url} /> } */}
                 </div>
             </Col>
-            <Col>
+            <Col lg={4} md={12}>
                 <h2>Övriga inställningar</h2>
                 <a href="/app/change_password/">
                     <Button>Ändra lösenord</Button>
