@@ -24,6 +24,7 @@ export class Member implements IdValue {
 
     membercard_number:string='';
     booked_weight_year?:number;
+    booked_weight?:number;
 
     email_verified = false;
     phone_verified = false;

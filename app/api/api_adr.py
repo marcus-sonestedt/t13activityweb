@@ -70,9 +70,9 @@ class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
     queryset = ActivityDelistRequest.objects \
-        .select_related('activity') \
+        .select_related('activity', 'member') \
         .prefetch_related('activity__assigned')
-    serializer_class = ActivityDelistRequestSerializer
+    serializer_class = ActivityDelistRequestDeepSerializer
 
     def get_queryset(self):
         qs = self.queryset
@@ -93,7 +93,7 @@ class ADRByActivityView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     queryset = ActivityDelistRequest.objects \
-        .select_related('activity') \
+        .select_related('activity', 'member') \
         .prefetch_related('activity__assigned')
     serializer_class = ActivityDelistRequestDeepSerializer
 
@@ -117,7 +117,7 @@ class ADRList(mixins.ListModelMixin, generics.GenericAPIView):
     parser_classes = [parsers.JSONParser]
     serializer_class = ActivityDelistRequestDeepSerializer
     queryset = ActivityDelistRequest.objects \
-        .select_related('activity') \
+        .select_related('activity', 'member') \
         .prefetch_related('activity__assigned')
 
     def get_queryset(self):

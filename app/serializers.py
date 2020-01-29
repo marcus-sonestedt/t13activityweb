@@ -20,10 +20,11 @@ class MemberSerializer(serializers.ModelSerializer):
 
 class MemberReadySerializer(MemberSerializer):
     booked_weight_year = serializers.IntegerField(required=False)    
+    booked_weight  = serializers.IntegerField(required=False)    
 
     class Meta:
         model = Member
-        fields = MemberSerializer.Meta.fields + ['booked_weight_year', 'membercard_number']
+        fields = MemberSerializer.Meta.fields + ['booked_weight_year', 'membercard_number', 'booked_weight']
 
 
 class MemberPatchSerializer(serializers.Serializer):
@@ -94,7 +95,7 @@ class ActivitySerializer(EventActivitySerializer):
 
 
 class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):
-    member = MemberSerializer()
+    member = MemberReadySerializer()
     activity = ActivitySerializer()
     approver = MemberSerializer(required=False)
 

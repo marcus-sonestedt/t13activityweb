@@ -53,7 +53,7 @@ export const ActivityComponent = (props: { model?: Activity }) => {
                     : null}
                 <HoverTooltip tooltip="En uppgift kan räknas som fler eller färre än en, beroende på omfattning/ansvar."
                     placement='bottom'>
-                    <h5>Vikt: <b>{model.weight}</b></h5>
+                    <h5>Värde: <b>{model.weight}</b></h5>
                 </HoverTooltip>
                 <h5>Tilldelad: {' '}
                     {!model.assigned

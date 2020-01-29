@@ -69,7 +69,7 @@ export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRe
     const { model } = props;
     const user = useContext(userContext);
 
-    if (!model )
+    if (!model)
         return null
 
     if (!(model.activity instanceof Activity))
@@ -84,38 +84,64 @@ export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRe
         </span>
         : null;
 
+    const remainingWeight = (model.member.booked_weight ?? 0) - (model.activity?.weight ?? 1)
+
     return (
         <>
             <div className="model-header">
                 <span>
-                    <h5>Avbokningsförfrågan</h5>
+                    <h4>Avbokningsförfrågan</h4>
                     <h5><span className='spacer' /><AdrStatusBadge model={model} /></h5>
                 </span>
                 {user.isStaff ?
-                    <a href={model.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
+                    <a href={model.adminUrl()}>
+                        <Button variant='outline-secondary' size='sm'>Editera förfrågan</Button></a>
                     : null}
             </div>
-            <h5>Medlem</h5>
+            <div className="model-header">
+                <h5>Medlem</h5>
+                <Button variant='outline-secondary' href={model.member.adminUrl()} size='sm'>
+                    Editera medlem
+                </Button>
+            </div>
             <p>
                 <a href={model.member.url()}>{model.member.fullname}</a>
                 {' - '}
                 <a href={`tel:${model.member.phone_number}`}>{model.member.phone_number}</a>
                 {' - '}
                 <a href={`mailto:${model.member.email}`}>{model.member.email}</a>
-                {' '}
-                {!user.isStaff ? null : 
-                    <Button variant='outline-secondary' href={model.member.adminUrl()} size='sm'>
-                        Info
-                    </Button> 
-                 }
             </p>
-            <h5>Uppgift / Aktivitet</h5>
+            {!user.isStaff ? null :
+                <p>
+                    <span style={{ opacity: 0.7 }}>
+                        Bokade uppgifter exkl. denna:
+                    </span>
+                    {' '}
+                    <b>
+                        {remainingWeight} / {user.minSignups}
+                    </b>
+                    {' '}
+                    {remainingWeight >= user.minSignups
+                        ? <Badge variant='success'>OK</Badge>
+                        : <Badge variant='danger'>UNDER GRÄNS</Badge>
+                    }
+                </p>
+            }
+            <h5>Uppgift / Aktivitet / Värde</h5>
             <p>
                 <a href={model.activity.url()}>{model.activity.name}</a>
                 {' - '}
                 <a href={model.activity.event.url()}>{model.activity.event.name}</a>
+                {' - '}
+                <b>
+                    {model.activity.weight}
+                </b>
             </p>
-            <h5>Avbokningsanledning</h5>
+            <p>Kommentar</p>
+            <p style={{ opacity: 0.7 }}>
+                {model.activity.comment}
+            </p>
+            <h5>Anledning</h5>
             <MarkDown source={model.reason} />
             {model.approved !== false ? null : <>
                 <MarkDown source={model.reject_reason ?? ''} />
@@ -142,13 +168,13 @@ export const ActivityDelistRequestsComponent = () => {
         setCurrentReq(data.results.find(r => r.id.toString() === currentId) ?? null);
     }, [reload, currentId]);
 
-    const memberMatch = useCallback((r:ActivityDelistRequest)  => {
+    const memberMatch = useCallback((r: ActivityDelistRequest) => {
         if (!(r.member instanceof Member))
             return false;
         return r.member.id === user.memberId;
     }, [user]);
 
-    const approverMatch = useCallback((r:ActivityDelistRequest)  => {
+    const approverMatch = useCallback((r: ActivityDelistRequest) => {
         if (!(r.approver instanceof Member))
             return false;
         return r.approver.id === user.memberId;
@@ -157,12 +183,12 @@ export const ActivityDelistRequestsComponent = () => {
     const myUnansweredRequests = useMemo(() =>
         allRequests?.results.filter(r => memberMatch(r) && r.approved === null), [allRequests, memberMatch]);
     const myAnsweredRequests = useMemo(() =>
-        allRequests?.results.filter(r => memberMatch(r) && r.approved !== null), [allRequests,  memberMatch]);
+        allRequests?.results.filter(r => memberMatch(r) && r.approved !== null), [allRequests, memberMatch]);
 
     const unhandledRequests = useMemo(() =>
-        allRequests?.results.filter(r => !memberMatch(r) && r.approved === null), [allRequests,  memberMatch]);
+        allRequests?.results.filter(r => !memberMatch(r) && r.approved === null), [allRequests, memberMatch]);
     const myHandledRequests = useMemo(() =>
-        allRequests?.results.filter(r => !memberMatch(r) && approverMatch(r)), [allRequests,  memberMatch, approverMatch]);
+        allRequests?.results.filter(r => !memberMatch(r) && approverMatch(r)), [allRequests, memberMatch, approverMatch]);
 
     const delistRequestsTable = (reqs: PagedADR | null) => {
         if (reqs === null)
