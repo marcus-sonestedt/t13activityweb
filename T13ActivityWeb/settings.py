@@ -136,6 +136,7 @@ LOGOUT_REDIRECT_URL = '/frontend/welcome'
 INSTALLED_APPS = [
     'app.apps.ActivityListAppConfig',
     'frontend',
+    'nested_inline',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

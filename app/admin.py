@@ -5,6 +5,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.urls import reverse
 from django.utils.html import escape, mark_safe
 
+import nested_inline.admin as nested 
+
 from app import models
 
 
@@ -26,7 +28,25 @@ class ActivityInline(admin.TabularInline):
     extra = 0
 
 
-class MemberInline(admin.StackedInline):
+
+class NestedActivityInline(nested.NestedTabularInline):
+    model = models.Activity
+    verbose_name_plural = 'Aktiviteter'
+    fk_name = 'assigned'
+    extra = 0
+    exclude = ['assigned_at', 'attachments', 'comment']
+
+
+class NestedADRInline(nested.NestedTabularInline):
+    model = models.ActivityDelistRequest
+    verbose_name_plural = 'Avboknigsförfrågningar'
+    fk_name = 'member'
+    readonly_fields = ['member', 'activity']
+    extra = 0
+
+
+class NestedMemberInline(nested.NestedStackedInline):
+    inlines = [NestedActivityInline, NestedADRInline]
     model = models.Member
     can_delete = False
     verbose_name_plural = 'Medlem'
@@ -38,8 +58,9 @@ class MemberInline(admin.StackedInline):
 
 @admin.register(User)
 @unregister(User)
-class UserWithMemberAdmin(UserAdmin):
-    inlines = [MemberInline]
+class UserWithMemberAdmin(nested.NestedModelAdmin):
+    inlines = [NestedMemberInline]
+    readonly_fields = ['username']
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -47,25 +68,10 @@ class UserWithMemberAdmin(UserAdmin):
         return super().get_inline_instances(request, obj)
 
 
-class MemberActivityInline(admin.TabularInline):
-    model = models.Activity
-    verbose_name_plural = 'Aktiviteter'
-    fk_name = 'assigned'
-    extra = 0
-    exclude = ['assigned_at', 'attachments', 'comment']
-
-
-class MemberADRInline(admin.TabularInline):
-    model = models.ActivityDelistRequest
-    verbose_name_plural = 'Avboknigsförfrågningar'
-    fk_name = 'member'
-    readonly_fields = ['member', 'activity']
-    extra = 0
-
 
 @admin.register(models.Member)
-class MemberAdmin(admin.ModelAdmin):
-    inlines = [MemberActivityInline, MemberADRInline]
+class MemberAdmin(nested.NestedModelAdmin):
+    inlines = [NestedActivityInline, NestedADRInline]
     readonly_fields = ['user']
     list_filter = ['phone_verified', 'email_verified']
 
