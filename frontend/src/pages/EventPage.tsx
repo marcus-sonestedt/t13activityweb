@@ -109,7 +109,9 @@ export const EventPage = () => {
             <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>{props.text}</Button>
 
         const assigned =
-            model.assigned !== null
+            !user.isLoggedIn
+            ? <span>{model.assigned?.fullname}</span>
+            : model.assigned !== null
                 ? <>
                     <a href={model.assigned.url()}>{model.assigned.fullname}</a>
                     {model.active_delist_request ? <>

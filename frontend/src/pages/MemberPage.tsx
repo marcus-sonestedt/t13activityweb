@@ -9,8 +9,9 @@ import { userContext } from "../components/UserContext";
 
 export const MemberComponent = (props: { member?: Member }) => {
     const { member } = props;
+    const user = useContext(userContext);
 
-    if (!member)
+    if (!member || !user.isLoggedIn)
         return null;
 
     return <div>
