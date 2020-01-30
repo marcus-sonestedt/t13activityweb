@@ -7,11 +7,11 @@ import '../components/Table.css'
 import { userContext } from "../components/UserContext";
 import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
-import { claimActivity } from '../logic/ADRActions';
+import { claimActivity, getJsonHeaders } from '../logic/ADRActions';
 import { Reimbursements } from "./ActivityTypePage";
 
 export const EventPage = () => {
-    const [event, setEvent] = useState<T13Event | null>(null);
+    const [event, setEvent] = useState<T13Event>();
     const [activities, setActivities] = useState<Activity[]>([]);
 
     const [error, setError] = useState('');
@@ -21,11 +21,8 @@ export const EventPage = () => {
     const user = useContext(userContext);
     const history = useHistory();
 
-    if (event !== null)
-        activities.forEach(a => a.event = event);
-
     useEffect(() => {
-        if (event === null || event === undefined)
+        if (!event)
             document.title = `T13 - Aktivitet id ${id}`
         else
             document.title = `T13 - ${event.name} - ${event.date()}`
@@ -35,24 +32,29 @@ export const EventPage = () => {
         const controller = new AbortController();
         const url = `/api/events/${id}`;
         const gotEvent = (t: string) => {
-            const newEvent = deserialize(PagedT13Events, t).results[0];
+            const newEvent = deserialize(PagedT13Events, t).results[0];            
             setEvent(newEvent);
         }
-        fetch(url, { signal: controller.signal, cache: 'no-store' })
-            .then(
-                r => r.status === 200
-                    ? r.text().then(gotEvent)
-                    : (setError(`${url}: HTTP ${r.status}: ${r.statusText}`),
-                        r.text().then(setHtmlError))
-            ).catch(e => {
-                if (e.name === 'AbortError')
-                    return;
-                setError(e.toString());
-            });
+        
+        fetch(url, {
+            signal: controller.signal,
+            cache: 'no-store',
+            headers: getJsonHeaders()
+        }).then(
+            r => r.status === 200
+                ? r.text().then(gotEvent)
+                : (setError(`${url}: HTTP ${r.status}: ${r.statusText}`),
+                    r.text().then(setHtmlError))
+        ).catch(e => {
+            if (e.name === 'AbortError')
+                return;
+            setError(e.toString());
+        });
 
         return function cleanup() { controller.abort(); }
     }, [id]);
 
+    
     useEffect(() => {
         const controller = new AbortController();
         const gotActivities = (t: any) => {
@@ -61,16 +63,18 @@ export const EventPage = () => {
         }
 
         const url2 = `/api/event_activities/${id}`;
-        fetch(url2, { signal: controller.signal, cache: 'no-store' })
-            .then(
-                r => r.status === 200
-                    ? r.text().then(gotActivities) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
-                        r.text().then(setHtmlError))
-            ).catch(e => {
-                if (e.name === 'AbortError')
-                    return;
-                setError(e.toString());
-            });
+        fetch(url2, {
+            signal: controller.signal,
+            cache: 'no-store',
+            headers: getJsonHeaders()
+        }).then(
+            r => r.status === 200
+                ? r.text().then(gotActivities) : (setError(`${url2}: HTTP ${r.status}: ${r.statusText}`),
+                    r.text().then(setHtmlError))
+        ).catch(e => {
+            if (e.name === 'AbortError') return;
+            setError(e.toString());
+        });
 
         return function cleanup() { controller.abort(); }
     }, [id]);
@@ -88,7 +92,7 @@ export const EventPage = () => {
             </Container>
         )
 
-    if (event === null)
+    if (!event)
         return <Container><p>Laddar ...</p></Container>
 
 
@@ -103,7 +107,7 @@ export const EventPage = () => {
             ? <a href={model.type.url()}>{model.type.name}</a>
             : '-';
 
-        const className = model.assigned?.id === user.memberId ? 'my-task' : null;
+        const className = (user.isLoggedIn && model.assigned?.id === user.memberId) ? 'my-task' : null;
 
         const ClaimButton = (props: { text: string }) =>
             <Button onClick={(e: React.MouseEvent<HTMLElement>) => claimActivityClick(e, model)}>{props.text}</Button>
@@ -114,12 +118,12 @@ export const EventPage = () => {
             : model.assigned !== null
                 ? <>
                     <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-                    {model.active_delist_request ? <>
+                    {(model.active_delist_request && user.isLoggedIn) ? <>
                         <span className='spacer' />
                         <ClaimButton text='Överta' />
                     </> : null}
                 </>
-                : model.bookable
+                : (model.bookable && user.isLoggedIn)
                     ? <ClaimButton text='Boka' />
                     : null;
 
@@ -130,7 +134,7 @@ export const EventPage = () => {
                 <td><a href={model.url()}>{model.name}</a></td>
                 <td>{type}</td>
                 <td className='nowrap'>
-                    {model.date()}<br />{model.time()}
+                    {event.date()}<br />{model.time()}
                 </td>
                 <td>
                     {model.weight === 1 ? null :
@@ -155,7 +159,7 @@ export const EventPage = () => {
         </li>
 
     return (
-        <Container fluid>
+        <Container fluid key={id}>
             <Row>
                 <Col md={12}>
                     <div className="model-header">

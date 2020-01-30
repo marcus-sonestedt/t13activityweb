@@ -1,3 +1,4 @@
+from datetime import datetime, date
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from app import models
@@ -48,7 +49,6 @@ class EventTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventType
         fields = '__all__'
-
 
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()

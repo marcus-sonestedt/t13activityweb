@@ -34,7 +34,7 @@ export const ActivityComponent = (props: { model?: Activity }) => {
             })
         })
         .catch(e => alert("Något gick fel:\n\n" + e))
-        .finally(() => window.location.reload());
+        .finally(() => window.location.reload());   
     }
 
     return (
