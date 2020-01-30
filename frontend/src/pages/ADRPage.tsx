@@ -94,15 +94,18 @@ export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRe
                     <h5><span className='spacer' /><AdrStatusBadge model={model} /></h5>
                 </span>
                 {user.isStaff ?
-                    <a href={model.adminUrl()}>
-                        <Button variant='outline-secondary' size='sm'>Editera förfrågan</Button></a>
+                    <Button variant='outline-secondary' href={model.adminUrl()} size='sm'>
+                        Editera förfrågan
+                    </Button>
                     : null}
             </div>
             <div className="model-header">
                 <h5>Medlem</h5>
-                <Button variant='outline-secondary' href={model.member.adminUrl()} size='sm'>
-                    Editera medlem
-                </Button>
+                {user.isStaff ?
+                    <Button variant='outline-secondary' href={model.member.adminUrl()} size='sm'>
+                        Editera medlem
+                    </Button>
+                    : null}
             </div>
             <p>
                 <a href={model.member.url()}>{model.member.fullname}</a>
