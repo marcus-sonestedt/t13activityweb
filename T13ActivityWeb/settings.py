@@ -74,7 +74,6 @@ EMAIL_HOST = None
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-print (f"DEBUG: {DEBUG}")
 
 for n in secret_names:
     if hasattr(secrets, n):
@@ -109,6 +108,9 @@ for n in secret_names:
                 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
             }
         }
+
+
+print (f"DEBUG: {DEBUG}")
 
 # will get emails with site errors
 ADMINS = [
