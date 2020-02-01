@@ -7,12 +7,9 @@ import '../components/Table.css'
 import { userContext } from "../components/UserContext";
 import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
-<<<<<<< HEAD
-import { claimActivity } from '../logic/TaskActions';
-=======
-import { claimActivity, getJsonHeaders } from '../logic/ADRActions';
->>>>>>> dev
+import { getJsonHeaders } from '../logic/ADRActions';
 import { Reimbursements } from "./ActivityTypePage";
+import { claimActivity } from "../logic/TaskActions";
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event>();
