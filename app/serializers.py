@@ -50,6 +50,14 @@ class EventTypeSerializer(serializers.ModelSerializer):
         model = EventType
         fields = '__all__'
 
+
+class EventPublicSerializer(serializers.ModelSerializer):
+    type = EventTypeSerializer()
+
+    class Meta:
+        model = Event
+        fields = '__all__'
+
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()
     coordinators = MemberSerializer(many=True)
