@@ -39,7 +39,7 @@ class NestedActivityInline(nested.NestedTabularInline):
 
 class NestedADRInline(nested.NestedTabularInline):
     model = models.ActivityDelistRequest
-    verbose_name_plural = 'Avboknigsförfrågningar'
+    verbose_name_plural = 'Avbokningsförfrågningar'
     fk_name = 'member'
     readonly_fields = ['member', 'activity']
     extra = 0
@@ -55,12 +55,12 @@ class NestedMemberInline(nested.NestedStackedInline):
     exclude= ['created', 'updated', 'email_verification_code',
         'email_verification_code_created']
 
-
 @admin.register(User)
 @unregister(User)
 class UserWithMemberAdmin(nested.NestedModelAdmin):
     inlines = [NestedMemberInline]
     readonly_fields = ['username']
+    search_fields=['username', 'first_name', 'last_name']
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -69,11 +69,13 @@ class UserWithMemberAdmin(nested.NestedModelAdmin):
 
 
 
+
 @admin.register(models.Member)
 class MemberAdmin(nested.NestedModelAdmin):
     inlines = [NestedActivityInline, NestedADRInline]
     readonly_fields = ['user']
     list_filter = ['phone_verified', 'email_verified']
+    search_fields=['user', 'phone_number', 'membercard_number']
 
     def user_link(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
@@ -101,8 +103,9 @@ class EventTypeAttachmentInline(admin.TabularInline):
 
 @admin.register(models.EventType)
 class EventTypeAdmin(admin.ModelAdmin):
-    exclude = ['attachments']
     inlines = [EventTypeAttachmentInline]
+    search_fields=['name']
+    filter_horizontal = ['attachments']
 
 
 class EventAttachmentInline(admin.TabularInline):
@@ -136,31 +139,37 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ['type', 'cancelled', CoordinatorFilter]
     list_display = ['name', 'type', 'cancelled', 'start_date',
                     'activities_available_count', 'activities_count', ]
+    search_fields=['name']
+    filter_horizontal = ['attachments', 'coordinators']
 
 
 class ActivityTypeAttachmentInline(admin.TabularInline):
     model = models.ActivityType.attachments.through
     extra = 0
+    search_fields=['name']
 
 
 @admin.register(models.ActivityType)
 class ActivityTypeAdmin(admin.ModelAdmin):
-    exclude = ['attachments']
     inlines = [ActivityTypeAttachmentInline]
+    search_fields=['name']
+    filter_horizontal = ['attachments']
 
 
 class ActivityAttachmentInline(admin.TabularInline):
     model = models.Activity.attachments.through
     extra = 0
+    search_fields=['name']
 
 
 @admin.register(models.Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    exclude = ['attachments']
     inlines = [ActivityAttachmentInline]
     list_filter = ['completed', 'cancelled', 'type', 'event']
     list_display = ('name', 'type', 'event',  'date',
                     'assigned',  'confirmed', 'completed', 'cancelled')
+    search_fields=['name']
+    filter_horizontal = ['attachments']
 
 
 @admin.register(models.ActivityDelistRequest)
@@ -172,6 +181,7 @@ class ActivityDelistRequestAdmin(admin.ModelAdmin):
         'approved',
         'approver'
     )
+    search_fields=['member', 'activity']
 
 
 @admin.register(models.FAQ)
@@ -181,8 +191,9 @@ class FAQAdmin(admin.ModelAdmin):
         'answer_short',
         'order'
     )
+    search_fields=['question', 'answer']
 
 
 @admin.register(models.InfoText)
 class InfoTextAdmin(admin.ModelAdmin):
-    pass
+    search_fields=['key', 'content']
