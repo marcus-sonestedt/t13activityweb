@@ -1,10 +1,15 @@
 django >= 2.2.9, < 3.0
+
 djangorestframework
-pillow
-pytest
-autopep8
 django-recaptcha
-pylint
+django-nested-inline
+django-debug-toolbar
+
+pillow
 openpyxl
 twilio
+
+pytest
 pipupgrade
+autopep8
+pylint

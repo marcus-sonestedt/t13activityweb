@@ -54,7 +54,9 @@ secret_names = [
     'EMAIL_PORT',
     'EMAIL_USE_TLS',
 
-    'SENDGRID_API_KEY']
+    'SENDGRID_API_KEY',
+    
+    'DEBUG']
 
 this_module = sys.modules[__name__]
 
@@ -72,7 +74,6 @@ EMAIL_HOST = None
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
-print (f"DEBUG: {DEBUG}")
 
 for n in secret_names:
     if hasattr(secrets, n):
@@ -108,6 +109,9 @@ for n in secret_names:
             }
         }
 
+
+print (f"DEBUG: {DEBUG}")
+
 # will get emails with site errors
 ADMINS = [
     ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
@@ -136,6 +140,7 @@ LOGOUT_REDIRECT_URL = '/frontend/welcome'
 INSTALLED_APPS = [
     'app.apps.ActivityListAppConfig',
     'frontend',
+    'nested_inline',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,6 +148,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'debug_toolbar',
     'captcha'
 ]
 
@@ -150,6 +156,7 @@ INSTALLED_APPS = [
 # https://docs.djangoproject.com/en/2.1/topics/http/middleware/
 MIDDLEWARE = [
     #'django.middleware.cache.UpdateCacheMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -211,7 +218,7 @@ LANGUAGE_CODE = 'sv-se'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False
+USE_TZ =  False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -226,6 +233,14 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = path.join(BASE_DIR, 'media')
+
+# Django debug toolpart
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    '::1'
+    # ...
+]
 
 LOGGING = {
     'version': 1,

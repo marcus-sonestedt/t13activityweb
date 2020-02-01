@@ -27,6 +27,7 @@ import { NotificationsPage } from './pages/NotificationsPage';
 import { ErrorBoundary} from './components/Utilities';
 import { EnlistByProxyPage } from './pages/EnlistByProxyPage';
 import { EditProfilePage } from './pages/EditProfilePage';
+import { MemberCardPage } from './pages/MemberCardPage';
 
 export const App = () => {
   const userJson = localStorage.getItem("user");
@@ -105,8 +106,11 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
         <Route path="/frontend/verify/email/:initialState?" component={VerifyEmailPage} />
 
         <Route path="/frontend/enlist_by_proxy/:activityId" component={EnlistByProxyPage} />
+        
         <Route path="/frontend/profile/edit/:id" component={EditProfilePage} />
         <Route path="/frontend/profile/create" component={EditProfilePage} />
+
+        <Route path='/frontend/membercards' component={MemberCardPage} />
 
         <Route exact path="/frontend/" render={() => <Redirect to="/frontend/home" />} />
         <Route path="/frontend/welcome" render={() => <Redirect to="/frontend/home" />} />

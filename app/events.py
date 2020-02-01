@@ -75,7 +75,7 @@ def adr_rejected(adr):
             mvh
             /Team13 aktivitetswebb''',
             settings.DEFAULT_FROM_EMAIL,
-            [adr.member.user.email, adr.approved_by.user.email])
+            [adr.member.user.email, adr.approver.user.email])
 
     sms_target = adr.member.phone_number
 

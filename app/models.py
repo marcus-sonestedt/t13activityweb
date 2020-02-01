@@ -5,7 +5,7 @@ Definition of models.
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.apps import apps
@@ -37,12 +37,12 @@ class Member(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     phone_number = models.CharField(max_length=20, blank=True,
-        verbose_name="Telefonnnummer")
+                                    verbose_name="Telefonnnummer")
 
     phone_verified = models.BooleanField(default=False,
-        verbose_name="Telefonnummer verifierat")
+                                         verbose_name="Telefonnummer verifierat")
     email_verified = models.BooleanField(default=False,
-        verbose_name="Emailaddress verifierad")
+                                         verbose_name="Emailaddress verifierad")
 
     email_verification_code = models.CharField(
         max_length=40, blank=True, null=True, verbose_name="Email-verifieringskod")
@@ -51,22 +51,35 @@ class Member(models.Model):
 
     comment = models.TextField(blank=True, verbose_name="Kommentar")
     membercard_number = models.CharField(max_length=64, blank=True,
-        verbose_name="Guldkortsnummer")
+                                         verbose_name="Guldkortsnummer")
 
-    min_signup_bias = models.IntegerField(default=0, verbose_name="Justeringsfaktor för åtaganaden")
+    min_signup_bias = models.IntegerField(
+        default=0, verbose_name="Justeringsfaktor för åtaganaden")
 
     proxy = models.ManyToManyField('self',  blank=True,
                                    verbose_name="Huvudman", related_name='proxies')
 
-    def fullname(self):
+    def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
-    fullname.short_description = 'Namn'
-    fullname = property(fullname)
+    def set_fullname(self, value: str):
+        parts = value.split(' ', 1)
+        self.user.first_name = parts[0]
+        if len(parts) > 1:
+            self.user.last_name = parts[1]
+        self.user.save()
 
-    @property
-    def email(self):
+    get_fullname.short_description = 'Namn'
+    fullname = property(get_fullname, set_fullname)
+
+    def get_email(self):
         return self.user.email
+
+    def set_email(self, value):
+        self.user.email = value
+        self.user.save()
+
+    email = property(get_email, set_email)
 
     class Meta:
         order_with_respect_to = 'user'
@@ -76,18 +89,31 @@ class Member(models.Model):
     def __str__(self):
         return f"{self.fullname} ({self.email})"
 
-    def task_summary(self):
+    @property
+    def year_activities(self):
         '''returns completed/booked activities for this year'''
         current_year = datetime.date.today().year
-        current_activities = Activity.objects \
+        return Activity.objects \
             .filter(assigned=self,
                     event__start_date__year=current_year)
-        booked_weight = current_activities.aggregate(Sum('weight')) \
-            .get('weight__sum', 0) or 0
-        booked_weight += self.min_signup_bias
-        completed = current_activities.filter(completed=True).count()
 
-        return f"{completed}/{booked_weight}"
+    @property
+    def completed_weight(self):
+        return self.year_activities \
+            .filter(completed=True) \
+            .aggregate(Sum('weight')) \
+            .get('weight__sum', 0) or 0
+
+    @property
+    def booked_weight(self):
+        booked_weight = self.year_activities \
+            .aggregate(Sum('weight')) \
+            .get('weight__sum', 0) or 0
+        return booked_weight + self.min_signup_bias
+
+    def task_summary(self):
+        '''returns completed/booked activities for this year'''
+        return f"{self.completed_weight}/{self.booked_weight}"
 
     task_summary.short_description = 'Utförda/Bokade'
     task_summary = property(task_summary)
@@ -99,10 +125,11 @@ def user_saved(sender, instance, created, **kwargs):
         instance.member = Member.objects.create(user=instance)
         instance.email = instance.username
         instance.save()
-    elif instance.username != instance.email or 'email' in kwargs:
-        instance.username = instance.email
-        instance.member.email_verified = False
-        instance.save()
+    else:
+        if instance.username != instance.email or 'email' in kwargs:
+            instance.username = instance.email
+            instance.member.email_verified = False
+            instance.save()
 
     instance.member.save()
 
@@ -111,8 +138,11 @@ def user_saved(sender, instance, created, **kwargs):
 def member_saved(sender, instance, created, **kwargs):
     if created:
         events.new_user_created(instance)
-    elif 'phone_number' in kwargs:
-        instance.phone_verified = False
+        return
+
+    if 'email' in kwargs:
+        instance.user.username = instance.user.email = instance.email
+        instance.email_verified = False
         instance.save()
 
 
@@ -291,7 +321,6 @@ class Activity(models.Model):
             return self.delist_requests.get(approved=None)
         except ActivityDelistRequest.DoesNotExist:
             return None
-
 
     class Meta:
         ordering = ['start_time', 'end_time', 'name']

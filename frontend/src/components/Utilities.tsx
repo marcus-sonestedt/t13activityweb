@@ -126,18 +126,16 @@ export const InfoText = (props: { textKey: string }) => {
         url={`/api/infotext/${props.textKey}`}
         ctor={x => JSON.parse(x).content}
         onLoaded={setInfoText}>
-        <Row>
-            <Col>
-                <MarkDown source={infoText} />
-            </Col>
-            <Col md='auto'>
-                {editButton}
-            </Col>
-        </Row>
+        <>
+            <MarkDown source={infoText} />
+            {editButton}
+        </>
     </DataProvider >
 }
 
 export const isoWeek = (date: Date) => {
+    date = new Date(date);
+
     date.setHours(0, 0, 0, 0);
     // Thursday in current week decides the year.
     date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);

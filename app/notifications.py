@@ -35,9 +35,8 @@ class NotificationData():
         self.compute_notifications()
 
     def count_badges(self):
-        (ct, bt) = map(float, self.member.task_summary.split('/'))
-        self.completedTasks = ct
-        self.bookedTasks = bt
+        self.completedTasks = self.member.completed_weight
+        self.bookedTasks = self.member.booked_weight
 
         self.myDelistRequests = \
             models.ActivityDelistRequest.objects.filter(
@@ -67,7 +66,7 @@ class NotificationData():
 
         if self.bookedTasks < self.minSignups:
             self.notifications.append(Notification(
-                f'Du behöver boka dig på {self.minSignups-self.bookedTasks} uppgift(er) till för att kunna hämta ut ditt guldkort.',
+                f'Du behöver boka dig på {self.minSignups-self.member.booked_weight} uppgift(er) till för att kunna hämta ut ditt guldkort.',
                 '/frontend/home?tab=upcoming-events'))
 
         elif not self.hasMemberCard and verified:
@@ -85,7 +84,7 @@ class NotificationDataSerializer(drf_serializers.Serializer):
     isLoggedIn = drf_serializers.BooleanField()
 
     notifications = NotificationSerializer(many=True, required=False)
-    member = serializers.MemberSerializer(required=False)
+    member = serializers.MemberReadySerializer(required=False)
 
     minSignups = drf_serializers.IntegerField(required=False)
 

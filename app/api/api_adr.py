@@ -70,7 +70,7 @@ class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
     authentication_classes = [authentication.SessionAuthentication]
     parser_classes = [parsers.JSONParser]
     queryset = ActivityDelistRequest.objects \
-        .select_related('activity') \
+        .select_related('activity', 'member') \
         .prefetch_related('activity__assigned')
     serializer_class = ActivityDelistRequestSerializer
 
@@ -93,7 +93,7 @@ class ADRByActivityView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]
     queryset = ActivityDelistRequest.objects \
-        .select_related('activity') \
+        .select_related('activity', 'member') \
         .prefetch_related('activity__assigned')
     serializer_class = ActivityDelistRequestDeepSerializer
 
@@ -124,7 +124,7 @@ class ADRList(mixins.ListModelMixin, generics.GenericAPIView):
         if self.request.user.is_staff:
             return self.queryset.all()
 
-        return self.queryset.filter(activity__member__user=self.request.user)
+        return self.queryset.filter(activity__assigned__user_id=self.request.user.id)
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):

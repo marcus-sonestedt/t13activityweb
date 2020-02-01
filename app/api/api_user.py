@@ -1,14 +1,13 @@
 import datetime
 import logging
 
-from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.core.exceptions import PermissionDenied, FieldDoesNotExist
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Sum, Q
 
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
@@ -29,6 +28,8 @@ from app.models import Activity, ActivityType, Event, EventType, Member, \
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer, FAQSerializer, UserSerializer
+
+from app import serializers
 
 from app.notifications import NotificationData, NotificationDataSerializer
 
@@ -72,37 +73,11 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
         return super().check_object_permissions(request, obj)
 
 
-class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
-    queryset = Member.objects.select_related('user')
-    permission_classes = [IsAuthenticated]
-    serializer_class = MemberSerializer
-
-    def get_queryset(self):
-        if 'pk' in self.kwargs:
-            return self.queryset.filter(id=self.kwargs['pk'])
-
-        return self.queryset
-
-    @method_decorator(never_cache)
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def check_object_permissions(self, request, obj):
-        if request.method.upper() == 'PATCH' and request.user.member.id != obj.id:
-            raise PermissionDenied("Can only PATCH self")
-
-        return super().check_object_permissions(request, obj)
-
-
 class IsLoggedIn(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     renderer_classes = (renderers.JSONRenderer,)
     read_only = True
 
-    @method_decorator(cache_page(60))
     @method_decorator(vary_on_cookie)
     @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
     def get(self, request, format=None):
@@ -115,6 +90,7 @@ class IsLoggedIn(APIView):
         serializer = NotificationDataSerializer(data)
         return Response(data=serializer.data)
 
+
 ##############################################################################
 
 
@@ -123,6 +99,5 @@ url_patterns = [
     path('logout', ClearAuthToken.as_view()),
     path('isloggedin', IsLoggedIn.as_view()),
 
-    re_path(r'^user/(?P<pk>[0-9]+)?', UserList.as_view()),
-    re_path(r'^member/(?P<pk>[0-9]+)?', MemberList.as_view()),
+    re_path(r'^user/(?P<pk>[0-9]+)?$', UserList.as_view()),
 ]

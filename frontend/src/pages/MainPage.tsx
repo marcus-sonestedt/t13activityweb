@@ -19,7 +19,7 @@ export const MainPage = () => {
     const history = useHistory();
     const setQueryPage = (key: string) => { history.replace(`?tab=${key}`); }
     const taskBadgeVariant = user.bookedTasks >= user.minSignups ? 'success' : 'warning';
-    const taskBadgeText = `${user.completedTasks} / ${user.bookedTasks}`
+    const taskBadgeText = `${user.completedTasks} / ${user.bookedTasks} / ${user.minSignups}`
     const verified = user.member?.email_verified && user.member?.phone_verified;
 
     return <Tab.Container defaultActiveKey={tab}
@@ -41,7 +41,7 @@ export const MainPage = () => {
                     <Nav.Item>
                         <Nav.Link eventKey="my-tasks">Uppgifter
                         <span className='spacer' />
-                            <HoverTooltip tooltip={'Antal utförda/bokade uppgifter detta år'}>
+                            <HoverTooltip tooltip={'Antal utförda, bokade & minsta antal uppgifter detta år'}>
                                 <Badge variant={taskBadgeVariant}>
                                     {taskBadgeText}
                                 </Badge>

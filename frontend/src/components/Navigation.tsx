@@ -24,9 +24,10 @@ export const Navigation = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="justify-content-end">
                 <Nav className="mr-auto">
-                    {!user.isStaff ? <p>{' '}</p> :
+                    {!user.isStaff ? <p>{' '}</p> : <>
                         <Nav.Link href="/admin">Administrera</Nav.Link>
-                    }
+                        <Nav.Link href="/frontend/membercards">Guldkort</Nav.Link>
+                    </>}
                 </Nav>
                 <Nav>
                     <Nav.Link href="/frontend/faq">Hjälp</Nav.Link>

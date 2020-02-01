@@ -34,7 +34,6 @@ from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
 logger = logging.getLogger(__name__)
 
 
-
 class MyActivitiesList(generics.ListAPIView):
     queryset = Activity.objects.select_related('type', 'event')
     permission_classes = [IsAuthenticated]
@@ -50,9 +49,16 @@ class MyActivitiesList(generics.ListAPIView):
 
 
 class EventList(generics.ListAPIView):
-    queryset = Event.objects.select_related('type')
-    serializer_class = EventSerializer
+    queryset = Event.objects.select_related('type') \
+        .prefetch_related('coordinators', 'coordinators__user', 'attachments',
+                          'activities', 'type__attachments', )
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated:
+            return serializers.EventSerializer
+        else:
+            return serializers.EventPublicSerializer
 
     def get_queryset(self):
         if 'upcoming' in self.kwargs:
@@ -64,7 +70,8 @@ class EventList(generics.ListAPIView):
         if 'id' in self.kwargs:
             return self.queryset.filter(id=self.kwargs['id'])
 
-        year = self.request.query_params.get('year', datetime.date.today().year)
+        year = self.request.query_params.get(
+            'year', datetime.date.today().year)
         return self.queryset.filter(start_date__year=year)
 
     @method_decorator(never_cache)
@@ -112,20 +119,21 @@ class ActivityList(generics.ListAPIView, mixins.UpdateModelMixin):
 
     def patch(self, request, pk):
         activity = self.get_queryset().first()
-        
+
         if not activity:
             raise ObjectDoesNotExist()
 
         if not self.request.user.is_staff and \
-            (not activity.assigned or activity.assigned.user != self.request.user):
-            raise PermissionDenied("Can only modify comment if staff that you are assigned to")       
+                (not activity.assigned or activity.assigned.user != self.request.user):
+            raise PermissionDenied(
+                "Can only modify comment if staff that you are assigned to")
 
         if list(request.data.keys()) != ['comment']:
             print(request.data.keys())
-            raise PermissionDenied("Can only modify 'comment' of an activity via API")
+            raise PermissionDenied(
+                "Can only modify 'comment' of an activity via API")
 
         return self.partial_update(request, pk)
-
 
 
 class EventTypeList(generics.ListAPIView):
@@ -167,7 +175,6 @@ class ActivityTypeList(generics.ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-
 class FAQList(generics.ListAPIView):
     queryset = FAQ.objects.all()
     serializer_class = FAQSerializer
@@ -201,5 +208,5 @@ url_patterns = [
     re_path(r'activity_type/(?P<id>[0-9]+)', ActivityTypeList.as_view()),
 
     path('faq', FAQList.as_view()),
-    re_path(r'infotext/(?P<pk>\w+)', InfoTextList.as_view())
+    re_path(r'infotext/(?P<pk>[\w-]+)', InfoTextList.as_view())
 ]
