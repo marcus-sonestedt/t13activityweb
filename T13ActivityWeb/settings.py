@@ -54,7 +54,9 @@ secret_names = [
     'EMAIL_PORT',
     'EMAIL_USE_TLS',
 
-    'SENDGRID_API_KEY']
+    'SENDGRID_API_KEY',
+    
+    'DEBUG']
 
 this_module = sys.modules[__name__]
 
