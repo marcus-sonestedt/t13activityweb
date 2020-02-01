@@ -173,7 +173,7 @@ class MemberNotReadyList(generics.ListAPIView):
     def get_queryset(self):
         current_year = datetime.date.today().year
         return Member.objects \
-            .exclude(Q(membercard_number='') | Q(phone_verified=True) | Q(email_verified=True)) \
+            .filter(Q(phone_verified=False) | Q(email_verified=False) | Q(membercard_number='')) \
             .filter(activity__event__start_date__year=current_year) \
             .annotate(booked_weight_year=Sum('activity__weight')) \
             .filter(booked_weight_year__lt=MIN_ACTIVITY_SIGNUPS) \

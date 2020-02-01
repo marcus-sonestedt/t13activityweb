@@ -178,23 +178,24 @@ const NeedTasksTab = () => {
             <td><a href={member.url()}>{member.fullname}</a></td>
             <td>
                 {'Email: '}
-                {member.email_verified ? 'OK' : 'SAKNAS'}
+                {member.email_verified ? 'OK ✔' : 'SAKNAS ❌'}
+                <br/>
                 {'Telefon: '}
-                {member.phone_verified ? 'OK' : 'SAKNAS'}
+                {member.phone_verified ? 'OK ✔' : 'SAKNAS ❌'}
             </td>
             <td>{member.booked_weight_year}
-                {' '}
+                <br/>
                 {member.booked_weight_year
-                    ? member.booked_weight_year >= user.minSignups ? 'OK' : 'OTILLRÄCKLIGT'
+                    ? member.booked_weight_year >= user.minSignups ? 'OK' : 'OTILLRÄCKLIGT ❌'
                     : null}
             </td>
-            <td><Button href={member.adminUrl()}>Administrera</Button></td>
+            <td><Button href={member.adminUrl()} variant='secondary'>Administrera</Button></td>
         </tr>
 
     return <Container fluid>
         <Row>
             <Col md={9}>
-                <h1>Medlemmar som bokat men inte kan få guldkort än</h1>
+                <h1>Medlemmar som bokat minst en aktivitet, men inte är klara för guldkort</h1>
                 <DataProvider<PagedMembers>
                     url='/api/members/not_ready'
                     ctor={json => deserialize(PagedMembers, json)}
@@ -215,7 +216,7 @@ const NeedTasksTab = () => {
 
                 </DataProvider>
             </Col>
-            <Col  md={2}>
+            <Col  md={3}>
                 <InfoText textKey="membercard-needtasks" />
             </Col>
         </Row>

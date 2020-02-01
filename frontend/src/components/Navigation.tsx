@@ -26,7 +26,7 @@ export const Navigation = () => {
                 <Nav className="mr-auto">
                     {!user.isStaff ? <p>{' '}</p> : <>
                         <Nav.Link href="/admin">Administrera</Nav.Link>
-                        <Nav.Link href="/frontend/membercards">Hantera guldkort</Nav.Link>
+                        <Nav.Link href="/frontend/membercards">Guldkort</Nav.Link>
                     </>}
                 </Nav>
                 <Nav>
