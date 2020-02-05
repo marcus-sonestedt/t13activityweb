@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os,sys
+import os
+import sys
 import os.path as path
 import logging
 
@@ -19,6 +20,7 @@ from django.contrib.staticfiles.finders import AppDirectoriesFinder
 
 
 logger = logging.getLogger(__name__)
+
 
 def get_env_value(env_variable):
     try:
@@ -55,7 +57,7 @@ secret_names = [
     'EMAIL_USE_TLS',
 
     'SENDGRID_API_KEY',
-    
+
     'DEBUG']
 
 this_module = sys.modules[__name__]
@@ -69,7 +71,7 @@ except (AttributeError, ImportError) as e:
     print(f"WARNING: Failed to import T13ActivityWeb/secrets.py: {e}")
     secrets = None
 
-SILENCED_SYSTEM_CHECKS = []    
+SILENCED_SYSTEM_CHECKS = []
 EMAIL_HOST = None
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -90,9 +92,10 @@ for n in secret_names:
         print("    Disabling email")
         del EMAIL_HOST
 
-    #if n.startswith('RECAPTCHA_'): 
-    #    logger.info("Disabling capcha test key warning")
-    #    SILENCED_SYSTEM_CHECKS += 'captcha.recaptcha_test_key_error'
+    if n.startswith('RECAPTCHA_'):
+        # localhost keys
+        RECAPTCHA_PUBLIC_KEY = '6LetEdYUAAAAAA5WlV-6oDFCTBvLjgA98Q8B5U4x'
+        RECAPTCHA_PRIVATE_KEY = '6LetEdYUAAAAAG0KQMM-mG3ULgtQU4Vgz7K_eVEI'
 
     if n == 'SECRET_KEY':
         print('    WARNING: Using predefined SECRET_KEY, not ok in production!')
@@ -110,7 +113,7 @@ for n in secret_names:
         }
 
 
-print (f"DEBUG: {DEBUG}")
+print(f"DEBUG: {DEBUG}")
 
 # will get emails with site errors
 ADMINS = [
@@ -155,7 +158,7 @@ INSTALLED_APPS = [
 # Middleware framework
 # https://docs.djangoproject.com/en/2.1/topics/http/middleware/
 MIDDLEWARE = [
-    #'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -165,7 +168,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'app.middleware.disable_api_cache_middleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'T13ActivityWeb.urls'
@@ -218,7 +221,7 @@ LANGUAGE_CODE = 'sv-se'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ =  False
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -228,7 +231,7 @@ STATIC_ROOT = path.join(BASE_DIR, 'static')
 
 # in addition to <application>/static/
 STATICFILES_DIRS = [
-    path.join(BASE_DIR, 'frontend','build'),
+    path.join(BASE_DIR, 'frontend', 'build'),
 ]
 
 MEDIA_URL = '/media/'
@@ -248,7 +251,7 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-         },
+        },
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
@@ -283,11 +286,11 @@ if not DEBUG:
 
 # recaptcha
 
-#proxy not requred if server can access internet
-#RECAPTCHA_PROXY = {
+# proxy not requred if server can access internet
+# RECAPTCHA_PROXY = {
     #    'http': 'http://localhost:8000',
     #    'https': 'https://localhost:8000'
-#}
+# }
 
 # https://developers.google.com/recaptcha/docs/v3#score
 RECAPTCHA_REQUIRED_SCORE = 0.5
