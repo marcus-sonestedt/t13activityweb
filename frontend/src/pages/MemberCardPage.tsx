@@ -168,7 +168,7 @@ const HasCardTab = () => {
 
         return members.results
             .map(renderRow)
-    }, [members, page])
+    }, [members])
 
     return <Container fluid>
         <Row>
@@ -247,7 +247,7 @@ const NeedTasksTab = () => {
             </tr>
 
         return members.results.map(renderRow)
-    }, [members, page, user])
+    }, [members, user])
 
 
     return <Container fluid>
