@@ -151,15 +151,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'debug_toolbar',
     'captcha'
 ]
+
+if DEBUG:
+    INSTALLED_APPS += 'debug_toolbar' 
 
 # Middleware framework
 # https://docs.djangoproject.com/en/2.1/topics/http/middleware/
 MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -170,6 +171,9 @@ MIDDLEWARE = [
     'app.middleware.disable_api_cache_middleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware' + MIDDLEWARE]
 
 ROOT_URLCONF = 'T13ActivityWeb.urls'
 
