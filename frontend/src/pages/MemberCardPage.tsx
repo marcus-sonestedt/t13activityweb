@@ -13,10 +13,10 @@ export const MemberCardPage = () => {
     const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
     const tab = tabMatch ? tabMatch[1] : 'ready';
     const history = useHistory();
-    const setQueryPage = (key: string) => { history.replace(`?tab=${key}`); }
+    const setQueryTab = (key: string) => { history.replace(`?tab=${key}`); }
 
     return <Tab.Container defaultActiveKey={tab}
-        onSelect={setQueryPage}>
+        onSelect={setQueryTab}>
         <Row>
             <Col md={1}>
                 <Nav variant="pills" className="flex-column">
@@ -84,7 +84,7 @@ const ReadyTab = () => {
                 <td><a href={`mailto:${member.email}`}>{member.email}</a></td>
                 <td><a href={`tel:${member.phone_number}`}>{member.phone_number}</a></td>
                 <td>{member.booked_weight_year}</td>
-                <td><Button onClick={() => handoutCard(member)} variant='primary'>Lämna ut guldkort</Button></td>
+                <td><Button onClick={() => handoutCard(member)} variant='success'>Lämna ut guldkort</Button></td>
                 <td><Button href={member.adminUrl()} variant='secondary'>Administrera</Button></td>
             </tr>
 

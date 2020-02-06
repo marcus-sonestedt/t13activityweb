@@ -1,5 +1,4 @@
 .table {
-    color: white;
     max-width: 100%;
 }
 
@@ -10,7 +9,7 @@
 td {
     white-space: no-wrap;
     color: white;
-    background-color: #0f0f18;
+    background-color: #1f1f28;
 }
 
 .table-count {
@@ -18,11 +17,17 @@ td {
     right: .5em;
 }
 
+table,
+th,
+td {
+    border-bottom: 1px solid gray !important;
+}
+
 th,
 th button {
     white-space: no-wrap;
     color: white;
-    background-color: #1f1f28;
+    background-color: #2f2f38;
     font-weight: bold ! important;
     font-size: large ! important;
 }
