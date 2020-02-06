@@ -59,6 +59,7 @@ export const MemberCardPage = () => {
 const ReadyTab = () => {
     const [members, setMembers] = useState(new PagedMembers())
     const [page, setPage] = useState(1)
+    const pageSize = 10;
 
     const handoutCard = (member: Member) => {
         var number = prompt('Ange guldkortsnummer');
@@ -75,8 +76,6 @@ const ReadyTab = () => {
             .finally(() => window.location.reload())
     }
 
-    const pageSize = 10;
-
     const rows = useMemo(() => {
         const renderRow = (member: Member) =>
             <tr key={member.id}>
@@ -88,24 +87,33 @@ const ReadyTab = () => {
                 <td><Button href={member.adminUrl()} variant='secondary'>Administrera</Button></td>
             </tr>
 
-        return members.results
-            .slice((page - 1) * pageSize, page * pageSize)
-            .map(renderRow)
-    }, [members, page])
+        return members.results.map(renderRow)
+    }, [members])
 
     return <Container fluid>
+        <Row>
+            <Col md={8}>
+                <h1>Medlemmar som är redo att hämta ut guldkort</h1>
+            </Col>
+            <Col md={1}>
+                <Pagination>
+                    <PageItems count={members.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
+                </Pagination>
+            </Col>
+            <Col md={3}>
+                <h3>
+                    {rows.length} / {members.count} st
+                </h3>
+            </Col>
+        </Row>
         <Row>
             <Col md={9}>
                 <h1>
                     <span className="table-title">
-                        Medlemmar som är redo att hämta ut guldkort
-                    </span>
-                    <span className="table-count">
-                        {rows.length} / {members.count}
                     </span>
                 </h1>
                 <DataProvider<PagedMembers>
-                    url={`/api/members/ready`}
+                    url={`/api/members/ready?page=${page}&page_size=${pageSize}`}
                     ctor={json => deserialize(PagedMembers, json)}
                     onLoaded={setMembers}>
                     <Table striped hover>
@@ -123,9 +131,6 @@ const ReadyTab = () => {
                             {rows}
                         </tbody>
                     </Table>
-                    <Pagination>
-                        <PageItems count={members.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
-                    </Pagination>
                 </DataProvider>
             </Col>
             <Col md={3}>
@@ -138,6 +143,7 @@ const ReadyTab = () => {
 const HasCardTab = () => {
     const [members, setMembers] = useState(new PagedMembers())
     const [page, setPage] = useState(1)
+    const pageSize = 10;
 
     const recallCard = (member: Member) => {
         fetch(member.apiUrl(),
@@ -150,9 +156,7 @@ const HasCardTab = () => {
             .catch(e => alert("Något gick fel :/\n\n" + e))
             .finally(() => window.location.reload())
     }
-
-    const pageSize = 10;
-
+    
     const rows = useMemo(() => {
         const renderRow = (member: Member) =>
             <tr key={member.id}>
@@ -163,24 +167,29 @@ const HasCardTab = () => {
             </tr>
 
         return members.results
-            .slice((page - 1) * pageSize, page * pageSize)
             .map(renderRow)
     }, [members, page])
 
     return <Container fluid>
         <Row>
+            <Col md={8}>
+                <h1>Medlemmar som har guldkort</h1>
+            </Col>
+            <Col md={1}>
+                <Pagination>
+                    <PageItems count={members.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
+                </Pagination>
+            </Col>
+            <Col md={3}>
+                <h3>
+                    {rows.length} / {members.count} st
+                </h3>
+            </Col>
+        </Row>
+        <Row>
             <Col md={9}>
-                <h1>
-                    <span className="table-title">
-                        Medlemmar som har guldkort
-                    </span>
-                    <span className="table-count">
-                        {rows.length} / {members.count}
-                    </span>
-                </h1>
-
                 <DataProvider<PagedMembers>
-                    url='/api/members/has_card'
+                    url={`/api/members/has_card?page=${page}&page_size=${pageSize}`}
                     ctor={json => deserialize(PagedMembers, json)}
                     onLoaded={setMembers}>
                     <Table>
@@ -196,9 +205,6 @@ const HasCardTab = () => {
                             {rows}
                         </tbody>
                     </Table>
-                    <Pagination>
-                        <PageItems count={members.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
-                    </Pagination>
                 </DataProvider>
             </Col>
             <Col md={3}>
@@ -240,26 +246,30 @@ const NeedTasksTab = () => {
                 <td><Button href={member.adminUrl()} variant='secondary'>Administrera</Button></td>
             </tr>
 
-        return members.results
-            .slice((page - 1) * pageSize, page * pageSize)
-            .map(renderRow)
+        return members.results.map(renderRow)
     }, [members, page, user])
 
 
     return <Container fluid>
         <Row>
+            <Col md={8}>
+                <h1>Medlemmar som inte är klara för guldkort</h1>
+            </Col>
+            <Col md={1}>
+                <Pagination>
+                    <PageItems count={members.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
+                </Pagination>
+            </Col>
+            <Col md={3}>
+                <h3>
+                    {rows.length} / {members.count} st
+                </h3>
+            </Col>
+        </Row>
+        <Row>
             <Col md={9}>
-                <h1>
-                    <span className="table-title">
-                        Medlemmar som inte är klara för guldkort
-                    </span>
-                    <span className="table-count">
-                        {rows.length} / {members.count}
-                    </span>
-                </h1>
-
                 <DataProvider<PagedMembers>
-                    url='/api/members/not_ready'
+                    url={`/api/members/not_ready?page=${page}&page_size=${pageSize}`}
                     ctor={json => deserialize(PagedMembers, json)}
                     onLoaded={setMembers}>
                     <Table>

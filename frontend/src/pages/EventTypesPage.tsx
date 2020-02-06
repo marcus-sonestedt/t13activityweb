@@ -26,17 +26,24 @@ export const EventTypesComponent = () => {
     const renderRow = (model: T13EventType) => {
         return <tr key={model.id}>
             <td><a href={model.url()}>{model.name}</a></td>
-            <td><MarkDown source={model.description}/></td>
+            <td style={{ textAlign: 'left' }}><MarkDown source={model.description} /></td>
         </tr>
     }
 
+    const pageSize = 5;
+
     return <DataProvider<PagedEventTypes>
         ctor={json => deserialize(PagedEventTypes, json)}
-        url={T13EventType.apiUrlAll() + `?page=${page}`}
+        url={T13EventType.apiUrlAll() + `?page=${page}&page_size=${pageSize}`}
         onLoaded={setData}>
         <Row>
-            <Col><h1>AktivitetsTyper</h1></Col>
-            <Col style={{textAlign: 'right'}}><h3>{data.results.length}/{data.count} st</h3></Col>
+            <Col><h1>Aktivitetstyper</h1></Col>
+            <h3 className="table-count">{data.results.length}/{data.count} st</h3>
+            <Col style={{ textAlign: 'right' }}>
+                <Pagination>
+                    <PageItems count={data.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
+                </Pagination>
+            </Col>
         </Row>
         <Table >
             <thead>
@@ -49,9 +56,6 @@ export const EventTypesComponent = () => {
                 {data.results.map(renderRow)}
             </tbody>
         </Table>
-        <Pagination>
-            <PageItems count={data.count} pageSize={10} currentPage={page} setFunc={setPage} />
-        </Pagination>
     </DataProvider>
 
 }

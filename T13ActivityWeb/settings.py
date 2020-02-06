@@ -254,7 +254,7 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
+               'class': 'django.utils.log.AdminEmailHandler',
             'include_html': True
         },
     },
@@ -301,5 +301,5 @@ RECAPTCHA_REQUIRED_SCORE = 0.5
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
     'DEFAULT_PAGINATION_CLASS': 'app.drf_defaults.DefaultResultsSetPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 100
 }
