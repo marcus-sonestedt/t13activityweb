@@ -11,7 +11,7 @@ export interface DataProps<T> {
 export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     const { ctor, url, onLoaded, render, children } = props;
     const [data, setData] = useState<any | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<ReactElement>();
     const [placeHolder, setPlaceHolder] = useState("Laddar...");
 
     const handleData = useCallback((json: string) => {
@@ -27,7 +27,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     useEffect(() => {
         const controller = new AbortController();
         setPlaceHolder("Laddar...");
-        setError(null);
+        setError(undefined);
 
         fetch(url, {
             signal: controller.signal,
@@ -37,8 +37,8 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             .then(r => {
                 if (r.status >= 300) {
                     setPlaceHolder("Oops. Något gick fel! :(");
-                    setError(`Error ${r.status}: ${r.statusText}}\n`);
-                    r.text().then(errorBody => setError(err => err + errorBody));
+                    setError(<h2>{r.status}: {r.statusText}</h2>);
+                    r.text().then(htmlError => setError(err => <><p>{err}</p><div dangerouslySetInnerHTML={{ __html: htmlError }} /></>));
                 } else {
                     return r.text();
                 }
