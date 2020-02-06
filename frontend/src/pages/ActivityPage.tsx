@@ -13,6 +13,7 @@ import { getJsonHeaders } from '../logic/ADRActions';
 
 export const ActivityComponent = (props: { model?: Activity }) => {
     const { model } = props;
+    const user = useContext(userContext);
 
     if (!model)
         return null;
@@ -26,15 +27,15 @@ export const ActivityComponent = (props: { model?: Activity }) => {
         if (!comment) return;
 
         await fetch(model.apiUrl(),
-        {
-            method: 'PATCH',
-            headers: getJsonHeaders(),
-            body: JSON.stringify({
-                comment: comment,
+            {
+                method: 'PATCH',
+                headers: getJsonHeaders(),
+                body: JSON.stringify({
+                    comment: comment,
+                })
             })
-        })
-        .catch(e => alert("Något gick fel:\n\n" + e))
-        .finally(() => window.location.reload());   
+            .catch(e => alert("Något gick fel:\n\n" + e))
+            .finally(() => window.location.reload());
     }
 
     return (
@@ -57,10 +58,14 @@ export const ActivityComponent = (props: { model?: Activity }) => {
                 </HoverTooltip>
                 <h5>Tilldelad: {' '}
                     {!model.assigned
-                        ? <Button variant='primary' href={model.event.url()} size='sm'>Boka?</Button>
+                        ? <><span>Ingen</span>{' '}<Button variant='outline-primary' href={model.event.url()} size='sm'>Boka via händelsesidan</Button></>
                         : <a href={model.assigned.url()}>{model.assigned.fullname}</a>}
                 </h5>
-                <h5>Kommentar <Button variant='outline-secondary' onClick={editComment}>Editera</Button></h5>
+                <h5>Kommentar: {' '}
+                {(user.isStaff || user.memberId === model?.assigned?.id)
+                        ? <Button variant='outline-secondary' onClick={editComment} size='sm'>Editera</Button>
+                        : null}
+                </h5>
                 {model.comment ? <MarkDown source={model.comment} /> : <p>¯\_(ツ)_/¯</p>}
                 <Attachments models={model.attachments} />
             </div>

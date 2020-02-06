@@ -1,6 +1,9 @@
 import { Cookies } from "react-cookie-consent";
 import { Activity, Member } from "../Models";
 import * as H from 'history';
+import React from "react";
+import { Button } from "react-bootstrap";
+import { useHistory } from 'react-router-dom';
 
 const cookies = new Cookies();
 
@@ -83,4 +86,22 @@ export const delistActivityViaProxy = (
     }).finally(() => {
         window.location.reload();
     });
+}
+
+export const BookButtons = (props: { model: Activity, canBookSelf: boolean }) => {
+    const history = useHistory();
+    const createClaimHandler = (self: boolean) => {
+        return (e: React.MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
+            claimActivity(props.model, self, history);
+        }
+    }
+
+    return <>
+        {props.canBookSelf
+            ? <Button onClick={createClaimHandler(true)}>Boka själv</Button>
+            : null}
+        {' '}
+        <Button onClick={createClaimHandler(false)}>Boka underhuggare</Button>
+    </>
 }

@@ -9,7 +9,7 @@ import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
 import { getJsonHeaders } from '../logic/ADRActions';
 import { Reimbursements } from "./ActivityTypePage";
-import { claimActivity } from "../logic/TaskActions";
+import { BookButtons } from "../logic/TaskActions";
 
 export const EventPage = () => {
     const [event, setEvent] = useState<T13Event>();
@@ -96,20 +96,6 @@ export const EventPage = () => {
     if (!event)
         return <Container><p>Laddar ...</p></Container>
 
-    const createClaimHandler = (model: Activity, self: boolean) => {
-        return (e: React.MouseEvent<HTMLElement>) => {
-            e.stopPropagation();
-            claimActivity(model, self, history);
-        }
-    }
-
-    const bookButtons = (model: Activity) => <>
-        {memberAlreadyBooked
-            ? null
-            : <Button onClick={createClaimHandler(model, true)}>Boka själv</Button>}
-        {' '}
-        <Button onClick={createClaimHandler(model, false)}>Boka underhuggare</Button>
-    </>
 
     const renderActivityRow = (model: Activity) => {
         const type = model.type !== null
@@ -126,11 +112,11 @@ export const EventPage = () => {
                         <a href={model.assigned.url()}>{model.assigned.fullname}</a>
                         {(model.active_delist_request && user.isLoggedIn) ? <>
                             <span className='spacer' />
-                            {bookButtons(model)}
+                            <BookButtons model={model} canBookSelf={!memberAlreadyBooked}/>
                         </> : null}
                     </>
                     : (model.bookable && user.isLoggedIn)
-                        ? bookButtons(model)
+                        ? <BookButtons model={model}  canBookSelf={!memberAlreadyBooked}/>
                         : null;
 
         const rowClicked = () => history.push(model.url());

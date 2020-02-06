@@ -18,6 +18,7 @@ export const EnlistByProxyPage = () => {
     const [proxies, setProxies] = useState<Member[]>([]);
     const user = useContext(userContext);
     const setActivityCallback = useCallback(data => setActivity(data.results[0]), []);
+    const setProxiesCallback = useCallback(data => setProxies(data.results[0]), []);
 
     if (!activityId) {
         return <NotFound />
@@ -36,20 +37,20 @@ export const EnlistByProxyPage = () => {
             <Col sm={12} md={6}>
                 <h2>Underhuggare</h2>
                 <DataProvider<PagedMembers>
-                    url={`/api/proxy/for_member/${user.memberId}`}
+                    url={`/api/proxy/for/${user.memberId}`}
                     ctor={json => deserialize(PagedMembers, json)}
-                    onLoaded={data => setProxies(data.results)}>
+                    onLoaded={data => setProxiesCallback(data.results)}>
                     {activity
                         ? <ProxiesTable proxies={proxies} activity={activity} />
                         : null
                     }
                 </DataProvider>
                 <div>
-                    <HoverTooltip tooltip="Skapa en ny användare i systemet som blir din underhuggare.">
+                    <HoverTooltip tooltip="Skapa en ny användare i systemet som blir din underhuggare." placement='bottom'>
                         <Button href='/frontend/profile/create' variant='success'>Skapa ny</Button>
                     </HoverTooltip>
                     {' '}
-                    <HoverTooltip tooltip="Koppla en användare som redan finns in systemet för att bli din underhuggare.">
+                    <HoverTooltip tooltip="Koppla en användare som redan finns in systemet för att bli din underhuggare." placement='bottom'>
                         <Button onClick={connectExistingProxy} variant='secondary'>Koppla befintlig</Button>
                     </HoverTooltip>
                 </div>
