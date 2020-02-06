@@ -2,6 +2,13 @@ import { Type } from "class-transformer";
 import "reflect-metadata"
 import { isoWeek } from './components/Utilities';
 
+const slugify = (s: string): string =>
+    s.toLowerCase()
+        .replace(/[åä]/g, 'a')
+        .replace('ö', 'o')
+        .replace(' ', '_')
+        .replace(/[\W]/g, '-')
+
 export class PagedValues<T>
 {
     count: number = 0;
@@ -23,10 +30,10 @@ export class Member implements IdValue {
     image_url?: string;
     comment?: string;
 
-    membercard_number:string='';
+    membercard_number: string = '';
 
-    booked_weight_year?:number;
-    booked_weight?:number;
+    booked_weight_year?: number;
+    booked_weight?: number;
 
     email_verified = false;
     phone_verified = false;
@@ -38,7 +45,7 @@ export class Member implements IdValue {
     static urlForId = (id: string, fullname?: string) => {
         const r = `/frontend/member/${id}`
         if (fullname)
-            return `${r}/${fullname.replace(/ /g, '-').toLowerCase()}`;
+            return `${r}/${slugify(fullname)}`;
         else
             return r
     }
@@ -115,7 +122,7 @@ export class Activity implements IdValue {
 
     toString = () => `${this.name} - ${this.event.date()} - ${this.time()}`
 
-    url = () => `/frontend/activity/${this.id}/${this.name.replace(/[ /\\?&+]/g, '-').toLowerCase()}`;
+    url = () => `/frontend/activity/${this.id}/${slugify(this.name)}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     apiUrl = () => Activity.apiUrlFromId(this.id);
     static apiUrlFromId = (id: string) => `/api/activity/${id}`;
@@ -140,7 +147,7 @@ export class ActivityType implements IdValue {
     food_included = false;
     rental_kart = false;
 
-    url = () => `/frontend/activity_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
+    url = () => `/frontend/activity_type/${this.id}/${slugify(this.name)}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
     static apiUrlAll = () => `/api/activity_type`;
@@ -161,7 +168,7 @@ export class T13EventType implements IdValue {
     @Type(() => Attachment)
     attachments: Attachment[] = []
 
-    url = () => `/frontend/event_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
+    url = () => `/frontend/event_type/${this.id}/${slugify(this.name)}`;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
     static apiUrl = (id: string) => `/api/event_type/${id}`;
     static apiUrlAll = () => `/api/event_type`;
@@ -203,7 +210,7 @@ export class T13Event implements IdValue {
     coordinators: Member[] = [];
 
     cancelled: boolean = false;
- 
+
     date = () => {
         const startDate = this.start_date.toLocaleDateString('sv-SE');
         const endDate = this.end_date.toLocaleDateString('sv-SE')
@@ -220,7 +227,7 @@ export class T13Event implements IdValue {
         return startWeek === endWeek ? `${range} v${startWeek}` : range;
     }
 
-    url = () => `/frontend/event/${this.id}/${this.name.replace(/ ,|_\//g, '-').toLowerCase()}`;
+    url = () => `/frontend/event/${this.id}/${slugify(this.name)}`;
     adminUrl = () => `/admin/app/event/${this.id}`;
     static apiUrl = (id: string) => `/api/event/${id}`;
 

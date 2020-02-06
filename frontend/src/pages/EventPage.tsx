@@ -33,10 +33,10 @@ export const EventPage = () => {
         const controller = new AbortController();
         const url = `/api/events/${id}`;
         const gotEvent = (t: string) => {
-            const newEvent = deserialize(PagedT13Events, t).results[0];            
+            const newEvent = deserialize(PagedT13Events, t).results[0];
             setEvent(newEvent);
         }
-        
+
         fetch(url, {
             signal: controller.signal,
             cache: 'no-store',
@@ -55,7 +55,7 @@ export const EventPage = () => {
         return function cleanup() { controller.abort(); }
     }, [id]);
 
-    
+
     useEffect(() => {
         const controller = new AbortController();
         const gotActivities = (t: any) => {
@@ -104,8 +104,10 @@ export const EventPage = () => {
     }
 
     const bookButtons = (model: Activity) => <>
-        {memberAlreadyBooked ? null :
-            <Button onClick={createClaimHandler(model, true)}>Boka själv</Button>}
+        {memberAlreadyBooked
+            ? null
+            : <Button onClick={createClaimHandler(model, true)}>Boka själv</Button>}
+        {' '}
         <Button onClick={createClaimHandler(model, false)}>Boka underhuggare</Button>
     </>
 
@@ -118,18 +120,18 @@ export const EventPage = () => {
 
         const assigned =
             !user.isLoggedIn
-            ? <span>{model.assigned?.fullname}</span>
-            : model.assigned !== null
-                ? <>
-                    <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-                    {(model.active_delist_request && user.isLoggedIn) ? <>
-                        <span className='spacer' />
-                        {bookButtons(model)}
-                    </> : null}
-                </>
-                : (model.bookable && user.isLoggedIn)
-                    ? bookButtons(model)
-                    : null;
+                ? <span>{model.assigned?.fullname}</span>
+                : model.assigned !== null
+                    ? <>
+                        <a href={model.assigned.url()}>{model.assigned.fullname}</a>
+                        {(model.active_delist_request && user.isLoggedIn) ? <>
+                            <span className='spacer' />
+                            {bookButtons(model)}
+                        </> : null}
+                    </>
+                    : (model.bookable && user.isLoggedIn)
+                        ? bookButtons(model)
+                        : null;
 
         const rowClicked = () => history.push(model.url());
 
