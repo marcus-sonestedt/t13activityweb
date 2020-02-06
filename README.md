@@ -176,9 +176,15 @@ python -m pipupgrade --latest --yes
 
 ## Third-party services
 
-### ReCaptcha
+API-Keys, passwords, email-addreses and other things that interact with the world
+outside this web application is stored in secrets.py.
 
-**NOTE**: Disabled for now as something is not working right... :-|
+See [secrets_example.py](T13ActivityWeb\secrets_example.py) for the format and current keys.
+
+The app _should_ work fine without this file or with a subset of keys, please report a bug if 
+your experience is different.
+
+### ReCaptcha v3
 
 Purpose:
 
