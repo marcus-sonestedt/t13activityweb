@@ -57,6 +57,11 @@ secret_names = [
     'EMAIL_USE_TLS',
 
     'SENDGRID_API_KEY',
+    
+    'ADMINS',
+    'MANAGERS',
+    'SERVER_EMAIL',
+    'DEFAULT_FROM_EMAIL',
 
     'DEBUG']
 
@@ -73,6 +78,8 @@ except (AttributeError, ImportError) as e:
 
 SILENCED_SYSTEM_CHECKS = []
 EMAIL_HOST = None
+ADMINS = []
+MANAGERS = []
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
@@ -115,18 +122,6 @@ for n in secret_names:
 
 print(f"DEBUG: {DEBUG}")
 
-# will get emails with site errors
-ADMINS = [
-    ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com')
-]
-
-# will get content notifications (broken links, new users, etc)
-MANAGERS = [
-    ('Marcus Sonestedt', 'marcus.s.lindblom@gmail.com'),
-]
-
-SERVER_EMAIL = DEFAULT_FROM_EMAIL = 't13-noreply@macke.eu.pythonanywhere.com'
-
 ALLOWED_HOSTS = [
     'macke.eu.pythonanywhere.com',
     'macke.pythonanywhere.com',
@@ -154,9 +149,6 @@ INSTALLED_APPS = [
     'captcha'
 ]
 
-if DEBUG:
-    INSTALLED_APPS += 'debug_toolbar' 
-
 # Middleware framework
 # https://docs.djangoproject.com/en/2.1/topics/http/middleware/
 MIDDLEWARE = [
@@ -173,7 +165,8 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware' + MIDDLEWARE]
+    INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 ROOT_URLCONF = 'T13ActivityWeb.urls'
 

@@ -15,5 +15,17 @@
 
 #SENDGRID_API_KEY = 'secret'
 
+# will get emails with site errors
+ADMINS = [
+#    ('My Name', 'firstname.lastname@gmail.com')
+]
+
+# will get content notifications (broken links, new users, etc)
+MANAGERS = [
+    #('Manager Name', 'firstname.lastname@gmail.com'),
+]
+
+SERVER_EMAIL = DEFAULT_FROM_EMAIL = 'noreply@mysite.org'
+
 DEBUG = True
 
