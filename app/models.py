@@ -56,7 +56,9 @@ class Member(models.Model):
     min_signup_bias = models.IntegerField(
         default=0, verbose_name="Justeringsfaktor för åtaganaden")
 
-    proxy = models.ManyToManyField('self',  blank=True,
+    # this points to the 'master', thus we are self
+    # our proxies are the reverse relation lookup, i.e. 'proxies'
+    proxy = models.ManyToManyField('self', blank=True,
                                    verbose_name="Huvudman", related_name='proxies')
 
     def get_fullname(self):

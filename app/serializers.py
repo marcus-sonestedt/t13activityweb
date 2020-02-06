@@ -11,6 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name')
 
+class UserWithProxiesSerializer(serializers.ModelSerializer):
+    proxy = UserSerializer(required=False)
+    proxies = UserSerializer(required=False, many=True)
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name', 'proxy', 'proxies')
+
+
 
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:

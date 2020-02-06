@@ -47,10 +47,10 @@ class ClearAuthToken(ObtainAuthToken):
         return Response("bye")
 
 
-class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
+class UserList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModelMixin):
     queryset = User.objects.select_related('proxy', 'member')
     permission_classes = [IsAuthenticated]
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserWithProxiesSerializer
 
     def get_queryset(self):
         return self.queryset.filter(
@@ -63,14 +63,21 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+    def put(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' and \
             (request.user.id != obj.id or
-                (obj.member.proxy.user.id == request.user.id and obj.password == '')):
+                (obj.member.proxy.user.id == request.user.id and not obj.password)):
             raise PermissionDenied(
-                "Can only PATCH yourself or your proxies without password")
+                "Can only PATCH self, or proxies who haven't logged in themselves yet")
 
         return super().check_object_permissions(request, obj)
+
+    def perform_create(self, serializer):
+        serializer.validated_data.proxy = models.Member.objects.get(user_id==self.request.user.id)
+        serializer.save()
 
 
 class IsLoggedIn(APIView):

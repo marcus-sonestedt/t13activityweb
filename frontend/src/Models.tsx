@@ -2,8 +2,8 @@ import { Type } from "class-transformer";
 import "reflect-metadata"
 import { isoWeek } from './components/Utilities';
 
-const slugify = (s: string): string =>
-    s.toLowerCase()
+const slugify = (s?: string) =>
+    s?.toLowerCase()
         .replace(/[åä]/g, 'a')
         .replace('ö', 'o')
         .replace(' ', '_')
@@ -42,13 +42,7 @@ export class Member implements IdValue {
     adminUrl = () => Member.adminUrlForId(this.user_id);
     apiUrl = () => Member.apiUrlForId(this.id);
 
-    static urlForId = (id: string, fullname?: string) => {
-        const r = `/frontend/member/${id}`
-        if (fullname)
-            return `${r}/${slugify(fullname)}`;
-        else
-            return r
-    }
+    static urlForId = (id: string, fullname?: string) => `/frontend/member/${id}/${slugify(fullname)}`;
     static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
     static apiUrlForId = (id: string) => `/api/member/${id}`;
 

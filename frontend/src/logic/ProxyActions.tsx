@@ -14,14 +14,12 @@ export const disconnectProxy = (proxy: Member, userName: string) => {
     }).then(r => {
         if (r.status !== 200)
             throw r.statusText;
-    }, r => { throw r })
-        .catch(e => {
-            console.error(e);
-            alert("Något gick fel! :(\n" + e);
-        })
-        .finally(() => {
-            window.location.reload();
-        });
+    }).catch(e => {
+        console.error(e);
+        alert("Något gick fel! :(\n" + e);
+    }).finally(() => {
+        window.location.reload();
+    });
 }
 
 export const addExistingProxy = (proxy: Member) => {
@@ -31,8 +29,40 @@ export const addExistingProxy = (proxy: Member) => {
     }).then(r => {
         if (r.status !== 200)
             throw r.statusText;
-    }, r => { throw r }
-    ).catch(e => {
+    }).catch(e => {
+        console.error(e);
+        alert("Något gick fel! :(\n" + e);
+    }).finally(() => {
+        window.location.reload();
+    });
+}
+
+export const updateProxy = (member: Member) => {
+    return fetch(member.apiUrl(), {
+        method: 'PATCH',
+        headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+    }).then(r => {
+        if (r.status !== 200)
+            throw r.statusText;
+    }).catch(e => {
+        console.error(e);
+        alert("Något gick fel! :(\n" + e);
+    }).finally(() => {
+        window.location.reload();
+    });
+}
+
+export const createProxy = (member: Member) => {
+    return fetch(member.apiUrl(), {
+        method: 'PUT',
+        headers: { 'X-CSRFToken': cookies.get('csrftoken') }
+    }).then(async r => {
+        if (r.status >= 300)
+            throw r.statusText;
+
+        const data = await r.json();
+        member.id = data.id;
+    }).catch(e => {
         console.error(e);
         alert("Något gick fel! :(\n" + e);
     }).finally(() => {
