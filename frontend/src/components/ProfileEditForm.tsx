@@ -9,8 +9,12 @@ export const ProfileEditForm = (props: {
     onSaved?: (member: Member) => void
 }) => {
     const [validated, setValidated] = useState(false);
-    const [member, setMember] = useState(props.member);
-    const { onSaved } = props;
+    const [fullname, setFullname] = useState(props.member?.fullname ?? '');
+    const [email, setEmail] = useState(props.member?.email ?? '');
+    const [phone, setPhone] = useState(props.member?.phone_number ?? '');
+    const [comment, setComment] = useState(props.member?.comment ?? '');
+
+    const { member, onSaved } = props;
 
     if (!member)
         return null;
@@ -20,49 +24,61 @@ export const ProfileEditForm = (props: {
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
-        } else if (member.id !== null) {
-            updateProxy(member);
-            onSaved?.(member);
-        } else {
-            createProxy(member);
-            onSaved?.(member);
+            setValidated(false);
+            return;
         }
 
+        if (!member)
+            return;
+
+
+        member.fullname = fullname;
+        member.email = email;
+        member.phone_number = phone;
+        member.comment = comment;
+
+        debugger
+
+        if (member.id !== '') {
+            updateProxy(member);
+        } else {
+            createProxy(member);
+        }
+
+        onSaved?.(member);
         setValidated(true);
     };
 
-    const setProperty = (property:string) => {
-        return (e:FormEvent<HTMLInputElement>) => {
-            const m = member as any;
-            m[property] = e.currentTarget.value; 
-            setMember(m as Member);
+    const setState = (f: (v: string) => void) => {
+        return (e: FormEvent<HTMLInputElement>) => {
+            f(e.currentTarget.value);
         }
     }
 
-    return <Form noValidate validated={validated} onSubmit={handleSubmit}>
+    return <Form validated={validated} onSubmit={handleSubmit}>
         <h2>Medlemsprofil</h2>
         <Form.Group controlId="formFullName">
             <Form.Label>Namn</Form.Label>
             <Form.Control type="text" placeholder="Förnamn Efternamn" required
-                value={member.fullname} onChange={setProperty('fullname')}  />
+                value={fullname} onChange={setState(setFullname)} />
         </Form.Group>
 
         <Form.Group controlId="formBasicEmail">
             <Form.Label>Email-adress</Form.Label>
-            <Form.Control type="email" placeholder="mitt.namn@domain.se"  required
-                value={member.email} onChange={setProperty('email')} />
+            <Form.Control type="email" placeholder="fornamn.efternamn@domain.se" required
+                value={email} onChange={setState(setEmail)} />
         </Form.Group>
 
         <Form.Group controlId="formPhone">
             <Form.Label>Telefonnummer</Form.Label>
             <Form.Control type="tel" placeholder="+46123456789" required
-                value={member.phone_number} onChange={setProperty('phone_number')}   />
+                value={phone} onChange={setState(setPhone)}   />
         </Form.Group>
 
         <Form.Group controlId="formComment">
             <Form.Label>Övrig info</Form.Label>
             <Form.Control type="text" placeholder="..."
-                value={member.comment} onChange={setProperty('comment')}  />
+                value={comment} onChange={setState(setComment)}  />
         </Form.Group>
 
         <Button type='submit' variant='primary'>Spara</Button>

@@ -31,14 +31,17 @@ export const EditProfilePage = () => {
 }
 
 const CreateProxy = () => {
-    const [member, setMember] = useState(new Member());
     const history = useHistory();
 
     return <ProfileEditForm
-        member={member}
+        member={new Member()}
         onSaved={m => {
-            setMember(m);
-            history.push(m.url());
+            if (m.id === '') {
+                alert("Något gick fel. Verkar inte som din underhuggare skapades. :-/");
+                console.error("Member id not updated. Was proxy not created?!");
+                return;
+            }            
+            history.push(`/frontend/myproxies?new_proxy=${m.id}`);
         }}
     />
 }

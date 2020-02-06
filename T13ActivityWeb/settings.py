@@ -100,13 +100,13 @@ for n in secret_names:
         del EMAIL_HOST
 
     if n.startswith('RECAPTCHA_'):
-        # localhost keys
-        RECAPTCHA_PUBLIC_KEY = '6LetEdYUAAAAAA5WlV-6oDFCTBvLjgA98Q8B5U4x'
-        RECAPTCHA_PRIVATE_KEY = '6LetEdYUAAAAAG0KQMM-mG3ULgtQU4Vgz7K_eVEI'
+        print('    WARNING: Using predefined RECAPTCHA keys, only valid for localhost!')
+        RECAPTCHA_PUBLIC_KEY = '6LetEdYUAAAAAA5WlV-6oDFCTBvLjgA98Q8B5U4x' # gg-ignore
+        RECAPTCHA_PRIVATE_KEY = '6LetEdYUAAAAAG0KQMM-mG3ULgtQU4Vgz7K_eVEI' # gg-ignore
 
     if n == 'SECRET_KEY':
         print('    WARNING: Using predefined SECRET_KEY, not ok in production!')
-        SECRET_KEY = '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4'
+        SECRET_KEY = '97e6d0e8-dd64-42d0-bfae-bf2f3ea54fa4' # gg-ignore
 
     if n == 'DATABASES':
         print("    INFO: Using local sqlite database")

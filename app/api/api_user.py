@@ -56,7 +56,6 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModel
         return self.queryset.filter(
             Q(id=self.request.user.id) | Q(member__proxy__user=self.request.user))
 
-    @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
@@ -76,7 +75,7 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModel
         return super().check_object_permissions(request, obj)
 
     def perform_create(self, serializer):
-        serializer.validated_data.proxy = models.Member.objects.get(user_id==self.request.user.id)
+        serializer.validated_data.proxy = models.Member.objects.get(user_id=self.request.user.id)
         serializer.save()
 
 
