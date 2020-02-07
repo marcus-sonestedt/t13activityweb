@@ -47,12 +47,12 @@ class ClearAuthToken(ObtainAuthToken):
         return Response("bye")
 
 
-class UserList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModelMixin):
+class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
     queryset = User.objects.select_related('proxy', 'member')
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.UserWithProxiesSerializer
 
-    def get_queryset(self):
+    def get_queryset(self):        
         return self.queryset.filter(
             Q(id=self.request.user.id) | Q(member__proxy__user=self.request.user))
 
@@ -61,9 +61,6 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModel
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
 
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' and \
@@ -74,9 +71,6 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModel
 
         return super().check_object_permissions(request, obj)
 
-    def perform_create(self, serializer):
-        serializer.validated_data.proxy = models.Member.objects.get(user_id=self.request.user.id)
-        serializer.save()
 
 
 class IsLoggedIn(APIView):

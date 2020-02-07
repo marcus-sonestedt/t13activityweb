@@ -74,11 +74,13 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     if (error != null) {
         return <>
             <p>{placeHolder}</p>
+            <div>
             <Image src='/static/brokenpiston.jpg'
                 alt="Broken piston"
                 className="errorImage"
                 fluid />
-            <Alert variant='warning'>{error}</Alert>
+            </div>
+            <Alert variant='danger'><pre style={{fontSize:'10px', whiteSpace:'pre-wrap'}}>{error}</pre></Alert>
         </>;
     }
 

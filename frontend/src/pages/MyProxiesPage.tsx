@@ -2,7 +2,7 @@ import { Member } from "../Models";
 import React, { useContext, useState } from "react";
 import { userContext } from "../components/UserContext";
 import { Container, Row, Col, Image } from "react-bootstrap";
-import { MyProxiesTable } from "../components/ProxiesTable";
+import { MyProxiesTable, MySuperProxiesTable } from "../components/ProxiesTable";
 
 
 export const ProxyComponent = (props: { member?: Member }) => {
@@ -30,13 +30,16 @@ export const ProxyComponent = (props: { member?: Member }) => {
 export const MyProxiesPage = () => {
     const [proxy, setProxy] = useState<Member>();
 
-    return <Container>
+    return <Container fluid>
         <Row>
-            <Col lg={6} md={12}>
-                <MyProxiesTable onProxySelected={setProxy}/>
+            <Col lg={4} md={6}>
+                <MyProxiesTable onProxySelected={setProxy} />
             </Col>
-            <Col lg={6} md={12}>
-                <ProxyComponent member={proxy}/>
+            <Col lg={4} md={6}>
+                <MySuperProxiesTable onProxySelected={setProxy} />
+            </Col>
+            <Col lg={4} md={12}>
+                <ProxyComponent member={proxy} />
             </Col>
         </Row>
     </Container>

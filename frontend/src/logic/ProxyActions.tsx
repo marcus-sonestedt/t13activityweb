@@ -35,36 +35,36 @@ export const addExistingProxy = (proxy: Member) => {
     });
 }
 
-export const updateProxy = (member: Member) => {
-    return fetch(member.apiUrl(), {
-        method: 'PATCH',
-        headers: getJsonHeaders()
-    }).then(r => {
-        if (r.status !== 200)
-            throw r.statusText;
-    }).catch(e => {
-        console.error(e);
-        alert("Något gick fel! :(\n" + e);
-    }).finally(() => {
-        window.location.reload();
-    });
-}
-
-export const createProxy = async (member: Member) => {
+export const updateProxyAsync = async (member: Member) => {
     try {
-        const r = await fetch(Member.apiUrlForId(''), {
-            method: 'PUT',
+        const r = await fetch(member.apiUrl(), {
+            method: 'PATCH',
             headers: getJsonHeaders()
         });
 
-        if (r.status >= 300)
-            throw r.statusText;
-
-        const data = await r.json();
-        member.id = data.id;
-        return member;
-    } catch (e) {
-        console.error(e);
-        alert("Något gick fel! :(\n" + e);
+        if (r.status >= 300) {
+            console.error(r.status + ' ' + r.statusText);
+            throw (await r.text())
+        }
     }
+    finally {
+        window.location.reload();
+    }
+}
+
+// throws on error
+export const createProxyAsync = async (member: Member) => {
+    const r = await fetch(Member.apiUrlForId(''), {
+        method: 'PUT',
+        headers: getJsonHeaders()
+    });
+
+    if (r.status >= 300) {
+        console.error(r.status + " " + r.statusText)
+        throw (await r.text())
+    }
+
+    const data = await r.json();
+    member.id = data.id;
+    return member;
 }

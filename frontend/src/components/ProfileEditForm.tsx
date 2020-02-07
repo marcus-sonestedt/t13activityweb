@@ -1,12 +1,13 @@
 import { Member } from "../Models";
 import React, { useState, FormEvent } from "react";
 import { Form, Button } from "react-bootstrap";
-import { updateProxy, createProxy } from "../logic/ProxyActions";
+import { updateProxyAsync, createProxyAsync } from "../logic/ProxyActions";
 
 /* If member is null id,  will create new proxy-member on save */
 export const ProfileEditForm = (props: {
     member?: Member,
     onSaved?: (member: Member) => void
+    onError?: (err: string) => void
 }) => {
     const [validated, setValidated] = useState(false);
     const [fullname, setFullname] = useState(props.member?.fullname ?? '');
@@ -19,14 +20,18 @@ export const ProfileEditForm = (props: {
     if (!member)
         return null;
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async (event: any) => {
         const form = event.currentTarget;
+        event.preventDefault();
+
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
             setValidated(false);
             return;
         }
+
+        setValidated(true);
 
         if (!member)
             return;
@@ -37,16 +42,18 @@ export const ProfileEditForm = (props: {
         member.phone_number = phone;
         member.comment = comment;
 
-        debugger
-
-        if (member.id !== '') {
-            updateProxy(member);
-        } else {
-            createProxy(member);
+        try {
+            let m = member;
+            if (m.id !== '') {
+                await updateProxyAsync(m);
+            } else {
+                m = await createProxyAsync(m);
+            }
+            onSaved?.(m);
+        } catch (e) {            
+            console.error(e);
+            props.onError?.(e);
         }
-
-        onSaved?.(member);
-        setValidated(true);
     };
 
     const setState = (f: (v: string) => void) => {

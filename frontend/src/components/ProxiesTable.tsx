@@ -9,8 +9,6 @@ import { disconnectProxy } from "../logic/ProxyActions";
 import { deserialize } from "class-transformer";
 import { HoverTooltip } from "./Utilities";
 
-const connectExistingProxy = () => { }
-
 export const MyProxiesTable = (props: {
     activity?: Activity,
     onProxySelected?: (proxy: Member) => void
@@ -19,53 +17,80 @@ export const MyProxiesTable = (props: {
     const [proxies, setProxies] = useState<Member[]>([]);
     const setProxiesCallback = useCallback(data => setProxies(data.results), []);
 
+    const renderButtons = (proxy: Member) => {
+        const AssignButtons = () => {
+            if (!activity)
+                return null;
+
+            return proxy.id !== activity.assigned?.id
+                ? <Button onClick={() => enlistActivityViaProxy(activity, proxy)} size='sm' variant='success'>Boka</Button>
+                : <Button onClick={() => delistActivityViaProxy(activity, proxy)} size='sm' variant='warning'>Avboka</Button>
+        }
+
+        return <>
+            <AssignButtons />
+            <Button href={`/frontend/proxy/edit/${proxy.id}`} size='sm' variant='secondary'>
+                Editera
+            </Button>
+        </>
+    }
+
     return <>
-        <h2>Underhuggare</h2>
+        <h2>Mina underhuggare</h2>
         <DataProvider<PagedMembers>
             url='/api/proxy/my/'
             ctor={json => deserialize(PagedMembers, json)}
             onLoaded={setProxiesCallback}>
-            <ProxiesTable proxies={proxies} activity={activity} onProxySelected={onProxySelected} />
+            <ProxiesTable proxies={proxies} 
+                onProxySelected={onProxySelected}
+                renderButtons={renderButtons} />
         </DataProvider>
         <div>
             <HoverTooltip tooltip="Skapa en ny användare i systemet som blir din underhuggare."
                 placement='bottom'>
                 <Button href='/frontend/profile/create' variant='success'>Skapa ny</Button>
             </HoverTooltip>
+            {/* not implemented yet
             {' '}
             <HoverTooltip tooltip="Koppla en användare som redan finns in systemet för att bli din underhuggare."
                 placement='bottom'>
-                <Button onClick={connectExistingProxy} variant='secondary'>Koppla befintlig</Button>
+                <Button onClick={NYI: connectExistingProxy} variant='secondary'>Koppla befintlig</Button>
             </HoverTooltip>
+            */}
         </div>
     </>
 }
 
-export const ProxiesTable = (props: {
-    proxies: Member[],
-    activity?: Activity,
+export const MySuperProxiesTable = (props: {
     onProxySelected?: (proxy: Member) => void
 }) => {
-    const { proxies, activity } = props;
     const user = useContext(userContext);
+    const [proxies, setProxies] = useState<Member[]>([]);
+    const setProxiesCallback = useCallback(data => setProxies(data.results), []);
 
+    const renderButtons = (proxy: Member) =>
+        <Button onClick={() => disconnectProxy(proxy, user.fullname)} size='sm' variant='danger'>
+            Avsluta
+        </Button>
+
+    return <>
+        <h2>Medlemmar jag är underhuggare åt</h2>
+        <DataProvider<PagedMembers>
+            url='/api/proxy/my_super/'
+            ctor={json => deserialize(PagedMembers, json)}
+            onLoaded={setProxiesCallback}>
+            <ProxiesTable proxies={proxies} renderButtons={renderButtons} />
+        </DataProvider>
+    </>
+}
+
+
+export const ProxiesTable = (props: {
+    proxies: Member[],
+    onProxySelected?: (proxy: Member) => void,
+    renderButtons?: (proxy: Member) => JSX.Element
+}) => {
     const renderRow = (proxy: Member) => {
-        const AssignButtons = () => {
-            if (!activity)
-                return null;
-
-            const enlistProxy = () => enlistActivityViaProxy(activity, proxy);
-            const delistProxy = () => delistActivityViaProxy(activity, proxy);
-
-            return proxy.id !== activity.assigned?.id
-                ? <Button onClick={enlistProxy} size='sm' variant='success'>
-                    Boka
-            </Button>
-                : <Button onClick={delistProxy} size='sm' variant='warning'>
-                    Avboka
-            </Button>
-        }
-
         const rowClicked = (e: any) => {
             e.preventDefault();
             props.onProxySelected?.(proxy);
@@ -76,13 +101,7 @@ export const ProxiesTable = (props: {
             <td><a href={`mailto:${proxy.email}`}>{proxy.email}</a></td>
             <td><a href={`tel:${proxy.phone_number}`}>{proxy.phone_number}</a></td>
             <td>
-                <AssignButtons />
-                <Button href={`/frontend/proxy/edit/${proxy.id}`} size='sm' variant='secondary'>
-                    Editera
-                </Button>
-                <Button onClick={() => disconnectProxy(proxy, user.fullname)} size='sm' variant='danger'>
-                    Avsluta
-                </Button>
+                {props.renderButtons?.(proxy)}
             </td>
         </tr>
     }
@@ -97,7 +116,8 @@ export const ProxiesTable = (props: {
             </tr>
         </thead>
         <tbody>
-            {proxies.map(renderRow)}
+            {props.proxies.map(renderRow)}
         </tbody>
     </Table>
 }
+

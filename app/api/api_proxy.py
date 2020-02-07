@@ -25,7 +25,7 @@ import app.notifications as notifications
 logger = logging.getLogger(__name__)
 
 
-class MyProxiesList(generics.ListAPIView):
+class MySubProxiesList(generics.ListAPIView):
     queryset = models.Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.MemberSerializer
@@ -33,13 +33,14 @@ class MyProxiesList(generics.ListAPIView):
     def get_queryset(self):
         return self.queryset.filter(proxy__user=self.request.user.id)
 
-class ProxyForList(generics.ListAPIView):
+class MySuperProxiesList(generics.ListAPIView):
     queryset = models.Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.MemberSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user, proxies__contain=self.kwargs['member_id'])
+        member = models.Member.objects.get(user=self.request.user.id)
+        return self.queryset.filter(proxies__contain=member.id)
 
 class ProxyConnector(generics.GenericAPIView):
     '''connects members as proxies'''
@@ -95,8 +96,8 @@ class ActivityByProxyEnlister(generics.GenericAPIView):
 
 url_patterns = [
     re_path(r'^proxy/(?P<proxy_id>[0-9]+)$', ProxyConnector.as_view()),
-    re_path(r'^proxy/for/(?P<member_id>[0-9]+)$', ProxyForList.as_view()),
-    re_path(r'^proxy/my/$', MyProxiesList.as_view()),
+    re_path(r'^proxy/my/$', MySubProxiesList.as_view()),
+    re_path(r'^proxy/my_super/$', MySuperProxiesList.as_view()),
     re_path(r'^proxy/activity/(?P<activity_id>[0-9]+)/(?P<proxy_id>[0-9]+)$',
             ActivityByProxyEnlister.as_view()),
 ]

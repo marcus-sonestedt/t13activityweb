@@ -22,10 +22,7 @@ from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
-from app.models import Activity, ActivityType, Event, EventType, Member, \
-    ActivityDelistRequest, RuleViolationException, FAQ
-
-from app import serializers
+from app import models, serializers
 
 from app.notifications import NotificationData, NotificationDataSerializer
 
@@ -34,8 +31,8 @@ logger = logging.getLogger(__name__)
 MIN_ACTIVITY_SIGNUPS = int(apps.get_app_config('app').MIN_ACTIVITY_SIGNUPS)
 
 
-class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
-    queryset = Member.objects.select_related('user')
+class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModelMixin):
+    queryset = models.Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -66,7 +63,8 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
         if request.method.upper() == 'PATCH' \
             and not request.user.is_staff \
             and request.user.member.id != obj.id:
-            raise PermissionDenied("Can only PATCH self (or as staff)")
+            raise PermissionDenied(
+                "Can only PATCH self, or proxies who haven't logged in themselves yet (unless is staff).")
 
         return super().check_object_permissions(request, obj)
 
@@ -74,7 +72,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
         if len(serializer.validated_data) == 0:
             raise FieldDoesNotExist()
 
-        member = Member.objects.get(id=self.kwargs['pk'])
+        member = models.Member.objects.get(id=self.kwargs['pk'])
 
         for k, v in serializer.validated_data.items():
             if k == 'membercard_number' and not self.request.user.is_staff:
@@ -96,13 +94,21 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
 
         member.save()
 
+    def put(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.validated_data.proxy = models.Member.objects.get(user_id=self.request.user.id)
+        serializer.save()
+
+
 class MemberReadyList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = serializers.MemberReadySerializer
 
     def get_queryset(self):
         current_year = datetime.date.today().year
-        return Member.objects \
+        return models.Member.objects \
             .filter(membercard_number='', phone_verified=True, email_verified=True) \
             .filter(activity__event__start_date__year=current_year) \
             .annotate(booked_weight_year=Sum('activity__weight')) \
@@ -115,7 +121,7 @@ class MemberNotReadyList(generics.ListAPIView):
 
     def get_queryset(self):
         current_year = datetime.date.today().year
-        return Member.objects \
+        return models.Member.objects \
             .filter(Q(phone_verified=False) | Q(email_verified=False) | Q(membercard_number='')) \
             .filter(activity__event__start_date__year=current_year) \
             .annotate(booked_weight_year=Sum('activity__weight')) \
@@ -126,7 +132,7 @@ class MemberNotReadyList(generics.ListAPIView):
 class MemberWithCardList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = serializers.MemberReadySerializer
-    queryset = Member.objects.exclude(membercard_number='')
+    queryset = models.Member.objects.exclude(membercard_number='')
 
 ##############################################################################
 
