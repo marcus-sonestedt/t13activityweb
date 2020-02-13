@@ -22,10 +22,10 @@ export class Member implements IdValue {
     email: string = "";
     image_url?: string;
 
-    membercard_number:string='';
+    membercard_number: string = '';
 
-    booked_weight_year?:number;
-    booked_weight?:number;
+    booked_weight_year?: number;
+    booked_weight?: number;
 
     email_verified = false;
     phone_verified = false;
@@ -39,7 +39,7 @@ export class Member implements IdValue {
         if (fullname)
             return `${r}/${fullname.replace(/ /g, '-').toLowerCase()}`;
         else
-            return r
+            return `${r}/_`;
     }
     static adminUrlForId = (user_id: string) => `/admin/auth/user/${user_id}`;
     static apiUrlForId = (id: string) => `/api/member/${id}`;
@@ -116,7 +116,9 @@ export class Activity implements IdValue {
     url = () => `/frontend/activity/${this.id}/${this.name.replace(/[ /\\?&+]/g, '-').toLowerCase()}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     apiUrl = () => Activity.apiUrlFromId(this.id);
+
     static apiUrlFromId = (id: string) => `/api/activity/${id}`;
+    static urlForId = (id: string) => `/frontend/activity/${id}/_`
 }
 
 
@@ -140,6 +142,7 @@ export class ActivityType implements IdValue {
 
     url = () => `/frontend/activity_type/${this.id}/${this.name.replace(/ /g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
+    
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
     static apiUrlAll = () => `/api/activity_type`;
 }
@@ -201,7 +204,7 @@ export class T13Event implements IdValue {
     coordinators: Member[] = [];
 
     cancelled: boolean = false;
- 
+
     date = () => {
         const startDate = this.start_date.toLocaleDateString('sv-SE');
         const endDate = this.end_date.toLocaleDateString('sv-SE')
@@ -211,7 +214,7 @@ export class T13Event implements IdValue {
             return `${startDate} ${weekday} v${isoWeek(this.start_date)}`;
         }
 
-        const range = `${startDate} - ${endDate}`
+        const range = `${startDate} - ${endDate}`;
         const startWeek = isoWeek(this.start_date);
         const endWeek = isoWeek(this.end_date);
 
@@ -220,7 +223,9 @@ export class T13Event implements IdValue {
 
     url = () => `/frontend/event/${this.id}/${this.name.replace(/ ,|_\//g, '-').toLowerCase()}`;
     adminUrl = () => `/admin/app/event/${this.id}`;
+
     static apiUrl = (id: string) => `/api/event/${id}`;
+    static urlForId = (id: string) => `/frontend/event/${id}/_`;
 
 }
 
@@ -283,3 +288,18 @@ export default {
     PagedT13Events, PagedMembers, PagedActivities, PagedEventTypes
 };
 
+export class DoubleBookedTask {
+    assigned_id!: string;
+    assigned_fullname!: string;
+    event_id!: string;
+    event_name!: string;
+    activity_id!: string;
+    activity_name!: string;
+    activity_comment!: string;
+}
+
+export class PagedDoubleBookedTasks extends PagedValues<DoubleBookedTask>
+{
+    @Type(() => DoubleBookedTask)
+    results: DoubleBookedTask[] = [];
+}

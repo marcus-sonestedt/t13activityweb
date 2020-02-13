@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied, FieldDoesNotExist
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
@@ -64,8 +64,8 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
 
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' \
-            and not request.user.is_staff \
-            and request.user.member.id != obj.id:
+                and not request.user.is_staff \
+                and request.user.member.id != obj.id:
             raise PermissionDenied("Can only PATCH self (or as staff)")
 
         return super().check_object_permissions(request, obj)
@@ -96,6 +96,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin):
 
         member.save()
 
+
 class MemberReadyList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = serializers.MemberReadySerializer
@@ -108,6 +109,8 @@ class MemberReadyList(generics.ListAPIView):
             .annotate(booked_weight_year=Sum('activity__weight')) \
             .filter(booked_weight_year__gte=MIN_ACTIVITY_SIGNUPS) \
             .order_by('user__first_name', 'user__last_name') \
+
+
 
 class MemberNotReadyList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
@@ -123,18 +126,69 @@ class MemberNotReadyList(generics.ListAPIView):
             .order_by('user__first_name', 'user__last_name') \
 
 
+
 class MemberWithCardList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = serializers.MemberReadySerializer
-    queryset = Member.objects.exclude(membercard_number='')
+    queryset = Member.objects.exclude(
+        Q(membercard_number='') | Q(membercard_number='-'))
+
+
+class DoubleBookedMembersList(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    serializer_class = serializers.DoubleBookedSerializer
+
+    def get_queryset(self):
+        current_year = datetime.date.today().year
+
+        # does not count only non-unique assigned activities ...  :-|
+        events = Event.objects \
+            .filter(start_date__year=current_year) \
+            .annotate(doublebooking=Count("activities__assigned")) \
+            .filter(doublebooking__gte=2) \
+            .order_by()
+
+        print(f"Found {len(events)} event(s) with potential double booking")
+        print(events)
+        values = []
+
+        for e in events:
+            acts = e.activities.exclude(assigned=None).values('assigned', 'comment')
+            aa = [a['assigned'] for a in acts]
+            dbu = set(a for a in aa if aa.count(a) >= 2)
+
+            if len(dbu) == 0:
+                continue
+
+            print(f"{e.name} has {len(dbu)} double booked user(s)")
+            print(dbu)
+
+            for m in dbu:
+                assigned_for_user = e.activities.filter(assigned=m).select_related('assigned')
+                for a in assigned_for_user:
+                    other_comments = [d['comment'] for d in assigned_for_user.exclude(id=a.id).values('comment')]
+                    if a.comment in other_comments:           
+                        # print(a)
+                        values.append({
+                            'assigned_id': a.assigned.id,
+                            'assigned_fullname': a.assigned.fullname,
+                            'event_id': e.id,
+                            'event_name': e.name,
+                            'activity_id': a.id,
+                            'activity_name': a.name,
+                            'activity_comment': a.comment,
+                        })
+
+        return sorted(values, key=lambda v: (v['assigned_fullname'], v['event_id']))
+
 
 ##############################################################################
-
 
 url_patterns = [
     re_path(r'^member/(?P<pk>[0-9]+)?$', MemberList.as_view()),
 
     re_path(r'^members/ready/$', MemberReadyList.as_view()),
     re_path(r'^members/not_ready/$', MemberNotReadyList.as_view()),
-    re_path(r'^members/has_card/$', MemberWithCardList.as_view())
+    re_path(r'^members/has_card/$', MemberWithCardList.as_view()),
+    re_path(r'^members/double_booked/$', DoubleBookedMembersList.as_view())
 ]

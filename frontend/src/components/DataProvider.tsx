@@ -1,5 +1,6 @@
 import React, { useEffect, useState, ReactNode, ReactElement, useCallback } from "react";
 import { Alert, Image } from 'react-bootstrap'
+import { getJsonHeaders } from '../logic/ADRActions';
 
 export interface DataProps<T> {
     ctor: ((json: string) => T);
@@ -32,12 +33,12 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         fetch(url, {
             signal: controller.signal,
             cache: "no-store",
-            headers: { 'Accept': 'application/json' }
+            headers: getJsonHeaders()
         })
             .then(r => {
                 if (r.status >= 300) {
                     setPlaceHolder("Oops. Något gick fel! :(");
-                    setError(`Error ${r.status}: ${r.statusText}}\n`);
+                    setError(`Error ${r.status}: ${r.statusText}\n`);
                     r.text().then(errorBody => setError(err => err + errorBody));
                 } else {
                     return r.text();
@@ -76,9 +77,11 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             <p>{placeHolder}</p>
             <Image src='/static/brokenpiston.jpg'
                 alt="Broken piston"
-                className="errorImage"
-                fluid />
-            <Alert variant='warning'>{error}</Alert>
+                className="errorImage"/>
+            <Alert variant='warning'>
+                {error.includes("<!DOCTYPE html>") ? <div dangerouslySetInnerHTML={{ __html:error }}/>
+                : <pre>{error}</pre> }
+            </Alert>
         </>;
     }
 
