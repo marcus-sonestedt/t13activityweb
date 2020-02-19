@@ -45,17 +45,19 @@ export const EventTypesComponent = () => {
                 </Pagination>
             </Col>
         </Row>
-        <Table >
-            <thead>
-                <tr>
-                    <th>Namn</th>
-                    <th>Beskrivning</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data.results.map(renderRow)}
-            </tbody>
-        </Table>
+        <Row>
+            <Table >
+                <thead>
+                    <tr>
+                        <th>Namn</th>
+                        <th>Beskrivning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.results.map(renderRow)}
+                </tbody>
+            </Table>
+        </Row>
     </DataProvider>
 
 }

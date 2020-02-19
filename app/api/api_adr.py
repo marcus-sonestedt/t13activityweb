@@ -28,7 +28,6 @@ from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
 
 logger = logging.getLogger(__name__)
 
-
 class ActivityEnlist(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [authentication.SessionAuthentication]

@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.urls import reverse
 from django.utils.html import escape, mark_safe
 
-import nested_inline.admin as nested 
+import nested_inline.admin as nested
 
 from app import models
 
@@ -26,7 +26,6 @@ class AttachmentAdmin(admin.ModelAdmin):
 class ActivityInline(admin.TabularInline):
     model = models.Activity
     extra = 0
-
 
 
 class NestedActivityInline(nested.NestedTabularInline):
@@ -52,15 +51,16 @@ class NestedMemberInline(nested.NestedStackedInline):
     verbose_name_plural = 'Medlem'
     fk_name = 'user'
     readonly_fields = ['user']
-    exclude= ['created', 'updated', 'email_verification_code',
-        'email_verification_code_created']
+    exclude = ['created', 'updated', 'email_verification_code',
+               'email_verification_code_created']
+
 
 @admin.register(User)
 @unregister(User)
 class UserWithMemberAdmin(nested.NestedModelAdmin):
     inlines = [NestedMemberInline]
-    readonly_fields = ['username']
-    search_fields=['username', 'first_name', 'last_name']
+    readonly_fields = ['username', 'last_login', 'date_joined']
+    search_fields = ['username', 'first_name', 'last_name']
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
@@ -68,14 +68,12 @@ class UserWithMemberAdmin(nested.NestedModelAdmin):
         return super().get_inline_instances(request, obj)
 
 
-
-
 @admin.register(models.Member)
 class MemberAdmin(nested.NestedModelAdmin):
     inlines = [NestedActivityInline, NestedADRInline]
     readonly_fields = ['user']
     list_filter = ['phone_verified', 'email_verified']
-    search_fields=['user', 'phone_number', 'membercard_number']
+    search_fields = ['user', 'phone_number', 'membercard_number']
 
     def user_link(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
@@ -93,8 +91,8 @@ class MemberAdmin(nested.NestedModelAdmin):
         'membercard_number'
     )
 
-    exclude= ['created', 'updated', 'email_verification_code',
-        'email_verification_code_created']
+    exclude = ['created', 'updated', 'email_verification_code',
+               'email_verification_code_created']
 
 
 class EventTypeAttachmentInline(admin.TabularInline):
@@ -104,7 +102,7 @@ class EventTypeAttachmentInline(admin.TabularInline):
 @admin.register(models.EventType)
 class EventTypeAdmin(admin.ModelAdmin):
     inlines = [EventTypeAttachmentInline]
-    search_fields=['name']
+    search_fields = ['name']
     filter_horizontal = ['attachments']
 
 
@@ -139,27 +137,27 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ['type', 'cancelled', CoordinatorFilter]
     list_display = ['name', 'type', 'cancelled', 'start_date',
                     'activities_available_count', 'activities_count', ]
-    search_fields=['name']
+    search_fields = ['name']
     filter_horizontal = ['attachments', 'coordinators']
 
 
 class ActivityTypeAttachmentInline(admin.TabularInline):
     model = models.ActivityType.attachments.through
     extra = 0
-    search_fields=['name']
+    search_fields = ['name']
 
 
 @admin.register(models.ActivityType)
 class ActivityTypeAdmin(admin.ModelAdmin):
     inlines = [ActivityTypeAttachmentInline]
-    search_fields=['name']
+    search_fields = ['name']
     filter_horizontal = ['attachments']
 
 
 class ActivityAttachmentInline(admin.TabularInline):
     model = models.Activity.attachments.through
     extra = 0
-    search_fields=['name']
+    search_fields = ['name']
 
 
 @admin.register(models.Activity)
@@ -168,7 +166,7 @@ class ActivityAdmin(admin.ModelAdmin):
     list_filter = ['completed', 'cancelled', 'type', 'event']
     list_display = ('name', 'type', 'event',  'date',
                     'assigned',  'confirmed', 'completed', 'cancelled')
-    search_fields=['name']
+    search_fields = ['name']
     filter_horizontal = ['attachments']
 
 
@@ -181,7 +179,7 @@ class ActivityDelistRequestAdmin(admin.ModelAdmin):
         'approved',
         'approver'
     )
-    search_fields=['member', 'activity']
+    search_fields = ['member', 'activity']
 
 
 @admin.register(models.FAQ)
@@ -191,9 +189,9 @@ class FAQAdmin(admin.ModelAdmin):
         'answer_short',
         'order'
     )
-    search_fields=['question', 'answer']
+    search_fields = ['question', 'answer']
 
 
 @admin.register(models.InfoText)
 class InfoTextAdmin(admin.ModelAdmin):
-    search_fields=['key', 'content']
+    search_fields = ['key', 'content']

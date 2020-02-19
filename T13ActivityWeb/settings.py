@@ -100,7 +100,7 @@ for n in secret_names:
         del EMAIL_HOST
 
     if n.startswith('RECAPTCHA_'):
-        # localhost keys
+        print("    Using RECAPTCHAv3 key for localhost")
         RECAPTCHA_PUBLIC_KEY = '6LetEdYUAAAAAA5WlV-6oDFCTBvLjgA98Q8B5U4x'
         RECAPTCHA_PRIVATE_KEY = '6LetEdYUAAAAAG0KQMM-mG3ULgtQU4Vgz7K_eVEI'
 
