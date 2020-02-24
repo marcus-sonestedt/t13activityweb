@@ -196,7 +196,7 @@ const HasCardTab = () => {
                         <thead>
                             <tr>
                                 <th>Namn</th>
-                                <th>Guldkortsummer</th>
+                                <th>Guldkortsnummer</th>
                                 <th>Åtgärd</th>
                                 <th>Admin</th>
                             </tr>

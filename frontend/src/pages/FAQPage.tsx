@@ -69,7 +69,7 @@ export const FAQPage = () => {
             ctor={(json) => deserialize(PagedFAQs, json)}
             onLoaded={setFAQs}>
             <Row>
-                <Col lg={4}>
+                <Col lg={4} className='div-group'>
                     <p>{faqs.results.length} frågor &amp; svar</p>
                     <ul>
                         {faqs.results.map(renderQ)}

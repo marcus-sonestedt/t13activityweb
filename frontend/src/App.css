@@ -7,6 +7,7 @@
     padding-right: 5em;
 }
 
+
 main>.container {
     padding: 15px 15px 0;
 }
@@ -19,10 +20,11 @@ footer * {
 .my-footer {
     padding: .5em;
     text-align: center;
+    background: rgba(0,0,0,0.2);
 }
 
-.jumbotron {
-    background-color: #555;
+.jumbotron, .div-group, .table {
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .model-header :first-child {
@@ -52,7 +54,7 @@ footer * {
 }
 
 .div-group {
-    background-color: #0f0f18;
+    background: rgba(0, 0, 0, 0.6);
     padding: 10px;
     margin-bottom: 10px;
 }

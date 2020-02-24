@@ -1,3 +1,7 @@
+.rbc-calendar {
+    opacity: 0.9;
+}
+
 .rbc-btn-group Button {
     color: #ddd;
     background-color: #234;
@@ -18,9 +22,7 @@
     color: #333;
 }
 
-.rbc-month-view,
-.rbc-time-view,
-.rbc-agenda-view {
+.rbc-month-view, .rbc-time-view, .rbc-agenda-view {
     background-color: #0f0f18;
 }
 

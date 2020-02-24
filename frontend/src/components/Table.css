@@ -17,6 +17,10 @@ td {
     right: .5em;
 }
 
+table {
+    opacity: 0.9;
+}
+
 table,
 th,
 td {

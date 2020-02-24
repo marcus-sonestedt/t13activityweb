@@ -1,14 +1,18 @@
+html,
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #282c34;
+    /* background-color: #282c34; */
+    background:
+            linear-gradient(
+            rgba(40, 40, 40, 0.7),
+            rgba(0, 0, 0, 0.85)
+          ),
+          url('/static/kz-background.jpg');
+    background-size: cover;
     color: white;
-}
-
-html,
-body {
     height: 100%;
 }
 
