@@ -12,8 +12,8 @@ import { Reimbursements } from "./ActivityTypePage";
 import DataProvider from "../components/DataProvider";
 
 export const EventPage = () => {
-    const [event, setEvent] = useState<T13Event>();
     const { id } = useParams();
+    const [event, setEvent] = useState<T13Event>();
     const onLoaded = useCallback(data => setEvent(data.results[0]), []);
 
     useEffect(() => {
@@ -84,6 +84,7 @@ const Header = (props: { event?: T13Event }) => {
 
 const EventDetails = (props: { event?: T13Event }) => {
     const { event } = props;
+    const user = useContext(userContext);
 
     if (!event)
         return <p>Laddar...</p>
@@ -113,7 +114,10 @@ const EventDetails = (props: { event?: T13Event }) => {
                 </>
                 : <>
                     <h5>Koordinator{event.coordinators.length > 1 ? 'er' : ''}</h5>
-                    <ul>{event.coordinators.map(renderCoordinator)}</ul>
+                    {user.isLoggedIn
+                        ? <ul>{event.coordinators.map(renderCoordinator)}</ul>
+                        : <p>Logga in för att se koordinator</p>
+                    }
                 </>}
             <Attachments models={event.attachments} />
             <h5>Övrig info</h5>
@@ -126,7 +130,6 @@ const EventDetails = (props: { event?: T13Event }) => {
 
 const ActivitiesTable = (props: { event?: T13Event }) => {
     const { event } = props;
-
     const [activities, setActivities] = useState(new PagedActivities());
     const [page, setPage] = useState(1);
     const pageSize = 8;
