@@ -62,20 +62,21 @@ const Header = (props: { event?: T13Event }) => {
         </Col>
         <Col style={{ textAlign: 'right' }}>
             <h2>
-                <Badge
-                    variant={(event.activities_available_count) ? 'success' : 'dark'}>
-                    {event.activities_count} totalt
+                {user.isLoggedIn ?
+                    <Badge
+                        variant={(event.activities_available_count) ? 'success' : 'dark'}>
+                        {event.activities_count} totalt
                         {', '}
-                    {event.activities_available_count} ledig
+                        {event.activities_available_count} ledig
                         {event.activities_available_count !== 1 ? 'a' : ''}
-                </Badge>
+                    </Badge>
+                    : null}
                 {' '}
                 {user.isStaff ?
                     <Button href={event.adminUrl()} variant='outline-secondary'>
                         Editera
-                        </Button>
-                    : null
-                }
+                    </Button>
+                    : null}
             </h2>
         </Col>
     </Row>
@@ -199,7 +200,7 @@ const ActivitiesTable = (props: { event?: T13Event }) => {
                 <Col sm={4}>
                     <h3>Uppgifter</h3>
                 </Col>
-                <Col sm={4} style={{ textAlign: 'center' }}>
+                <Col sm={4} style={{ display: 'flex', justifyContent: 'center' }}>
                     <Pagination>
                         <PageItems count={activities.count} pageSize={pageSize} currentPage={page} setFunc={setPage} />
                     </Pagination>
@@ -231,7 +232,6 @@ const ActivitiesTable = (props: { event?: T13Event }) => {
             </Table>
         </>
     </DataProvider>
-
 }
 
 export default EventPage;
