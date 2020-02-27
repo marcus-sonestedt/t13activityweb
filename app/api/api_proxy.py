@@ -40,7 +40,7 @@ class MySuperProxiesList(generics.ListAPIView):
 
     def get_queryset(self):
         member = models.Member.objects.get(user=self.request.user.id)
-        return self.queryset.filter(proxies__contain=member.id)
+        return self.queryset.filter(proxies=member.id)
 
 class ProxyConnector(generics.GenericAPIView):
     '''connects members as proxies'''

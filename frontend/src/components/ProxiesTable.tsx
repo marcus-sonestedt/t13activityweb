@@ -4,7 +4,7 @@ import { Member, Activity, PagedMembers } from '../Models';
 import { useContext } from "react";
 import { userContext } from "./UserContext";
 import { enlistActivityViaProxy, delistActivityViaProxy } from "../logic/TaskActions";
-import { Button, Table } from "react-bootstrap";
+import { Button, Table, Col, Row } from "react-bootstrap";
 import { disconnectProxy } from "../logic/ProxyActions";
 import { deserialize } from "class-transformer";
 import { HoverTooltip } from "./Utilities";
@@ -36,20 +36,26 @@ export const MyProxiesTable = (props: {
     }
 
     return <>
-        <h2>Mina underhuggare</h2>
+        <Row>
+            <Col md={9}>
+                <h2>Mina underhuggare</h2>
+            </Col>
+            <Col md={3} className='align-right'>
+                <HoverTooltip tooltip="Skapa en ny användare i systemet som blir din underhuggare."
+                    placement='bottom'>
+                    <Button href='/frontend/profile/create' variant='success'>Skapa ny</Button>
+                </HoverTooltip>
+            </Col>
+        </Row>
         <DataProvider<PagedMembers>
             url='/api/proxy/my/'
             ctor={json => deserialize(PagedMembers, json)}
             onLoaded={setProxiesCallback}>
-            <ProxiesTable proxies={proxies} 
+            <ProxiesTable proxies={proxies}
                 onProxySelected={onProxySelected}
                 renderButtons={renderButtons} />
         </DataProvider>
         <div>
-            <HoverTooltip tooltip="Skapa en ny användare i systemet som blir din underhuggare."
-                placement='bottom'>
-                <Button href='/frontend/profile/create' variant='success'>Skapa ny</Button>
-            </HoverTooltip>
             {/* not implemented yet
             {' '}
             <HoverTooltip tooltip="Koppla en användare som redan finns in systemet för att bli din underhuggare."

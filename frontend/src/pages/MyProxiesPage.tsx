@@ -9,10 +9,10 @@ export const ProxyComponent = (props: { member?: Member }) => {
     const { member } = props;
     const user = useContext(userContext);
 
-    if (!member || !user.isLoggedIn)
-        return null;
-
     return <div>
+        <h2>Detaljer</h2>
+        {!member || !user.isLoggedIn ? null :
+        <div className='div-group'>
         <h3>Namn: {member.fullname}</h3>
         <h4>Email:{' '}
             <a href={`mailto:${member.email}`}>{member.email}</a>
@@ -23,6 +23,7 @@ export const ProxyComponent = (props: { member?: Member }) => {
         {member.image_url === undefined ? null :
             <Image src={member.image_url} />
         }
+        </div>}
     </div>
 }
 

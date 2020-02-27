@@ -59,7 +59,7 @@ class Member(models.Model):
 
     # this points to the 'master', thus we are self
     # our proxies are the reverse relation lookup, i.e. 'proxies'
-    proxy = models.ManyToManyField('self', blank=True,
+    proxy = models.ManyToManyField('self', blank=True, symmetrical=False,
                                    verbose_name="Huvudman", related_name='proxies')
 
     def get_fullname(self):
