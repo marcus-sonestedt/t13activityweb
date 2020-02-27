@@ -130,3 +130,12 @@ class InfoTextSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InfoText
         fields = '__all__'
+
+class DoubleBookedSerializer(serializers.Serializer):
+    assigned_id = serializers.CharField()
+    assigned_fullname = serializers.CharField()
+    event_id = serializers.CharField()
+    event_name = serializers.CharField()    
+    activity_id = serializers.CharField()
+    activity_name = serializers.CharField()
+    activity_comment = serializers.CharField()

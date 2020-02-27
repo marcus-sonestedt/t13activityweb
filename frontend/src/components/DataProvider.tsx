@@ -1,5 +1,6 @@
 import React, { useEffect, useState, ReactNode, ReactElement, useCallback } from "react";
 import { Alert, Image } from 'react-bootstrap'
+import { getJsonHeaders } from '../logic/ADRActions';
 
 export interface DataProps<T> {
     ctor: ((json: string) => T);
@@ -11,7 +12,7 @@ export interface DataProps<T> {
 export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     const { ctor, url, onLoaded, render, children } = props;
     const [data, setData] = useState<any | null>(null);
-    const [error, setError] = useState<ReactElement>();
+    const [error, setError] = useState<string>();
     const [placeHolder, setPlaceHolder] = useState("Laddar...");
 
     const handleData = useCallback((json: string) => {
@@ -32,13 +33,13 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         fetch(url, {
             signal: controller.signal,
             cache: "no-store",
-            headers: { 'Accept': 'application/json' }
+            headers: getJsonHeaders()
         })
             .then(r => {
                 if (r.status >= 300) {
                     setPlaceHolder("Oops. Något gick fel! :(");
-                    setError(<h2>{r.status}: {r.statusText}</h2>);
-                    r.text().then(htmlError => setError(err => <><p>{err}</p><div dangerouslySetInnerHTML={{ __html: htmlError }} /></>));
+                    setError(`Error ${r.status}: ${r.statusText}\n`);
+                    r.text().then(errorBody => setError(err => err + errorBody));
                 } else {
                     return r.text();
                 }
@@ -74,14 +75,14 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     if (error != null) {
         return <>
             <p>{placeHolder}</p>
-            <div>
             <Image src='/static/brokenpiston.jpg'
                 alt="Broken piston"
-                className="errorImage"
-                fluid />
-            </div>
-            <Alert variant='danger'><pre style={{fontSize:'10px', whiteSpace:'pre-wrap'}}>{error}</pre></Alert>
-        </>;
+                className="errorImage"/>
+            <Alert variant='warning'>
+                {error.includes("<!DOCTYPE html>") ? <div dangerouslySetInnerHTML={{ __html:error }}/>
+                : <pre>{error}</pre> }
+            </Alert>
+        </>
     }
 
     return <div><p>{placeHolder}</p></div>

@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
+from django.core.exceptions import ObjectDoesNotExist
 from django.dispatch import receiver
 from django.utils import timezone
 from django.apps import apps
@@ -127,13 +128,15 @@ def user_saved(sender, instance, created, **kwargs):
         instance.member = Member.objects.create(user=instance)
         instance.email = instance.username
         instance.save()
-    else:
-        if instance.username != instance.email or 'email' in kwargs:
+        instance.member.save()
+    elif instance.username != instance.email or 'email' in kwargs:
             instance.username = instance.email
-            instance.member.email_verified = False
+            try:
+                instance.member.email_verified = False
+                instance.member.save()
+            except Exception as e:
+                logger.warning(f"User #{instance.id} - {instance.first_name} {instance.last_name} - {instance.email}: {e}")
             instance.save()
-
-    instance.member.save()
 
 
 @receiver(post_save, sender=Member)

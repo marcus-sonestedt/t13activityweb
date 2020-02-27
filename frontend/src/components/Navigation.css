@@ -15,3 +15,12 @@
     height: 2.5em; width:2.5em;
     margin-right: 1em;
 }
+
+.navbar {
+    padding-left: 5em;
+    padding-right: 5em;
+}
+
+.bg-dark {
+    background: rgba(20,20,20,0.7) !important;
+}

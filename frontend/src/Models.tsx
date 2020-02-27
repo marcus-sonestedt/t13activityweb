@@ -7,7 +7,7 @@ const slugify = (s?: string) =>
         .replace(/[åä]/g, 'a')
         .replace('ö', 'o')
         .replace(' ', '_')
-        .replace(/[\W]/g, '-')
+        .replace(/[\W]/g, '-') ?? '_'
 
 export class PagedValues<T>
 {
@@ -119,7 +119,9 @@ export class Activity implements IdValue {
     url = () => `/frontend/activity/${this.id}/${slugify(this.name)}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
     apiUrl = () => Activity.apiUrlFromId(this.id);
+
     static apiUrlFromId = (id: string) => `/api/activity/${id}`;
+    static urlForId = (id: string) => `/frontend/activity/${id}/_`
 }
 
 
@@ -143,6 +145,7 @@ export class ActivityType implements IdValue {
 
     url = () => `/frontend/activity_type/${this.id}/${slugify(this.name)}`;
     adminUrl = () => `/admin/app/activitytype/${this.id}`;
+    
     static apiUrl = (id: string) => `/api/activity_type/${id}`;
     static apiUrlAll = () => `/api/activity_type`;
 }
@@ -214,7 +217,7 @@ export class T13Event implements IdValue {
             return `${startDate} ${weekday} v${isoWeek(this.start_date)}`;
         }
 
-        const range = `${startDate} - ${endDate}`
+        const range = `${startDate} - ${endDate}`;
         const startWeek = isoWeek(this.start_date);
         const endWeek = isoWeek(this.end_date);
 
@@ -223,7 +226,9 @@ export class T13Event implements IdValue {
 
     url = () => `/frontend/event/${this.id}/${slugify(this.name)}`;
     adminUrl = () => `/admin/app/event/${this.id}`;
+
     static apiUrl = (id: string) => `/api/event/${id}`;
+    static urlForId = (id: string) => `/frontend/event/${id}/_`;
 
 }
 
@@ -286,3 +291,18 @@ export default {
     PagedT13Events, PagedMembers, PagedActivities, PagedEventTypes
 };
 
+export class DoubleBookedTask {
+    assigned_id!: string;
+    assigned_fullname!: string;
+    event_id!: string;
+    event_name!: string;
+    activity_id!: string;
+    activity_name!: string;
+    activity_comment!: string;
+}
+
+export class PagedDoubleBookedTasks extends PagedValues<DoubleBookedTask>
+{
+    @Type(() => DoubleBookedTask)
+    results: DoubleBookedTask[] = [];
+}

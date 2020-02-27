@@ -71,12 +71,12 @@ By default, uses the [SQLite](https://www.sqlite.org/) db during development, wh
 python -m pip install -r requirements.txt
 ```
 
-* Init database, apply any new migrations and populate tables
+* Initialize database with create schema (via migrations), load some sample data and create a super user so you can log in:
 
 ```bash
-python manage.py createsuperuser
 python manage.py migrate
-python manage.py loaddata testdata
+cat fixtures/2020_testdata.json | python manage.py loaddata - --format= json
+python manage.py createsuperuser
 ```
 
 * Start development server

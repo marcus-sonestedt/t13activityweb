@@ -1,13 +1,13 @@
-import { Tab, Row, Col, Nav, Table, Button, Container, Pagination } from 'react-bootstrap';
-import React, { useState, useContext, useMemo } from "react";
 import { deserialize } from "class-transformer";
-
-import { Member, PagedMembers } from '../Models';
-import DataProvider from "../components/DataProvider";
-import { ErrorBoundary, InfoText, PageItems, HoverTooltip } from "../components/Utilities";
+import React, { useContext, useMemo, useState } from "react";
+import { Button, Col, Container, Nav, Pagination, Row, Tab, Table } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
+import DataProvider from "../components/DataProvider";
 import { userContext } from '../components/UserContext';
+import { ErrorBoundary, HoverTooltip, InfoText, PageItems } from "../components/Utilities";
 import { getJsonHeaders } from '../logic/ADRActions';
+import { Member, PagedMembers } from '../Models';
+
 
 export const MemberCardPage = () => {
     const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
@@ -112,7 +112,7 @@ const ReadyTab = () => {
                     <span className="table-title">
                     </span>
                 </h1>
-                <DataProvider<PagedMembers>
+                <DataProvider
                     url={`/api/members/ready?page=${page}&page_size=${pageSize}`}
                     ctor={json => deserialize(PagedMembers, json)}
                     onLoaded={setMembers}>
@@ -156,7 +156,7 @@ const HasCardTab = () => {
             .catch(e => alert("Något gick fel :/\n\n" + e))
             .finally(() => window.location.reload())
     }
-    
+
     const rows = useMemo(() => {
         const renderRow = (member: Member) =>
             <tr key={member.id}>
@@ -188,7 +188,7 @@ const HasCardTab = () => {
         </Row>
         <Row>
             <Col md={9}>
-                <DataProvider<PagedMembers>
+                <DataProvider
                     url={`/api/members/has_card?page=${page}&page_size=${pageSize}`}
                     ctor={json => deserialize(PagedMembers, json)}
                     onLoaded={setMembers}>
@@ -196,7 +196,7 @@ const HasCardTab = () => {
                         <thead>
                             <tr>
                                 <th>Namn</th>
-                                <th>Guldkortsummer</th>
+                                <th>Guldkortsnummer</th>
                                 <th>Åtgärd</th>
                                 <th>Admin</th>
                             </tr>
@@ -268,7 +268,7 @@ const NeedTasksTab = () => {
         </Row>
         <Row>
             <Col md={9}>
-                <DataProvider<PagedMembers>
+                <DataProvider
                     url={`/api/members/not_ready?page=${page}&page_size=${pageSize}`}
                     ctor={json => deserialize(PagedMembers, json)}
                     onLoaded={setMembers}>
@@ -296,3 +296,5 @@ const NeedTasksTab = () => {
         </Row>
     </Container>
 }
+
+

@@ -1,0 +1,8503 @@
+[
+{
+  "model": "app.eventtype",
+  "pk": 34,
+  "fields": {
+    "name": "Licensutbildning",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 35,
+  "fields": {
+    "name": "Arbetsdag",
+    "description": "zug zug",
+    "image": "",
+    "attachments": [
+      1
+    ]
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 36,
+  "fields": {
+    "name": "Gokart-skola",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 37,
+  "fields": {
+    "name": "Karting-l\u00e4ger",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 38,
+  "fields": {
+    "name": "T\u00e4vlingskommitt\u00e9",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 39,
+  "fields": {
+    "name": "Mekaniker-skola",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 40,
+  "fields": {
+    "name": "Tr\u00e4ning",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 41,
+  "fields": {
+    "name": "Intro nya medlemmar",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 42,
+  "fields": {
+    "name": "Prova-p\u00e5-Karting",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 43,
+  "fields": {
+    "name": "Klubbt\u00e4vling",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 44,
+  "fields": {
+    "name": "L\u00f6rdaxx1 (L)",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 45,
+  "fields": {
+    "name": "OBM /SKCC (N)",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 46,
+  "fields": {
+    "name": "Karting-on-Tour",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 47,
+  "fields": {
+    "name": "GSP (N)",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.eventtype",
+  "pk": 48,
+  "fields": {
+    "name": "L\u00f6rdaxx2 (N)",
+    "description": "",
+    "image": "",
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1190,
+  "fields": {
+    "name": "Licensutbildning vecka 8",
+    "description": "",
+    "start_date": "2020-02-20",
+    "end_date": "2020-02-20",
+    "comment": "",
+    "image": "",
+    "type": 34,
+    "created": "2019-12-26T20:44:19.870",
+    "modified": "2019-12-26T20:44:19.870",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1191,
+  "fields": {
+    "name": "Arbetsdag vecka 8",
+    "description": "",
+    "start_date": "2020-02-20",
+    "end_date": "2020-02-20",
+    "comment": "",
+    "image": "",
+    "type": 35,
+    "created": "2019-12-26T20:44:19.903",
+    "modified": "2019-12-26T20:44:19.903",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1192,
+  "fields": {
+    "name": "Arbetsdag vecka 8",
+    "description": "",
+    "start_date": "2020-02-24",
+    "end_date": "2020-02-24",
+    "comment": "",
+    "image": "",
+    "type": 35,
+    "created": "2019-12-26T20:44:20.058",
+    "modified": "2019-12-26T20:44:20.058",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1193,
+  "fields": {
+    "name": "Gokart-skola vecka 9",
+    "description": "",
+    "start_date": "2020-02-25",
+    "end_date": "2020-02-25",
+    "comment": "",
+    "image": "",
+    "type": 36,
+    "created": "2019-12-26T20:44:20.283",
+    "modified": "2019-12-26T20:44:20.283",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1194,
+  "fields": {
+    "name": "Gokart-skola vecka 9",
+    "description": "",
+    "start_date": "2020-02-26",
+    "end_date": "2020-02-26",
+    "comment": "",
+    "image": "",
+    "type": 36,
+    "created": "2019-12-26T20:44:20.387",
+    "modified": "2019-12-26T20:44:20.387",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1195,
+  "fields": {
+    "name": "Gokart-skola vecka 9",
+    "description": "",
+    "start_date": "2020-02-28",
+    "end_date": "2020-02-28",
+    "comment": "",
+    "image": "",
+    "type": 36,
+    "created": "2019-12-26T20:44:20.449",
+    "modified": "2019-12-26T20:44:20.449",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1196,
+  "fields": {
+    "name": "Karting-l\u00e4ger vecka 9",
+    "description": "",
+    "start_date": "2020-03-02",
+    "end_date": "2020-03-02",
+    "comment": "",
+    "image": "",
+    "type": 37,
+    "created": "2019-12-26T20:44:20.502",
+    "modified": "2019-12-26T20:44:20.502",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1197,
+  "fields": {
+    "name": "Karting-l\u00e4ger vecka 9",
+    "description": "",
+    "start_date": "2020-03-03",
+    "end_date": "2020-03-03",
+    "comment": "",
+    "image": "",
+    "type": 37,
+    "created": "2019-12-26T20:44:20.557",
+    "modified": "2019-12-26T20:44:20.557",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1198,
+  "fields": {
+    "name": "T\u00e4vlingskommitt\u00e9 vecka 5",
+    "description": "",
+    "start_date": "2020-03-10",
+    "end_date": "2020-03-10",
+    "comment": "",
+    "image": "",
+    "type": 38,
+    "created": "2019-12-26T20:44:20.620",
+    "modified": "2019-12-26T20:44:20.620",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1199,
+  "fields": {
+    "name": "Arbetsdag vecka 10",
+    "description": "",
+    "start_date": "2020-03-10",
+    "end_date": "2020-03-10",
+    "comment": "",
+    "image": "",
+    "type": 35,
+    "created": "2019-12-26T20:44:20.724",
+    "modified": "2019-12-26T20:44:20.724",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1200,
+  "fields": {
+    "name": "T\u00e4vlingskommitt\u00e9 vecka 10",
+    "description": "",
+    "start_date": "2020-03-10",
+    "end_date": "2020-03-10",
+    "comment": "",
+    "image": "",
+    "type": 38,
+    "created": "2019-12-26T20:44:20.838",
+    "modified": "2019-12-26T20:44:20.838",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1201,
+  "fields": {
+    "name": "Mekaniker-skola vecka 12",
+    "description": "",
+    "start_date": "2020-03-21",
+    "end_date": "2020-03-21",
+    "comment": "",
+    "image": "",
+    "type": 39,
+    "created": "2019-12-26T20:44:20.920",
+    "modified": "2019-12-26T20:44:20.920",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1202,
+  "fields": {
+    "name": "Arbetsdag vecka 13",
+    "description": "",
+    "start_date": "2020-03-31",
+    "end_date": "2020-03-31",
+    "comment": "",
+    "image": "",
+    "type": 35,
+    "created": "2019-12-26T20:44:20.972",
+    "modified": "2019-12-26T20:44:20.972",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1203,
+  "fields": {
+    "name": "T\u00e4vlingskommitt\u00e9 vecka 13",
+    "description": "",
+    "start_date": "2020-03-31",
+    "end_date": "2020-03-31",
+    "comment": "",
+    "image": "",
+    "type": 38,
+    "created": "2019-12-26T20:44:21.043",
+    "modified": "2019-12-26T20:44:21.043",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1204,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 14",
+    "description": "",
+    "start_date": "2020-04-02",
+    "end_date": "2020-04-02",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.089",
+    "modified": "2019-12-26T20:44:21.089",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1205,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 14",
+    "description": "",
+    "start_date": "2020-04-04",
+    "end_date": "2020-04-04",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.132",
+    "modified": "2019-12-26T20:44:21.132",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1206,
+  "fields": {
+    "name": "Intro nya medlemmar vecka 14",
+    "description": "",
+    "start_date": "2020-04-04",
+    "end_date": "2020-04-04",
+    "comment": "",
+    "image": "",
+    "type": 41,
+    "created": "2019-12-26T20:44:21.166",
+    "modified": "2019-12-26T20:44:21.166",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1207,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 14",
+    "description": "",
+    "start_date": "2020-04-06",
+    "end_date": "2020-04-06",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.183",
+    "modified": "2019-12-26T20:44:21.184",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1208,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 15",
+    "description": "",
+    "start_date": "2020-04-09",
+    "end_date": "2020-04-09",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.211",
+    "modified": "2019-12-26T20:44:21.211",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1209,
+  "fields": {
+    "name": "Prova-p\u00e5-Karting vecka 15",
+    "description": "",
+    "start_date": "2020-04-11",
+    "end_date": "2020-04-11",
+    "comment": "",
+    "image": "",
+    "type": 42,
+    "created": "2019-12-26T20:44:21.248",
+    "modified": "2019-12-26T20:44:21.248",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1210,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 15",
+    "description": "",
+    "start_date": "2020-04-11",
+    "end_date": "2020-04-11",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.273",
+    "modified": "2019-12-26T20:44:21.273",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1211,
+  "fields": {
+    "name": "Klubbt\u00e4vling vecka 15",
+    "description": "",
+    "start_date": "2020-04-13",
+    "end_date": "2020-04-13",
+    "comment": "",
+    "image": "",
+    "type": 43,
+    "created": "2019-12-26T20:44:21.311",
+    "modified": "2019-12-26T20:44:21.311",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1212,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 16",
+    "description": "",
+    "start_date": "2020-04-16",
+    "end_date": "2020-04-16",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.357",
+    "modified": "2019-12-26T20:44:21.357",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1213,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 16",
+    "description": "",
+    "start_date": "2020-04-18",
+    "end_date": "2020-04-18",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.387",
+    "modified": "2019-12-26T20:44:21.387",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1214,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 17",
+    "description": "",
+    "start_date": "2020-04-23",
+    "end_date": "2020-04-23",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.413",
+    "modified": "2019-12-26T20:44:21.413",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1215,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 17",
+    "description": "",
+    "start_date": "2020-04-25",
+    "end_date": "2020-04-25",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.440",
+    "modified": "2019-12-26T20:44:21.440",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1216,
+  "fields": {
+    "name": "L\u00f6rdaxx1 (L) vecka 17",
+    "description": "",
+    "start_date": "2020-04-27",
+    "end_date": "2020-04-27",
+    "comment": "",
+    "image": "",
+    "type": 44,
+    "created": "2019-12-26T20:44:21.474",
+    "modified": "2019-12-26T20:44:21.474",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1217,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 18",
+    "description": "",
+    "start_date": "2020-04-30",
+    "end_date": "2020-04-30",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.581",
+    "modified": "2019-12-26T20:44:21.581",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1218,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 18",
+    "description": "",
+    "start_date": "2020-05-02",
+    "end_date": "2020-05-02",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.609",
+    "modified": "2019-12-26T20:44:21.609",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1219,
+  "fields": {
+    "name": "Klubbt\u00e4vling vecka 18",
+    "description": "",
+    "start_date": "2020-05-04",
+    "end_date": "2020-05-04",
+    "comment": "",
+    "image": "",
+    "type": 43,
+    "created": "2019-12-26T20:44:21.637",
+    "modified": "2019-12-26T20:44:21.637",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1220,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 19",
+    "description": "",
+    "start_date": "2020-05-07",
+    "end_date": "2020-05-07",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.677",
+    "modified": "2019-12-26T20:44:21.677",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1221,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 19",
+    "description": "",
+    "start_date": "2020-05-09",
+    "end_date": "2020-05-09",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.705",
+    "modified": "2019-12-26T20:44:21.705",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1222,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 19",
+    "description": "",
+    "start_date": "2020-05-11",
+    "end_date": "2020-05-11",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.733",
+    "modified": "2019-12-26T20:44:21.733",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1223,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 20",
+    "description": "",
+    "start_date": "2020-05-14",
+    "end_date": "2020-05-14",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.761",
+    "modified": "2019-12-26T20:44:21.761",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1224,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 20",
+    "description": "",
+    "start_date": "2020-05-16",
+    "end_date": "2020-05-16",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.789",
+    "modified": "2019-12-26T20:44:21.789",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1225,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 20",
+    "description": "",
+    "start_date": "2020-05-17",
+    "end_date": "2020-05-17",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:21.816",
+    "modified": "2019-12-26T20:44:21.816",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1226,
+  "fields": {
+    "name": "OBM /SKCC (N) vecka 20",
+    "description": "",
+    "start_date": "2020-05-18",
+    "end_date": "2020-05-18",
+    "comment": "",
+    "image": "",
+    "type": 45,
+    "created": "2019-12-26T20:44:21.859",
+    "modified": "2019-12-26T20:44:21.859",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1227,
+  "fields": {
+    "name": "OBM /SKCC (N) vecka 20",
+    "description": "",
+    "start_date": "2020-05-19",
+    "end_date": "2020-05-19",
+    "comment": "",
+    "image": "",
+    "type": 45,
+    "created": "2019-12-26T20:44:22.023",
+    "modified": "2019-12-26T20:44:22.023",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1228,
+  "fields": {
+    "name": "Karting-on-Tour vecka 21",
+    "description": "",
+    "start_date": "2020-05-21",
+    "end_date": "2020-05-21",
+    "comment": "",
+    "image": "",
+    "type": 46,
+    "created": "2019-12-26T20:44:22.230",
+    "modified": "2019-12-26T20:44:22.230",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1229,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 21",
+    "description": "",
+    "start_date": "2020-05-21",
+    "end_date": "2020-05-21",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.296",
+    "modified": "2019-12-26T20:44:22.296",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1230,
+  "fields": {
+    "name": "Karting-on-Tour vecka 21",
+    "description": "",
+    "start_date": "2020-05-22",
+    "end_date": "2020-05-22",
+    "comment": "",
+    "image": "",
+    "type": 46,
+    "created": "2019-12-26T20:44:22.325",
+    "modified": "2019-12-26T20:44:22.325",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1231,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 21",
+    "description": "",
+    "start_date": "2020-05-23",
+    "end_date": "2020-05-23",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.380",
+    "modified": "2019-12-26T20:44:22.380",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1232,
+  "fields": {
+    "name": "Klubbt\u00e4vling vecka 21",
+    "description": "",
+    "start_date": "2020-05-25",
+    "end_date": "2020-05-25",
+    "comment": "",
+    "image": "",
+    "type": 43,
+    "created": "2019-12-26T20:44:22.417",
+    "modified": "2019-12-26T20:44:22.417",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1233,
+  "fields": {
+    "name": "Karting-on-Tour vecka 21",
+    "description": "",
+    "start_date": "2020-05-26",
+    "end_date": "2020-05-26",
+    "comment": "",
+    "image": "",
+    "type": 46,
+    "created": "2019-12-26T20:44:22.466",
+    "modified": "2019-12-26T20:44:22.466",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1234,
+  "fields": {
+    "name": "Karting-on-Tour vecka 22",
+    "description": "",
+    "start_date": "2020-05-27",
+    "end_date": "2020-05-27",
+    "comment": "",
+    "image": "",
+    "type": 46,
+    "created": "2019-12-26T20:44:22.524",
+    "modified": "2019-12-26T20:44:22.524",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1235,
+  "fields": {
+    "name": "Karting-on-Tour vecka 22",
+    "description": "",
+    "start_date": "2020-05-28",
+    "end_date": "2020-05-28",
+    "comment": "",
+    "image": "",
+    "type": 46,
+    "created": "2019-12-26T20:44:22.573",
+    "modified": "2019-12-26T20:44:22.573",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1236,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 22",
+    "description": "",
+    "start_date": "2020-05-28",
+    "end_date": "2020-05-28",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.623",
+    "modified": "2019-12-26T20:44:22.623",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1237,
+  "fields": {
+    "name": "Karting-on-Tour vecka 22",
+    "description": "",
+    "start_date": "2020-05-31",
+    "end_date": "2020-05-31",
+    "comment": "",
+    "image": "",
+    "type": 46,
+    "created": "2019-12-26T20:44:22.655",
+    "modified": "2019-12-26T20:44:22.655",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1238,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 22",
+    "description": "",
+    "start_date": "2020-06-01",
+    "end_date": "2020-06-01",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.704",
+    "modified": "2019-12-26T20:44:22.704",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1239,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 23",
+    "description": "",
+    "start_date": "2020-06-04",
+    "end_date": "2020-06-04",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.737",
+    "modified": "2019-12-26T20:44:22.737",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1240,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 24",
+    "description": "",
+    "start_date": "2020-06-11",
+    "end_date": "2020-06-11",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.765",
+    "modified": "2019-12-26T20:44:22.765",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1241,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 24",
+    "description": "",
+    "start_date": "2020-06-13",
+    "end_date": "2020-06-13",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.794",
+    "modified": "2019-12-26T20:44:22.795",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1242,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 24",
+    "description": "",
+    "start_date": "2020-06-15",
+    "end_date": "2020-06-15",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.822",
+    "modified": "2019-12-26T20:44:22.822",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1243,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 25",
+    "description": "",
+    "start_date": "2020-06-18",
+    "end_date": "2020-06-18",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.849",
+    "modified": "2019-12-26T20:44:22.849",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1244,
+  "fields": {
+    "name": "Gokart-skola vecka 26",
+    "description": "",
+    "start_date": "2020-06-24",
+    "end_date": "2020-06-24",
+    "comment": "",
+    "image": "",
+    "type": 36,
+    "created": "2019-12-26T20:44:22.877",
+    "modified": "2019-12-26T20:44:22.877",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1245,
+  "fields": {
+    "name": "Gokart-skola vecka 26",
+    "description": "",
+    "start_date": "2020-06-25",
+    "end_date": "2020-06-25",
+    "comment": "",
+    "image": "",
+    "type": 36,
+    "created": "2019-12-26T20:44:22.905",
+    "modified": "2019-12-26T20:44:22.905",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1246,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 26",
+    "description": "",
+    "start_date": "2020-06-25",
+    "end_date": "2020-06-25",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.930",
+    "modified": "2019-12-26T20:44:22.930",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1247,
+  "fields": {
+    "name": "Gokart-skola vecka 26",
+    "description": "",
+    "start_date": "2020-06-26",
+    "end_date": "2020-06-26",
+    "comment": "",
+    "image": "",
+    "type": 36,
+    "created": "2019-12-26T20:44:22.956",
+    "modified": "2019-12-26T20:44:22.956",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1248,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 26",
+    "description": "",
+    "start_date": "2020-06-27",
+    "end_date": "2020-06-27",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:22.982",
+    "modified": "2019-12-26T20:44:22.982",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1249,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 26",
+    "description": "",
+    "start_date": "2020-06-29",
+    "end_date": "2020-06-29",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.007",
+    "modified": "2019-12-26T20:44:23.007",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1250,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 31",
+    "description": "",
+    "start_date": "2020-08-01",
+    "end_date": "2020-08-01",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.035",
+    "modified": "2019-12-26T20:44:23.035",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1251,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 31",
+    "description": "",
+    "start_date": "2020-08-03",
+    "end_date": "2020-08-03",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.062",
+    "modified": "2019-12-26T20:44:23.062",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1252,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 32",
+    "description": "",
+    "start_date": "2020-08-06",
+    "end_date": "2020-08-06",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.091",
+    "modified": "2019-12-26T20:44:23.091",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1253,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 32",
+    "description": "",
+    "start_date": "2020-08-08",
+    "end_date": "2020-08-08",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.118",
+    "modified": "2019-12-26T20:44:23.118",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1254,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 32",
+    "description": "",
+    "start_date": "2020-08-10",
+    "end_date": "2020-08-10",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.146",
+    "modified": "2019-12-26T20:44:23.146",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1255,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 33",
+    "description": "",
+    "start_date": "2020-08-13",
+    "end_date": "2020-08-13",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.176",
+    "modified": "2019-12-26T20:44:23.176",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1256,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 33",
+    "description": "",
+    "start_date": "2020-08-15",
+    "end_date": "2020-08-15",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.203",
+    "modified": "2019-12-26T20:44:23.203",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1257,
+  "fields": {
+    "name": "Klubbt\u00e4vling vecka 33",
+    "description": "",
+    "start_date": "2020-08-17",
+    "end_date": "2020-08-17",
+    "comment": "",
+    "image": "",
+    "type": 43,
+    "created": "2019-12-26T20:44:23.232",
+    "modified": "2019-12-26T20:44:23.232",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1258,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 34",
+    "description": "",
+    "start_date": "2020-08-20",
+    "end_date": "2020-08-20",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.270",
+    "modified": "2019-12-26T20:44:23.270",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1259,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 34",
+    "description": "",
+    "start_date": "2020-08-22",
+    "end_date": "2020-08-22",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.317",
+    "modified": "2019-12-26T20:44:23.317",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1260,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 34",
+    "description": "",
+    "start_date": "2020-08-24",
+    "end_date": "2020-08-24",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.345",
+    "modified": "2019-12-26T20:44:23.345",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1261,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 35",
+    "description": "",
+    "start_date": "2020-08-27",
+    "end_date": "2020-08-27",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.374",
+    "modified": "2019-12-26T20:44:23.374",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1262,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 35",
+    "description": "",
+    "start_date": "2020-08-29",
+    "end_date": "2020-08-29",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.402",
+    "modified": "2019-12-26T20:44:23.402",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1263,
+  "fields": {
+    "name": "GSP (N) vecka 35",
+    "description": "",
+    "start_date": "2020-08-30",
+    "end_date": "2020-08-30",
+    "comment": "",
+    "image": "",
+    "type": 47,
+    "created": "2019-12-26T20:44:23.437",
+    "modified": "2019-12-26T20:44:23.438",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1264,
+  "fields": {
+    "name": "GSP (N) vecka 35",
+    "description": "",
+    "start_date": "2020-08-31",
+    "end_date": "2020-08-31",
+    "comment": "",
+    "image": "",
+    "type": 47,
+    "created": "2019-12-26T20:44:23.475",
+    "modified": "2019-12-26T20:44:23.475",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1265,
+  "fields": {
+    "name": "GSP (N) vecka 35",
+    "description": "",
+    "start_date": "2020-09-01",
+    "end_date": "2020-09-01",
+    "comment": "",
+    "image": "",
+    "type": 47,
+    "created": "2019-12-26T20:44:23.635",
+    "modified": "2019-12-26T20:44:23.635",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1266,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 36",
+    "description": "",
+    "start_date": "2020-09-03",
+    "end_date": "2020-09-03",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.786",
+    "modified": "2019-12-26T20:44:23.786",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1267,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 36",
+    "description": "",
+    "start_date": "2020-09-05",
+    "end_date": "2020-09-05",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.813",
+    "modified": "2019-12-26T20:44:23.813",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1268,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 36",
+    "description": "",
+    "start_date": "2020-09-07",
+    "end_date": "2020-09-07",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.839",
+    "modified": "2019-12-26T20:44:23.839",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1269,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 37",
+    "description": "",
+    "start_date": "2020-09-10",
+    "end_date": "2020-09-10",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.865",
+    "modified": "2019-12-26T20:44:23.865",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1270,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 37",
+    "description": "",
+    "start_date": "2020-09-12",
+    "end_date": "2020-09-12",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:23.894",
+    "modified": "2019-12-26T20:44:23.894",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1271,
+  "fields": {
+    "name": "L\u00f6rdaxx2 (N) vecka 37",
+    "description": "",
+    "start_date": "2020-09-14",
+    "end_date": "2020-09-14",
+    "comment": "",
+    "image": "",
+    "type": 48,
+    "created": "2019-12-26T20:44:23.928",
+    "modified": "2019-12-26T20:44:23.928",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1272,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 38",
+    "description": "",
+    "start_date": "2020-09-17",
+    "end_date": "2020-09-17",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.056",
+    "modified": "2019-12-26T20:44:24.056",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1273,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 38",
+    "description": "",
+    "start_date": "2020-09-19",
+    "end_date": "2020-09-19",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.083",
+    "modified": "2019-12-26T20:44:24.083",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1274,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 38",
+    "description": "",
+    "start_date": "2020-09-21",
+    "end_date": "2020-09-21",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.116",
+    "modified": "2019-12-26T20:44:24.116",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1275,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 39",
+    "description": "",
+    "start_date": "2020-09-24",
+    "end_date": "2020-09-24",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.155",
+    "modified": "2019-12-26T20:44:24.155",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1276,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 39",
+    "description": "",
+    "start_date": "2020-09-26",
+    "end_date": "2020-09-26",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.196",
+    "modified": "2019-12-26T20:44:24.196",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1277,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 39",
+    "description": "",
+    "start_date": "2020-09-28",
+    "end_date": "2020-09-28",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.229",
+    "modified": "2019-12-26T20:44:24.229",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1278,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 40",
+    "description": "",
+    "start_date": "2020-10-01",
+    "end_date": "2020-10-01",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.262",
+    "modified": "2019-12-26T20:44:24.262",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1279,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 40",
+    "description": "",
+    "start_date": "2020-10-03",
+    "end_date": "2020-10-03",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.294",
+    "modified": "2019-12-26T20:44:24.294",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1280,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 40",
+    "description": "",
+    "start_date": "2020-10-05",
+    "end_date": "2020-10-05",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.324",
+    "modified": "2019-12-26T20:44:24.324",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1281,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 41",
+    "description": "",
+    "start_date": "2020-10-08",
+    "end_date": "2020-10-08",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.355",
+    "modified": "2019-12-26T20:44:24.355",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1282,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 41",
+    "description": "",
+    "start_date": "2020-10-10",
+    "end_date": "2020-10-10",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.384",
+    "modified": "2019-12-26T20:44:24.384",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1283,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 41",
+    "description": "",
+    "start_date": "2020-10-12",
+    "end_date": "2020-10-12",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.412",
+    "modified": "2019-12-26T20:44:24.412",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1284,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 42",
+    "description": "",
+    "start_date": "2020-10-15",
+    "end_date": "2020-10-15",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.439",
+    "modified": "2019-12-26T20:44:24.439",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1285,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 42",
+    "description": "",
+    "start_date": "2020-10-17",
+    "end_date": "2020-10-17",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.466",
+    "modified": "2019-12-26T20:44:24.466",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1286,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 42",
+    "description": "",
+    "start_date": "2020-10-19",
+    "end_date": "2020-10-19",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.493",
+    "modified": "2019-12-26T20:44:24.493",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1287,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 43",
+    "description": "",
+    "start_date": "2020-10-22",
+    "end_date": "2020-10-22",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.519",
+    "modified": "2019-12-26T20:44:24.519",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1288,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 43",
+    "description": "",
+    "start_date": "2020-10-24",
+    "end_date": "2020-10-24",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.546",
+    "modified": "2019-12-26T20:44:24.546",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1289,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 43",
+    "description": "",
+    "start_date": "2020-10-26",
+    "end_date": "2020-10-26",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.572",
+    "modified": "2019-12-26T20:44:24.572",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1290,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 44",
+    "description": "",
+    "start_date": "2020-10-29",
+    "end_date": "2020-10-29",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.599",
+    "modified": "2019-12-26T20:44:24.599",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1291,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 44",
+    "description": "",
+    "start_date": "2020-10-31",
+    "end_date": "2020-10-31",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.625",
+    "modified": "2019-12-26T20:44:24.625",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.event",
+  "pk": 1292,
+  "fields": {
+    "name": "Tr\u00e4ning vecka 44",
+    "description": "",
+    "start_date": "2020-11-02",
+    "end_date": "2020-11-02",
+    "comment": "",
+    "image": "",
+    "type": 40,
+    "created": "2019-12-26T20:44:24.657",
+    "modified": "2019-12-26T20:44:24.657",
+    "cancelled": false,
+    "coordinators": [],
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 28,
+  "fields": {
+    "name": "Licens-utbildning (l\u00e4rare)",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 29,
+  "fields": {
+    "name": "Arbetsdag-deltagare",
+    "description": "S\u00e5g \u00e5 st\u00e4d!",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 30,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare)",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 31,
+  "fields": {
+    "name": "Karting-l\u00e4ger (ledare)",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 32,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, L\u00f6rdaxx",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 33,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, SKCC",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 34,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, GSP",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 35,
+  "fields": {
+    "name": "Mekaniker-skola (l\u00e4rare)",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 36,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 37,
+  "fields": {
+    "name": "Dep\u00e5-fadder",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 38,
+  "fields": {
+    "name": "Prova-p\u00e5-Karting (ledare)",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 39,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activitytype",
+  "pk": 40,
+  "fields": {
+    "name": "Karting-on-Tour (ledare)",
+    "description": "",
+    "image": "",
+    "fee_reimbursed": false,
+    "food_included": false,
+    "rental_kart": false,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2666,
+  "fields": {
+    "name": "Licens-utbildning (l\u00e4rare) Licensutbildning vecka 8 torsdag",
+    "type": 28,
+    "event": 1190,
+    "assigned": 1,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2667,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 8 torsdag",
+    "type": 29,
+    "event": 1191,
+    "assigned": 3,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2668,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 8 torsdag",
+    "type": 29,
+    "event": 1191,
+    "assigned": 3,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2669,
+  "fields": {
+    "name": "Asfalstl\u00e4ggare",
+    "type": 29,
+    "event": 1191,
+    "assigned": 3,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2670,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 8 m\u00e5ndag",
+    "type": 29,
+    "event": 1192,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2671,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 8 m\u00e5ndag",
+    "type": 29,
+    "event": 1192,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2672,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 8 m\u00e5ndag",
+    "type": 29,
+    "event": 1192,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2673,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 8 m\u00e5ndag",
+    "type": 29,
+    "event": 1192,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2674,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 9 tisdag",
+    "type": 30,
+    "event": 1193,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2675,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 9 tisdag",
+    "type": 30,
+    "event": 1193,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2676,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 9 onsdag",
+    "type": 30,
+    "event": 1194,
+    "assigned": 1,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2677,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 9 onsdag",
+    "type": 30,
+    "event": 1194,
+    "assigned": 1,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2678,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 9 fredag",
+    "type": 30,
+    "event": 1195,
+    "assigned": 1,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2679,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 9 fredag",
+    "type": 30,
+    "event": 1195,
+    "assigned": 1,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2680,
+  "fields": {
+    "name": "Karting-l\u00e4ger (ledare) Karting-l\u00e4ger vecka 9 m\u00e5ndag",
+    "type": 31,
+    "event": 1196,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2681,
+  "fields": {
+    "name": "Karting-l\u00e4ger (ledare) Karting-l\u00e4ger vecka 9 m\u00e5ndag",
+    "type": 31,
+    "event": 1196,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2682,
+  "fields": {
+    "name": "Karting-l\u00e4ger (ledare) Karting-l\u00e4ger vecka 9 tisdag",
+    "type": 31,
+    "event": 1197,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "08:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2683,
+  "fields": {
+    "name": "Karting-l\u00e4ger (ledare) Karting-l\u00e4ger vecka 9 tisdag",
+    "type": 31,
+    "event": 1197,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "08:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2684,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, L\u00f6rdaxx T\u00e4vlingskommitt\u00e9 vecka 5 tisdag",
+    "type": 32,
+    "event": 1198,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2685,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, SKCC T\u00e4vlingskommitt\u00e9 vecka 5 tisdag",
+    "type": 33,
+    "event": 1198,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2686,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, GSP T\u00e4vlingskommitt\u00e9 vecka 5 tisdag",
+    "type": 34,
+    "event": 1198,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2687,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 10 tisdag",
+    "type": 29,
+    "event": 1199,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2688,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 10 tisdag",
+    "type": 29,
+    "event": 1199,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2689,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 10 tisdag",
+    "type": 29,
+    "event": 1199,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2690,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 10 tisdag",
+    "type": 29,
+    "event": 1199,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2691,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 10 tisdag",
+    "type": 29,
+    "event": 1199,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2692,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 10 tisdag",
+    "type": 29,
+    "event": 1199,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2693,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, L\u00f6rdaxx T\u00e4vlingskommitt\u00e9 vecka 10 tisdag",
+    "type": 32,
+    "event": 1200,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2694,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, SKCC T\u00e4vlingskommitt\u00e9 vecka 10 tisdag",
+    "type": 33,
+    "event": 1200,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2695,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, GSP T\u00e4vlingskommitt\u00e9 vecka 10 tisdag",
+    "type": 34,
+    "event": 1200,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2696,
+  "fields": {
+    "name": "Mekaniker-skola (l\u00e4rare) Mekaniker-skola vecka 12 l\u00f6rdag",
+    "type": 35,
+    "event": 1201,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2697,
+  "fields": {
+    "name": "Mekaniker-skola (l\u00e4rare) Mekaniker-skola vecka 12 l\u00f6rdag",
+    "type": 35,
+    "event": 1201,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2698,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 13 tisdag",
+    "type": 29,
+    "event": 1202,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2699,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 13 tisdag",
+    "type": 29,
+    "event": 1202,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2700,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 13 tisdag",
+    "type": 29,
+    "event": 1202,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2701,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 13 tisdag",
+    "type": 29,
+    "event": 1202,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2702,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 13 tisdag",
+    "type": 29,
+    "event": 1202,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2703,
+  "fields": {
+    "name": "Arbetsdag-deltagare Arbetsdag vecka 13 tisdag",
+    "type": 29,
+    "event": 1202,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2704,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, L\u00f6rdaxx T\u00e4vlingskommitt\u00e9 vecka 13 tisdag",
+    "type": 32,
+    "event": 1203,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2705,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, SKCC T\u00e4vlingskommitt\u00e9 vecka 13 tisdag",
+    "type": 33,
+    "event": 1203,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2706,
+  "fields": {
+    "name": "T\u00e4vlingsplanering, GSP T\u00e4vlingskommitt\u00e9 vecka 13 tisdag",
+    "type": 34,
+    "event": 1203,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "15:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2707,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 14 torsdag",
+    "type": 36,
+    "event": 1204,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2708,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 14 torsdag",
+    "type": 37,
+    "event": 1204,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2709,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 14 l\u00f6rdag",
+    "type": 36,
+    "event": 1205,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2710,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 14 l\u00f6rdag",
+    "type": 37,
+    "event": 1205,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2711,
+  "fields": {
+    "name": "Dep\u00e5-fadder Intro nya medlemmar vecka 14 l\u00f6rdag",
+    "type": 37,
+    "event": 1206,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2712,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 14 m\u00e5ndag",
+    "type": 36,
+    "event": 1207,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2713,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 14 m\u00e5ndag",
+    "type": 37,
+    "event": 1207,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2714,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 15 torsdag",
+    "type": 36,
+    "event": 1208,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2715,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 15 torsdag",
+    "type": 37,
+    "event": 1208,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2716,
+  "fields": {
+    "name": "Prova-p\u00e5-Karting (ledare) Prova-p\u00e5-Karting vecka 15 l\u00f6rdag",
+    "type": 38,
+    "event": 1209,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2717,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 15 l\u00f6rdag",
+    "type": 36,
+    "event": 1210,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2718,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 15 l\u00f6rdag",
+    "type": 37,
+    "event": 1210,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2719,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 15 m\u00e5ndag",
+    "type": 39,
+    "event": 1211,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2720,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 15 m\u00e5ndag",
+    "type": 39,
+    "event": 1211,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2721,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 15 m\u00e5ndag",
+    "type": 39,
+    "event": 1211,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2722,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 16 torsdag",
+    "type": 36,
+    "event": 1212,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2723,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 16 torsdag",
+    "type": 37,
+    "event": 1212,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2724,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 16 l\u00f6rdag",
+    "type": 36,
+    "event": 1213,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2725,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 16 l\u00f6rdag",
+    "type": 37,
+    "event": 1213,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2726,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 17 torsdag",
+    "type": 36,
+    "event": 1214,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2727,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 17 torsdag",
+    "type": 37,
+    "event": 1214,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2728,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 17 l\u00f6rdag",
+    "type": 36,
+    "event": 1215,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2729,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 17 l\u00f6rdag",
+    "type": 37,
+    "event": 1215,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2730,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2731,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2732,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2733,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2734,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2735,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2736,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2737,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2738,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2739,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx1 (L) vecka 17 m\u00e5ndag",
+    "type": 39,
+    "event": 1216,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2740,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 18 torsdag",
+    "type": 36,
+    "event": 1217,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2741,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 18 torsdag",
+    "type": 37,
+    "event": 1217,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2742,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 18 l\u00f6rdag",
+    "type": 36,
+    "event": 1218,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2743,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 18 l\u00f6rdag",
+    "type": 37,
+    "event": 1218,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2744,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 18 m\u00e5ndag",
+    "type": 39,
+    "event": 1219,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2745,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 18 m\u00e5ndag",
+    "type": 39,
+    "event": 1219,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2746,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 18 m\u00e5ndag",
+    "type": 39,
+    "event": 1219,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2747,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 19 torsdag",
+    "type": 36,
+    "event": 1220,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2748,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 19 torsdag",
+    "type": 37,
+    "event": 1220,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2749,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 19 l\u00f6rdag",
+    "type": 36,
+    "event": 1221,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2750,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 19 l\u00f6rdag",
+    "type": 37,
+    "event": 1221,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2751,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 19 m\u00e5ndag",
+    "type": 36,
+    "event": 1222,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2752,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 19 m\u00e5ndag",
+    "type": 37,
+    "event": 1222,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2753,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 20 torsdag",
+    "type": 36,
+    "event": 1223,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2754,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 20 torsdag",
+    "type": 37,
+    "event": 1223,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2755,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 20 l\u00f6rdag",
+    "type": 36,
+    "event": 1224,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2756,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 20 l\u00f6rdag",
+    "type": 37,
+    "event": 1224,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2757,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 20 s\u00f6ndag",
+    "type": 36,
+    "event": 1225,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2758,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 20 s\u00f6ndag",
+    "type": 36,
+    "event": 1225,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2759,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 20 s\u00f6ndag",
+    "type": 36,
+    "event": 1225,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2760,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2761,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2762,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2763,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2764,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2765,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2766,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2767,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2768,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2769,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2770,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2771,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2772,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2773,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2774,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 m\u00e5ndag",
+    "type": 39,
+    "event": 1226,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2775,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2776,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2777,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2778,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2779,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2780,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2781,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2782,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2783,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2784,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2785,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2786,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2787,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2788,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2789,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling OBM /SKCC (N) vecka 20 tisdag",
+    "type": 39,
+    "event": 1227,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2790,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 torsdag",
+    "type": 40,
+    "event": 1228,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2791,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 torsdag",
+    "type": 40,
+    "event": 1228,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2792,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 torsdag",
+    "type": 40,
+    "event": 1228,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2793,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 torsdag",
+    "type": 40,
+    "event": 1228,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2794,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 21 torsdag",
+    "type": 36,
+    "event": 1229,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2795,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 21 torsdag",
+    "type": 37,
+    "event": 1229,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2796,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 fredag",
+    "type": 40,
+    "event": 1230,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2797,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 fredag",
+    "type": 40,
+    "event": 1230,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2798,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 fredag",
+    "type": 40,
+    "event": 1230,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2799,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 fredag",
+    "type": 40,
+    "event": 1230,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2800,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 21 l\u00f6rdag",
+    "type": 36,
+    "event": 1231,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2801,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 21 l\u00f6rdag",
+    "type": 37,
+    "event": 1231,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2802,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 21 m\u00e5ndag",
+    "type": 39,
+    "event": 1232,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2803,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 21 m\u00e5ndag",
+    "type": 39,
+    "event": 1232,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2804,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 21 m\u00e5ndag",
+    "type": 39,
+    "event": 1232,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2805,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 tisdag",
+    "type": 40,
+    "event": 1233,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2806,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 tisdag",
+    "type": 40,
+    "event": 1233,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2807,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 tisdag",
+    "type": 40,
+    "event": 1233,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2808,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 21 tisdag",
+    "type": 40,
+    "event": 1233,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2809,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 onsdag",
+    "type": 40,
+    "event": 1234,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2810,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 onsdag",
+    "type": 40,
+    "event": 1234,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2811,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 onsdag",
+    "type": 40,
+    "event": 1234,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2812,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 onsdag",
+    "type": 40,
+    "event": 1234,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2813,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 torsdag",
+    "type": 40,
+    "event": 1235,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2814,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 torsdag",
+    "type": 40,
+    "event": 1235,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2815,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 torsdag",
+    "type": 40,
+    "event": 1235,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2816,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 torsdag",
+    "type": 40,
+    "event": 1235,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2817,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 22 torsdag",
+    "type": 36,
+    "event": 1236,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2818,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 22 torsdag",
+    "type": 37,
+    "event": 1236,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2819,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 s\u00f6ndag",
+    "type": 40,
+    "event": 1237,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2820,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 s\u00f6ndag",
+    "type": 40,
+    "event": 1237,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2821,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 s\u00f6ndag",
+    "type": 40,
+    "event": 1237,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2822,
+  "fields": {
+    "name": "Karting-on-Tour (ledare) Karting-on-Tour vecka 22 s\u00f6ndag",
+    "type": 40,
+    "event": 1237,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "20:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2823,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 22 m\u00e5ndag",
+    "type": 36,
+    "event": 1238,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2824,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 22 m\u00e5ndag",
+    "type": 37,
+    "event": 1238,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2825,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 23 torsdag",
+    "type": 36,
+    "event": 1239,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2826,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 23 torsdag",
+    "type": 37,
+    "event": 1239,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2827,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 24 torsdag",
+    "type": 36,
+    "event": 1240,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2828,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 24 torsdag",
+    "type": 37,
+    "event": 1240,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2829,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 24 l\u00f6rdag",
+    "type": 36,
+    "event": 1241,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2830,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 24 l\u00f6rdag",
+    "type": 37,
+    "event": 1241,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2831,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 24 m\u00e5ndag",
+    "type": 36,
+    "event": 1242,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2832,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 24 m\u00e5ndag",
+    "type": 37,
+    "event": 1242,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2833,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 25 torsdag",
+    "type": 36,
+    "event": 1243,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2834,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 25 torsdag",
+    "type": 37,
+    "event": 1243,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2835,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 26 onsdag",
+    "type": 30,
+    "event": 1244,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2836,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 26 onsdag",
+    "type": 30,
+    "event": 1244,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2837,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 26 torsdag",
+    "type": 30,
+    "event": 1245,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2838,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 26 torsdag",
+    "type": 30,
+    "event": 1245,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2839,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 26 torsdag",
+    "type": 36,
+    "event": 1246,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2840,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 26 torsdag",
+    "type": 37,
+    "event": 1246,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2841,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 26 fredag",
+    "type": 30,
+    "event": 1247,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2842,
+  "fields": {
+    "name": "Gokart-skola (l\u00e4rare) Gokart-skola vecka 26 fredag",
+    "type": 30,
+    "event": 1247,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "22:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2843,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 26 l\u00f6rdag",
+    "type": 36,
+    "event": 1248,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2844,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 26 l\u00f6rdag",
+    "type": 37,
+    "event": 1248,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2845,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 26 m\u00e5ndag",
+    "type": 36,
+    "event": 1249,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2846,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 26 m\u00e5ndag",
+    "type": 37,
+    "event": 1249,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2847,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 31 l\u00f6rdag",
+    "type": 36,
+    "event": 1250,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2848,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 31 l\u00f6rdag",
+    "type": 37,
+    "event": 1250,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2849,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 31 m\u00e5ndag",
+    "type": 36,
+    "event": 1251,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2850,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 31 m\u00e5ndag",
+    "type": 37,
+    "event": 1251,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2851,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 32 torsdag",
+    "type": 36,
+    "event": 1252,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2852,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 32 torsdag",
+    "type": 37,
+    "event": 1252,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2853,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 32 l\u00f6rdag",
+    "type": 36,
+    "event": 1253,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2854,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 32 l\u00f6rdag",
+    "type": 37,
+    "event": 1253,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2855,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 32 m\u00e5ndag",
+    "type": 36,
+    "event": 1254,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2856,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 32 m\u00e5ndag",
+    "type": 37,
+    "event": 1254,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2857,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 33 torsdag",
+    "type": 36,
+    "event": 1255,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2858,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 33 torsdag",
+    "type": 37,
+    "event": 1255,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2859,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 33 l\u00f6rdag",
+    "type": 36,
+    "event": 1256,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2860,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 33 l\u00f6rdag",
+    "type": 37,
+    "event": 1256,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2861,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 33 m\u00e5ndag",
+    "type": 39,
+    "event": 1257,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2862,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 33 m\u00e5ndag",
+    "type": 39,
+    "event": 1257,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2863,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling Klubbt\u00e4vling vecka 33 m\u00e5ndag",
+    "type": 39,
+    "event": 1257,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "09:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2864,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 34 torsdag",
+    "type": 36,
+    "event": 1258,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2865,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 34 torsdag",
+    "type": 37,
+    "event": 1258,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2866,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 34 l\u00f6rdag",
+    "type": 36,
+    "event": 1259,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2867,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 34 l\u00f6rdag",
+    "type": 37,
+    "event": 1259,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2868,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 34 m\u00e5ndag",
+    "type": 36,
+    "event": 1260,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2869,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 34 m\u00e5ndag",
+    "type": 37,
+    "event": 1260,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2870,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 35 torsdag",
+    "type": 36,
+    "event": 1261,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2871,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 35 torsdag",
+    "type": 37,
+    "event": 1261,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2872,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 35 l\u00f6rdag",
+    "type": 36,
+    "event": 1262,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2873,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 35 l\u00f6rdag",
+    "type": 37,
+    "event": 1262,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2874,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt GSP (N) vecka 35 s\u00f6ndag",
+    "type": 36,
+    "event": 1263,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2875,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt GSP (N) vecka 35 s\u00f6ndag",
+    "type": 36,
+    "event": 1263,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2876,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt GSP (N) vecka 35 s\u00f6ndag",
+    "type": 36,
+    "event": 1263,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "18:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2877,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2878,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2879,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2880,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2881,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2882,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2883,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2884,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2885,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2886,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2887,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2888,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2889,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2890,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2891,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 m\u00e5ndag",
+    "type": 39,
+    "event": 1264,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2892,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2893,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2894,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2895,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2896,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2897,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2898,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2899,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2900,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2901,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2902,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2903,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2904,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2905,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2906,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling GSP (N) vecka 35 tisdag",
+    "type": 39,
+    "event": 1265,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2907,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 36 torsdag",
+    "type": 36,
+    "event": 1266,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2908,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 36 torsdag",
+    "type": 37,
+    "event": 1266,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2909,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 36 l\u00f6rdag",
+    "type": 36,
+    "event": 1267,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2910,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 36 l\u00f6rdag",
+    "type": 37,
+    "event": 1267,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2911,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 36 m\u00e5ndag",
+    "type": 36,
+    "event": 1268,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2912,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 36 m\u00e5ndag",
+    "type": 37,
+    "event": 1268,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2913,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 37 torsdag",
+    "type": 36,
+    "event": 1269,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2914,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 37 torsdag",
+    "type": 37,
+    "event": 1269,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2915,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 37 l\u00f6rdag",
+    "type": 36,
+    "event": 1270,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2916,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 37 l\u00f6rdag",
+    "type": 37,
+    "event": 1270,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2917,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2918,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2919,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2920,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2921,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2922,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2923,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2924,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2925,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2926,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2927,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2928,
+  "fields": {
+    "name": "Funktion\u00e4r p\u00e5 t\u00e4vling L\u00f6rdaxx2 (N) vecka 37 m\u00e5ndag",
+    "type": 39,
+    "event": 1271,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "07:30:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2929,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 38 torsdag",
+    "type": 36,
+    "event": 1272,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2930,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 38 torsdag",
+    "type": 37,
+    "event": 1272,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2931,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 38 l\u00f6rdag",
+    "type": 36,
+    "event": 1273,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2932,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 38 l\u00f6rdag",
+    "type": 37,
+    "event": 1273,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2933,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 38 m\u00e5ndag",
+    "type": 36,
+    "event": 1274,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2934,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 38 m\u00e5ndag",
+    "type": 37,
+    "event": 1274,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2935,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 39 torsdag",
+    "type": 36,
+    "event": 1275,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2936,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 39 torsdag",
+    "type": 37,
+    "event": 1275,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2937,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 39 l\u00f6rdag",
+    "type": 36,
+    "event": 1276,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2938,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 39 l\u00f6rdag",
+    "type": 37,
+    "event": 1276,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2939,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 39 m\u00e5ndag",
+    "type": 36,
+    "event": 1277,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2940,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 39 m\u00e5ndag",
+    "type": 37,
+    "event": 1277,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2941,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 40 torsdag",
+    "type": 36,
+    "event": 1278,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2942,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 40 torsdag",
+    "type": 37,
+    "event": 1278,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2943,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 40 l\u00f6rdag",
+    "type": 36,
+    "event": 1279,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2944,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 40 l\u00f6rdag",
+    "type": 37,
+    "event": 1279,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2945,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 40 m\u00e5ndag",
+    "type": 36,
+    "event": 1280,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2946,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 40 m\u00e5ndag",
+    "type": 37,
+    "event": 1280,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2947,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 41 torsdag",
+    "type": 36,
+    "event": 1281,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2948,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 41 torsdag",
+    "type": 37,
+    "event": 1281,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2949,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 41 l\u00f6rdag",
+    "type": 36,
+    "event": 1282,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2950,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 41 l\u00f6rdag",
+    "type": 37,
+    "event": 1282,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2951,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 41 m\u00e5ndag",
+    "type": 36,
+    "event": 1283,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2952,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 41 m\u00e5ndag",
+    "type": 37,
+    "event": 1283,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2953,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 42 torsdag",
+    "type": 36,
+    "event": 1284,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2954,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 42 torsdag",
+    "type": 37,
+    "event": 1284,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2955,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 42 l\u00f6rdag",
+    "type": 36,
+    "event": 1285,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2956,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 42 l\u00f6rdag",
+    "type": 37,
+    "event": 1285,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2957,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 42 m\u00e5ndag",
+    "type": 36,
+    "event": 1286,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2958,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 42 m\u00e5ndag",
+    "type": 37,
+    "event": 1286,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2959,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 43 torsdag",
+    "type": 36,
+    "event": 1287,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2960,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 43 torsdag",
+    "type": 37,
+    "event": 1287,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2961,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 43 l\u00f6rdag",
+    "type": 36,
+    "event": 1288,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2962,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 43 l\u00f6rdag",
+    "type": 37,
+    "event": 1288,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2963,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 43 m\u00e5ndag",
+    "type": 36,
+    "event": 1289,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2964,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 43 m\u00e5ndag",
+    "type": 37,
+    "event": 1289,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2965,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 44 torsdag",
+    "type": 36,
+    "event": 1290,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2966,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 44 torsdag",
+    "type": 37,
+    "event": 1290,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "17:00:00",
+    "end_time": "21:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2967,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 44 l\u00f6rdag",
+    "type": 36,
+    "event": 1291,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2968,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 44 l\u00f6rdag",
+    "type": 37,
+    "event": 1291,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "16:00:00",
+    "end_time": "19:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2969,
+  "fields": {
+    "name": "Tr\u00e4ningsvakt Tr\u00e4ning vecka 44 m\u00e5ndag",
+    "type": 36,
+    "event": 1292,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.activity",
+  "pk": 2970,
+  "fields": {
+    "name": "Dep\u00e5-fadder Tr\u00e4ning vecka 44 m\u00e5ndag",
+    "type": 37,
+    "event": 1292,
+    "assigned": null,
+    "assigned_at": null,
+    "start_time": "10:00:00",
+    "end_time": "16:00:00",
+    "comment": "",
+    "weight": 1,
+    "confirmed": false,
+    "completed": null,
+    "cancelled": false,
+    "earliest_bookable_date": null,
+    "attachments": []
+  }
+},
+{
+  "model": "app.faq",
+  "pk": 1,
+  "fields": {
+    "question": "bafd",
+    "answer": "asdfdsaf",
+    "order": 1
+  }
+},
+{
+  "model": "app.infotext",
+  "pk": "overview",
+  "fields": {
+    "content": "# Vroom\r\n\r\nH\u00e4r h\u00e4nder det bra grejor"
+  }
+},
+{
+  "model": "app.infotext",
+  "pk": "welcome",
+  "fields": {
+    "content": "# V\u00e4lkommen till Team13's webbaktivitetslista!\r\n\r\nHar du inget konto kan du [skapa ett nytt]/(/app/signup)  med den e-mailadress som du registrerat hos klubben.\r\n\r\nKontakta klubbens kansli p\u00e5 [info@team13.se](mailto:info@team13.se) om du beh\u00f6ver hj\u00e4lp."
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3vje8jklpsfd3uknpk5c0yo8y8ujj7zt",
+  "fields": {
+    "session_data": "ZTZjOGY3MjRlMGYwMzI0MzJhNjkxZjQ0ZjYwYmM0Yjc0MDM3NTdjNjp7Il9hdXRoX3VzZXJfaWQiOiI0IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI2NDY5ZGY3ODRiMjE5YzgzMjIzNjVlYTRkN2JiZjIyMWE1YTdmNzExIn0=",
+    "expire_date": "2020-02-06T21:35:53.126"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "8hrqwsvfbkh4yz7pbdni79yb298ntav1",
+  "fields": {
+    "session_data": "MWMwMTZiMDZlODFjMmViYjQwNGVjZjZlOTZjODg4MGFlZjZmOWE0Njp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmNzQzYzU5MzYyODUxMTQ4NGYwMTJiNGFmOTZmMDk4OTA2NDU4YjI1In0=",
+    "expire_date": "2019-12-07T11:01:51.649"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "i3khymd58zm8wz0b45cmm3thk3eu3lsi",
+  "fields": {
+    "session_data": "YWY0NjJhNjlhMjZiZWRmNzVhZjA3ZGEzZjNlZTlhMjg0ZjJjNzRmNTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4OGU4OTQ3ZTFjMDlmZWZiYmJmZmVlNmI5MjRlNWZkNGM4ZWQ3MzJlIn0=",
+    "expire_date": "2020-01-25T15:23:04.049"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "jbljhbifgp8q5mdkqvbxlqvycxnln4qk",
+  "fields": {
+    "session_data": "ZmNkZWM3ZDQ1MDc2MjI3ZWQ3MThiZWJkMmU2ZGE5NTc0YTM5MWZjNjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkYWIwYWE2MWUzZmZlZTNhMjljMmQwMjFkOGY2NDFlZTMwMmY0MmJmIn0=",
+    "expire_date": "2019-11-16T22:13:00.428"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nnc90chjht3hxep4kt3whotslt5akose",
+  "fields": {
+    "session_data": "NjJjOWRhYjcyODE0ODZiOWQ2ZjllYjRjYzNmMWQ4ZTFhMjg1YTI5Yjp7Il9hdXRoX3VzZXJfaWQiOiI1IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJkNzU5ZWY2NGI4ZWVkZmYwNGI1M2NkYmI0ZjBiZjA4NmZlYWJiMDhkIn0=",
+    "expire_date": "2020-03-04T19:12:21.959"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vvd3a5th8bxwqhsd4fly2wr5mu9v321x",
+  "fields": {
+    "session_data": "YWY0NjJhNjlhMjZiZWRmNzVhZjA3ZGEzZjNlZTlhMjg0ZjJjNzRmNTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI4OGU4OTQ3ZTFjMDlmZWZiYmJmZmVlNmI5MjRlNWZkNGM4ZWQ3MzJlIn0=",
+    "expire_date": "2020-01-28T15:59:31.380"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$5pLsB0LbfVDY$hbRIs3kEI7xsk9OO7D101OSh9gxSPE4f6WFgM7ObekM=",
+    "last_login": "2020-01-14T15:59:31",
+    "is_superuser": true,
+    "username": "macke@yar.nu",
+    "first_name": "Marcus",
+    "last_name": "Sonestedt",
+    "email": "macke@yar.nu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2019-11-02T22:12:46",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$myviIHeAeN93$s7uUjI93eHZoD1wf/nDAV8uovzGx7GyutdMtq98xCvE=",
+    "last_login": "2019-12-08T17:42:22.690",
+    "is_superuser": false,
+    "username": "test6",
+    "first_name": "Mr Test",
+    "last_name": "User",
+    "email": "test6",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2019-12-08T17:42:19.389",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$XsoTce9hBMve$sM/A60kInmqybXjRlV2fIfezjTL9X3tjfbiIKBsJW0w=",
+    "last_login": "2020-01-23T21:35:53",
+    "is_superuser": true,
+    "username": "bah@bah.bah",
+    "first_name": "Bah",
+    "last_name": "Bahbah",
+    "email": "bah@bah.bah",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-01-23T21:35:31",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$150000$I6dtYPOVlJa4$LqLmW+I67Q0JUyb2ERrUGFpsRhq9q3FWoD9Qsh+7K1s=",
+    "last_login": "2020-02-19T19:12:21.940",
+    "is_superuser": true,
+    "username": "marcus.s.lindblom@gmail.com",
+    "first_name": "Marcus",
+    "last_name": "Sonestedt",
+    "email": "marcus.s.lindblom@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-02-19T19:12:14",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "app.attachment",
+  "pk": 1,
+  "fields": {
+    "uploader": 1,
+    "file": "goomba.jpg",
+    "comment": "dsfasdf",
+    "created": "2020-01-13T17:23:44.199",
+    "modified": "2020-01-14T06:37:50.847"
+  }
+},
+{
+  "model": "app.member",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "created": "2019-11-07T17:01:37.673",
+    "updated": "2020-01-20T16:54:09.271",
+    "phone_number": "0706436328",
+    "phone_verified": true,
+    "email_verified": true,
+    "email_verification_code": null,
+    "email_verification_code_created": null,
+    "comment": "Trevlig kille.",
+    "membercard_number": "",
+    "min_signup_bias": -3,
+    "_order": 0
+  }
+},
+{
+  "model": "app.member",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "created": "2019-12-08T17:42:19.630",
+    "updated": "2019-12-08T17:42:22.698",
+    "phone_number": "",
+    "phone_verified": false,
+    "email_verified": false,
+    "email_verification_code": "",
+    "email_verification_code_created": null,
+    "comment": "",
+    "membercard_number": "",
+    "min_signup_bias": 0,
+    "_order": 0
+  }
+},
+{
+  "model": "app.member",
+  "pk": 3,
+  "fields": {
+    "user": 4,
+    "created": "2020-01-23T21:35:31.450",
+    "updated": "2020-01-23T21:37:11.780",
+    "phone_number": "+000012344531241",
+    "phone_verified": true,
+    "email_verified": true,
+    "email_verification_code": null,
+    "email_verification_code_created": null,
+    "comment": "",
+    "membercard_number": "",
+    "min_signup_bias": 0,
+    "_order": 0
+  }
+},
+{
+  "model": "app.member",
+  "pk": 4,
+  "fields": {
+    "user": 5,
+    "created": "2020-02-19T19:12:15.148",
+    "updated": "2020-02-19T19:19:29.879",
+    "phone_number": "+46706436328",
+    "phone_verified": true,
+    "email_verified": true,
+    "email_verification_code": null,
+    "email_verification_code_created": null,
+    "comment": "",
+    "membercard_number": "",
+    "min_signup_bias": 0,
+    "_order": 0
+  }
+}
+]
