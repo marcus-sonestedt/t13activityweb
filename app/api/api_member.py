@@ -130,7 +130,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
             user.save()
 
             member = models.Member.objects.get(user=user)
-            member.phone_number=phone,
+            member.phone_number = phone
             member.comment=serializer.validated_data['comment']
             member.proxy.add(proxy_for)
             member.save()
