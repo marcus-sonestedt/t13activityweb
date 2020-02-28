@@ -4,10 +4,11 @@ import logging
 from django.urls import path, re_path
 from django.apps import apps
 from django.core.exceptions import PermissionDenied, FieldDoesNotExist
-from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from django.db.models import Sum, Q, Count
+from django.db import transaction
 
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
@@ -25,6 +26,9 @@ from rest_framework import mixins
 from app import models, serializers
 
 from app.notifications import NotificationData, NotificationDataSerializer
+import traceback
+from http import HTTPStatus
+from django.db import IntegrityError
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +48,8 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
     def get_serializer_class(self):
         if self.request.method.upper() == 'PATCH':
             return serializers.MemberPatchSerializer
+        elif self.request.method.upper() == 'PUT':
+            return serializers.CreateMemberSerializer
         else:
             return serializers.MemberSerializer
 
@@ -61,8 +67,8 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
 
     def check_object_permissions(self, request, obj):
         if request.method.upper() == 'PATCH' \
-            and not request.user.is_staff \
-            and request.user.member.id != obj.id:
+                and not request.user.is_staff \
+                and request.user.member.id != obj.id:
             raise PermissionDenied(
                 "Can only PATCH self, or proxies who haven't logged in themselves yet (unless is staff).")
 
@@ -95,11 +101,39 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
         member.save()
 
     def put(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        try:
+            return self.create(request, *args, **kwargs)
+        except IntegrityError as e:
+            traceback.print_exc()
+            resp = HttpResponse(str(e))
+            resp.status_code = HTTPStatus.CONFLICT
+            return resp
 
     def perform_create(self, serializer):
-        serializer.validated_data.proxy = models.Member.objects.get(user_id=self.request.user.id)
-        serializer.save()
+        email = serializer.validated_data['email']
+        name = serializer.validated_data['fullname'].split(' ', 1)
+        phone = serializer.validated_data['phone_number']
+
+        if User.objects.filter(email=email).count() > 0:
+            raise IntegrityError(
+                f"A user with email '{email}' already exists!")
+
+        if models.Member.objects.filter(phone_number=phone).count() > 0:
+            raise IntegrityError(
+                f"A user with phone number '{phone}' already exists!")
+
+        proxy_for = models.Member.objects.get(user_id=self.request.user.id)
+
+        with transaction.atomic():
+            user = User(username=email, email=email,
+                        first_name=name[0], last_name=name[1])
+            user.save()
+
+            member = models.Member.objects.get(user=user)
+            member.phone_number=phone,
+            member.comment=serializer.validated_data['comment']
+            member.proxy.add(proxy_for)
+            member.save()
 
 
 class MemberReadyList(generics.ListAPIView):
@@ -158,7 +192,8 @@ class DoubleBookedMembersList(generics.ListAPIView):
         values = []
 
         for e in events:
-            acts = e.activities.exclude(assigned=None).values('assigned', 'comment')
+            acts = e.activities.exclude(
+                assigned=None).values('assigned', 'comment')
             aa = [a['assigned'] for a in acts]
             dbu = set(a for a in aa if aa.count(a) >= 2)
 
@@ -169,10 +204,12 @@ class DoubleBookedMembersList(generics.ListAPIView):
             print(dbu)
 
             for m in dbu:
-                assigned_for_user = e.activities.filter(assigned=m).select_related('assigned')
+                assigned_for_user = e.activities.filter(
+                    assigned=m).select_related('assigned')
                 for a in assigned_for_user:
-                    other_comments = [d['comment'] for d in assigned_for_user.exclude(id=a.id).values('comment')]
-                    if a.comment in other_comments:           
+                    other_comments = [d['comment'] for d in assigned_for_user.exclude(
+                        id=a.id).values('comment')]
+                    if a.comment in other_comments:
                         # print(a)
                         values.append({
                             'assigned_id': a.assigned.id,

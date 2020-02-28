@@ -27,13 +27,23 @@ class MemberSerializer(serializers.ModelSerializer):
                   'phone_verified', 'email_verified', 'user_id']
 
 
+class CreateMemberSerializer(serializers.ModelSerializer):
+    fullname = serializers.CharField()
+    email = serializers.EmailField()
+
+    class Meta:
+        model = Member
+        fields = ['phone_number', 'comment', 'fullname', 'email']
+
+
 class MemberReadySerializer(MemberSerializer):
     booked_weight_year = serializers.IntegerField(required=False)    
     booked_weight  = serializers.IntegerField(required=False)    
 
     class Meta:
         model = Member
-        fields = MemberSerializer.Meta.fields + ['booked_weight_year', 'membercard_number', 'booked_weight']
+        fields = MemberSerializer.Meta.fields + ['booked_weight_year',
+            'membercard_number', 'booked_weight']
 
 
 class MemberPatchSerializer(serializers.Serializer):

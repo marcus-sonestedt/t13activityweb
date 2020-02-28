@@ -36,7 +36,6 @@ export const ProfileEditForm = (props: {
         if (!member)
             return;
 
-
         member.fullname = fullname;
         member.email = email;
         member.phone_number = phone;

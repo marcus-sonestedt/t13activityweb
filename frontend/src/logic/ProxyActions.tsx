@@ -56,7 +56,8 @@ export const updateProxyAsync = async (member: Member) => {
 export const createProxyAsync = async (member: Member) => {
     const r = await fetch(Member.apiUrlForId(''), {
         method: 'PUT',
-        headers: getJsonHeaders()
+        headers: getJsonHeaders(),
+        body: JSON.stringify(member)
     });
 
     if (r.status >= 300) {
