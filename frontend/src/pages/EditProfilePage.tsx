@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { deserialize } from 'class-transformer';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Alert, Image } from 'react-bootstrap';
 import { useHistory, useParams } from 'react-router-dom';
 
 import DataProvider from '../components/DataProvider';
@@ -34,7 +34,16 @@ const CreateProxy = () => {
     const history = useHistory();
 
     if (error)
-        return <pre dangerouslySetInnerHTML={{ __html: error }} />;
+        return <div>
+            <p>Ooops. Något fick fel! :(</p>
+            <Image src='/static/brokenpiston.jpg'
+                alt="Broken piston"
+                className="errorImage" />
+            <Alert variant='warning'>
+                {error.includes("<!DOCTYPE html>") ? <div dangerouslySetInnerHTML={{ __html: error }} />
+                    : <pre>{error}</pre>}
+            </Alert>
+        </div>
 
     return <ProfileEditForm
         member={new Member()}

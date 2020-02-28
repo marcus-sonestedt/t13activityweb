@@ -80,7 +80,7 @@ export const MySuperProxiesTable = (props: {
         </Button>
 
     return <>
-        <h2>Medlemmar jag är underhuggare åt</h2>
+        <h2>Medlemmar jag kan jobba åt</h2>
         <DataProvider<PagedMembers>
             url='/api/proxy/my_super/'
             ctor={json => deserialize(PagedMembers, json)}

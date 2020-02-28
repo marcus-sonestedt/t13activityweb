@@ -11,20 +11,23 @@ export const ProxyComponent = (props: { member?: Member }) => {
 
     return <div>
         <h2>Detaljer</h2>
-        {!member || !user.isLoggedIn ? null :
         <div className='div-group'>
-        <h3>Namn: {member.fullname}</h3>
-        <h4>Email:{' '}
-            <a href={`mailto:${member.email}`}>{member.email}</a>
-        </h4>
-        <h4>Telefon:{' '}
-            <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
-        </h4>
-        {member.image_url === undefined ? null :
-            <Image src={member.image_url} />
-        }
-        </div>}
-    </div>
+            {(!member || !user.isLoggedIn) ?
+                <p>Välj en underhuggare/medlem för att se mer information.</p>
+                : <>
+                    <h3>Namn: {member.fullname}</h3>
+                    <h4>Email:{' '}
+                        <a href={`mailto:${member.email}`}>{member.email}</a>
+                    </h4>
+                    <h4>Telefon:{' '}
+                        <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
+                    </h4>
+                    {member.image_url === undefined ? null :
+                        <Image src={member.image_url} />
+                    }
+                </>}
+        </div>
+    </div >
 }
 
 
