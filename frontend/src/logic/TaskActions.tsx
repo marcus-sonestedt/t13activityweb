@@ -1,9 +1,9 @@
-import { Cookies } from "react-cookie-consent";
-import { Activity, Member } from "../Models";
-import * as H from 'history';
 import React from "react";
+import Cookies from "universal-cookie";
+import * as H from 'history';
 import { Button } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
+import { Activity, Member } from "../Models";
 
 const cookies = new Cookies();
 
@@ -43,10 +43,10 @@ const claimActivityForSelf = (
 }
 
 export const enlistActivityViaProxy = (
-    model: Activity,
+    activity: Activity,
     proxy: Member
 ) => {
-    fetch(`/api/proxy/activity/${model.id}/${proxy.id}`, {
+    fetch(`/api/proxy/activity/${activity.id}/${proxy.id}`, {
         method: 'PUT',
         headers: {
             'X-CSRFToken': cookies.get('csrftoken'),

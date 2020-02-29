@@ -95,6 +95,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
 
         if 'phone_number' in serializer.validated_data:
             member.phone_verified = False
+
         if 'email' in serializer.validated_data:
             member.email_verified = False
 

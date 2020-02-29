@@ -135,7 +135,7 @@ const T13CookieConsent = (props: { isLoggedIn: boolean }) => {
     <span style={{ fontSize: "small" }}>
       Vi behöver hålla koll på att du är inloggad och
       säkra kommandon till webbservern.
-      </span>
+    </span>
   </CookieConsent>
 }
 

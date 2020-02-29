@@ -18,21 +18,15 @@ export const MyProxiesTable = (props: {
     const setProxiesCallback = useCallback(data => setProxies(data.results), []);
 
     const renderButtons = (proxy: Member) => {
-        const AssignButtons = () => {
-            if (!activity)
-                return null;
-
+        if (activity) {
             return proxy.id !== activity.assigned?.id
                 ? <Button onClick={() => enlistActivityViaProxy(activity, proxy)} size='sm' variant='success'>Boka</Button>
                 : <Button onClick={() => delistActivityViaProxy(activity, proxy)} size='sm' variant='warning'>Avboka</Button>
         }
 
-        return <>
-            <AssignButtons />
-            <Button href={`/frontend/proxy/edit/${proxy.id}`} size='sm' variant='secondary'>
-                Editera
+        return <Button href={`/frontend/profile/edit/${proxy.id}`} size='sm' variant='secondary'>
+            Editera
             </Button>
-        </>
     }
 
     return <>
@@ -43,7 +37,9 @@ export const MyProxiesTable = (props: {
             <Col md={3} className='align-right'>
                 <HoverTooltip tooltip="Skapa en ny användare i systemet som blir din underhuggare."
                     placement='bottom'>
-                    <Button href='/frontend/profile/create' variant='success'>Skapa ny</Button>
+                    <Button href='/frontend/profile/create' variant='success'>
+                        Skapa ny
+                    </Button>
                 </HoverTooltip>
             </Col>
         </Row>
@@ -98,7 +94,7 @@ export const ProxiesTable = (props: {
 }) => {
     const renderRow = (proxy: Member) => {
         const rowClicked = (e: any) => {
-            e.preventDefault();
+            //e.preventDefault();
             props.onProxySelected?.(proxy);
         }
 

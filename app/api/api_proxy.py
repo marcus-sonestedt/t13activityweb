@@ -1,10 +1,11 @@
+from http import HTTPStatus
+from rest_framework.exceptions import APIException, PermissionDenied
 import datetime
 import logging
 
 from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponse
 from django.utils.decorators import method_decorator
 
@@ -25,6 +26,16 @@ import app.notifications as notifications
 logger = logging.getLogger(__name__)
 
 
+class NotYourProxy(APIException):
+    status_code = 403
+    default_detail = 'Member is not a proxy for current user.'
+    default_code = 'forbidden'
+
+class NotYourProxy(APIException):
+    status_code = 403
+    default_detail = 'Member is not a proxy for current user.'
+    default_code = 'forbidden'
+
 class MySubProxiesList(generics.ListAPIView):
     queryset = models.Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]
@@ -32,6 +43,7 @@ class MySubProxiesList(generics.ListAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(proxy__user=self.request.user.id)
+
 
 class MySuperProxiesList(generics.ListAPIView):
     queryset = models.Member.objects.select_related('user')
@@ -41,6 +53,7 @@ class MySuperProxiesList(generics.ListAPIView):
     def get_queryset(self):
         member = models.Member.objects.get(user=self.request.user.id)
         return self.queryset.filter(proxies=member.id)
+
 
 class ProxyConnector(generics.GenericAPIView):
     '''connects members as proxies'''
@@ -54,9 +67,9 @@ class ProxyConnector(generics.GenericAPIView):
 
         # TOOD: Create proxy-request and have other user confirm first!
         #member = models.Member.get(user_id=self.request.user.id)
-        #member.proxies.add(proxy)
-        #member.save()
-        #return HttpResponse("Created")
+        # member.proxies.add(proxy)
+        # member.save()
+        # return HttpResponse("Created")
 
         return HttpResponseForbidden("Not yet implemented")
 
@@ -73,23 +86,70 @@ class ProxyConnector(generics.GenericAPIView):
         return HttpResponse("Deleted")
 
 
-
-class ActivityByProxyEnlister(generics.GenericAPIView):
+class ActivityByProxyEnlister(APIView):
     '''enlists on an activity via a proxy'''
 
     permission_classes = [IsAuthenticated]
 
-    def put(self, request, activity_id, proxy_id):
-        activity = models.Activityies.objects.get(id=activity_id)
-        member = models.Member.objects.get(id=proxy_id)
+    def get(self, request, activity_id, proxy_id):
+        activity = models.Activity.objects.get(id=activity_id)
+        proxy = models.Member.objects.get(id=proxy_id)
+        master = models.Member.objects.get(user=self.request.user)
 
-        raise "Not implemented yet"
+        return Response(
+            data={'proxy_assigned': (
+                activity.assigned == proxy and activity.assigned_for_proxy == master)}
+        )
+
+    def put(self, request, activity_id, proxy_id):
+        proxy = models.Member.objects.get(id=proxy_id)
+        master = models.Member.objects.get(user=self.request.user)
+
+        if not master in proxy.proxy.all():
+            raise NotYourProxy(
+                f"Proxy {proxy} not registered to act on behalf of {master}.")
+
+        activity = models.Activity.objects.get(id=activity_id)
+
+        if activity.assigned is not None:
+            raise PermissionDenied(
+                f"Activity {activity} already assigned to someone.")
+
+        logger.info(
+            f"Assigning activity {activity} to {proxy} on behalf of {master}")
+
+        activity.assigned = proxy
+        activity.assigned_for_proxy = master
+        activity.assigned_at = datetime.datetime.now()
+        activity.save()
+
+        return Response(f"{proxy} is now assigned for {activity} on behalf of {master}")
 
     def delete(self, request, activity_id, proxy_id):
-        activity = models.Activityies.objects.get(id=activity_id)
-        member = models.Member.objects.get(id=proxy_id)
+        proxy = models.Member.objects.get(id=proxy_id)
+        master = models.Member.objects.get(user=self.request.user)
 
-        raise "Not implemented yet"
+        if not master in proxy.proxy.all():
+            raise NotYourProxy(
+                f"Proxy {proxy} not registered to act on behalf of {master}.")
+
+        activity = models.Activity.objects.get(id=activity_id)
+
+        if activity.assigned != proxy:
+            raise PermissionDenied(f"Activity not assigned to proxy {proxy}")
+
+        if activity.assigned_for_proxy != master:
+            raise PermissionDenied(f"Activity not assigned for for {master}")
+
+        logger.info(
+            f"Delisting activity {activity} to {proxy} on behalf of {master}")
+
+        activity.assigned = None
+        activity.assigned_for_proxy = None
+        activity.assigned_at = None
+        activity.save()
+
+        return Response(f"{proxy} has been delisted from {activity} (was on behalf of {master})")
 
 
 ##############################################################################

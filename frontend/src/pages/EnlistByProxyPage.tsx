@@ -18,7 +18,7 @@ export const EnlistByProxyPage = () => {
         return <NotFound />
     }
 
-    return <Container fluid>
+    return <Container>
         <Row>
             <Col sm={12} md={6}>
                 <DataProvider<PagedActivities>
