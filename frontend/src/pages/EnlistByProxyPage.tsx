@@ -20,7 +20,7 @@ export const EnlistByProxyPage = () => {
 
     return <Container>
         <Row>
-            <Col sm={12} md={6}>
+            <Col md={12} lg={6}>
                 <DataProvider<PagedActivities>
                     url={Activity.apiUrlFromId(activityId)}
                     ctor={json => deserialize(PagedActivities, json)}
@@ -28,7 +28,7 @@ export const EnlistByProxyPage = () => {
                     <ActivityComponent model={activity} />
                 </DataProvider>
             </Col>
-            <Col sm={12} md={6}>
+            <Col md={12} lg={6}>
                 <MyProxiesTable activity={activity}/>
             </Col>
         </Row>

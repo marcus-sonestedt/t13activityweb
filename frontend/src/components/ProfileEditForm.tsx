@@ -17,6 +17,8 @@ export const ProfileEditForm = (props: {
 
     const { member, onSaved } = props;
 
+    debugger
+
     if (!member)
         return null;
 
@@ -49,7 +51,7 @@ export const ProfileEditForm = (props: {
                 m = await createProxyAsync(m);
             }
             onSaved?.(m);
-        } catch (e) {            
+        } catch (e) {
             console.error(e);
             props.onError?.(e);
         }
@@ -78,18 +80,20 @@ export const ProfileEditForm = (props: {
         <Form.Group controlId="formPhone">
             <Form.Label>Telefonnummer</Form.Label>
             <Form.Control type="tel" placeholder="+46123456789" required
-                value={phone} onChange={setState(setPhone)}   />
+                value={phone} onChange={setState(setPhone)} />
         </Form.Group>
 
         <Form.Group controlId="formComment">
             <Form.Label>Övrig info</Form.Label>
             <Form.Control type="text" placeholder="..."
-                value={comment} onChange={setState(setComment)}  />
+                value={comment} onChange={setState(setComment)} />
         </Form.Group>
 
-        <Button type='submit' variant='primary'>Spara</Button>
-        {' '}
-        <Button type='submit' variant='outline-warning' onClick={window.location.reload}>Återställ</Button>
+        <div style={{ textAlign: 'right' }}>
+            <Button type='submit' variant='primary'>Spara</Button>
+            {' '}
+            <Button type='submit' variant='outline-warning' onClick={window.location.reload}>Återställ</Button>
+        </div>
     </Form>
 }
 

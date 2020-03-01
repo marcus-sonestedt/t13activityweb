@@ -3,25 +3,35 @@ import DataProvider from "./DataProvider";
 import { Member, Activity, PagedMembers } from '../Models';
 import { useContext } from "react";
 import { userContext } from "./UserContext";
-import { enlistActivityViaProxy, delistActivityViaProxy } from "../logic/TaskActions";
-import { Button, Table, Col, Row } from "react-bootstrap";
+import { changeActivityViaProxy } from "../logic/TaskActions";
+import { Button, Table, Col, Row, Alert } from "react-bootstrap";
 import { disconnectProxy } from "../logic/ProxyActions";
 import { deserialize } from "class-transformer";
 import { HoverTooltip } from "./Utilities";
+import { useHistory } from "react-router-dom";
 
 export const MyProxiesTable = (props: {
     activity?: Activity,
     onProxySelected?: (proxy: Member) => void
 }) => {
     const { activity, onProxySelected } = props;
+
     const [proxies, setProxies] = useState<Member[]>([]);
+    const [reload, setReload] = useState(0);
+    const [error, setError] = useState<string>();
+    const history = useHistory();
+
     const setProxiesCallback = useCallback(data => setProxies(data.results), []);
+    const onError = (e?: string) => {
+        setError(e);
+        if (!e) history.goBack(); else setReload(r => r + 1);
+    }
 
     const renderButtons = (proxy: Member) => {
         if (activity) {
             return proxy.id !== activity.assigned?.id
-                ? <Button onClick={() => enlistActivityViaProxy(activity, proxy)} size='sm' variant='success'>Boka</Button>
-                : <Button onClick={() => delistActivityViaProxy(activity, proxy)} size='sm' variant='warning'>Avboka</Button>
+                ? <Button onClick={() => changeActivityViaProxy('PUT', activity, proxy, onError)} size='sm' variant='success'>Boka</Button>
+                : <Button onClick={() => changeActivityViaProxy('DELETE', activity, proxy, onError)} size='sm' variant='warning'>Avboka</Button>
         }
 
         return <Button href={`/frontend/profile/edit/${proxy.id}`} size='sm' variant='secondary'>
@@ -44,7 +54,8 @@ export const MyProxiesTable = (props: {
             </Col>
         </Row>
         <DataProvider<PagedMembers>
-            url='/api/proxy/my/'
+            key={reload}
+            url={`/api/proxy/my/?_reload=${reload}`}
             ctor={json => deserialize(PagedMembers, json)}
             onLoaded={setProxiesCallback}>
             <ProxiesTable proxies={proxies}
@@ -60,6 +71,7 @@ export const MyProxiesTable = (props: {
             </HoverTooltip>
             */}
         </div>
+        {error ? <Alert variant='danger'>{error}</Alert> : null}
     </>
 }
 

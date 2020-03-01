@@ -9,7 +9,7 @@ import { MarkDown, HoverTooltip, PageItems } from '../components/Utilities';
 import { Attachments } from "../components/AttachmentComponent";
 import { Reimbursements } from "./ActivityTypePage";
 import { BookButtons } from "../logic/TaskActions";
-import { DataProvider} from "../components/DataProvider";
+import { DataProvider } from "../components/DataProvider";
 
 export const EventPage = () => {
     const { id } = useParams();
@@ -141,46 +141,46 @@ const ActivitiesTable = (props: { event?: T13Event }) => {
         activities.results.filter(a => a.assigned?.id === user.memberId).length
         , [activities, user.memberId]);
 
-    const renderActivityRow = (model: Activity) => {
-        const type = model.type !== null
-            ? <a href={model.type.url()}>{model.type.name}</a>
+    const renderActivityRow = (activity: Activity) => {
+        const type = activity.type !== null
+            ? <a href={activity.type.url()}>{activity.type.name}</a>
             : '-';
 
         const className =
-            (user.isLoggedIn && model.assigned?.id === user.memberId) ? 'my-task' : null;
+            (user.isLoggedIn && activity.assigned?.id === user.memberId) ? 'my-task' : null;
 
+        let assigned = <span>{activity.assigned?.fullname}</span>
 
-        const assigned =
-            !user.isLoggedIn
-                ? <span>{model.assigned?.fullname}</span>
-                : model.assigned !== null
-                    ? <>
-                        <a href={model.assigned.url()}>{model.assigned.fullname}</a>
-                        {(model.active_delist_request && user.isLoggedIn) ? <>
-                            <span className='spacer' />
-                            <BookButtons model={model} canBookSelf={!memberAlreadyBooked}/>
-                        </> : null}
-                    </>
-                    : (model.bookable && user.isLoggedIn)
-                        ? <BookButtons model={model}  canBookSelf={!memberAlreadyBooked}/>
-                        : null;
+        if (user.isLoggedIn) {
+            if (activity.assigned !== null) {
+                assigned = <a href={activity.assigned.url()}>{activity.assigned.fullname}</a>
+            }
 
-        const rowClicked = () => history.push(model.url());
+            if (activity.active_delist_request || activity.bookable) {
+                assigned = <>
+                    {assigned}
+                    {' '}
+                    <BookButtons activity={activity} canBookSelf={!memberAlreadyBooked} />
+                </>
+            }
+        }
+
+        const rowClicked = () => history.push(activity.url());
 
         return (
-            <tr key={model.id} className={'linked ' + className} onClick={rowClicked}>
-                <td><a href={model.url()}>{model.name}</a></td>
+            <tr key={activity.id} className={'linked ' + className} onClick={rowClicked}>
+                <td><a href={activity.url()}>{activity.name}</a></td>
                 <td>{type}</td>
                 <td className='nowrap'>
-                    {event?.date()}<br />{model.time()}
+                    {event?.date()}<br />{activity.time()}
                 </td>
                 <td>
-                    {model.weight === 1 ? null :
+                    {activity.weight === 1 ? null :
                         <HoverTooltip tooltip="Denna aktivitet räknas som flera">
-                            <span className='weight'>{model.weight}</span>
+                            <span className='weight'>{activity.weight}</span>
                         </HoverTooltip>}
                     {' '}
-                    <Reimbursements model={model.type} /></td>
+                    <Reimbursements model={activity.type} /></td>
                 <td>{assigned}</td>
             </tr>
         )

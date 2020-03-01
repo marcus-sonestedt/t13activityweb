@@ -4,6 +4,7 @@ import * as H from 'history';
 import { Button } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
 import { Activity, Member } from "../Models";
+import { getJsonHeaders } from "./ADRActions";
 
 const cookies = new Cookies();
 
@@ -42,58 +43,35 @@ const claimActivityForSelf = (
     });
 }
 
-export const enlistActivityViaProxy = (
+export const changeActivityViaProxy = (
+    method:string,
     activity: Activity,
-    proxy: Member
+    proxy: Member,
+    setError: (err?: string) => void,
 ) => {
     fetch(`/api/proxy/activity/${activity.id}/${proxy.id}`, {
-        method: 'PUT',
-        headers: {
-            'X-CSRFToken': cookies.get('csrftoken'),
-            'accept': 'application/json'
+        method: method,
+        headers: getJsonHeaders()
+    }).then(async  r => {
+        if (r.status !== 200){
+            const errText = `${r.statusText}:\n${await r.json().then(j => j['detail'])}`
+            throw errText
         }
-    }).then(r => {
-        if (r.status !== 200)
-            throw r.statusText;
+        setError(undefined);
     }, r => {
         throw r
     }).catch(e => {
         console.error(e);
-        alert("Något gick fel! :(\n" + e);
-    }).finally(() => {
-        window.location.reload();
+        setError(e);
     });
 }
 
-export const delistActivityViaProxy = (
-    model: Activity,
-    proxy: Member,
-) => {
-    fetch(`/api/proxy/activity/${model.id}/${proxy.id}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRFToken': cookies.get('csrftoken'),
-            'accept': 'application/json'
-        }
-    }).then(r => {
-        if (r.status !== 200)
-            throw r.statusText;
-    }, r => {
-        throw r
-    }).catch(e => {
-        console.error(e);
-        alert("Något gick fel! :(\n" + e);
-    }).finally(() => {
-        window.location.reload();
-    });
-}
-
-export const BookButtons = (props: { model: Activity, canBookSelf: boolean }) => {
+export const BookButtons = (props: { activity: Activity, canBookSelf: boolean }) => {
     const history = useHistory();
     const createClaimHandler = (self: boolean) => {
         return (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation();
-            claimActivity(props.model, self, history);
+            claimActivity(props.activity, self, history);
         }
     }
 

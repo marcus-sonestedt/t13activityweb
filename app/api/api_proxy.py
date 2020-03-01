@@ -109,21 +109,25 @@ class ActivityByProxyEnlister(APIView):
             raise NotYourProxy(
                 f"Proxy {proxy} not registered to act on behalf of {master}.")
 
-        activity = models.Activity.objects.get(id=activity_id)
+        activity = models.Activity.objects.select_related('event').get(id=activity_id)
 
         if activity.assigned is not None:
             raise PermissionDenied(
                 f"Activity {activity} already assigned to someone.")
 
+        if models.Activity.objects.filter(event=activity.event, assigned=proxy).exists():
+            raise PermissionDenied(
+                f"Proxy {proxy} already assigned to event {activity.event}.")
+
         logger.info(
-            f"Assigning activity {activity} to {proxy} on behalf of {master}")
+            f"Assigning activity {activity} to {proxy} on behalf of {master}.")
 
         activity.assigned = proxy
         activity.assigned_for_proxy = master
         activity.assigned_at = datetime.datetime.now()
         activity.save()
 
-        return Response(f"{proxy} is now assigned for {activity} on behalf of {master}")
+        return Response(f"{proxy} is now assigned for {activity} on behalf of {master}.")
 
     def delete(self, request, activity_id, proxy_id):
         proxy = models.Member.objects.get(id=proxy_id)
@@ -136,13 +140,13 @@ class ActivityByProxyEnlister(APIView):
         activity = models.Activity.objects.get(id=activity_id)
 
         if activity.assigned != proxy:
-            raise PermissionDenied(f"Activity not assigned to proxy {proxy}")
+            raise PermissionDenied(f"Activity not assigned to proxy {proxy}.")
 
         if activity.assigned_for_proxy != master:
-            raise PermissionDenied(f"Activity not assigned for for {master}")
+            raise PermissionDenied(f"Activity not assigned for for {master}.")
 
         logger.info(
-            f"Delisting activity {activity} to {proxy} on behalf of {master}")
+            f"Delisting activity {activity} to {proxy} on behalf of {master}.")
 
         activity.assigned = None
         activity.assigned_for_proxy = None
