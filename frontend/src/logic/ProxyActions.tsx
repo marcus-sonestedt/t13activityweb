@@ -35,20 +35,16 @@ export const addExistingProxy = (proxy: Member) => {
     });
 }
 
-export const updateProxyAsync = async (member: Member) => {
-    try {
-        const r = await fetch(member.apiUrl(), {
-            method: 'PATCH',
-            headers: getJsonHeaders()
-        });
+export const updateProxyAsync = async (proxy: Member) => {
+    const r = await fetch(proxy.apiUrl(), {
+        method: 'PATCH',
+        headers: getJsonHeaders(),
+        body: JSON.stringify(proxy)
+    });
 
-        if (r.status >= 300) {
-            console.error(r.status + ' ' + r.statusText);
-            throw (await r.text())
-        }
-    }
-    finally {
-        window.location.reload();
+    if (r.status >= 300) {
+        console.error(r.status + ': ' + r.statusText);
+        throw (await r.text())
     }
 }
 
@@ -69,3 +65,4 @@ export const createProxyAsync = async (member: Member) => {
     member.id = data.id;
     return member;
 }
+

@@ -82,7 +82,7 @@ ADMINS = []
 MANAGERS = []
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = False
 
 for n in secret_names:
     if hasattr(secrets, n):

@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 MIN_ACTIVITY_SIGNUPS = int(apps.get_app_config('app').MIN_ACTIVITY_SIGNUPS)
 
-
 class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModelMixin):
     queryset = models.Member.objects.select_related('user')
     permission_classes = [IsAuthenticated]

@@ -7,9 +7,10 @@
 
 #SMS_FROM_NUMBER = 'TEAM13 LOCAL'
 
+# if using google & 2FA, use an application password, see https://accounts.google.com
 #EMAIL_HOST = 'smtp.gmail.com'
 #EMAIL_HOST_USER = 'firstname.lastname@gmail.com'
-#EMAIL_HOST_PASSWORD = 'verysecret'
+#EMAIL_HOST_PASSWORD = 'verysecret' 
 #EMAIL_PORT = 587
 #EMAIL_USE_TLS = True
 

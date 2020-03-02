@@ -4,10 +4,11 @@ import { Member, Activity, PagedMembers } from '../Models';
 import { useContext } from "react";
 import { userContext } from "./UserContext";
 import { changeActivityViaProxy } from "../logic/TaskActions";
-import { Button, Table, Col, Row, Alert } from "react-bootstrap";
+import { Button, Table, Col, Row, Alert, Modal } from "react-bootstrap";
 import { disconnectProxy } from "../logic/ProxyActions";
 import { deserialize } from "class-transformer";
 import { HoverTooltip } from "./Utilities";
+import { ProfileEditForm } from "./ProfileEditForm";
 
 export const MyProxiesTable = (props: {
     activity?: Activity,
@@ -18,6 +19,7 @@ export const MyProxiesTable = (props: {
     const [proxies, setProxies] = useState<Member[]>([]);
     const [reload, setReload] = useState(0);
     const [error, setError] = useState<string>();
+    const [editProxy, setEditProxy] = useState<Member>();
 
     const setProxiesCallback = useCallback(data => setProxies(data.results), []);
 
@@ -33,12 +35,35 @@ export const MyProxiesTable = (props: {
                 : <Button onClick={() => changeActivityViaProxy('DELETE', activity, proxy, onError)} size='sm' variant='warning'>Avboka</Button>
         }
 
-        return <Button href={`/frontend/profile/edit/${proxy.id}`} size='sm' variant='secondary'>
+        const handleClick = (e:React.MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
+            setEditProxy(proxy);
+        }
+
+        return <Button onClick={handleClick} size='sm' variant='secondary'>
             Editera
         </Button>
     }
 
+    const saveProxy = (result?:Member) => {
+        if (result) {
+            const i = proxies.findIndex(p => p.id === result.id);
+            proxies[i] = result;
+            setProxies(proxies);
+        }
+        setEditProxy(undefined);
+    }
+
     return <>
+        <Modal show={editProxy !== undefined} onHide={() => saveProxy(undefined)}>
+            <Modal.Header closeButton={true}>
+                Editera underhuggare
+            </Modal.Header>
+            <Modal.Body>
+                <ProfileEditForm member={editProxy} onSaved={saveProxy}/>                
+            </Modal.Body>
+        </Modal>
+
         <Row>
             <Col md={9}>
                 <h2>Mina underhuggare</h2>
