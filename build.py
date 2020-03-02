@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.7
 
 from subprocess import run
+from pathlib import Path
 import shutil, os, os.path, sys
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,13 +35,22 @@ def test():
     #print("\n == PYTHON TEST")
     #run(['python','manage.py','test', '--debug-mode'], check=True, env=testEnv, shell=SHELL)
 
+def reload():
+    '''reload web app at pythonanywhere.com'''
+    path = Path('/var/www/macke_eu_pythonanywhere_com_wsgi.py')
+    if path.exists():
+        print(f"Touching {path}")
+        path.touch()
+    else:
+        print(f"Ignoring WSGI file {path} as it doesn't exist here.")
+
 this_module = sys.modules[__name__]
 
 if __name__ == '__main__':
     print("Working in " + ROOT_DIR + " ...")
     os.chdir(ROOT_DIR)
 
-    tasks = ['install', 'clean', 'build', 'migratedb', 'test']
+    tasks = ['install', 'clean', 'build', 'migratedb', 'test', 'reload']
 
     if '--help' in sys.argv:
         print("build.py [task(s)] (" + tasks + ")")
