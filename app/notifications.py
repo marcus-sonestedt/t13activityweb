@@ -30,6 +30,7 @@ class NotificationData():
         self.fullname = member.fullname
 
         self.hasMemberCard = member.membercard_number != None and member.membercard_number != ''
+        self.hasProxies = member.proxies.all().exists()
 
         self.count_badges()
         self.compute_notifications()
@@ -38,14 +39,13 @@ class NotificationData():
         self.completedTasks = self.member.completed_weight
         self.bookedTasks = self.member.booked_weight
 
-        self.myDelistRequests = \
-            models.ActivityDelistRequest.objects.filter(
+        self.myDelistRequests = models.ActivityDelistRequest.objects.filter(
                 member=self.member, approved=None).count()
 
         if self.isStaff:
-            self.unansweredDelistRequests = \
-                models.ActivityDelistRequest.objects.filter(
-                    approved=None).exclude(member=self.member).count()
+            self.unansweredDelistRequests = models.ActivityDelistRequest.objects \
+                .filter(approved=None) \
+                .exclude(member=self.member).count()
         else:
             self.unansweredDelistRequests = None
 
@@ -89,6 +89,7 @@ class NotificationDataSerializer(drf_serializers.Serializer):
     minSignups = drf_serializers.IntegerField(required=False)
 
     isStaff = drf_serializers.BooleanField(required=False)
+    hasProxies = drf_serializers.BooleanField(required=False)
 
     memberId = drf_serializers.IntegerField(required=False)
     userId = drf_serializers.IntegerField(required=False)

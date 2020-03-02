@@ -10,7 +10,9 @@ import { Member, PagedMembers } from '../Models';
 export const EditProfilePage = () => {
     const { id } = useParams();
     const [member, setMember] = useState<Member>();
+    const history = useHistory();
     const onLoaded = useCallback(data => setMember(data.results[0]), []);
+    const handleSaved = () => history.goBack();
 
     return <Container>
         <Row>
@@ -20,7 +22,7 @@ export const EditProfilePage = () => {
                         url={Member.apiUrlForId(id)}
                         ctor={json => deserialize(PagedMembers, json)}
                         onLoaded={onLoaded}>
-                        <ProfileEditForm member={member} />
+                        <ProfileEditForm member={member} onSaved={handleSaved}/>
                     </DataProvider>
                     : <CreateProxy />
                 }
@@ -36,7 +38,7 @@ const CreateProxy = () => {
     return <>
         <ProfileEditForm
             member={new Member()}
-            onSaved={m => history.push(`/frontend/myproxies?highlight=${m.id}`)}
+            onSaved={m => history.push(`/frontend/proxies?highlight=${m.id}`)}
             onError={setError}
         />
         {error ?

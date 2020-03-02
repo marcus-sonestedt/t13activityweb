@@ -105,7 +105,7 @@ export const MyActivitiesTable = (props: {
         <div className="table-container">
             <Row>
                 <Col>
-                    <h1>Mina uppgifter</h1>
+                    <h1>Uppgifter</h1>
                 </Col>
                 <Col style={{ textAlign: 'right' }}>
                     <h3>

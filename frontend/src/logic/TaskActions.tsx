@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Cookies from "universal-cookie";
 import * as H from 'history';
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
 import { Activity, Member } from "../Models";
 import { getJsonHeaders } from "./ADRActions";
+import { MyProxiesTable } from "../components/ProxiesTable";
+import { userContext } from "../components/UserContext";
 
 const cookies = new Cookies();
 
@@ -44,7 +46,7 @@ const claimActivityForSelf = (
 }
 
 export const changeActivityViaProxy = (
-    method:string,
+    method: string,
     activity: Activity,
     proxy: Member,
     setError: (err?: string) => void,
@@ -53,7 +55,7 @@ export const changeActivityViaProxy = (
         method: method,
         headers: getJsonHeaders()
     }).then(async  r => {
-        if (r.status !== 200){
+        if (r.status !== 200) {
             const errText = `${r.statusText}:\n${await r.json().then(j => j['detail'])}`
             throw errText
         }
@@ -66,20 +68,50 @@ export const changeActivityViaProxy = (
     });
 }
 
-export const BookButtons = (props: { activity: Activity, canBookSelf: boolean }) => {
+export const BookButtons = (props: {
+    activity: Activity,
+    canBookSelf: boolean,
+    reloadActivity: () => void
+}) => {
     const history = useHistory();
-    const createClaimHandler = (self: boolean) => {
-        return (e: React.MouseEvent<HTMLElement>) => {
-            e.stopPropagation();
-            claimActivity(props.activity, self, history);
-        }
+    const user = useContext(userContext);
+    const [showProxyDialog, setShowProxyDialog] = useState(false);
+
+    const handleEnlistSelf = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        claimActivity(props.activity, true, history);
+    }
+
+    const handleEnlistProxy = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        setShowProxyDialog(true);
+    }
+
+    const handleHide = () => {
+        setShowProxyDialog(false);
+        props.reloadActivity();
+    }
+
+    const handleProxySelected = () => {
+        setShowProxyDialog(false);
+        props.reloadActivity();
     }
 
     return <>
+        <Modal show={showProxyDialog} onHide={handleHide}>
+            <Modal.Header closeButton>
+                <Modal.Title>Boka underhuggare</Modal.Title>
+                <Modal.Body>
+                    <MyProxiesTable activity={props.activity} onProxySelected={handleProxySelected} />
+                </Modal.Body>
+            </Modal.Header>
+        </Modal>
         {props.canBookSelf
-            ? <Button onClick={createClaimHandler(true)}>Boka själv</Button>
+            ? <Button style={{ marginBottom: 3 }} onClick={handleEnlistSelf}>Boka själv</Button>
             : null}
         {' '}
-        <Button onClick={createClaimHandler(false)}>Boka underhuggare</Button>
+        {user.hasProxies ?
+            <Button variant="outline-primary" onClick={handleEnlistProxy}>Boka underhuggare</Button>
+            : null}
     </>
 }

@@ -41,12 +41,17 @@ class MyActivitiesList(generics.ListAPIView):
 
     def get_queryset(self):
         member = Member.objects.get(user=self.request.user)
-        return self.queryset.filter(assigned=member)
+        return self.queryset.filter(assigned=member, event__start_date__year=datetime.date.today().year)
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+class ProxyActivityList(MyActivitiesList):
+    def get_queryset(self):
+        member = Member.objects.get(user=self.request.user)
+        proxy = member.proxies.get(id=self.kwargs['proxy_id'])
+        return self.queryset.filter(assigned=proxy, assigned_for_proxy=member)
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type') \
@@ -192,7 +197,9 @@ class InfoTextList(generics.RetrieveAPIView):
 
 
 url_patterns = [
-    path('myactivities', MyActivitiesList.as_view()),
+    path('activity_my', MyActivitiesList.as_view()),
+    re_path(r'^activity_for_proxy/(?P<proxy_id>[0-9]+)?', ProxyActivityList.as_view()),
+
     re_path(r'^activity/(?P<pk>[0-9]+)?', ActivityList.as_view()),
     re_path(
         r'event_activities/(?P<event_id>[0-9]+)', EventActivities.as_view()),

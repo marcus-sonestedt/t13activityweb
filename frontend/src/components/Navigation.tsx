@@ -30,7 +30,7 @@ export const Navigation = () => {
                         <Nav.Link href="/frontend/double-bookings">Dubbelbokningar</Nav.Link>
                     </>}
                     {!user.isLoggedIn ? <p>{' '}</p> : <>
-                    <Nav.Link href="/frontend/myproxies">Underhuggare</Nav.Link>
+                    <Nav.Link href="/frontend/proxies">Underhuggare</Nav.Link>
                     </>}
                 </Nav>
                 <Nav>

@@ -20,6 +20,7 @@ export class UserContext {
   completedTasks = 0;
   bookedTasks = 0;
   hasMemberCard = false;
+  hasProxies = false;
 }
 
 export const userContext = React.createContext(new UserContext());

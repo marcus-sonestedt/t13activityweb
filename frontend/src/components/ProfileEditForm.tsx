@@ -17,8 +17,6 @@ export const ProfileEditForm = (props: {
 
     const { member, onSaved } = props;
 
-    debugger
-
     if (!member)
         return null;
 

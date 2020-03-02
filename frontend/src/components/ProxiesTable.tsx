@@ -8,7 +8,6 @@ import { Button, Table, Col, Row, Alert } from "react-bootstrap";
 import { disconnectProxy } from "../logic/ProxyActions";
 import { deserialize } from "class-transformer";
 import { HoverTooltip } from "./Utilities";
-import { useHistory } from "react-router-dom";
 
 export const MyProxiesTable = (props: {
     activity?: Activity,
@@ -19,12 +18,12 @@ export const MyProxiesTable = (props: {
     const [proxies, setProxies] = useState<Member[]>([]);
     const [reload, setReload] = useState(0);
     const [error, setError] = useState<string>();
-    const history = useHistory();
 
     const setProxiesCallback = useCallback(data => setProxies(data.results), []);
+
     const onError = (e?: string) => {
         setError(e);
-        if (!e) history.goBack(); else setReload(r => r + 1);
+        setReload(r => r + 1);
     }
 
     const renderButtons = (proxy: Member) => {
@@ -36,7 +35,7 @@ export const MyProxiesTable = (props: {
 
         return <Button href={`/frontend/profile/edit/${proxy.id}`} size='sm' variant='secondary'>
             Editera
-            </Button>
+        </Button>
     }
 
     return <>
@@ -105,8 +104,8 @@ export const ProxiesTable = (props: {
     renderButtons?: (proxy: Member) => JSX.Element
 }) => {
     const renderRow = (proxy: Member) => {
-        const rowClicked = (e: any) => {
-            //e.preventDefault();
+        const rowClicked = (e: React.MouseEvent<HTMLElement>) => {
+            e.stopPropagation();
             props.onProxySelected?.(proxy);
         }
 

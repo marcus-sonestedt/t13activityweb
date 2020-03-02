@@ -21,7 +21,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         if (onLoaded !== undefined)
             onLoaded(typedData);
 
-    },  // eslint-disable-next-line            
+    },  // eslint-disable-next-line
         [ onLoaded /*, ctor */] // weird, but infinite loop otherwise, even if useCallback is used
     );
 
@@ -29,6 +29,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
         const controller = new AbortController();
         setPlaceHolder("Laddar...");
         setError(undefined);
+        setData(undefined);
 
         fetch(url, {
             signal: controller.signal,
@@ -78,7 +79,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             <Image src='/static/brokenpiston.jpg'
                 alt="Broken piston"
                 className="errorImage"/>
-            <Alert variant='warning'>
+            <Alert variant='danger'>
                 {error.includes("<!DOCTYPE html>") ? <div dangerouslySetInnerHTML={{ __html:error }}/>
                 : <pre>{error}</pre> }
             </Alert>

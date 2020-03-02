@@ -21,9 +21,8 @@ import { MainPage } from './pages/MainPage';
 import { MemberCardPage } from './pages/MemberCardPage';
 import { MemberPage } from './pages/MemberPage';
 import { NotificationsPage } from './pages/NotificationsPage';
-import { EnlistByProxyPage } from './pages/EnlistByProxyPage';
 import { EditProfilePage } from './pages/EditProfilePage';
-import { MyProxiesPage } from './pages/MyProxiesPage';
+import { ProxiesPage } from './pages/ProxiesPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { VerifyPhonePage } from './pages/VerifyPhonePage';
@@ -107,8 +106,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
         <Route path="/frontend/verify/phone" component={VerifyPhonePage} />
         <Route path="/frontend/verify/email/:initialState?" component={VerifyEmailPage} />
 
-        <Route path="/frontend/enlist_by_proxy/:activityId" component={EnlistByProxyPage} />
-        <Route path="/frontend/myproxies/" component={MyProxiesPage} />
+        <Route path="/frontend/proxies/" component={ProxiesPage} />
 
         <Route exact path="/frontend/profile/create" component={EditProfilePage} />
         <Route path="/frontend/profile/edit/:id" component={EditProfilePage} />

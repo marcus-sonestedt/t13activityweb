@@ -1,16 +1,16 @@
-import { Tab, Row, Col, Nav, Pagination, Badge, NavDropdown, Jumbotron, Alert } from "react-bootstrap"
-import React, { useState, useCallback, useContext } from "react";
+import { Tab, Row, Col, Nav, Badge, NavDropdown, Jumbotron, Alert } from "react-bootstrap"
+import React, { useState, useContext } from "react";
 import { deserialize } from "class-transformer";
 
-import { PagedActivities, PagedT13Events } from "../Models";
+import { PagedT13Events } from "../Models";
 import DataProvider from "../components/DataProvider";
-import { MyActivitiesTable } from "../components/MyActivitiesTable";
-import { PageItems, HoverTooltip, ErrorBoundary, InfoText } from "../components/Utilities";
+import { HoverTooltip, ErrorBoundary, InfoText } from "../components/Utilities";
 import EventsComponent from "../components/Events";
 import { userContext } from "../components/UserContext";
 import { ActivityDelistRequestsComponent } from "./ADRPage";
 import { NotificationsComponent } from "./NotificationsPage";
 import { useHistory } from "react-router-dom";
+import { MemberActivitiesTable } from "../components/MemberActivitiesTable";
 
 export const MainPage = () => {
     const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
@@ -76,7 +76,7 @@ export const MainPage = () => {
                             <OverviewTab />
                         </Tab.Pane>
                         <Tab.Pane eventKey="my-tasks">
-                            {verified ? <MyTasksTab /> : <UnverifiedNotice />}
+                            {verified ? <MemberActivitiesTable memberId={user.memberId} /> : <UnverifiedNotice />}
                         </Tab.Pane>
                         <Tab.Pane eventKey="upcoming-events">
                             {verified ? <UpcomingEventsTab /> : <UnverifiedNotice />}
@@ -113,38 +113,6 @@ const OverviewTab = () => {
         </Col>
     </Row>
 
-
-}
-
-const MyTasksTab = () => {
-    const [activities, setActivities] = useState(new PagedActivities());
-    const [activitiesPage, setActivitiesPage] = useState(1);
-    const [reload, setReload] = useState(1);
-
-    const incReload = () => setReload(reload + 1);
-
-    const setActivitiesReload = useCallback((data: PagedActivities) => {
-        if (reload > 0)
-            setActivities(data);
-    }, [reload]);
-
-    const ACTIVITIES_PAGE_SIZE = 10;
-
-    return <DataProvider< PagedActivities >
-        ctor={t => deserialize(PagedActivities, t)}
-        url={`/api/myactivities?page=${activitiesPage}&page_size=${ACTIVITIES_PAGE_SIZE}`}
-        onLoaded={setActivitiesReload}>
-        <MyActivitiesTable
-            values={activities.results}
-            reload={incReload}
-        />
-        <Pagination>
-            <PageItems count={activities.count}
-                pageSize={ACTIVITIES_PAGE_SIZE}
-                currentPage={activitiesPage}
-                setFunc={setActivitiesPage} />
-        </Pagination>
-    </DataProvider>
 
 }
 
