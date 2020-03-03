@@ -60,6 +60,10 @@ button {
     cursor: pointer
 }
 
+td>a {
+    color: #4488ff
+}
+
 td:first-child>a {
     color: #ffffff !important
 }
