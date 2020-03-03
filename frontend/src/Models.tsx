@@ -107,6 +107,8 @@ export class Activity implements IdValue {
     @Type(() => Attachment)
     attachments: Attachment[] = []
 
+    current_user_can_enlist = false;
+
     time = () => {
         if (this.end_time === null || this.end_time === this.start_time)
             return this.start_time

@@ -108,11 +108,12 @@ class EventActivitySerializer(serializers.ModelSerializer):
     end_time = serializers.TimeField(format="%H:%M")
     bookable = serializers.BooleanField()
     active_delist_request = ActivityDelistRequestSerializer(required=False)
+    current_user_can_enlist = serializers.BooleanField(required=False)
 
     class Meta:
         model = Activity
         fields = [x.name for x in Activity._meta.get_fields()] + \
-            ['bookable',  'active_delist_request']
+            ['bookable',  'active_delist_request', 'current_user_can_enlist']
 
 
 class ActivitySerializer(EventActivitySerializer):

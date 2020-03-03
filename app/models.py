@@ -327,6 +327,9 @@ class Activity(models.Model):
         except ActivityDelistRequest.DoesNotExist:
             return None
 
+    def can_member_enlist(self, member:Member):
+        return not self.event.activities.filter(assigned=member).exists()
+
     class Meta:
         ordering = ['start_time', 'end_time', 'name']
         verbose_name = 'Uppgift'

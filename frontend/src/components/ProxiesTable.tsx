@@ -1,69 +1,28 @@
-import React, { useCallback, useState } from "react";
-import DataProvider from "./DataProvider";
-import { Member, Activity, PagedMembers } from '../Models';
-import { useContext } from "react";
-import { userContext } from "./UserContext";
+import React, { useState } from "react";
+import { Member, Activity } from '../Models';
 import { changeActivityViaProxy } from "../logic/TaskActions";
-import { Button, Table, Col, Row, Alert, Modal } from "react-bootstrap";
-import { disconnectProxy } from "../logic/ProxyActions";
-import { deserialize } from "class-transformer";
+import { Button, Table, Col, Row, Alert } from "react-bootstrap";
 import { HoverTooltip } from "./Utilities";
-import { ProfileEditForm } from "./ProfileEditForm";
 
 export const MyProxiesTable = (props: {
     activity?: Activity,
+    proxies:Member[],
     onProxySelected?: (proxy: Member) => void
 }) => {
-    const { activity, onProxySelected } = props;
+    const { activity, proxies, onProxySelected } = props;
 
-    const [proxies, setProxies] = useState<Member[]>([]);
-    const [reload, setReload] = useState(0);
     const [error, setError] = useState<string>();
-    const [editProxy, setEditProxy] = useState<Member>();
-
-    const setProxiesCallback = useCallback(data => setProxies(data.results), []);
-
-    const onError = (e?: string) => {
-        setError(e);
-        setReload(r => r + 1);
-    }
 
     const renderButtons = (proxy: Member) => {
-        if (activity) {
-            return proxy.id !== activity.assigned?.id
-                ? <Button onClick={() => changeActivityViaProxy('PUT', activity, proxy, onError)} size='sm' variant='success'>Boka</Button>
-                : <Button onClick={() => changeActivityViaProxy('DELETE', activity, proxy, onError)} size='sm' variant='warning'>Avboka</Button>
-        }
-
-        const handleClick = (e:React.MouseEvent<HTMLElement>) => {
-            e.stopPropagation();
-            setEditProxy(proxy);
-        }
-
-        return <Button onClick={handleClick} size='sm' variant='secondary'>
-            Editera
-        </Button>
-    }
-
-    const saveProxy = (result?:Member) => {
-        if (result) {
-            const i = proxies.findIndex(p => p.id === result.id);
-            proxies[i] = result;
-            setProxies(proxies);
-        }
-        setEditProxy(undefined);
+        if (!activity)
+            return <span />
+        else if (proxy.id !== activity.assigned?.id)
+            return <Button onClick={() => changeActivityViaProxy('PUT', activity, proxy, setError)} size='sm' variant='success'>Boka</Button>
+        else
+            return <Button onClick={() => changeActivityViaProxy('DELETE', activity, proxy, setError)} size='sm' variant='warning'>Avboka</Button>
     }
 
     return <>
-        <Modal show={editProxy !== undefined} onHide={() => saveProxy(undefined)}>
-            <Modal.Header closeButton={true}>
-                Editera underhuggare
-            </Modal.Header>
-            <Modal.Body>
-                <ProfileEditForm member={editProxy} onSaved={saveProxy}/>                
-            </Modal.Body>
-        </Modal>
-
         <Row>
             <Col md={9}>
                 <h2>Mina underhuggare</h2>
@@ -77,15 +36,9 @@ export const MyProxiesTable = (props: {
                 </HoverTooltip>
             </Col>
         </Row>
-        <DataProvider<PagedMembers>
-            key={reload}
-            url={`/api/proxy/my/?_reload=${reload}`}
-            ctor={json => deserialize(PagedMembers, json)}
-            onLoaded={setProxiesCallback}>
-            <ProxiesTable proxies={proxies}
-                onProxySelected={onProxySelected}
-                renderButtons={renderButtons} />
-        </DataProvider>
+        <ProxiesTable proxies={proxies}
+            onProxySelected={onProxySelected}
+            renderButtons={renderButtons} />
         <div>
             {/* not implemented yet
             {' '}
@@ -99,6 +52,7 @@ export const MyProxiesTable = (props: {
     </>
 }
 
+/*
 export const MySuperProxiesTable = (props: {
     onProxySelected?: (proxy: Member) => void
 }) => {
@@ -121,7 +75,7 @@ export const MySuperProxiesTable = (props: {
         </DataProvider>
     </>
 }
-
+*/
 
 export const ProxiesTable = (props: {
     proxies: Member[],

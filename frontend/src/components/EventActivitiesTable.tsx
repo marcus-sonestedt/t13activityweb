@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { deserialize } from "class-transformer";
 
 import { PagedActivities, T13Event, Activity } from "../Models";
-import { BookButtons } from "../logic/TaskActions";
+import { EnlistButtons } from "../components/EnlistButtons";
 import { HoverTooltip, PageItems } from "./Utilities";
 import { Reimbursements } from "../pages/ActivityTypePage";
 import DataProvider from "./DataProvider";
@@ -15,15 +15,9 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
     const [activities, setActivities] = useState(new PagedActivities());
     const [page, setPage] = useState(1);
     const [reload, setReload] = useState(0);
-
-    const pageSize = 8;
-    const user = useContext(userContext);
     const history = useHistory();
-
-    // TODO: Compute for all activities, not just current page! Maybe on server?
-    const memberAlreadyBooked = useMemo(() =>
-        activities.results.filter(a => a.assigned?.id === user.memberId).length
-        , [activities, user.memberId]);
+    const user = useContext(userContext);
+    const pageSize = 8;
 
     const renderActivityRow = (activity: Activity) => {
         const type = activity.type !== null
@@ -44,7 +38,7 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
                 assigned = <>
                     {assigned}
                     {' '}
-                    <BookButtons activity={activity} canBookSelf={!memberAlreadyBooked}
+                    <EnlistButtons activity={activity}
                         reloadActivity={() => setReload(r => r+1)} />
                 </>
             }

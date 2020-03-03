@@ -10,6 +10,7 @@ import { userContext } from "../components/UserContext";
 import { MarkDown, HoverTooltip } from '../components/Utilities';
 import { Attachments } from '../components/AttachmentComponent';
 import { getJsonHeaders } from '../logic/ADRActions';
+import { EnlistButtons } from '../components/EnlistButtons';
 
 export const ActivityComponent = (props: { model?: Activity }) => {
     const { model } = props;
@@ -58,7 +59,7 @@ export const ActivityComponent = (props: { model?: Activity }) => {
                 </HoverTooltip>
                 <h5>Tilldelad: {' '}
                     {!model.assigned
-                        ? <><span>Ingen</span>{' '}<Button variant='outline-primary' href={model.event.url()} size='sm'>Boka via händelsesidan</Button></>
+                        ? <EnlistButtons activity={model} reloadActivity={() => window.location.reload()}/>
                         : <a href={model.assigned.url()}>{model.assigned.fullname}</a>}
                 </h5>
                 <h5>Kommentar: {' '}

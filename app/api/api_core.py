@@ -30,6 +30,8 @@ from app import serializers
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer, FAQSerializer, UserSerializer
+from django.db.models.aggregates import Count
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -41,17 +43,20 @@ class MyActivitiesList(generics.ListAPIView):
 
     def get_queryset(self):
         member = Member.objects.get(user=self.request.user)
-        return self.queryset.filter(assigned=member, event__start_date__year=datetime.date.today().year)
+        return self.queryset \
+            .filter(assigned=member, event__start_date__year=datetime.date.today().year)
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
 
 class ProxyActivityList(MyActivitiesList):
     def get_queryset(self):
         member = Member.objects.get(user=self.request.user)
         proxy = member.proxies.get(id=self.kwargs['proxy_id'])
         return self.queryset.filter(assigned=proxy, assigned_for_proxy=member)
+
 
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type') \
@@ -66,18 +71,23 @@ class EventList(generics.ListAPIView):
             return serializers.EventPublicSerializer
 
     def get_queryset(self):
+        today = datetime.date.today()
         if 'upcoming' in self.kwargs:
-            today = datetime.date.today()
-            return self.queryset.filter(
+            qs = self.queryset.filter(
                 start_date__gte=today,
                 start_date__year=today.year)
+        elif 'id' in self.kwargs:
+            qs = self.queryset.filter(id=self.kwargs['id'])
+        else:
+            year = self.request.query_params.get('year', today.year)
+            qs = self.queryset.filter(start_date__year=year)
 
-        if 'id' in self.kwargs:
-            return self.queryset.filter(id=self.kwargs['id'])
+        if self.request.user.is_authenticated:
+            member = models.Member.objects.get(user=self.request.user)
+            qs = qs.annotate(current_user_assigned=Count(
+                'activities', filter=Q(activities__assigned=member)))
 
-        year = self.request.query_params.get(
-            'year', datetime.date.today().year)
-        return self.queryset.filter(start_date__year=year)
+        return qs
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
@@ -198,7 +208,8 @@ class InfoTextList(generics.RetrieveAPIView):
 
 url_patterns = [
     path('activity_my', MyActivitiesList.as_view()),
-    re_path(r'^activity_for_proxy/(?P<proxy_id>[0-9]+)?', ProxyActivityList.as_view()),
+    re_path(
+        r'^activity_for_proxy/(?P<proxy_id>[0-9]+)?', ProxyActivityList.as_view()),
 
     re_path(r'^activity/(?P<pk>[0-9]+)?', ActivityList.as_view()),
     re_path(
