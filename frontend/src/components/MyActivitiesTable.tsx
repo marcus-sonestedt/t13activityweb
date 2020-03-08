@@ -17,9 +17,15 @@ export const MyActivitiesTable = (props: {
     const history = useHistory();
     const user = useContext(userContext)
     const today = new Date();
-    const bookedCount = useMemo(() => values.filter(a => a.active_delist_request?.member !== user.memberId).length, [values, user.memberId])
-    const completedCount = useMemo(() => values.filter(a => a.completed === true).length, [values])
-    const canRequestUnlist = !user.hasMemberCard || bookedCount > user.minSignups
+
+    const bookedWeight = useMemo(() => values
+        .filter(a => a.active_delist_request?.member !== user.memberId)
+        .reduce((w, a) => w + a.weight, 0)
+        , [values, user.memberId])
+    const completedWeight = useMemo(() => values
+        .filter(a => a.completed === true)
+        .reduce((w, a) => w + a.weight, 0)
+        , [values])
 
     const buttonClick = (f: () => Promise<void>) => (e: any) => {
         e.stopPropagation();
@@ -56,6 +62,8 @@ export const MyActivitiesTable = (props: {
 
         const myADR = activity.active_delist_request?.member === user.memberId;
 
+        const canRequestUnlist = !user.hasMemberCard || (bookedWeight-activity.weight) >= user.minSignups
+
         return (
             <tr key={activity.id} className={rowClassName} onClick={rowClick} >
                 <td>
@@ -73,7 +81,7 @@ export const MyActivitiesTable = (props: {
                         : null}
                 </td>
                 <td className='nowrap'>
-                    {activity.date()}
+                    <b>{activity.date()}</b>
                     <br />
                     {activity.time()}
                 </td>
@@ -81,11 +89,14 @@ export const MyActivitiesTable = (props: {
                     ? <HoverTooltip tooltip={tooltip}>
                         <span>{text} <span role="img" aria-label={emojiLabel}>{emoji}</span></span>
                     </HoverTooltip>
-                    : (myADR && activity.active_delist_request)
+                    : <>
+                        {(myADR && activity.active_delist_request)
                         ? <a href={activity.active_delist_request.url()}>
                             Avbokningsfråga inlagd
                         </a>
-                        : <span>Bokad</span>
+                        : <b>Bokad</b>}
+                    <div>Värde: {activity.weight}</div>
+                    </>
                 }
                 </td>
                 <td>
@@ -109,7 +120,7 @@ export const MyActivitiesTable = (props: {
                 </Col>
                 <Col style={{ textAlign: 'right' }}>
                     <h3>
-                        {values.length} totalt, {completedCount} utförda, {bookedCount} bokade
+                        {values.length} totalt, {completedWeight} utförda, {bookedWeight} bokade
                     </h3>
                 </Col>
             </Row>
