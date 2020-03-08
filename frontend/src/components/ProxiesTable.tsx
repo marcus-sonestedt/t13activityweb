@@ -6,8 +6,9 @@ import { HoverTooltip } from "./Utilities";
 
 export const MyProxiesTable = (props: {
     activity?: Activity,
-    proxies:Member[],
-    onProxySelected?: (proxy: Member) => void
+    proxies: Member[],
+    onProxySelected?: (proxy: Member) => void,
+    onEnlistChanged?: () => void
 }) => {
     const { activity, proxies, onProxySelected } = props;
 
@@ -17,9 +18,15 @@ export const MyProxiesTable = (props: {
         if (!activity)
             return <span />
         else if (proxy.id !== activity.assigned?.id)
-            return <Button onClick={() => changeActivityViaProxy('PUT', activity, proxy, setError)} size='sm' variant='success'>Boka</Button>
+            return <Button onClick={async () => {
+                await changeActivityViaProxy('PUT', activity, proxy, setError);
+                props.onEnlistChanged?.();
+            }} size='sm' variant='success'>Boka</Button>
         else
-            return <Button onClick={() => changeActivityViaProxy('DELETE', activity, proxy, setError)} size='sm' variant='warning'>Avboka</Button>
+            return <Button onClick={async () => {
+                await changeActivityViaProxy('DELETE', activity, proxy, setError);
+                props.onEnlistChanged?.();
+            }} size='sm' variant='warning'>Avboka</Button>
     }
 
     return <>

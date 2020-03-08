@@ -40,26 +40,27 @@ const claimActivityForSelf = (
     });
 }
 
-export const changeActivityViaProxy = (
+export const changeActivityViaProxy = async (
     method: string,
     activity: Activity,
     proxy: Member,
     setError: (err?: string) => void,
 ) => {
-    fetch(`/api/proxy/activity/${activity.id}/${proxy.id}`, {
+    const r = await fetch(`/api/proxy/activity/${activity.id}/${proxy.id}`, {
         method: method,
         headers: getJsonHeaders()
-    }).then(async  r => {
+    })
+
+    try {
         if (r.status !== 200) {
             const errText = `${r.statusText}:\n${await r.json().then(j => j['detail'])}`
             throw errText
         }
+
         setError(undefined);
-    }, r => {
-        throw r
-    }).catch(e => {
+    } catch (e) {
         console.error(e);
         setError(e);
-    });
+    }
 }
 

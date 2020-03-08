@@ -107,8 +107,6 @@ export class Activity implements IdValue {
     @Type(() => Attachment)
     attachments: Attachment[] = []
 
-    current_user_can_enlist = false;
-
     time = () => {
         if (this.end_time === null || this.end_time === this.start_time)
             return this.start_time
@@ -209,6 +207,7 @@ export class T13Event implements IdValue {
     coordinators: Member[] = [];
 
     cancelled: boolean = false;
+    current_user_assigned: boolean = false;
 
     date = () => {
         const startDate = this.start_date.toLocaleDateString('sv-SE');

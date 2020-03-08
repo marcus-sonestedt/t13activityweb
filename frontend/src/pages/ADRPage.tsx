@@ -15,12 +15,13 @@ export const RequestAdrButton = (props: {
 }) => {
     const user = useContext(userContext);
 
-    const onSpanClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => { if (props.disabled) e.stopPropagation(); }
+    const onSpanClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        if (props.disabled) e.stopPropagation();
+    }
 
     const onButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        props.onClick(e);
         e.stopPropagation();
-        e.preventDefault();
+        props.onClick(e);
     }
 
     return (

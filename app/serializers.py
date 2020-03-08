@@ -79,11 +79,13 @@ class EventPublicSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()
     coordinators = MemberSerializer(many=True)
+    current_user_assigned = serializers.BooleanField(required=False)
 
     class Meta:
         model = Event
         fields = [x.name for x in Event._meta.get_fields()] + \
-            ['has_bookable_activities', 'activities_count', 'activities_available_count']
+            ['has_bookable_activities', 'activities_count', 'activities_available_count',
+            'current_user_assigned']
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
@@ -108,12 +110,11 @@ class EventActivitySerializer(serializers.ModelSerializer):
     end_time = serializers.TimeField(format="%H:%M")
     bookable = serializers.BooleanField()
     active_delist_request = ActivityDelistRequestSerializer(required=False)
-    current_user_can_enlist = serializers.BooleanField(required=False)
 
     class Meta:
         model = Activity
         fields = [x.name for x in Activity._meta.get_fields()] + \
-            ['bookable',  'active_delist_request', 'current_user_can_enlist']
+            ['bookable',  'active_delist_request']
 
 
 class ActivitySerializer(EventActivitySerializer):
