@@ -121,8 +121,8 @@ export const MyActivitiesTable = (props: {
 
     const renderProxyRow = (activity: Activity) => {
         const r = renderRow(activity);
-        const proxy = <td><a href={activity.assigned?.url()}>{activity.assigned?.fullname}</a></td>
-        return r.row([proxy].concat(r.td));
+        const proxy = activity.assigned ? <a href={activity.assigned.url()}>{activity.assigned.fullname}</a> : null;
+        return r.row([<td>{proxy}</td>].concat(r.td));
     }
 
     const tableHeaders = <>
@@ -133,17 +133,17 @@ export const MyActivitiesTable = (props: {
         <th>Åtgärd</th>
     </>
 
-    var myTasks = values
+    const myTasks = values
         .filter(a => a.assigned?.id === user.memberId)
-        .sort((a, b) => a.date < b.date ? 1 : 0)
+        .sort((a, b) => a.date().localeCompare(b.date()))
         .map(renderMyRow)
 
-    var myProxiesTasks = values
+    const myProxiesTasks = values
         .filter(a => a.assigned?.id !== user.memberId)
-        .sort((a, b) => a.date < b.date ? 1 : 0)
+        .sort((a, b) => a.date().localeCompare(b.date()))
         .map(renderProxyRow)
 
-    var r =
+    const r =
         [<Row>
             <Col>
                 <h2>Mina egna uppgifter</h2>
