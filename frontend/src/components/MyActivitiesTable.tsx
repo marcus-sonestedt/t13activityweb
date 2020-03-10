@@ -143,38 +143,51 @@ export const MyActivitiesTable = (props: {
         .sort((a, b) => a.date().localeCompare(b.date()))
         .map(renderProxyRow)
 
-    const r =
-        [<Row>
-            <Col>
-                <h2>Mina egna uppgifter</h2>
-            </Col>
-            <Col style={{ textAlign: 'right' }}>
-                <h3>
-                    {values.length} uppgift(er), {completedWeight} utfört värde, {bookedWeight} bokat värde
-                </h3>
-            </Col>
-        </Row>,
-        <Row><Col><Table striped responsive='lg'>
+    const r = []
+
+    r.push(<Row>
+        <Col>
+            {(myTasks.length > 0 && myProxiesTasks.length > 0) ?
+                <h2>Mina uppgifter</h2>
+                : <h2>Underhuggares uppgifter</h2>
+            }
+        </Col>
+        <Col style={{ textAlign: 'right' }}>
+            <h4>
+                {values.length} uppgift(er), {completedWeight} utfört värde, {bookedWeight} bokat värde
+            </h4>
+        </Col>
+    </Row>)
+
+    if (myTasks.length != 0) {
+        r.push(<Row><Col><Table striped responsive='lg'>
             <thead><tr>
                 {tableHeaders}
             </tr></thead>
             <tbody>
                 {myTasks}
             </tbody>
-        </Table></Col></Row>
-        ]
-
-    if (user.hasProxies) {
-        r.push(<Row><Col><h2>Mina underhuggares uppgifter</h2></Col></Row>)
-        r.push(<Row><Col><Table striped responsive='lg'>
-            <thead><tr>
-                <th>Namn</th>
-                {tableHeaders}
-            </tr></thead>
-            <tbody>
-                {myProxiesTasks}
-            </tbody>
         </Table></Col></Row>)
+    }
+
+    if (myTasks.length > 0 && myProxiesTasks.length > 0) {
+        r.push(<Row><Col>
+            <h2>Mina underhuggares uppgifter</h2>
+        </Col></Row>)
+    }
+
+    if (myProxiesTasks.length > 0) {
+        r.push(<Row><Col>
+            <Table striped responsive='lg'>
+                <thead><tr>
+                    <th>Namn</th>
+                    {tableHeaders}
+                </tr></thead>
+                <tbody>
+                    {myProxiesTasks}
+                </tbody>
+            </Table>
+        </Col></Row>)
     }
 
     return <div className="table-container">
