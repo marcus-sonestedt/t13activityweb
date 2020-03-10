@@ -143,9 +143,7 @@ export const MyActivitiesTable = (props: {
         .sort((a, b) => a.date().localeCompare(b.date()))
         .map(renderProxyRow)
 
-    const r = []
-
-    r.push(<Row>
+    const r = [<Row>
         <Col>
             {(myTasks.length > 0 && myProxiesTasks.length > 0) ?
                 <h2>Mina uppgifter</h2>
@@ -157,9 +155,9 @@ export const MyActivitiesTable = (props: {
                 {values.length} uppgift(er), {completedWeight} utfört värde, {bookedWeight} bokat värde
             </h4>
         </Col>
-    </Row>)
+    </Row>]
 
-    if (myTasks.length != 0) {
+    if (myTasks.length !== 0) {
         r.push(<Row><Col><Table striped responsive='lg'>
             <thead><tr>
                 {tableHeaders}
