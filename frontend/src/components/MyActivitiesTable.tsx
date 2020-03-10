@@ -22,10 +22,14 @@ export const MyActivitiesTable = (props: {
         .filter(a => a.active_delist_request?.member !== user.memberId)
         .reduce((w, a) => w + a.weight, 0)
         , [values, user.memberId])
+
     const completedWeight = useMemo(() => values
         .filter(a => a.completed === true)
         .reduce((w, a) => w + a.weight, 0)
         , [values])
+
+    if (values === undefined)
+        return <p>Oops</p>
 
     const buttonClick = (f: () => Promise<void>) => (e: any) => {
         e.stopPropagation();
@@ -62,84 +66,119 @@ export const MyActivitiesTable = (props: {
 
         const myADR = activity.active_delist_request?.member === user.memberId;
 
-        const canRequestUnlist = !user.hasMemberCard || (bookedWeight-activity.weight) >= user.minSignups
+        const canRequestUnlist = !user.hasMemberCard || (bookedWeight - activity.weight) >= user.minSignups
 
-        return (
-            <tr key={activity.id} className={rowClassName} onClick={rowClick} >
+        return {
+            row: (children: JSX.Element[]) =>
+                <tr key={activity.id} className={rowClassName} onClick={rowClick}>
+                    {children}
+                </tr>,
+            td: [
                 <td>
                     <a href={activity.url()}>{activity.name}</a>
                     <br />
                     {activity.type !== null
                         ? <a href={activity.type.url()} style={{ fontWeight: 'normal' }}>{activity.type.name}</a>
                         : null}
-                </td>
+                </td>,
                 <td>
                     <a href={activity.event.url()} style={{ fontWeight: 'bold' }}>{activity.event.name}</a>
                     <br />
                     {activity.event.type !== null
                         ? <a href={activity.event.type.url()}>{activity.event.type.name}</a>
                         : null}
-                </td>
+                </td>,
                 <td className='nowrap'>
                     <b>{activity.date()}</b>
                     <br />
                     {activity.time()}
-                </td>
+                </td>,
                 <td>{(eventInPast || eventActive)
                     ? <HoverTooltip tooltip={tooltip}>
                         <span>{text} <span role="img" aria-label={emojiLabel}>{emoji}</span></span>
                     </HoverTooltip>
-                    : <>
-                        {(myADR && activity.active_delist_request)
-                        ? <a href={activity.active_delist_request.url()}>
-                            Avbokningsfråga inlagd
-                        </a>
-                        : <b>Bokad</b>}
-                    <div>Värde: {activity.weight}</div>
-                    </>
+                    : (myADR && activity.active_delist_request)
+                        ? <a href={activity.active_delist_request.url()}>Avbokningsfråga inlagd</a>
+                        : <b>Bokad</b>
                 }
-                </td>
+                    <div>Värde: {activity.weight}</div>
+                </td>,
                 <td>
                     {myADR
                         ? <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
                         : <RequestAdrButton onClick={buttonClick(() => createADR(activity, user))} disabled={!canRequestUnlist} />
                     }
                 </td>
-            </tr>
-        );
+            ]
+        }
     }
 
-    if (props.values === undefined)
-        return <p>Oops</p>
 
-    return (
-        <div className="table-container">
-            <Row>
-                <Col>
-                    <h1>Uppgifter</h1>
-                </Col>
-                <Col style={{ textAlign: 'right' }}>
-                    <h3>
-                        {values.length} totalt, {completedWeight} utförda, {bookedWeight} bokade
-                    </h3>
-                </Col>
-            </Row>
-            <Table striped responsive='lg'>
-                <thead>
-                    <tr>
-                        <th>Uppgift / Typ</th>
-                        <th>Aktivitet / Typ</th>
-                        <th>Tidpunkt</th>
-                        <th>Status</th>
-                        <th>Åtgärd</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {values
-                        .sort((a, b) => a.date < b.date ? 1 : 0)
-                        .map(renderRow)}
-                </tbody>
-            </Table>
-        </div>
-    )
+    const renderMyRow = (activity: Activity) => {
+        const r = renderRow(activity);
+        return r.row(r.td);
+    }
+
+    const renderProxyRow = (activity: Activity) => {
+        const r = renderRow(activity);
+        const proxy = <td><a href={activity.assigned?.url()}>{activity.assigned?.fullname}</a></td>
+        return r.row([proxy].concat(r.td));
+    }
+
+    const tableHeaders = <>
+        <th>Uppgift / Typ</th>
+        <th>Aktivitet / Typ</th>
+        <th>Tidpunkt</th>
+        <th>Status</th>
+        <th>Åtgärd</th>
+    </>
+
+    var myTasks = values
+        .filter(a => a.assigned?.id === user.memberId)
+        .sort((a, b) => a.date < b.date ? 1 : 0)
+        .map(renderMyRow)
+
+    var myProxiesTasks = values
+        .filter(a => a.assigned?.id !== user.memberId)
+        .sort((a, b) => a.date < b.date ? 1 : 0)
+        .map(renderProxyRow)
+
+    var r =
+        [<Row>
+            <Col>
+                <h2>Mina egna uppgifter</h2>
+            </Col>
+            <Col style={{ textAlign: 'right' }}>
+                <h3>
+                    {values.length} uppgift(er), {completedWeight} utfört värde, {bookedWeight} bokat värde
+                </h3>
+            </Col>
+        </Row>,
+        <Row><Col><Table striped responsive='lg'>
+            <thead><tr>
+                {tableHeaders}
+            </tr></thead>
+            <tbody>
+                {myTasks}
+            </tbody>
+        </Table></Col></Row>
+        ]
+
+    if (user.hasProxies) {
+        r.push(<Row><Col><h2>Mina underhuggares uppgifter</h2></Col></Row>)
+        r.push(<Row><Col><Table striped responsive='lg'>
+            <thead><tr>
+                <th>Namn</th>
+                {tableHeaders}
+            </tr></thead>
+            <tbody>
+                {myProxiesTasks}
+            </tbody>
+        </Table></Col></Row>)
+    }
+
+    return <div className="table-container">
+        {r}
+    </div>
+
 }

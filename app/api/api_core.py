@@ -44,12 +44,12 @@ class MyActivitiesList(generics.ListAPIView):
     def get_queryset(self):
         member = Member.objects.get(user=self.request.user)
         return self.queryset \
-            .filter(assigned=member, event__start_date__year=datetime.date.today().year)
+            .filter(Q(assigned=member) | Q(assigned_for_proxy=member),
+                    event__start_date__year=datetime.date.today().year)
 
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
 
 class ProxyActivityList(MyActivitiesList):
     def get_queryset(self):

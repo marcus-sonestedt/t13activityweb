@@ -19,7 +19,7 @@ export const MemberActivitiesTable = (props: { memberId: string }) => {
             setActivities(data);
     }, [reload]);
 
-    const ACTIVITIES_PAGE_SIZE = 10;
+    const ACTIVITIES_PAGE_SIZE = 20;
 
     const url = props.memberId === user.memberId
         ? `/api/activity_my?page=${activitiesPage}&page_size=${ACTIVITIES_PAGE_SIZE}`
@@ -40,5 +40,4 @@ export const MemberActivitiesTable = (props: { memberId: string }) => {
                 setFunc={setActivitiesPage} />
         </Pagination>
     </DataProvider>
-
 }
