@@ -79,7 +79,7 @@ class Member(models.Model):
         return self.user.email
 
     def set_email(self, value):
-        self.user.email = value
+        self.user.username = self.user.email = value
         self.user.save()
 
     email = property(get_email, set_email)
@@ -130,13 +130,14 @@ def user_saved(sender, instance, created, **kwargs):
         instance.save()
         instance.member.save()
     elif instance.username != instance.email or 'email' in kwargs:
-            instance.username = instance.email
-            try:
-                instance.member.email_verified = False
-                instance.member.save()
-            except Exception as e:
-                logger.warning(f"User #{instance.id} - {instance.first_name} {instance.last_name} - {instance.email}: {e}")
-            instance.save()
+        instance.username = instance.email
+        try:
+            instance.member.email_verified = False
+            instance.member.save()
+        except Exception as e:
+            logger.warning(
+                f"User #{instance.id} - {instance.first_name} {instance.last_name} - {instance.email}: {e}")
+        instance.save()
 
 
 @receiver(post_save, sender=Member)

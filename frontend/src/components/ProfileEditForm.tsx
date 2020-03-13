@@ -51,7 +51,7 @@ export const ProfileEditForm = (props: {
             onSaved?.(m);
         } catch (e) {
             console.error(e);
-            props.onError?.(e);
+            props.onError?.(e.toString());
         }
     };
 

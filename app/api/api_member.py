@@ -61,7 +61,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
             return self.partial_update(request, *args, **kwargs)
         except FieldDoesNotExist:
             return HttpResponseBadRequest('Field not found on model')
-        except Member.DoesNotExist:
+        except models.Member.DoesNotExist:
             return HttpResponseNotFound()
 
     def check_object_permissions(self, request, obj):
@@ -77,7 +77,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
         if len(serializer.validated_data) == 0:
             raise FieldDoesNotExist()
 
-        member = models.Member.objects.get(id=self.kwargs['pk'])
+        member = models.Member.objects.select_related('user').get(id=self.kwargs['pk'])
 
         for k, v in serializer.validated_data.items():
             if k == 'membercard_number' and not self.request.user.is_staff:
@@ -86,16 +86,19 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
             try:
                 # has support for value really stored on User, such as fullname and email
                 setattr(member, k, v)
-            except Exception as e:
+            except Exception:
                 logger.error(traceback.format_exc())
                 logger.error("Failed to set " + k + ' = ' +
                              v + ' on ' + str(member))
                 raise
 
-        if 'phone_number' in serializer.validated_data:
+        if 'phone_number' in serializer.validated_data and \
+            serializer.validated_data['phone_number'] != member.phone_number:
             member.phone_verified = False
 
-        if 'email' in serializer.validated_data:
+        if 'email' in serializer.validated_data and \
+            serializer.validated_data['email'] != member.email:
+            member.email = serializer.validated_data['email']
             member.email_verified = False
 
         member.save()
