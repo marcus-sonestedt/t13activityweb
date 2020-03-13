@@ -35,7 +35,7 @@ const handleResponse = (action: string, url: string) => {
     });
 }
 
-export const createADR = async (model: Activity, user: UserContext) => {
+export const createADR = async (model: Activity, memberId: string) => {
     const reason = prompt(
         "Ange varför du vill avboka ditt åtagande.\n" +
         "Observera att avbokningen inte är giltig innan den bekräftats av klubben.");
@@ -50,7 +50,7 @@ export const createADR = async (model: Activity, user: UserContext) => {
             method: 'POST',
             headers: getJsonHeaders(),
             body: JSON.stringify({
-                member: user.memberId,
+                member: memberId,
                 activity: model.id,
                 reason: reason
             })

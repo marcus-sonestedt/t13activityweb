@@ -64,7 +64,8 @@ export const MyActivitiesTable = (props: {
 
         const rowClassName = 'clickable-row ' + (activity.id.toString() === highlightActivityId ? 'active' : '');
 
-        const myADR = activity.active_delist_request?.member === user.memberId;
+        const myADR = activity.active_delist_request?.member === user.memberId
+         || (activity.active_delist_request && activity.assigned_for_proxy === user.memberId);
 
         const canRequestUnlist = !user.hasMemberCard || (bookedWeight - activity.weight) >= user.minSignups
 
@@ -105,8 +106,11 @@ export const MyActivitiesTable = (props: {
                 </td>,
                 <td>
                     {myADR
-                        ? <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
-                        : <RequestAdrButton onClick={buttonClick(() => createADR(activity, user))} disabled={!canRequestUnlist} />
+                        ? <CancelAdrButton
+                            onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
+                        : <RequestAdrButton 
+                                onClick={buttonClick(() => createADR(activity, activity.assigned?.id ?? user.memberId))}
+                            disabled={!canRequestUnlist} />
                     }
                 </td>
             ]

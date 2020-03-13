@@ -94,7 +94,8 @@ export class Activity implements IdValue {
 
     @Type(() => Member)
     assigned: Member | null = null;
-    assigned_for_proxy?: number;
+    assigned_for_proxy?: string;
+    
     @Type(() => Date)
     assigned_at: Date | null = null;
 

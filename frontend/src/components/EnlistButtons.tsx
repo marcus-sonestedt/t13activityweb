@@ -1,4 +1,4 @@
-import { Activity, Member, PagedMembers } from "../Models";
+import { Activity, Member, PagedMembers } from '../Models';
 import { useHistory } from "react-router-dom";
 import React, { useContext, useState, useCallback } from "react";
 import { userContext } from "./UserContext";
@@ -32,22 +32,28 @@ export const EnlistButtons = (props: {
         props.reloadActivity();
     }
 
-    if (activity.assigned?.id === user.memberId)
-        return <Button variant='outline-danger' size='sm' href="/frontend/home?tab=my-tasks">Avboka</Button>
+    if (activity.assigned?.id === user.memberId || activity.assigned_for_proxy === user.memberId) {
+        return <>
+            {' '}
+            <Button variant='outline-danger' size='sm' href="/frontend/home?tab=my-tasks">
+                Avboka
+            </Button>
+        </>
+    }
 
-    var r = []
+    if (activity.assigned)
+        return <></>;
 
-    if (!activity.event.current_user_assigned)
-        r.push(<Button style={{ marginBottom: 3 }} onClick={handleEnlistSelf}>Boka</Button>)
+    var r = [<Button style={{ marginBottom: 3 }} onClick={handleEnlistSelf}>Boka</Button>]
 
     if (user.hasProxies)
-        r.push(<>
-            <ProxyDialog show={showProxyDialog} onHide={handleHide} activity={activity}/>
-            <Button variant="outline-primary" onClick={handleEnlistProxy}>Boka underhuggare</Button>
-        </>)
+        r.push(<>{' '}</>)
+    r.push(<>
+        <ProxyDialog show={showProxyDialog} onHide={handleHide} activity={activity} />
+        <Button variant="outline-primary" onClick={handleEnlistProxy}>Boka underhuggare</Button>
+    </>)
 
     return <>{r}</>;
-
 }
 
 

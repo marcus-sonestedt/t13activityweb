@@ -46,7 +46,7 @@ export const ProfilePage = () => {
                         Editera profilinformation
                     </Modal.Header>
                     <Modal.Body>
-                        <ProfileEditForm member={member as Member} onSaved={handleSaved} onError={setEditError} />
+                        <ProfileEditForm member={member} onSaved={handleSaved} onError={setEditError} />
                         {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
                     </Modal.Body>
                 </Modal>

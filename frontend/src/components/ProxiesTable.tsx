@@ -26,7 +26,7 @@ export const MyProxiesTable = (props: {
             return <Button onClick={async () => {
                 await changeActivityViaProxy('DELETE', activity, proxy, setError);
                 props.onEnlistChanged?.();
-            }} size='sm' variant='warning'>Avboka</Button>
+            }} size='sm' variant='outline-warning'>Avboka</Button>
     }
 
     return <>
