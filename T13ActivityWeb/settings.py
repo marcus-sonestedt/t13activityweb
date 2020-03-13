@@ -123,6 +123,7 @@ for n in secret_names:
 print(f"DEBUG: {DEBUG}")
 
 ALLOWED_HOSTS = [
+    'test-macke.eu.pythonanywhere.com',
     'macke.eu.pythonanywhere.com',
     'macke.pythonanywhere.com',
     'localhost'
