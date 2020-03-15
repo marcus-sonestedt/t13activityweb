@@ -52,7 +52,7 @@ class NestedMemberInline(nested.NestedStackedInline):
     fk_name = 'user'
     readonly_fields = ['user']
     exclude = ['created', 'updated', 'email_verification_code',
-               'email_verification_code_created']
+               'email_verification_code_created', 'proxy']
 
 
 @admin.register(User)

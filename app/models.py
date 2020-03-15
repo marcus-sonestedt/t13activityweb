@@ -32,6 +32,14 @@ class RuleViolationException(BaseException):
 class Member(models.Model):
     '''A club member or a member's proxy'''
 
+    class Meta:
+        order_with_respect_to = 'user'
+        verbose_name = 'Medlem'
+        verbose_name_plural = 'Medlemmar'
+        indexes = [
+            models.Index(fields=['user']),
+        ]    
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -84,11 +92,6 @@ class Member(models.Model):
 
     email = property(get_email, set_email)
 
-    class Meta:
-        order_with_respect_to = 'user'
-        verbose_name = 'Medlem'
-        verbose_name_plural = 'Medlemmar'
-
     def __str__(self):
         return f"{self.fullname} ({self.email})"
 
@@ -97,8 +100,8 @@ class Member(models.Model):
         '''returns completed/booked activities for this year'''
         current_year = datetime.date.today().year
         return Activity.objects \
-            .filter(assigned=self,
-                    event__start_date__year=current_year)
+            .filter(Q(assigned=self) | Q(assigned_for_proxy=self)) \
+            .filter(event__start_date__year=current_year)
 
     @property
     def completed_weight(self):
@@ -153,6 +156,10 @@ def member_saved(sender, instance, created, **kwargs):
 
 
 class Attachment(models.Model):
+    class Meta:
+        verbose_name = 'Bifogad fil'
+        verbose_name_plural = 'Bifogade filer'
+
     uploader = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True)
     file = models.FileField()
@@ -169,11 +176,6 @@ class Attachment(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Attachment, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = 'Bifogad fil'
-        verbose_name_plural = 'Bifogade filer'
-
 
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -193,7 +195,18 @@ class EventType(models.Model):
 
 
 class Event(models.Model):
-    '''Groups a set of activities'''
+    '''Groups a set of tasks'''
+
+    class Meta:
+        ordering = ['start_date', 'end_date', 'name']
+        verbose_name = 'Aktivitet'
+        verbose_name_plural = 'Aktiviteter'
+        indexes = [
+            models.Index(fields=('start_date', 'end_date')),
+            models.Index(fields=('type',)),
+            models.Index(fields=('cancelled',))
+        ]
+        
     name = models.CharField(max_length=40)
     description = models.TextField(blank=True)
 
@@ -247,10 +260,7 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        ordering = ['start_date', 'end_date', 'name']
-        verbose_name = 'Aktivitet'
-        verbose_name_plural = 'Aktiviteter'
+
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -338,7 +348,9 @@ class Activity(models.Model):
         indexes = [
             models.Index(fields=['assigned']),
             models.Index(fields=['event']),
-            models.Index(fields=['event', 'assigned'])
+            models.Index(fields=['event', 'assigned']),
+            models.Index(fields=['assigned_for_proxy']),
+            models.Index(fields=['earliest_bookable_date'])
         ]
 
     def __str__(self):
