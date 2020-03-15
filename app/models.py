@@ -236,16 +236,20 @@ class Event(models.Model):
     date = property(date)
 
     def activities_count(self):
-        return self.activities.count()
+        if not hasattr(self, '_activities_count'):
+            self._activities_count = self.activities.count()
+        return self._activities_count
 
     activities_count.short_description = 'Uppgifter'
     activities_count = property(activities_count)
 
     def activities_available_count(self):
-        today = datetime.date.today()
-        return self.activities.filter(assigned=None) \
-            .filter(Q(earliest_bookable_date__gte=today) | Q(earliest_bookable_date=None)) \
-            .count()
+        if not hasattr(self, '_activities_available_count'):
+            today = datetime.date.today()
+            self._activities_available_count = self.activities.filter(assigned=None) \
+                .filter(Q(earliest_bookable_date__gte=today) | Q(earliest_bookable_date=None)) \
+                .count()
+        return self._activities_available_count
 
     activities_available_count.short_description = 'Lediga uppgifter'
     activities_available_count = property(activities_available_count)

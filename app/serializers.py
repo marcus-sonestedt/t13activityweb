@@ -11,13 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name')
 
+
 class UserWithProxiesSerializer(serializers.ModelSerializer):
     proxy = UserSerializer(required=False)
     proxies = UserSerializer(required=False, many=True)
+
     class Meta:
         model = User
         fields = ('id', 'email', 'first_name', 'last_name', 'proxy', 'proxies')
-
 
 
 class MemberSerializer(serializers.ModelSerializer):
@@ -37,13 +38,13 @@ class CreateMemberSerializer(serializers.ModelSerializer):
 
 
 class MemberReadySerializer(MemberSerializer):
-    booked_weight_year = serializers.IntegerField(required=False)    
-    booked_weight  = serializers.IntegerField(required=False)    
+    booked_weight_year = serializers.IntegerField(required=False)
+    booked_weight = serializers.IntegerField(required=False)
 
     class Meta:
         model = Member
         fields = MemberSerializer.Meta.fields + ['booked_weight_year',
-            'membercard_number', 'booked_weight']
+                                                 'membercard_number', 'booked_weight']
 
 
 class MemberPatchSerializer(serializers.Serializer):
@@ -52,13 +53,13 @@ class MemberPatchSerializer(serializers.Serializer):
     phone_number = serializers.CharField(required=False)
     membercard_number = serializers.CharField(required=False, allow_blank=True)
 
+
 class AttachmentSerializer(serializers.Serializer):
     uploader = UserSerializer()
 
     class Meta:
         model = Attachment
         fields = '__all__'
-
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
@@ -76,6 +77,7 @@ class EventPublicSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
 
+
 class EventSerializer(serializers.ModelSerializer):
     type = EventTypeSerializer()
     coordinators = MemberSerializer(many=True)
@@ -84,8 +86,8 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [x.name for x in Event._meta.get_fields()] + \
-            ['has_bookable_activities', 'activities_count', 'activities_available_count',
-            'current_user_assigned']
+            ['has_bookable_activities', 'activities_count',
+             'activities_available_count', 'current_user_assigned']
 
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
@@ -143,11 +145,12 @@ class InfoTextSerializer(serializers.ModelSerializer):
         model = models.InfoText
         fields = '__all__'
 
+
 class DoubleBookedSerializer(serializers.Serializer):
     assigned_id = serializers.CharField()
     assigned_fullname = serializers.CharField()
     event_id = serializers.CharField()
-    event_name = serializers.CharField()    
+    event_name = serializers.CharField()
     activity_id = serializers.CharField()
     activity_name = serializers.CharField()
     activity_comment = serializers.CharField()
