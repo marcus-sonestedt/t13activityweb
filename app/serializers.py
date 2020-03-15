@@ -90,6 +90,23 @@ class EventSerializer(serializers.ModelSerializer):
              'activities_available_count', 'current_user_assigned']
 
 
+class EventTypeBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventType
+        fields = ['id', 'name']
+
+
+class EventListSerializer(serializers.ModelSerializer):
+    type = EventTypeBriefSerializer()
+    coordinators = MemberSerializer(many=True)
+    current_user_assigned = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = Event
+        fields = [x.name for x in Event._meta.get_fields()] + \
+            ['has_bookable_activities', 'activities_count',
+             'activities_available_count', 'current_user_assigned']
+
 class ActivityTypeSerializer(serializers.ModelSerializer):
     attachments = AttachmentSerializer(many=True)
 

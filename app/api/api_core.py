@@ -51,6 +51,7 @@ class MyActivitiesList(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class ProxyActivityList(MyActivitiesList):
     def get_queryset(self):
         member = Member.objects.get(user=self.request.user)
@@ -61,26 +62,30 @@ class ProxyActivityList(MyActivitiesList):
 class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type') \
         .prefetch_related('coordinators', 'coordinators__user', 'attachments',
-                          'activities', 'type__attachments', )
+                          'activities', )
+                          
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
-        if self.request.user.is_authenticated:
+        if not self.request.user.is_authenticated:
+            return serializers.EventPublicSerializer
+        elif 'id' in self.kwargs:
             return serializers.EventSerializer
         else:
-            return serializers.EventPublicSerializer
+            return serializers.EventListSerializer
 
     def get_queryset(self):
         today = datetime.date.today()
         if 'upcoming' in self.kwargs:
-            qs = self.queryset.filter(
-                start_date__gte=today,
-                start_date__year=today.year)
+            qs = self.queryset.filter(start_date__gte=today, start_date__year=today.year) \
+                .order_by('start_date', 'end_date', 'name')
+
         elif 'id' in self.kwargs:
             qs = self.queryset.filter(id=self.kwargs['id'])
         else:
             year = self.request.query_params.get('year', today.year)
-            qs = self.queryset.filter(start_date__year=year)
+            qs = self.queryset.filter(start_date__year=year) \
+                .order_by('start_date', 'end_date', 'name')
 
         if self.request.user.is_authenticated:
             member = models.Member.objects.get(user=self.request.user)
