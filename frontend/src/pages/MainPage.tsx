@@ -18,8 +18,8 @@ export const MainPage = () => {
     const user = useContext(userContext);
     const history = useHistory();
     const setQueryPage = (key: string) => { history.replace(`?tab=${key}`); }
-    const taskBadgeVariant = user.bookedTasks >= user.minSignups ? 'success' : 'warning';
-    const taskBadgeText = `${user.completedTasks} / ${user.bookedTasks} / ${user.minSignups}`
+    const taskBadgeVariant = user.bookedWeight >= user.minSignups ? 'success' : 'warning';
+    const taskBadgeText = `${user.completedWeight} / ${user.bookedWeight} / ${user.minSignups}`
     const verified = user.member?.email_verified && user.member?.phone_verified;
 
     return <Tab.Container defaultActiveKey={tab}

@@ -17,8 +17,9 @@ export class UserContext {
 
   notifications: { message:string, link:string}[] = [];
 
-  completedTasks = 0;
-  bookedTasks = 0;
+  completedWeight = 0;
+  bookedWeight = 0;
+
   hasMemberCard = false;
   hasProxies = false;
 }

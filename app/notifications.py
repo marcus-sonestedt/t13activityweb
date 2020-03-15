@@ -36,11 +36,11 @@ class NotificationData():
         self.compute_notifications()
 
     def count_badges(self):
-        self.completedTasks = self.member.completed_weight
-        self.bookedTasks = self.member.booked_weight
+        self.completedWeight = self.member.completed_weight
+        self.bookedWeight = self.member.booked_weight
 
         self.myDelistRequests = models.ActivityDelistRequest.objects.filter(
-                member=self.member, approved=None).count()
+            member=self.member, approved=None).count()
 
         if self.isStaff:
             self.unansweredDelistRequests = models.ActivityDelistRequest.objects \
@@ -64,9 +64,9 @@ class NotificationData():
                 'Din emailaddress behöver verifieras! Klicka här för att åtgärda.',
                 '/frontend/verify/email'))
 
-        if self.bookedTasks < self.minSignups:
+        if self.bookedWeight < self.minSignups:
             self.notifications.append(Notification(
-                f'Du behöver boka dig på {self.minSignups-self.member.booked_weight} uppgift(er) till för att kunna hämta ut ditt guldkort.',
+                f'Du behöver boka dig på {self.minSignups-self.bookedWeight} uppgift(er) till för att kunna hämta ut ditt guldkort.',
                 '/frontend/home?tab=upcoming-events'))
 
         elif not self.hasMemberCard and verified:
@@ -96,8 +96,8 @@ class NotificationDataSerializer(drf_serializers.Serializer):
     fullname = drf_serializers.CharField(required=False)
 
     hasMemberCard = drf_serializers.BooleanField(required=False)
-    completedTasks = drf_serializers.IntegerField(required=False)
-    bookedTasks = drf_serializers.IntegerField(required=False)
+    completedWeight = drf_serializers.IntegerField(required=False)
+    bookedWeight = drf_serializers.IntegerField(required=False)
 
     myDelistRequests = drf_serializers.IntegerField(required=False)
     unansweredDelistRequests = drf_serializers.IntegerField(required=False)

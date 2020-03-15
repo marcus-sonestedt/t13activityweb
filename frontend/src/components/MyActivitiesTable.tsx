@@ -4,10 +4,9 @@ import { useHistory } from "react-router-dom";
 
 import { Activity } from '../Models';
 import { userContext } from "./UserContext"
-import { createADR, cancelADRByActivity } from "../logic/ADRActions";
-import { CancelAdrButton, RequestAdrButton } from '../pages/ADRPage';
 import { HoverTooltip } from "./Utilities";
 import './Table.css'
+import { EnlistButtons } from "./EnlistButtons";
 
 export const MyActivitiesTable = (props: {
     values: Activity[],
@@ -30,11 +29,6 @@ export const MyActivitiesTable = (props: {
 
     if (values === undefined)
         return <p>Oops</p>
-
-    const buttonClick = (f: () => Promise<void>) => (e: any) => {
-        e.stopPropagation();
-        f().then(reload);
-    }
 
     const highlightActivityMatch = window.location.search.match(/[?&]highlight-task=([0-9]+)/);
     const highlightActivityId = highlightActivityMatch ? highlightActivityMatch[1] : undefined;
@@ -66,8 +60,6 @@ export const MyActivitiesTable = (props: {
 
         const myADR = activity.active_delist_request?.member === user.memberId
          || (activity.active_delist_request && activity.assigned_for_proxy === user.memberId);
-
-        const canRequestUnlist = !user.hasMemberCard || (bookedWeight - activity.weight) >= user.minSignups
 
         return {
             row: (children: JSX.Element[]) =>
@@ -104,19 +96,10 @@ export const MyActivitiesTable = (props: {
                 }
                     <div>Värde: {activity.weight}</div>
                 </td>,
-                <td>
-                    {myADR
-                        ? <CancelAdrButton
-                            onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
-                        : <RequestAdrButton 
-                                onClick={buttonClick(() => createADR(activity, activity.assigned?.id ?? user.memberId))}
-                            disabled={!canRequestUnlist} />
-                    }
-                </td>
+                <td><EnlistButtons activity={activity} reloadActivity={reload} /></td>
             ]
         }
     }
-
 
     const renderMyRow = (activity: Activity) => {
         const r = renderRow(activity);

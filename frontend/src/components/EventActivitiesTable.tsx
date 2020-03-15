@@ -43,6 +43,7 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
             }
 
             if (activity.active_delist_request || activity.bookable) {
+                assigned.push(<>{' '}</>)
                 assigned.push(
                     <EnlistButtons activity={activity} reloadActivity={() => setReload(r => r + 1)} />)
             }

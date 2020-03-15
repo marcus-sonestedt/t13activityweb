@@ -7,6 +7,8 @@ import { Modal, Button } from "react-bootstrap";
 import DataProvider from "./DataProvider";
 import { deserialize } from "class-transformer";
 import { MyProxiesTable } from "./ProxiesTable";
+import { createADR, cancelADRByActivity } from '../logic/ADRActions';
+import { RequestAdrButton, CancelAdrButton } from '../pages/ADRPage';
 
 export const EnlistButtons = (props: {
     activity: Activity,
@@ -33,12 +35,18 @@ export const EnlistButtons = (props: {
     }
 
     if (activity.assigned?.id === user.memberId || activity.assigned_for_proxy === user.memberId) {
-        return <>
-            {' '}
-            <Button variant='outline-danger' size='sm' href="/frontend/home?tab=my-tasks">
-                Avboka
-            </Button>
-        </>
+        const buttonClick = (f: () => Promise<void>) => (e: any) => {
+            e.stopPropagation();
+            f().then(props.reloadActivity);
+        }
+
+        const canRequestUnlist = !user.hasMemberCard || (user.bookedWeight - activity.weight) >= user.minSignups
+
+        if (activity.active_delist_request)
+            return <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
+
+        return <RequestAdrButton onClick={buttonClick(() => createADR(activity, activity.assigned?.id ?? user.memberId))}
+            disabled={!canRequestUnlist} />
     }
 
     if (activity.assigned)
@@ -46,12 +54,13 @@ export const EnlistButtons = (props: {
 
     var r = [<Button style={{ marginBottom: 3 }} onClick={handleEnlistSelf}>Boka</Button>]
 
-    if (user.hasProxies)
+    if (user.hasProxies) {
         r.push(<>{' '}</>)
-    r.push(<>
-        <ProxyDialog show={showProxyDialog} onHide={handleHide} activity={activity} />
-        <Button variant="outline-primary" onClick={handleEnlistProxy}>Boka underhuggare</Button>
-    </>)
+        r.push(<>
+            <ProxyDialog show={showProxyDialog} onHide={handleHide} activity={activity} />
+            <Button variant="outline-primary" onClick={handleEnlistProxy}>Boka underhuggare</Button>
+        </>)
+    }
 
     return <>{r}</>;
 }

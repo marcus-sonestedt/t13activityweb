@@ -3,6 +3,7 @@ import { Member, Activity } from '../Models';
 import { changeActivityViaProxy } from "../logic/TaskActions";
 import { Button, Table, Col, Row, Alert } from "react-bootstrap";
 import { HoverTooltip } from "./Utilities";
+import { createADR } from '../logic/ADRActions';
 
 export const MyProxiesTable = (props: {
     activity?: Activity,
@@ -24,7 +25,7 @@ export const MyProxiesTable = (props: {
             }} size='sm' variant='success'>Boka</Button>
         else
             return <Button onClick={async () => {
-                await changeActivityViaProxy('DELETE', activity, proxy, setError);
+                await createADR(activity, proxy.id);
                 props.onEnlistChanged?.();
             }} size='sm' variant='outline-warning'>Avboka</Button>
     }
