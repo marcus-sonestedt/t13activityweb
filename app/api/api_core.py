@@ -63,7 +63,7 @@ class EventList(generics.ListAPIView):
     queryset = Event.objects.select_related('type') \
         .prefetch_related('coordinators', 'coordinators__user', 'attachments',
                           'activities', )
-                          
+
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
@@ -75,17 +75,18 @@ class EventList(generics.ListAPIView):
             return serializers.EventListSerializer
 
     def get_queryset(self):
-        today = datetime.date.today()
-        if 'upcoming' in self.kwargs:
-            qs = self.queryset.filter(start_date__gte=today, start_date__year=today.year) \
-                .order_by('start_date', 'end_date', 'name')
-
-        elif 'id' in self.kwargs:
+        if 'id' in self.kwargs:
             qs = self.queryset.filter(id=self.kwargs['id'])
         else:
-            year = self.request.query_params.get('year', today.year)
-            qs = self.queryset.filter(start_date__year=year) \
-                .order_by('start_date', 'end_date', 'name')
+            today = datetime.date.today()
+            if 'upcoming' in self.kwargs:
+                qs = self.queryset.filter(start_date__gte=today, start_date__year=today.year) 
+            else:
+                year = self.request.query_params.get('year', today.year)
+                qs = self.queryset.filter(start_date__year=year)             
+                
+            qs = qs.order_by('start_date', 'end_date', 'name') \
+                    .annotate(_activities_available_count=Count(models.Event.activities_available_count_filter()))
 
         if self.request.user.is_authenticated:
             member = models.Member.objects.get(user=self.request.user)

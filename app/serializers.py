@@ -99,14 +99,13 @@ class EventSerializer(serializers.ModelSerializer):
 
 class EventListSerializer(serializers.ModelSerializer):
     type = EventTypeBriefSerializer()
-    coordinators = MemberSerializer(many=True)
-    current_user_assigned = serializers.BooleanField(required=False)
+    #coordinators = MemberSerializer(many=True)
+    #current_user_assigned = serializers.BooleanField(required=False)
 
     class Meta:
         model = Event
-        fields = [x.name for x in Event._meta.get_fields()] + \
-            ['has_bookable_activities', 'activities_count',
-             'activities_available_count', 'current_user_assigned']
+        fields = [x.name for x in Event._meta.get_fields() if x.name not in ['coordinators']] + \
+            ['has_bookable_activities']
 
 class ActivityTypeSerializer(serializers.ModelSerializer):
     attachments = AttachmentSerializer(many=True)

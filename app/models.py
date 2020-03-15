@@ -243,11 +243,16 @@ class Event(models.Model):
     activities_count.short_description = 'Uppgifter'
     activities_count = property(activities_count)
 
+    @staticmethod
+    def activities_available_count_filter():
+        today = datetime.date.today()
+        return Q(activities__assigned=None) & \
+            (Q(activities__earliest_bookable_date__gte=today) | Q(activities__earliest_bookable_date=None))
+
     def activities_available_count(self):
         if not hasattr(self, '_activities_available_count'):
             today = datetime.date.today()
-            self._activities_available_count = self.activities.filter(assigned=None) \
-                .filter(Q(earliest_bookable_date__gte=today) | Q(earliest_bookable_date=None)) \
+            self._activities_available_count = self.activities.filter(self.activities_available_count_filter()) \
                 .count()
         return self._activities_available_count
 
@@ -255,9 +260,12 @@ class Event(models.Model):
     activities_available_count = property(activities_available_count)
 
     def has_bookable_activities(self):
-        if self.end_date < datetime.date.today():
-            return False
-        return bool(self.activities_available_count)
+        if not hasattr(self, '_has_bookable_activities'):
+            if self.end_date < datetime.date.today():
+                self._has_bookable_activities = False
+            else:
+                self._has_bookable_activities = bool(self.activities_available_count)
+        return self._has_bookable_activities
 
     has_bookable_activities.boolean = True
     has_bookable_activities = property(has_bookable_activities)
@@ -267,6 +275,13 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
+        try:
+            del self._has_bookable_activities
+            del self._activities_available_count
+            del self._activities_count
+        except:
+            pass
+
         if not self.id:
             self.created = timezone.now()
         self.modified = timezone.now()
