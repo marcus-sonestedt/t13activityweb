@@ -9,6 +9,9 @@ log = logging.getLogger(__name__)
 
 _sms_client = None
 
+def strip_lines(lines):
+    return '\n'.join(line.lstrip() for line in lines.split('\n'))
+
 def sms_client():
     global _sms_client
     if _sms_client is None:
@@ -23,7 +26,7 @@ def new_user_created(member):
     user = member.user
     mail_managers(
         f'New user {user.username} registered at T13 web',
-        f'''Hej admin!
+        strip_lines(f'''Hej admin!
 
         '{user.first_name} {user.last_name}' har precis registrerat sig på  Team 13's webbapplikation.
 
@@ -32,20 +35,20 @@ def new_user_created(member):
 
         mvh,
         /Team13's aktivitetswebb
-        ''')
+        '''))
 
 
 def adr_approved(adr):
     log.info(f"ADR {adr} has been approved, sending email")
 
     send_mail('Avbokning godkänd',
-        f'''Hej {adr.member.fullname}
+        strip_lines(f'''Hej {adr.member.fullname}
 
         Din önskan om avbokning från {adr.activity}
         har blivit godkänd av {adr.approver.fullname}.
 
         mvh
-        /Team13 aktivitetswebb''',
+        /Team13 aktivitetswebb'''),
         settings.DEFAULT_FROM_EMAIL,
         [adr.member.user.email])
 
@@ -64,18 +67,18 @@ def adr_rejected(adr):
     log.info(f"ADR {adr} has been rejected, sending email")
 
     send_mass_mail('Avbokning ej godkänd',
-            f'''Hej {adr.member.fullname},
+        strip_lines(f'''Hej {adr.member.fullname},
 
-            Din önskan om avbokning från {adr.activity}
-            har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
-            med följande meddelande:\n\n"{adr.reject_reason}"
+        Din önskan om avbokning från {adr.activity}
+        har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
+        med följande meddelande:\n\n"{adr.reject_reason}"
 
-            Vänligen tag kontakt om du har frågor.
+        Vänligen tag kontakt om du har frågor.
 
-            mvh
-            /Team13 aktivitetswebb''',
-            settings.DEFAULT_FROM_EMAIL,
-            [adr.member.user.email, adr.approver.user.email])
+        mvh
+        /Team13 aktivitetswebb'''),
+        settings.DEFAULT_FROM_EMAIL,
+        [adr.member.user.email, adr.approver.user.email])
 
     sms_target = adr.member.phone_number
 
@@ -98,12 +101,12 @@ def notify_upcoming_activity(activity):
 
     log.info(f"Notifying {activity.assigned} that {activity} happens tomorrow")
 
-    message = f'''Hej!
+    message = strip_lines(f'''Hej!
 
         Här kommer en påminnelse om att du är inbokad på uppgiften {activity}
         den {activity.date} mellan {activity.start_time} och {activity.end_time}.
 
-        mvh /Team13'''
+        mvh /Team13''')
 
     send_mail(f"Påminnelse om {activity}",
         message,
@@ -124,13 +127,13 @@ def notify_upcoming_activity(activity):
 
 def send_verification_email(member):
     send_mail(subject='Team13 email verification',
-        message=f'''Hej {member.fullname},
+        message=strip_lines(f'''Hej {member.fullname},
 
         Klicka på länken för att verifiera din emailadress:
 
         https://macke.eu.pythonanywhere.com/api/verify/email/check/{member.email_verification_code}
 
         mvh
-        /Team13''',
+        /Team13'''),
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[member.email])
