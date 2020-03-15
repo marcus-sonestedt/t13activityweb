@@ -113,6 +113,7 @@ class Member(models.Model):
     @property
     def booked_weight(self):
         booked_weight = self.year_activities \
+            .exclude((~Q(delist_requests__member=None)) & Q(delist_requests__approved=None)) \
             .aggregate(Sum('weight')) \
             .get('weight__sum', 0) or 0
         return booked_weight + self.min_signup_bias
@@ -259,8 +260,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
-
-
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''

@@ -40,7 +40,7 @@ export const EnlistButtons = (props: {
             f().then(props.reloadActivity);
         }
 
-        const canRequestUnlist = !user.hasMemberCard || (user.bookedWeight - activity.weight) >= user.minSignups
+        const canRequestUnlist = (user.bookedWeight - activity.weight) >= user.minSignups;
 
         if (activity.active_delist_request)
             return <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />

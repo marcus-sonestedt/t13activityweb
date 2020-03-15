@@ -22,6 +22,7 @@ from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
+from app import models
 from app.models import Activity, ActivityType, Event, EventType, Member, \
     ActivityDelistRequest, RuleViolationException, FAQ
 
@@ -56,9 +57,6 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
         return self.queryset.filter(
             Q(id=self.request.user.id) | Q(member__proxy__user=self.request.user))
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
@@ -73,22 +71,22 @@ class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
 
 
 
-class IsLoggedIn(APIView):
+class IsLoggedIn(generics.GenericAPIView, mixins.RetrieveModelMixin):
     permission_classes = [IsAuthenticatedOrReadOnly]
     renderer_classes = (renderers.JSONRenderer,)
     read_only = True
+    serializer_class = NotificationDataSerializer
 
-    @method_decorator(vary_on_cookie)
-    @method_decorator(cache_control(max_age=60, must_revalidate=True, no_store=True, stale_while_revalidate=10))
-    def get(self, request, format=None):
-        if request.user.is_authenticated:
-            member = Member.objects.get(user=request.user)
+    def get(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    def get_object(self):
+        if self.request.user.is_authenticated:
+            member = models.Member.objects.get(user=self.request.user)
         else:
             member = None
 
-        data = NotificationData(member)
-        serializer = NotificationDataSerializer(data)
-        return Response(data=serializer.data)
+        return NotificationData(member)
 
 
 ##############################################################################

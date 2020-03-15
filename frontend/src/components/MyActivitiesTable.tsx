@@ -18,9 +18,9 @@ export const MyActivitiesTable = (props: {
     const today = new Date();
 
     const bookedWeight = useMemo(() => values
-        .filter(a => a.active_delist_request?.member !== user.memberId)
+        .filter(a => !a.active_delist_request)
         .reduce((w, a) => w + a.weight, 0)
-        , [values, user.memberId])
+        , [values])
 
     const completedWeight = useMemo(() => values
         .filter(a => a.completed === true)
