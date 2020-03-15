@@ -184,7 +184,7 @@ class DoubleBookedMembersList(generics.ListAPIView):
         current_year = datetime.date.today().year
 
         # does not count only non-unique assigned activities ...  :-|
-        events = Event.objects \
+        events = models.Event.objects \
             .filter(start_date__year=current_year) \
             .annotate(doublebooking=Count("activities__assigned")) \
             .filter(doublebooking__gte=2) \
