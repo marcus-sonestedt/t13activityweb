@@ -244,15 +244,16 @@ class Event(models.Model):
     activities_count = property(activities_count)
 
     @staticmethod
-    def activities_available_count_filter():
+    def activities_available_count_query():
         today = datetime.date.today()
         return Q(activities__assigned=None) & \
             (Q(activities__earliest_bookable_date__gte=today) | Q(activities__earliest_bookable_date=None))
 
     def activities_available_count(self):
         if not hasattr(self, '_activities_available_count'):
-            today = datetime.date.today()
-            self._activities_available_count = self.activities.filter(self.activities_available_count_filter()) \
+            self._activities_available_count = Event.objects \
+                .filter(id=self.id) \
+                .filter(self.activities_available_count_query()) \
                 .count()
         return self._activities_available_count
 
@@ -264,7 +265,7 @@ class Event(models.Model):
             if self.end_date < datetime.date.today():
                 self._has_bookable_activities = False
             else:
-                self._has_bookable_activities = bool(self.activities_available_count)
+                self._has_bookable_activities = self.activities_available_count > 0
         return self._has_bookable_activities
 
     has_bookable_activities.boolean = True
@@ -276,9 +277,9 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         try:
-            del self._has_bookable_activities
-            del self._activities_available_count
             del self._activities_count
+            del self._activities_available_count
+            del self._has_bookable_activities
         except:
             pass
 

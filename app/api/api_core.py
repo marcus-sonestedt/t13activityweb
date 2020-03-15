@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 class MyActivitiesList(generics.ListAPIView):
-    queryset = Activity.objects.select_related('type', 'event')
+    queryset = Activity.objects.select_related('type', 'event').prefetch_related('event__type')
     permission_classes = [IsAuthenticated]
     serializer_class = ActivitySerializer
 
@@ -86,7 +86,7 @@ class EventList(generics.ListAPIView):
                 qs = self.queryset.filter(start_date__year=year)             
                 
             qs = qs.order_by('start_date', 'end_date', 'name') \
-                    .annotate(_activities_available_count=Count(models.Event.activities_available_count_filter()))
+                    .annotate(_activities_available_count=Count(models.Event.activities_available_count_query()))
 
         if self.request.user.is_authenticated:
             member = models.Member.objects.get(user=self.request.user)
