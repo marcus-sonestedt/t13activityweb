@@ -70,8 +70,15 @@ class EventTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+class EventTypeBriefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventType
+        fields = ['id', 'name']
+
+
 class EventPublicSerializer(serializers.ModelSerializer):
-    type = EventTypeSerializer()
+    type = EventTypeBriefSerializer()
 
     class Meta:
         model = Event
@@ -88,12 +95,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = [x.name for x in Event._meta.get_fields()] + \
             ['has_bookable_activities', 'activities_count',
              'activities_available_count', 'current_user_assigned']
-
-
-class EventTypeBriefSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EventType
-        fields = ['id', 'name']
 
 
 class EventListSerializer(serializers.ModelSerializer):
@@ -121,6 +122,7 @@ class ActivityDelistRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class EventActivitySerializer(serializers.ModelSerializer):
     '''serializer used when fetching tasks for an event'''
     type = ActivityTypeSerializer(required=False)
@@ -135,15 +137,35 @@ class EventActivitySerializer(serializers.ModelSerializer):
         fields = [x.name for x in Activity._meta.get_fields()] + \
             ['bookable',  'active_delist_request']
 
-
 class ActivitySerializer(EventActivitySerializer):
     '''serializer used when fetching stand-alone tasks'''
-    event = EventSerializer(required=False)
+    event = EventListSerializer(required=False)
+
+class ActivityTypeBriefSerializer(EventActivitySerializer):
+    class Meta:
+        model = Activity
+        fields = ['id', 'name']
+
+
+class EventListADRSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = [x.name for x in Event._meta.get_fields() if x.name not in ['type', 'attachments', 'coordinators', 'activities']]
+
+
+class ActivityADRSerializer(EventActivitySerializer):
+    '''serializer used when fetching stand-alone tasks'''
+    event = EventListADRSerializer(required=False)
+    type = ActivityTypeBriefSerializer()
+
+    class Meta:
+        model = Activity  
+        fields = [x.name for x in Activity._meta.get_fields() if x.name != 'attachments']
 
 
 class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):
-    member = MemberReadySerializer()
-    activity = ActivitySerializer()
+    member = MemberSerializer()
+    activity = ActivityADRSerializer()
     approver = MemberSerializer(required=False)
 
     class Meta:

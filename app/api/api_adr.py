@@ -70,7 +70,7 @@ class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
     parser_classes = [parsers.JSONParser]
     queryset = ActivityDelistRequest.objects \
         .select_related('activity', 'member') \
-        .prefetch_related('activity__assigned')
+        .prefetch_related('activity__assigned', 'member__user')
     serializer_class = ActivityDelistRequestSerializer
 
     def get_queryset(self):
@@ -117,7 +117,7 @@ class ADRList(mixins.ListModelMixin, generics.GenericAPIView):
     serializer_class = ActivityDelistRequestDeepSerializer
     queryset = ActivityDelistRequest.objects \
         .select_related('activity') \
-        .prefetch_related('activity__assigned')
+        .prefetch_related('activity__assigned', 'activity__assigned__user', 'activity__type', 'activity__event')
 
     def get_queryset(self):
         if self.request.user.is_staff:
