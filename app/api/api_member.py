@@ -141,7 +141,7 @@ class MemberList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateMod
 
 class MemberReadyList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    serializer_class = serializers.MemberReadySerializer
+    serializer_class = serializers.MemberBookWeightSerializer
 
     def get_queryset(self):
         current_year = datetime.date.today().year
@@ -156,7 +156,7 @@ class MemberReadyList(generics.ListAPIView):
 
 class MemberNotReadyList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    serializer_class = serializers.MemberReadySerializer
+    serializer_class = serializers.MemberBookWeightSerializer
 
     def get_queryset(self):
         current_year = datetime.date.today().year
@@ -171,7 +171,7 @@ class MemberNotReadyList(generics.ListAPIView):
 
 class MemberWithCardList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
-    serializer_class = serializers.MemberReadySerializer
+    serializer_class = serializers.MemberBookWeightSerializer
     queryset = models.Member.objects.exclude(
         Q(membercard_number='') | Q(membercard_number='-'))
 

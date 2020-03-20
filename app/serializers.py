@@ -37,7 +37,7 @@ class CreateMemberSerializer(serializers.ModelSerializer):
         fields = ['phone_number', 'comment', 'fullname', 'email']
 
 
-class MemberReadySerializer(MemberSerializer):
+class MemberBookWeightSerializer(MemberSerializer):
     booked_weight_year = serializers.IntegerField(required=False)
     booked_weight = serializers.IntegerField(required=False)
 
@@ -163,7 +163,7 @@ class ActivityADRSerializer(EventActivitySerializer):
 
 
 class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):
-    member = MemberSerializer()
+    member = MemberBookWeightSerializer()
     activity = ActivityADRSerializer()
     approver = MemberSerializer(required=False)
 
