@@ -59,7 +59,7 @@ export const MyActivitiesTable = (props: {
         const rowClassName = 'clickable-row ' + (activity.id.toString() === highlightActivityId ? 'active' : '');
 
         const myADR = activity.active_delist_request?.member === user.memberId
-         || (activity.active_delist_request && activity.assigned_for_proxy === user.memberId);
+            || (activity.active_delist_request && activity.assigned_for_proxy === user.memberId);
 
         return {
             row: (children: JSX.Element[]) =>
@@ -67,26 +67,26 @@ export const MyActivitiesTable = (props: {
                     {children}
                 </tr>,
             td: [
-                <td>
+                <td key='1'>
                     <a href={activity.url()}>{activity.name}</a>
                     <br />
                     {activity.type !== null
                         ? <a href={activity.type.url()} style={{ fontWeight: 'normal' }}>{activity.type.name}</a>
                         : null}
                 </td>,
-                <td>
+                <td key='2'>
                     <a href={activity.event.url()} style={{ fontWeight: 'bold' }}>{activity.event.name}</a>
                     <br />
                     {activity.event.type !== null
                         ? <a href={activity.event.type.url()}>{activity.event.type.name}</a>
                         : null}
                 </td>,
-                <td className='nowrap'>
+                <td key='3' className='nowrap'>
                     <b>{activity.date()}</b>
                     <br />
                     {activity.time()}
                 </td>,
-                <td>{(eventInPast || eventActive)
+                <td key='4'>{(eventInPast || eventActive)
                     ? <HoverTooltip tooltip={tooltip}>
                         <span>{text} <span role="img" aria-label={emojiLabel}>{emoji}</span></span>
                     </HoverTooltip>
@@ -96,7 +96,7 @@ export const MyActivitiesTable = (props: {
                 }
                     <div>Värde: {activity.weight}</div>
                 </td>,
-                <td><EnlistButtons activity={activity} reloadActivity={reload} /></td>
+                <td key='5'><EnlistButtons activity={activity} reloadActivity={reload} /></td>
             ]
         }
     }
@@ -109,7 +109,7 @@ export const MyActivitiesTable = (props: {
     const renderProxyRow = (activity: Activity) => {
         const r = renderRow(activity);
         const proxy = activity.assigned ? <a href={activity.assigned.url()}>{activity.assigned.fullname}</a> : null;
-        return r.row([<td>{proxy}</td>].concat(r.td));
+        return r.row([<td key='6'>{proxy}</td>].concat(r.td));
     }
 
     const tableHeaders = <>
@@ -130,7 +130,7 @@ export const MyActivitiesTable = (props: {
         .sort((a, b) => a.date().localeCompare(b.date()))
         .map(renderProxyRow)
 
-    const r = [<Row>
+    const r = [<Row key='1'>
         <Col>
             {(myTasks.length > 0 && myProxiesTasks.length > 0) ?
                 <h2>Mina uppgifter</h2>
@@ -145,7 +145,7 @@ export const MyActivitiesTable = (props: {
     </Row>]
 
     if (myTasks.length !== 0) {
-        r.push(<Row><Col><Table striped responsive='lg'>
+        r.push(<Row key='2'><Col><Table striped responsive='lg'>
             <thead><tr>
                 {tableHeaders}
             </tr></thead>
@@ -156,13 +156,13 @@ export const MyActivitiesTable = (props: {
     }
 
     if (myTasks.length > 0 && myProxiesTasks.length > 0) {
-        r.push(<Row><Col>
+        r.push(<Row key='3'><Col>
             <h2>Mina underhuggares uppgifter</h2>
         </Col></Row>)
     }
 
     if (myProxiesTasks.length > 0) {
-        r.push(<Row><Col>
+        r.push(<Row key='4'><Col>
             <Table striped responsive='lg'>
                 <thead><tr>
                     <th>Namn</th>

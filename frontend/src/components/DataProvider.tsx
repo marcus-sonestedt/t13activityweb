@@ -6,7 +6,7 @@ export interface DataProps<T> {
     ctor: ((json: string) => T);
     url: string;
     onLoaded?: ((data: T) => void);
-    render?: (() => ReactNode);
+    render?: ((data:T) => ReactNode);
 }
 
 export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
@@ -68,7 +68,7 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     if (data !== null && data !== undefined) {
         // see https://stackoverflow.com/questions/54905376/type-error-jsx-element-type-null-undefined-is-not-a-constructor-functi/54908762
         if (render !== undefined)
-            return render() as ReactElement<any>;
+            return render(data) as ReactElement<any>;
         else
             return children as ReactElement<any>;
     }

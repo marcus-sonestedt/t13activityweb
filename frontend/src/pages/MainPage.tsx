@@ -17,20 +17,20 @@ export const MainPage = () => {
     const tab = tabMatch ? tabMatch[1] : 'overview';
     const user = useContext(userContext);
     const history = useHistory();
-    const setQueryPage = (key: string) => { history.replace(`?tab=${key}`); }
+    const setQueryTab = (key: string) => { history.replace(`?tab=${key}`); }
     const taskBadgeVariant = user.bookedWeight >= user.minSignups ? 'success' : 'warning';
     const taskBadgeText = `${user.completedWeight} / ${user.bookedWeight} / ${user.minSignups}`
     const verified = user.member?.email_verified && user.member?.phone_verified;
 
     return <Tab.Container defaultActiveKey={tab}
-        onSelect={setQueryPage}>
+        onSelect={setQueryTab}>
         <Row>
             <Col md='auto'>
                 <Nav variant="pills" className="flex-column">
                     <Nav.Item>
                         <Nav.Link eventKey="overview">
                             Översikt
-                            <span className='spacer' />
+                            {' '}
                             <HoverTooltip tooltip='Olästa notifieringar'>
                                 <Badge variant={user.notifications.length ? 'info' : 'secondary'}>
                                     {user.notifications.length}
@@ -40,7 +40,7 @@ export const MainPage = () => {
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey="my-tasks">Uppgifter
-                        <span className='spacer' />
+                        {' '}
                             <HoverTooltip tooltip={'Antal utförda, bokade & minsta antal uppgifter detta år'}>
                                 <Badge variant={taskBadgeVariant}>
                                     {taskBadgeText}
@@ -51,7 +51,7 @@ export const MainPage = () => {
                     <Nav.Item>
                         <Nav.Link eventKey="my-adrs">
                             Avbokningar
-                            <span className='spacer' />
+                            {' '}
                             <HoverTooltip tooltip={
                                 "Antal obehandlade egna förfrågningar\n" +
                                 (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>

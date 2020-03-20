@@ -177,7 +177,7 @@ const SendEmail = (props: { onNext: () => void }) => {
             <Button variant="success" onClick={props.onNext} disabled={disable}>
                 Jag fick mailet, har klickat på länken.
             </Button>
-            <span className='spacer' />
+            {' '}
             <Button variant="warning" onClick={() => setAttempt(attempt + 1)} disabled={disable}>
                 Inget mail. Skicka igen.
             </Button>

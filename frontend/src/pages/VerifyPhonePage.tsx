@@ -168,7 +168,7 @@ const SendCode = (props: { setState: (state: State) => void }) => {
         <Button variant="success" onClick={() => props.setState(State.VerifyCode)} disabled={sending}>
             Jag fick en kod
         </Button>
-        <span className='spacer' />
+        {' '}
         <Button variant="warning" onClick={() => props.setState(State.CheckPhoneNumber)} disabled={sending}>
             Inget händer, dubbelkolla numret
         </Button>
@@ -227,9 +227,9 @@ const VerifyCode = (props: { setState: (state: State) => void}) => {
                 </Form.Text>
             </Form.Group>
             <Button onClick={onCodeSubmit} variant="success" disabled={submitting}>Verifiera koden</Button>
-            <span className="spacer" />
+            {' '}
             <Button onClick={() => props.setState(State.SendCode)} variant="secondary" disabled={submitting}>Skicka ny kod</Button>
-            <span className="spacer" />
+            {' '}
             <Button onClick={() => props.setState(State.Failure)} variant="danger">Avbryt</Button>
         </Form>
     </>

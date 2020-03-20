@@ -29,7 +29,7 @@ export const WelcomePage = () => {
                             <a href="/app/login/">
                                 <Button size='lg'>Logga in</Button>
                             </a>
-                            <span className="spacer">&nbsp;</span>
+                            {' '}
                             <a href="/app/signup">
                                 <Button size='lg'>Registrera konto</Button>
                             </a>
