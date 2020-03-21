@@ -225,7 +225,7 @@ export const ActivityDelistRequestsComponent = () => {
                     <td>
                         {request.activity.assigned_for_proxy
                             ? <>
-                                <a href={request.member.url()}>{request.member.fullname}</a>}
+                                <a href={request.member.url()}>{request.member.fullname}</a>
                                 <br />
                                 <span style={{ fontWeight: 'normal' }}>Via: </span>
                                 <a href={request?.activity?.assigned?.url() ?? 'x'}>{request?.activity?.assigned?.fullname}</a>
