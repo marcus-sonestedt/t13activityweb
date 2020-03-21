@@ -37,12 +37,15 @@ def test():
 
 def reload():
     '''reload web app at pythonanywhere.com'''
-    path = Path('/var/www/macke_eu_pythonanywhere_com_wsgi.py')
-    if path.exists():
-        print(f"Touching {path}")
-        path.touch()
-    else:
-        print(f"Ignoring WSGI file {path} as it doesn't exist here.")
+    paths = [Path('/var/www/macke_eu_pythonanywhere_com_wsgi.py'),
+             Path('/var/www/test-macke_eu_pythonanywhere_com_wsgi.py')]
+
+    for path in paths:
+        if path.exists():
+            print(f"Touching {path}")
+            path.touch()
+        else:
+            print(f"Ignoring WSGI file {path} as it doesn't exist here.")
 
 this_module = sys.modules[__name__]
 
