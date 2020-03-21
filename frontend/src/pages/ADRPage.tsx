@@ -7,7 +7,7 @@ import { userContext } from "../components/UserContext";
 import { HoverTooltip, MarkDown, PageItems } from '../components/Utilities';
 import { approveADR, cancelADR, deleteADR, rejectADR } from "../logic/ADRActions";
 import { Activity, ActivityDelistRequest, Member, PagedADR, PagedMembers } from '../Models';
-
+import '../components/Table.css'
 
 export const RequestAdrButton = (props: {
     onClick: ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void),
@@ -221,7 +221,7 @@ export const ActivityDelistRequestsComponent = () => {
                     return null;
 
                 return <tr key={request.id} onClick={e => rowClicked(e, request)}
-                    className={'clickable-row ' + (request === currentReq ? 'active' : undefined)}>
+                    className={`clickable-row ${request.id === currentReq?.id ? 'active' : ''}`}>
                     <td>
                         {request.activity.assigned_for_proxy
                             ? <>
