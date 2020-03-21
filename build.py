@@ -40,12 +40,19 @@ def reload():
     paths = [Path('/var/www/macke_eu_pythonanywhere_com_wsgi.py'),
              Path('/var/www/test-macke_eu_pythonanywhere_com_wsgi.py')]
 
+    found = False
+
     for path in paths:
         if path.exists():
             print(f"Touching {path}")
             path.touch()
+            found = True
         else:
             print(f"Ignoring WSGI file {path} as it doesn't exist here.")
+
+    if found:
+       run(['python','manage.py','check', --deploy], shell=SHELL)
+
 
 this_module = sys.modules[__name__]
 
