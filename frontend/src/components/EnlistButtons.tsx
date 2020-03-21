@@ -45,7 +45,7 @@ export const EnlistButtons = (props: {
         if (activity.active_delist_request)
             return <CancelAdrButton onClick={buttonClick(() => cancelADRByActivity(activity.id))} />
 
-        return <RequestAdrButton onClick={buttonClick(() => createADR(activity, activity.assigned?.id ?? user.memberId))}
+        return <RequestAdrButton onClick={buttonClick(() => createADR(activity, user.memberId))}
             disabled={!canRequestUnlist} />
     }
 

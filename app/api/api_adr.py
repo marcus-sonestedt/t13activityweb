@@ -46,7 +46,7 @@ class ActivityEnlist(APIView):
 
         if activity.assigned is not None:
             if activity.active_delist_request is None:
-                return HttpResponseForbidden("Uppgiften är redan bokad av " + activity.assigned.fullname)
+                return HttpResponseForbidden(f"Uppgiften är redan bokad av {activity.assigned.fullname}")
             else:
                 logger.info("Transferring activity due to active ADR.")
 
@@ -61,7 +61,7 @@ class ActivityEnlist(APIView):
         activity.assigned = member
         activity.save()
 
-        return Response("Inbokad på " + activity.name)
+        return Response(f"Inbokad på {activity.name}")
 
 
 class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
@@ -77,7 +77,7 @@ class ADRView(generics.RetrieveUpdateDestroyAPIView, mixins.CreateModelMixin):
         qs = self.queryset
 
         if not self.request.user.is_staff:
-            qs = qs.filter(activity__assigned__user=self.request.user)
+            qs = qs.filter(member__user=self.request.user)
 
         return qs.all()
 
@@ -134,7 +134,7 @@ class ADRList(mixins.ListModelMixin, generics.GenericAPIView):
 url_patterns = [
     re_path(r'activity_enlist/(?P<id>.+)', ActivityEnlist.as_view()),
 
-    path('activity_delist_request', ADRList.as_view()),
+    re_path(r'activity_delist_request/$', ADRList.as_view()),
     re_path(r'activity_delist_request/(?P<pk>[0-9]+)', ADRView.as_view()),
     re_path(r'activity_delist_request/create', ADRView.as_view()),
     re_path(r'activity_delist_request/activity/(?P<id>.+)', ADRByActivityView.as_view()),

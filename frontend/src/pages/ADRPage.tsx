@@ -6,7 +6,7 @@ import DataProvider from "../components/DataProvider";
 import { userContext } from "../components/UserContext";
 import { HoverTooltip, MarkDown, PageItems } from '../components/Utilities';
 import { approveADR, cancelADR, deleteADR, rejectADR } from "../logic/ADRActions";
-import { Activity, ActivityDelistRequest, Member, PagedADR, PagedMembers } from '../Models';
+import { Activity, ActivityDelistRequest, Member, PagedADR } from '../Models';
 import '../components/Table.css'
 
 export const RequestAdrButton = (props: {
@@ -225,13 +225,10 @@ export const ActivityDelistRequestsComponent = () => {
                     <td>
                         {request.activity.assigned_for_proxy
                             ? <>
-                                <DataProvider<PagedMembers> url={Member.apiUrlForId(request.activity.assigned_for_proxy)}
-                                    ctor={json => deserialize(PagedMembers, json)}
-                                    render={data => <a href={data.results[0].url()}>{data.results[0].fullname}</a>}
-                                />
+                                <a href={request.member.url()}>{request.member.fullname}</a>}
                                 <br />
                                 <span style={{ fontWeight: 'normal' }}>Via: </span>
-                                <a href={request.member.url()}>{request.member.fullname}</a>
+                                <a href={request?.activity?.assigned?.url() ?? 'x'}>{request?.activity?.assigned?.fullname}</a>
                             </>
                             : <a href={request.member.url()}>{request.member.fullname}</a>}
                     </td>
@@ -265,7 +262,7 @@ export const ActivityDelistRequestsComponent = () => {
                     <tr>
                         <th>Medlem/Underhuggare</th>
                         <th>Aktivitet/Uppgift</th>
-                        <th>Uppgift/Värde</th>
+                        <th>Datum/Värde</th>
                         <th>Status</th>
                         <th>Åtgärd</th>
                     </tr>
