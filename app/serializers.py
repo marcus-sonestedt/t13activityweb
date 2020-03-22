@@ -99,8 +99,8 @@ class EventSerializer(serializers.ModelSerializer):
 
 class EventListSerializer(serializers.ModelSerializer):
     type = EventTypeBriefSerializer()
-    #coordinators = MemberSerializer(many=True)
     current_user_assigned = serializers.BooleanField(required=False)
+    has_bookable_activities = serializers.BooleanField(required=False)
 
     class Meta:
         model = Event

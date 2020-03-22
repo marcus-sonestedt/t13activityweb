@@ -31,7 +31,7 @@ from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer, FAQSerializer, UserSerializer
 from django.db.models.aggregates import Count
-from django.db.models import Q
+from django.db.models import Q, OuterRef, Subquery
 
 logger = logging.getLogger(__name__)
 
@@ -85,8 +85,13 @@ class EventList(generics.ListAPIView):
                 year = self.request.query_params.get('year', today.year)
                 qs = self.queryset.filter(start_date__year=year)             
                 
+            available_activities = models.Activity.objects \
+                .filter(event=OuterRef('pk')) \
+                .filter(models.Event.activities_available_count_query()) \
+                .values('id')
+
             qs = qs.order_by('start_date', 'end_date', 'name') \
-                    .annotate(_activities_available_count=Count(models.Event.activities_available_count_query()))
+                .annotate(_activities_available_count=Count(Subquery(available_activities)))
 
         if self.request.user.is_authenticated:
             member = models.Member.objects.get(user=self.request.user)

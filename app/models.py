@@ -246,15 +246,11 @@ class Event(models.Model):
     @staticmethod
     def activities_available_count_query():
         today = datetime.date.today()
-        return Q(activities__assigned=None) & \
-            (Q(activities__earliest_bookable_date__gte=today) | Q(activities__earliest_bookable_date=None))
+        return Q(assigned=None) & (Q(earliest_bookable_date__lte=today) | Q(earliest_bookable_date=None))
 
     def activities_available_count(self):
         if not hasattr(self, '_activities_available_count'):
-            self._activities_available_count = Event.objects \
-                .filter(id=self.id) \
-                .filter(self.activities_available_count_query()) \
-                .count()
+            self._activities_available_count = self.activities.filter(self.activities_available_count_query()).count()
         return self._activities_available_count
 
     activities_available_count.short_description = 'Lediga uppgifter'
@@ -268,7 +264,7 @@ class Event(models.Model):
                 self._has_bookable_activities = self.activities_available_count > 0
         return self._has_bookable_activities
 
-    has_bookable_activities.boolean = True
+    has_bookable_activities.boolean = True  
     has_bookable_activities = property(has_bookable_activities)
 
     def __str__(self):
