@@ -23,7 +23,7 @@ export const MyProxiesTable = (props: {
             return <Button onClick={async () => {
                 await changeActivityViaProxy('PUT', activity, proxy, setError);
                 props.onEnlistChanged?.();
-            }} size='sm' variant='success'>Boka</Button>
+            }} size='sm' variant='primary'>Boka</Button>
         else
             return <Button onClick={async () => {
                 await createADR(activity, user.memberId);
@@ -97,8 +97,8 @@ export const ProxiesTable = (props: {
             props.onProxySelected?.(proxy);
         }
 
-        return <tr key={proxy.id} onClick={rowClicked}>
-            <td><a href={proxy.url()}>{proxy.fullname}</a></td>
+        return <tr key={proxy.id} onClick={rowClicked} className='clickable-row'>
+            <td>{proxy.fullname}</td>
             <td><a href={`mailto:${proxy.email}`}>{proxy.email}</a></td>
             <td><a href={`tel:${proxy.phone_number}`}>{proxy.phone_number}</a></td>
             <td>

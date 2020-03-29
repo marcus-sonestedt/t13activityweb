@@ -7,6 +7,7 @@ import { MemberActivitiesTable } from "../components/MemberActivitiesTable";
 import { ProfileEditForm } from "../components/ProfileEditForm";
 import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
+import { InfoText } from "../components/Utilities";
 
 
 export const ProxyComponent = (props: {
@@ -86,7 +87,7 @@ export const ProxiesPage = () => {
 
     return <Container fluid>
         <Row>
-            <Col lg={6} md={12}>
+            <Col lg={4} md={9}>
                 <DataProvider<PagedMembers>
                     url={`/api/proxy/my`}
                     ctor={json => deserialize(PagedMembers, json)}
@@ -101,6 +102,9 @@ export const ProxiesPage = () => {
             */}
             <Col lg={6} md={12}>
                 <ProxyComponent proxy={proxy} onChanged={handleChanged} />
+            </Col>
+            <Col lg={2} md={3}>
+                <InfoText textKey="proxies"/>
             </Col>
         </Row>
     </Container>

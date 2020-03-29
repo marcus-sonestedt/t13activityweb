@@ -9,6 +9,7 @@ import { deserialize } from "class-transformer";
 import { MyProxiesTable } from "./ProxiesTable";
 import { createADR, cancelADRByActivity } from '../logic/ADRActions';
 import { RequestAdrButton, CancelAdrButton } from '../pages/ADRPage';
+import { InfoText } from './Utilities';
 
 export const EnlistButtons = (props: {
     activity: Activity,
@@ -57,8 +58,8 @@ export const EnlistButtons = (props: {
     if (user.hasProxies) {
         r.push(<>{' '}</>)
         r.push(<>
-            <ProxyDialog show={showProxyDialog} onHide={handleHide} activity={activity} />
             <Button variant="outline-primary" onClick={handleEnlistProxy}>Boka underhuggare</Button>
+            <ProxyDialog show={showProxyDialog} onHide={handleHide} activity={activity} />
         </>)
     }
 
@@ -70,19 +71,24 @@ const ProxyDialog = (props: { show: boolean, onHide: () => void, activity: Activ
     const [proxies, setProxies] = useState<Member[]>([]);
     const handleLoaded = useCallback((data: PagedMembers) => setProxies(data.results), [])
 
-    return <Modal show={props.show} onHide={props.onHide}>
+    return <Modal show={props.show} onHide={props.onHide} size='lg'>
         <Modal.Header closeButton>
-            <Modal.Title>Boka underhuggare</Modal.Title>
-            <Modal.Body>
-                <DataProvider<PagedMembers>
-                    url={`/api/proxy/my`}
-                    ctor={json => deserialize(PagedMembers, json)}
-                    onLoaded={handleLoaded}>
+            Boka underhuggare
+        </Modal.Header>
+        <Modal.Body>
+            <DataProvider<PagedMembers>
+                url={`/api/proxy/my`}
+                ctor={json => deserialize(PagedMembers, json)}
+                onLoaded={handleLoaded}>
+                <div>
                     <MyProxiesTable proxies={proxies}
                         activity={props.activity}
                         onEnlistChanged={() => window.location.reload()} />
-                </DataProvider>
-            </Modal.Body>
-        </Modal.Header>
+                </div>
+            </DataProvider>
+        </Modal.Body>
+        <Modal.Footer>
+            <InfoText textKey="proxies-booking" />
+        </Modal.Footer>
     </Modal>
 }
