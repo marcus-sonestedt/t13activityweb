@@ -49,7 +49,7 @@ class ClearAuthToken(ObtainAuthToken):
 
 
 class UserList(generics.ListAPIView, mixins.UpdateModelMixin):
-    queryset = User.objects.select_related('member').fetch_releated('member__proxy')
+    queryset = User.objects.select_related('member').prefetch_related('member__proxy')
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.UserWithProxiesSerializer
 
