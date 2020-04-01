@@ -229,7 +229,7 @@ export const EventsTable = (props: {
             placement='bottom'>
             <Button onClick={toggleBookableFilter} size='sm'
                 variant='outline-info' block={true}>
-                Bokningsbar{' '}
+                Ledig{' '}
                 {bookableFilter === null ? null :
                     bookableFilter === true ? <Check /> : <Cross />}
             </Button>
@@ -269,7 +269,7 @@ export interface EventProps {
 const LS_CALMODE_KEY = "event-calendar-mode";
 
 export const EventsComponent = (props: EventProps) => {
-    const { events, title = 'Kommande händelser', height = '75vh',
+    const { events, title = 'Kommande händelser', height = '60vh',
         showBookableStatus } = props;
 
     const storedViewModeJson = localStorage.getItem(LS_CALMODE_KEY);
@@ -303,12 +303,10 @@ export const EventsComponent = (props: EventProps) => {
                 </h5>
             </Col>
         </Row>
-        <div style={{ height: height }}>
-            {viewMode
-                ? <EventsCalendar events={events} showBookableStatus={showBookableStatus} />
-                : <EventsTable events={events} count={15} showBookableStatus={showBookableStatus} />
-            }
-        </div>
+        {viewMode ? <div style={{ height: height }}>            
+            <EventsCalendar events={events} showBookableStatus={showBookableStatus} /> 
+            </div> 
+                : <EventsTable events={events} count={15} showBookableStatus={showBookableStatus} />}
     </div>
 }
 

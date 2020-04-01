@@ -1,4 +1,4 @@
-import { Tab, Row, Col, Nav, Badge, NavDropdown, Jumbotron, Alert } from "react-bootstrap"
+import { Tab, Row, Col, Nav, Badge, NavDropdown, Jumbotron, Alert, Container } from "react-bootstrap"
 import React, { useState, useContext } from "react";
 import { deserialize } from "class-transformer";
 
@@ -8,7 +8,7 @@ import { HoverTooltip, ErrorBoundary, InfoText } from "../components/Utilities";
 import EventsComponent from "../components/Events";
 import { userContext } from "../components/UserContext";
 import { ActivityDelistRequestsComponent } from "./ADRPage";
-import { NotificationsComponent } from "./NotificationsPage";
+import { NotificationsPage } from "./NotificationsPage";
 import { useHistory } from "react-router-dom";
 import { MemberActivitiesTable } from "../components/MemberActivitiesTable";
 
@@ -20,7 +20,7 @@ export const MainPage = () => {
     const setQueryTab = (key: string) => { history.replace(`?tab=${key}`); }
     const taskBadgeVariant = user.bookedWeight >= user.minSignups ? 'success' : 'warning';
     const taskBadgeText = `${user.completedWeight} / ${user.bookedWeight} / ${user.minSignups}`
-    const verified = user.member?.email_verified && user.member?.phone_verified;
+    const verified = (user.member?.email_verified && user.member?.phone_verified) ?? false;
 
     return <Tab.Container defaultActiveKey={tab}
         onSelect={setQueryTab}>
@@ -63,23 +63,16 @@ export const MainPage = () => {
                             </HoverTooltip>
                         </Nav.Link>
                     </Nav.Item>
-                    <NavDropdown.Divider />
-                    <Nav.Item>
-                        <Nav.Link eventKey="upcoming-events">Aktivitetskalender</Nav.Link>
-                    </Nav.Item>
                 </Nav>
             </Col>
             <Col sm={12} md={10}>
                 <ErrorBoundary>
                     <Tab.Content>
                         <Tab.Pane eventKey="overview">
-                            <OverviewTab />
+                            <OverviewTab verified={verified} />
                         </Tab.Pane>
                         <Tab.Pane eventKey="my-tasks">
                             {verified ? <MemberActivitiesTable memberId={user.memberId} /> : <UnverifiedNotice />}
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="upcoming-events">
-                            {verified ? <UpcomingEventsTab /> : <UnverifiedNotice />}
                         </Tab.Pane>
                         <Tab.Pane eventKey="my-adrs">
                             {verified ? <ActivityDelistRequestsComponent /> : <UnverifiedNotice />}
@@ -91,32 +84,33 @@ export const MainPage = () => {
     </Tab.Container >
 }
 
-const UnverifiedNotice = () => 
-{
+const UnverifiedNotice = () => {
     return <Alert variant='warning'>
         Du måste verifera både din email-address och ditt telefonnummer
         innan du kan boka något!
     </Alert>
 }
 
-const OverviewTab = () => {
+const OverviewTab = (props: { verified: boolean }) => {
     const user = useContext(userContext);
-    return <Row>
-        <Col>
-            <Jumbotron>
-                <InfoText textKey='overview' />
-            </Jumbotron>
-            <h4>Meddelanden</h4>
-            {!user.notifications.length
-                ? <p>Inga olästa notiser</p>
-                : <NotificationsComponent />}
-        </Col>
-    </Row>
-
-
+    return <Container fluid>
+        <Row>
+            <Col lg={7} md={12}>
+                {props.verified ? <UpcomingEvents /> : <UnverifiedNotice />}
+                {!user.notifications.length
+                    ? <p>Inga olästa notiser</p>
+                    : <NotificationsPage />}
+            </Col>
+            <Col lg={5} md={12}>
+                <Jumbotron>
+                    <InfoText textKey='overview' />
+                </Jumbotron>
+            </Col>
+        </Row>
+    </Container>
 }
 
-const UpcomingEventsTab = () => {
+const UpcomingEvents = () => {
     const [events, setEvents] = useState(new PagedT13Events());
 
     const EVENTS_PAGE_SIZE = 150; // ~100-120 events/year typically
