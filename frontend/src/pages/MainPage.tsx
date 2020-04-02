@@ -1,4 +1,4 @@
-import { Tab, Row, Col, Nav, Badge, NavDropdown, Jumbotron, Alert, Container } from "react-bootstrap"
+import { Tab, Row, Col, Nav, Badge, Jumbotron, Alert, Container } from "react-bootstrap"
 import React, { useState, useContext } from "react";
 import { deserialize } from "class-transformer";
 
@@ -25,12 +25,12 @@ export const MainPage = () => {
     return <Tab.Container defaultActiveKey={tab}
         onSelect={setQueryTab}>
         <Row>
-            <Col md='auto'>
+            <Col md='1'>
                 <Nav variant="pills" className="flex-column">
                     <Nav.Item>
                         <Nav.Link eventKey="overview">
                             Översikt
-                            {' '}
+                            <br/>
                             <HoverTooltip tooltip='Olästa notifieringar'>
                                 <Badge variant={user.notifications.length ? 'info' : 'secondary'}>
                                     {user.notifications.length}
@@ -39,8 +39,9 @@ export const MainPage = () => {
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey="my-tasks">Uppgifter
-                        {' '}
+                        <Nav.Link eventKey="my-tasks">
+                            Uppgifter
+                            <br/>
                             <HoverTooltip tooltip={'Antal utförda, bokade & minsta antal uppgifter detta år'}>
                                 <Badge variant={taskBadgeVariant}>
                                     {taskBadgeText}
@@ -51,7 +52,7 @@ export const MainPage = () => {
                     <Nav.Item>
                         <Nav.Link eventKey="my-adrs">
                             Avbokningar
-                            {' '}
+                            <br/>
                             <HoverTooltip tooltip={
                                 "Antal obehandlade egna förfrågningar\n" +
                                 (user.isStaff ? "respektive antal obehandlade från alla medlemmar." : '')}>
@@ -65,7 +66,7 @@ export const MainPage = () => {
                     </Nav.Item>
                 </Nav>
             </Col>
-            <Col sm={12} md={10}>
+            <Col sm={12} md={11}>
                 <ErrorBoundary>
                     <Tab.Content>
                         <Tab.Pane eventKey="overview">

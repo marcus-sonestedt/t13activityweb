@@ -303,10 +303,14 @@ export const EventsComponent = (props: EventProps) => {
                 </h5>
             </Col>
         </Row>
-        {viewMode ? <div style={{ height: height }}>            
-            <EventsCalendar events={events} showBookableStatus={showBookableStatus} /> 
-            </div> 
-                : <EventsTable events={events} count={15} showBookableStatus={showBookableStatus} />}
+        {viewMode
+            ?
+            <div style={{ height: height }}>
+                <EventsCalendar events={events} showBookableStatus={showBookableStatus} />
+            </div>
+            :
+            <EventsTable events={events} count={15} showBookableStatus={showBookableStatus} />
+        }
     </div>
 }
 

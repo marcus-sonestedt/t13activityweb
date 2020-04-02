@@ -51,6 +51,16 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
 
         //const rowClicked = () => history.push(activity.url());
 
+        const weight = (activity.weight === 0)
+            ? <HoverTooltip tooltip="Denna uppgift räknas inte mot guldkortet">
+                <span>X</span>    
+            </HoverTooltip>
+            : (activity.weight > 1) ?
+                <HoverTooltip tooltip="Denna uppgift räknas som flera">
+                    <span className='weight'>{activity.weight}</span>
+                </HoverTooltip>
+            : null;
+
         return (
             <tr key={activity.id} className={'linked ' + className}>
                 <td><a href={activity.url()}>{activity.name}</a></td>
@@ -59,11 +69,8 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
                     {event?.date()}<br />{activity.time()}
                 </td>
                 <td>
-                    {activity.weight === 1 ? null :
-                        <HoverTooltip tooltip="Denna aktivitet räknas som flera">
-                            <span className='weight'>{activity.weight}</span>
-                        </HoverTooltip>}
-                    {' '}
+                    {weight}
+                    {weight ? ' ' : null}
                     <Reimbursements model={activity.type} /></td>
                 <td>{assigned}</td>
             </tr>
