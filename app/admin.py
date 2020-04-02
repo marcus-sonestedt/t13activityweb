@@ -33,7 +33,7 @@ class NestedActivityInline(nested.NestedTabularInline):
     fields = ['name', 'event', 'type', 'weight',  
         'assigned_for_proxy', 'earliest_bookable_date', 'confirmed', 'completed']
     model = models.Activity
-    verbose_name_plural = 'Aktiviteter'
+    verbose_name_plural = 'Uppgifter'
     fk_name = 'assigned'
     extra = 0
 
@@ -42,7 +42,7 @@ class NestedProxyActivityInline(nested.NestedTabularInline):
     fields = ['name', 'event', 'type', 'weight',  
         'assigned', 'earliest_bookable_date', 'confirmed', 'completed']
     model = models.Activity
-    verbose_name_plural = 'Underhuggares aktiviteter'
+    verbose_name_plural = 'Underhuggares uppgifter'
     fk_name = 'assigned_for_proxy'
     extra = 0
 
@@ -51,7 +51,8 @@ class NestedADRInline(nested.NestedTabularInline):
     model = models.ActivityDelistRequest
     verbose_name_plural = 'Avbokningsförfrågningar'
     fk_name = 'member'
-    readonly_fields = ['member', 'activity']
+    readonly_fields = ['activity', 'approved', 'approver']
+    fields = ['activity', 'reason', 'approved', 'approver',  'reject_reason']
     extra = 0
 
 

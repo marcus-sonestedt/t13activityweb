@@ -78,7 +78,6 @@ export const ProxiesPage = () => {
     const [reload, setReload] = useState(0);
 
     const handleChanged = (updatedProxy: Member) => {
-        debugger
         const index = proxies.findIndex(p => p.id === updatedProxy.id);
         proxies[index] = updatedProxy;
         setProxies(proxies);

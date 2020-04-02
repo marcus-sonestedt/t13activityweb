@@ -36,7 +36,6 @@ export const addExistingProxy = (proxy: Member) => {
 }
 
 export const updateProxyAsync = async (proxy: Member) => {
-    debugger
     const r = await fetch(Member.apiUrlForId(proxy.id), {
         method: 'PATCH',
         headers: getJsonHeaders(),
