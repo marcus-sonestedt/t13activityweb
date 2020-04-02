@@ -85,7 +85,7 @@ export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRe
         </span>
         : null;
 
-    const remainingWeight = (model.member.booked_weight ?? 0) - (model.activity ?.weight ?? 1)
+    const remainingWeight = (model.member.booked_weight ?? 0);
 
     return (
         <>
@@ -118,11 +118,11 @@ export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRe
             {!user.isStaff ? null :
                 <p>
                     <span style={{ opacity: 0.7 }}>
-                        Bokade uppgifter exkl. denna:
+                        Bokade uppgifter:
                     </span>
                     {' '}
                     <b>
-                        {remainingWeight} / {user.minSignups}
+                        {remainingWeight} (minst: {user.minSignups})
                     </b>
                     {' '}
                     <span style={{ fontSize: 'x-large' }}>
@@ -130,6 +130,9 @@ export const ActivityDelistRequestComponent = (props: { model?: ActivityDelistRe
                             ? <Badge variant='success'>OK</Badge>
                             : <Badge variant='danger'>UNDER GRÄNS</Badge>
                         }
+                    </span>
+                    <span style={{ opacity: 0.7 }}>
+                    <br/>(exkl. avbokningsförfrågningar)                  
                     </span>
                 </p>
             }
@@ -330,7 +333,7 @@ export const ActivityDelistRequestsPage = () => {
 }
 
 const ApproveAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>
-    <HoverTooltip tooltip=
+    <HoverTooltip placement='bottom' tooltip=
         {'Godkänn avbokningen och frigör medlemmen från sitt åtagande.' +
             'Uppgiften kommer inte ha någon medlem tilldelad efter detta.'}>
         <span className="d-inline-block">
@@ -342,7 +345,7 @@ const ApproveAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled:
     </HoverTooltip>
 
 const RejectAdrButton = (props: { onClick: (e: any) => Promise<void>, disabled: boolean }) =>
-    <HoverTooltip tooltip={
+    <HoverTooltip placement='bottom' tooltip={
         'Avvisa denna avbokningsförfrågan. Du behöver ange en anledning' +
         'till varför du inte godtar anledningen som medlemmen angivit.'}>
         <span className="d-inline-block">

@@ -114,8 +114,9 @@ class Member(models.Model):
     def booked_weight(self):
         booked_weight = self.year_activities \
             .exclude((~Q(delist_requests__member=None)) & Q(delist_requests__approved=None)) \
-            .aggregate(Sum('weight')) \
-            .get('weight__sum', 0) or 0
+            .aggregate(booked_weight=Sum('weight')) \
+            .get('booked_weight', 0) or 0
+
         return booked_weight + self.min_signup_bias
 
     def task_summary(self):
