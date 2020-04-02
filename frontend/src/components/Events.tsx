@@ -1,16 +1,16 @@
-import React, { useState, SyntheticEvent, useMemo } from "react";
-import { Table, Button, Pagination, Row, Col } from 'react-bootstrap'
-import { useHistory } from "react-router-dom";
-import RBC, { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
+import moment from 'moment';
 import 'moment/locale/sv';
-
-import { HoverTooltip, PageItems } from "./Utilities";
-import { PagedT13Events, T13Event } from '../Models'
-
+import React, { SyntheticEvent, useMemo, useState } from "react";
+import RBC, { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './Table.css'
-import './Calendar.css'
+import { Button, Col, Pagination, Row, Table } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
+import { PagedT13Events, T13Event } from '../Models';
+import './Calendar.css';
+import './Table.css';
+import { HoverTooltip, PageItems } from "./Utilities";
+
+
 
 export interface MyProps {
     events: PagedT13Events;
@@ -38,13 +38,13 @@ const intToRgb = (i: number) => {
 class MyAgendaEvent extends React.Component<any, {}> {
     render = () => {
         const event = this.props.event;
-        const typeIndex = parseInt(event.type?.id) + 1 ?? 0;
+        const typeIndex = parseInt(event.type ?.id) + 1 ?? 0;
         const bgColor = intToRgb(typeIndex);
 
         return <div className={'event ' + (event.has_bookable_activities ? 'bookable' : 'locked')}
             style={{ backgroundColor: bgColor }}>
             <a href={event.url()}>
-                {event.name} {event.type ? ' - ' : null} {event.type?.name}
+                {event.name} {event.type ? ' - ' : null} {event.type ?.name}
             </a>
         </div>
     }
@@ -53,11 +53,11 @@ class MyAgendaEvent extends React.Component<any, {}> {
 const MyEvent = (props: { event: any, showBookableStatus?: boolean }) => {
     const { event, showBookableStatus } = props;
 
-    const typeIndex = parseInt(event.type?.id) + 1 ?? 0;
+    const typeIndex = parseInt(event.type ?.id) + 1 ?? 0;
     const bgColor = intToRgb(typeIndex);
 
     const tooltip = <div>{event.name}
-        <br />{event.type?.name ?? ''}
+        <br />{event.type ?.name ?? ''}
         <br />
         {!showBookableStatus ? null :
             event.has_bookable_activities
@@ -135,6 +135,9 @@ export const EventsCalendar = (props: {
 }
 
 const LS_EVENTTABLE_PAGE_KEY = "eventtable-page";
+const LS_EVENTTABLE_BOOKABLE_KEY = "eventtable-bookable";
+const LS_EVENTTABLE_TYPE_KEY = "eventtable-type";
+const LS_EVENTTABLE_YEAR_KEY = "eventtable-year";
 
 const pageForToday = (events: PagedT13Events, pageSize: number) => {
     var etPageJson = localStorage.getItem(LS_EVENTTABLE_PAGE_KEY);
@@ -152,6 +155,11 @@ const pageForToday = (events: PagedT13Events, pageSize: number) => {
     return page;
 }
 
+function getLS<T>(key: string, defaultValue: T) {
+    var json = localStorage.getItem(key);
+    return json === null ? defaultValue : JSON.parse(json) as T;
+}
+
 export const EventsTable = (props: {
     events: PagedT13Events,
     pageSize: number,
@@ -159,21 +167,36 @@ export const EventsTable = (props: {
 }) => {
     const { events, pageSize = 10, showBookableStatus } = props;
     const [page, _setPage] = useState(pageForToday(events, pageSize));
-    const [bookableFilter, setBookableFilter] = useState<boolean | null>(null);
-    const [typeFilter, setTypeFilter] = useState<string | null>(null);
-    const [year, setYear] = useState(new Date().getFullYear());
+    const [bookableFilter, _setBookableFilter] = useState(getLS<boolean|null>(LS_EVENTTABLE_BOOKABLE_KEY, null));
+    const [typeFilter, _setTypeFilter] = useState(getLS<string|null>(LS_EVENTTABLE_TYPE_KEY, null));
+    const [year, _setYear] = useState(getLS(LS_EVENTTABLE_YEAR_KEY, new Date().getFullYear()));
     const history = useHistory();
 
-    const setPage = (page: number) => {
-        localStorage.setItem(LS_EVENTTABLE_PAGE_KEY, JSON.stringify(page));
-        _setPage(page);
+    const setPage = (value: number) => {
+        localStorage.setItem(LS_EVENTTABLE_PAGE_KEY, JSON.stringify(value));
+        _setPage(value);
+    }
+
+    const setBookableFilter = (value: boolean | null) => {
+        localStorage.setItem(LS_EVENTTABLE_BOOKABLE_KEY, JSON.stringify(value));
+        _setBookableFilter(value);
+    }
+
+    const setTypeFilter = (value: string | null) => {
+        localStorage.setItem(LS_EVENTTABLE_TYPE_KEY, JSON.stringify(value));
+        _setTypeFilter(value);
+    }
+
+    const setYear = (value: number) => {
+        localStorage.setItem(LS_EVENTTABLE_YEAR_KEY, JSON.stringify(value));
+        _setYear(value);
     }
 
     const renderRow = (model: T13Event) => {
         const type = model.type === null ? '-' :
             <a href={model.type.url()}>{model.type.name}</a>
 
-        const typeIndex = parseInt(model?.type?.id ?? '0') + 1 ?? 0;
+        const typeIndex = parseInt(model ?.type ?.id ?? '0') + 1 ?? 0;
         const bgColor = intToRgb(typeIndex);
 
         return (
@@ -196,7 +219,7 @@ export const EventsTable = (props: {
     }
 
     const types = useMemo(() => {
-        const set = new Set(events.results.map(e => e.type?.name));
+        const set = new Set(events.results.map(e => e.type ?.name));
         const values = new Array(set.size);
         const x = set.values();
         for (let i = 0; i < values.length; ++i)
@@ -219,7 +242,7 @@ export const EventsTable = (props: {
     const filteredEvents = useMemo(() =>
         events.results
             .filter(e => bookableFilter === null ? true : bookableFilter === e.has_bookable_activities)
-            .filter(e => typeFilter === null ? true : typeFilter === e.type?.name)
+            .filter(e => typeFilter === null ? true : typeFilter === e.type ?.name)
             .filter(e => e.start_date.getFullYear() === year || e.end_date.getFullYear() === year)
         , [events, typeFilter, bookableFilter, year]);
 
@@ -242,7 +265,7 @@ export const EventsTable = (props: {
             placement='bottom'>
             <Button onClick={toggleTypeFilter} size='sm'
                 variant='outline-info' block={true}>
-                Typ{' '}{typeFilter?.toString()}
+                Typ{' '}{typeFilter ?.toString()}
             </Button>
         </HoverTooltip>
 
@@ -337,4 +360,5 @@ export const EventsComponent = (props: EventProps) => {
 }
 
 export default EventsComponent;
+
 
