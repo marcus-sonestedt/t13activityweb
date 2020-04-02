@@ -320,17 +320,17 @@ class Activity(models.Model):
         Member, on_delete=models.SET_NULL, null=True, blank=True)
     assigned_for_proxy = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name='assigned_via_proxies')
+        related_name='assigned_via_proxies', verbose_name='Tilldelad som underhuggare åt')
     assigned_at = models.DateTimeField(null=True, blank=True)
 
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
 
     comment = models.TextField(blank=True)
-    weight = models.IntegerField(default=1)
+    weight = models.IntegerField(default=1, verbose_name='Värde')
 
     confirmed = models.BooleanField(
-        default=False, verbose_name='Påminnelse bekräftad')
+        default=False, verbose_name='Bekräftad')
     completed = models.BooleanField(
         default=None, null=True, blank=True, verbose_name='Utförd')
     cancelled = models.BooleanField(default=False, verbose_name='Inställd')

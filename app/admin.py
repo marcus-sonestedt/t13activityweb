@@ -29,11 +29,22 @@ class ActivityInline(admin.TabularInline):
 
 
 class NestedActivityInline(nested.NestedTabularInline):
+    readonly_fields = ['name', 'event', 'type', 'weight', 'earliest_bookable_date']
+    fields = ['name', 'event', 'type', 'weight',  
+        'assigned_for_proxy', 'earliest_bookable_date', 'confirmed', 'completed']
     model = models.Activity
     verbose_name_plural = 'Aktiviteter'
     fk_name = 'assigned'
     extra = 0
-    exclude = ['assigned_at', 'attachments', 'comment']
+
+class NestedProxyActivityInline(nested.NestedTabularInline):
+    readonly_fields = ['name', 'event', 'type', 'weight', 'earliest_bookable_date']
+    fields = ['name', 'event', 'type', 'weight',  
+        'assigned', 'earliest_bookable_date', 'confirmed', 'completed']
+    model = models.Activity
+    verbose_name_plural = 'Underhuggares aktiviteter'
+    fk_name = 'assigned_for_proxy'
+    extra = 0
 
 
 class NestedADRInline(nested.NestedTabularInline):
@@ -45,7 +56,7 @@ class NestedADRInline(nested.NestedTabularInline):
 
 
 class NestedMemberInline(nested.NestedStackedInline):
-    inlines = [NestedActivityInline, NestedADRInline]
+    inlines = [NestedActivityInline, NestedProxyActivityInline, NestedADRInline]
     model = models.Member
     can_delete = False
     verbose_name_plural = 'Medlem'
@@ -61,6 +72,7 @@ class UserWithMemberAdmin(nested.NestedModelAdmin):
     inlines = [NestedMemberInline]
     readonly_fields = ['username', 'last_login', 'date_joined']
     search_fields = ['username', 'first_name', 'last_name']
+    exclude = ['user_permissions']
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
