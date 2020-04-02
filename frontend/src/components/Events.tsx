@@ -134,18 +134,40 @@ export const EventsCalendar = (props: {
     />
 }
 
+const LS_EVENTTABLE_PAGE_KEY = "eventtable-page";
+
+const pageForToday = (events: PagedT13Events, pageSize: number) => {
+    var etPageJson = localStorage.getItem(LS_EVENTTABLE_PAGE_KEY);
+    if (etPageJson)
+        return JSON.parse(etPageJson) as number;
+
+    const today = new Date();
+
+    const idx = events.results
+        .filter(e => (e.start_date.getMonth() - e.start_date.getMonth()) < 1)
+        .findIndex(e => e.start_date >= today);
+
+    const page = Math.ceil(idx / pageSize) + 1;
+    localStorage.setItem(LS_EVENTTABLE_PAGE_KEY, JSON.stringify(page));
+    return page;
+}
+
 export const EventsTable = (props: {
     events: PagedT13Events,
-    count: number,
+    pageSize: number,
     showBookableStatus?: boolean
 }) => {
-    const { events, count = 10, showBookableStatus } = props;
-    const [page, setPage] = useState(1);
+    const { events, pageSize = 10, showBookableStatus } = props;
+    const [page, _setPage] = useState(pageForToday(events, pageSize));
     const [bookableFilter, setBookableFilter] = useState<boolean | null>(null);
     const [typeFilter, setTypeFilter] = useState<string | null>(null);
     const [year, setYear] = useState(new Date().getFullYear());
-
     const history = useHistory();
+
+    const setPage = (page: number) => {
+        localStorage.setItem(LS_EVENTTABLE_PAGE_KEY, JSON.stringify(page));
+        _setPage(page);
+    }
 
     const renderRow = (model: T13Event) => {
         const type = model.type === null ? '-' :
@@ -248,12 +270,12 @@ export const EventsTable = (props: {
             </thead>
             <tbody>
                 {filteredEvents
-                    .slice((page - 1) * count, page * count)
+                    .slice((page - 1) * pageSize, page * pageSize)
                     .map(renderRow)}
             </tbody>
         </Table >
         <Pagination>
-            <PageItems count={filteredEvents.length} pageSize={count}
+            <PageItems count={filteredEvents.length} pageSize={pageSize}
                 currentPage={page} setFunc={setPage} />
         </Pagination>
     </>
@@ -309,7 +331,7 @@ export const EventsComponent = (props: EventProps) => {
                 <EventsCalendar events={events} showBookableStatus={showBookableStatus} />
             </div>
             :
-            <EventsTable events={events} count={15} showBookableStatus={showBookableStatus} />
+            <EventsTable events={events} pageSize={15} showBookableStatus={showBookableStatus} />
         }
     </div>
 }
