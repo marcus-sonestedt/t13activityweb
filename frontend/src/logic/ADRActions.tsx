@@ -39,7 +39,7 @@ export const createADR = async (model: Activity, memberId: string) => {
     const reason = prompt(
         "Ange varför du vill avboka ditt åtagande.\n" +
         "Observera att avbokningen inte är giltig innan den bekräftats av klubben.");
-    if (reason === null)
+    if (reason === null || reason === '')
         return;
 
     const url = ActivityDelistRequest.apiUrlAll() + '/create';
@@ -56,7 +56,7 @@ export const createADR = async (model: Activity, memberId: string) => {
             })
         })
         .then(handler, handler)
-        .finally(() => window.location.reload)
+        .finally(() => window.location.reload())
 }
 
 export async function cancelADRByActivity(activity_id: string) {
@@ -72,7 +72,8 @@ export async function cancelADRByActivity(activity_id: string) {
         .then(resp => resp.text().then(json => {
             const data = deserialize(ActivityDelistRequest, json);
             return cancelADR(data);
-        }, handler), handler);
+        }, handler), handler)
+        .finally(() => window.location.reload())
 
 }
 
@@ -87,8 +88,10 @@ export async function cancelADR(model: ActivityDelistRequest) {
             method: 'DELETE',
             headers: getJsonHeaders(),
         })
-        .then(handler, handler);
-};
+        .then(handler, handler)
+        .finally(() => window.location.reload())
+
+}
 
 export async function deleteADR(model: ActivityDelistRequest) {
     if (model.approved !== true) {
@@ -103,8 +106,9 @@ export async function deleteADR(model: ActivityDelistRequest) {
             method: 'DELETE',
             headers: getJsonHeaders(),
         })
-        .then(handler, handler);
-};
+        .then(handler, handler)
+        .finally(() => window.location.reload())
+}
 
 
 export const approveADR = async (model: ActivityDelistRequest, user: UserContext) => {
@@ -133,8 +137,9 @@ export const approveADR = async (model: ActivityDelistRequest, user: UserContext
                 approver: user.memberId
             })
         })
-        .then(handler, handler);
-};
+        .then(handler, handler)
+        .finally(() => window.location.reload())
+}
 
 export const rejectADR = async (model: ActivityDelistRequest, user: UserContext) => {
     if (!user.isStaff) {
@@ -165,7 +170,8 @@ export const rejectADR = async (model: ActivityDelistRequest, user: UserContext)
                 reject_reason: rejectReason
             })
         })
-        .then(handler, handler);
-};
+        .then(handler, handler)
+        .finally(() => window.location.reload())
+}
 
 export default {}
