@@ -115,3 +115,5 @@ static
 **/secrets.py
 .vscode/tags
 media/*
+
+*.bak
