@@ -39,18 +39,20 @@ def new_user_created(member):
 
 
 def adr_approved(adr):
-    log.info(f"ADR {adr} has been approved, sending email")
+    log.info(f"ADR {adr} has been approved")
 
-    send_mail('Avbokning godkänd',
-        strip_lines(f'''Hej {adr.member.fullname}
+    if settings.DEFAULT_FROM_EMAIL:
+        log.info("Sending email to " + adr.member.user.email)
+        send_mail('Avbokning godkänd',
+            strip_lines(f'''Hej {adr.member.fullname}
 
-        Din önskan om avbokning från {adr.activity}
-        har blivit godkänd av {adr.approver.fullname}.
+            Din önskan om avbokning från {adr.activity}
+            har blivit godkänd av {adr.approver.fullname}.
 
-        mvh
-        /Team13 aktivitetswebb'''),
-        settings.DEFAULT_FROM_EMAIL,
-        [adr.member.user.email])
+            mvh
+            /Team13 aktivitetswebb'''),
+            settings.DEFAULT_FROM_EMAIL,
+            [adr.member.user.email])
 
     sms_target = adr.member.phone_number
 
@@ -64,21 +66,24 @@ def adr_approved(adr):
             to=sms_target)
 
 def adr_rejected(adr):
-    log.info(f"ADR {adr} has been rejected, sending email")
+    log.info(f"ADR {adr} has been rejected,")
 
-    send_mass_mail('Avbokning ej godkänd',
-        strip_lines(f'''Hej {adr.member.fullname},
+    if settings.DEFAULT_FROM_EMAIL:
+        recipients = [adr.member.user.email, adr.approver.user.email]
+        log.info(f"Sending email to {recipients}")
+        send_mass_mail('Avbokning ej godkänd',
+            strip_lines(f'''Hej {adr.member.fullname},
 
-        Din önskan om avbokning från {adr.activity}
-        har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
-        med följande meddelande:\n\n"{adr.reject_reason}"
+            Din önskan om avbokning från {adr.activity}
+            har tyvärr blivit avvisad av {adr.approver.fullname} ({adr.approver.user.email})
+            med följande meddelande:\n\n"{adr.reject_reason}"
 
-        Vänligen tag kontakt om du har frågor.
+            Vänligen tag kontakt om du har frågor.
 
-        mvh
-        /Team13 aktivitetswebb'''),
-        settings.DEFAULT_FROM_EMAIL,
-        [adr.member.user.email, adr.approver.user.email])
+            mvh
+            /Team13 aktivitetswebb'''),
+            settings.DEFAULT_FROM_EMAIL,
+            recipients)
 
     sms_target = adr.member.phone_number
 
@@ -108,10 +113,11 @@ def notify_upcoming_activity(activity):
 
         mvh /Team13''')
 
-    send_mail(f"Påminnelse om {activity}",
-        message,
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[activity.assigned.user.email])
+    if settings.DEFAULT_FROM_EMAIL:
+        send_mail(f"Påminnelse om {activity}",
+            message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[activity.assigned.user.email])
 
     sms_target = activity.assigned.phone_number
 
@@ -126,14 +132,20 @@ def notify_upcoming_activity(activity):
 
 
 def send_verification_email(member):
-    send_mail(subject='Team13 email verification',
-        message=strip_lines(f'''Hej {member.fullname},
+    link = f"https://macke.eu.pythonanywhere.com/api/verify/email/check/{member.email_verification_code}"
 
-        Klicka på länken för att verifiera din emailadress:
+    if settings.DEFAULT_FROM_EMAIL:
+        log.info(f"Sending verification link to {member.email}:\n{link}")
+        send_mail(subject='Team13 email verification',
+            message=strip_lines(f'''Hej {member.fullname},
 
-        https://macke.eu.pythonanywhere.com/api/verify/email/check/{member.email_verification_code}
+            Klicka på länken för att verifiera din emailadress:
 
-        mvh
-        /Team13'''),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[member.email])
+            {link}
+
+            mvh
+            /Team13'''),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[member.email])
+    else:
+        log.info(f"Email disabled, verification link for {member.email}:\n{link}")
