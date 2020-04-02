@@ -14,7 +14,7 @@ def strip_lines(lines):
 
 def sms_client():
     global _sms_client
-    if _sms_client is None:
+    if _sms_client is None and settings.TWILIO_ACCOUNT_SID:
         _sms_client = TwilioClient(
             settings.TWILIO_ACCOUNT_SID,
             settings.TWILIO_AUTH_TOKEN)
@@ -55,15 +55,19 @@ def adr_approved(adr):
             [adr.member.user.email])
 
     sms_target = adr.member.phone_number
+    body = f"Din begäran om avbokning av {adr.activity} har blivit godkänd. mvh /Team13",
+    log.info(f"About to send SMS to {sms_target}: {body}")
 
     if sms_target is None:
         log.warning(f"No phone_number set for {adr.member}")
-    else:
+    elif sms_client():
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
-            body=f"Din begäran om avbokning av {adr.activity} har blivit godkänd. mvh /Team13",
+            body=body,
             from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
+    else:
+        log.warning("SMS is disabled")
 
 def adr_rejected(adr):
     log.info(f"ADR {adr} has been rejected,")
@@ -86,16 +90,19 @@ def adr_rejected(adr):
             recipients)
 
     sms_target = adr.member.phone_number
+    body = f"Hej! Din begäran om avbokning från {adr.activity} har tyvärr avvisats. mvh /Team13"
+    log.info(f"About to send SMS to {sms_target}: {body}")
 
     if not sms_target:
         log.warning(f"No phone_number set for {adr.member}")
-    else:
+    elif sms_client():
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
-            body=f"Hej! Din begäran om avbokning från {adr.activity} har tyvärr avvisats. mvh /Team13",
+            body=body,
             from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
-
+    else:
+        log.warning("SMS is disabled")
 
 
 def notify_upcoming_activity(activity):
@@ -104,7 +111,7 @@ def notify_upcoming_activity(activity):
         log.warning(f"Activity '{activity}' is not assigned, cannot notify")
         return
 
-    log.info(f"Notifying {activity.assigned} that {activity} happens tomorrow")
+    log.info(f"Notifying {activity.assigned} that they are assigned to {activity}, which occurs soon.")
 
     message = strip_lines(f'''Hej!
 
@@ -120,15 +127,18 @@ def notify_upcoming_activity(activity):
             recipient_list=[activity.assigned.user.email])
 
     sms_target = activity.assigned.phone_number
+    log.info(f"About to send SMS to {sms_target}: {message}")
 
     if not sms_target:
         log.warning(f"No phone_number set for {activity.member}")
-    else:
+    elif sms_client():
         log.info(f"Sending SMS to {sms_target}")
         sms_client().messages.create(
             body=message,
             from_=settings.SMS_FROM_NUMBER,
             to=sms_target)
+    else:
+        log.warning("SMS is disabled")
 
 
 def send_verification_email(member):
