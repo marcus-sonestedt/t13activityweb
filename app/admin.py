@@ -9,6 +9,7 @@ import nested_inline.admin as nested
 
 from app import models
 
+import bulk_admin
 
 def unregister(model):
     def f2(f):
@@ -108,7 +109,7 @@ class MemberAdmin(nested.NestedModelAdmin):
                'email_verification_code_created']
 
 
-class EventTypeAttachmentInline(admin.TabularInline):
+class EventTypeAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
     model = models.EventType.attachments.through
 
 
@@ -119,7 +120,7 @@ class EventTypeAdmin(admin.ModelAdmin):
     filter_horizontal = ['attachments']
 
 
-class EventAttachmentInline(admin.TabularInline):
+class EventAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
     model = models.Event.attachments.through
     extra = 0
 
@@ -154,7 +155,7 @@ class EventAdmin(admin.ModelAdmin):
     filter_horizontal = ['attachments', 'coordinators']
 
 
-class ActivityTypeAttachmentInline(admin.TabularInline):
+class ActivityTypeAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
     model = models.ActivityType.attachments.through
     extra = 0
     search_fields = ['name']
@@ -167,14 +168,14 @@ class ActivityTypeAdmin(admin.ModelAdmin):
     filter_horizontal = ['attachments']
 
 
-class ActivityAttachmentInline(admin.TabularInline):
+class ActivityAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
     model = models.Activity.attachments.through
     extra = 0
     search_fields = ['name']
 
 
 @admin.register(models.Activity)
-class ActivityAdmin(admin.ModelAdmin):
+class ActivityAdmin(bulk_admin.BulkModelAdmin):
     inlines = [ActivityAttachmentInline]
     list_filter = ['completed', 'cancelled', 'type', 'event']
     list_display = ('name', 'type', 'event',  'date',
@@ -184,7 +185,7 @@ class ActivityAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.ActivityDelistRequest)
-class ActivityDelistRequestAdmin(admin.ModelAdmin):
+class ActivityDelistRequestAdmin(bulk_admin.BulkModelAdmin):
     list_filter = ['approved']
     list_display = (
         'member',
@@ -196,7 +197,7 @@ class ActivityDelistRequestAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.FAQ)
-class FAQAdmin(admin.ModelAdmin):
+class FAQAdmin(bulk_admin.BulkModelAdmin):
     list_display = (
         'question',
         'answer_short',
@@ -206,5 +207,5 @@ class FAQAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.InfoText)
-class InfoTextAdmin(admin.ModelAdmin):
+class InfoTextAdmin(abulk_admin.BulkModelAdmin):
     search_fields = ['key', 'content']

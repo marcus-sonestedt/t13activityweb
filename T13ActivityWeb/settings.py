@@ -140,6 +140,7 @@ INSTALLED_APPS = [
     'app.apps.ActivityListAppConfig',
     'frontend',
     'nested_inline',
+    'bulk_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
