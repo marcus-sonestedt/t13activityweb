@@ -29,7 +29,7 @@ class ActivityInline(admin.TabularInline):
 
 
 class NestedActivityInline(nested.NestedTabularInline):
-    readonly_fields = ['name', 'event', 'type', 'weight', 'earliest_bookable_date']
+    readonly_fields = ['name', 'event', 'type', 'weight', 'assigned_for_proxy', 'earliest_bookable_date']
     fields = ['name', 'event', 'type', 'weight',  
         'assigned_for_proxy', 'earliest_bookable_date', 'confirmed', 'completed']
     model = models.Activity

@@ -47,7 +47,7 @@ export const MemberPage = () => {
                     <div className="model-header">
                         <h1>Medlem</h1>
                         {user.isStaff ?
-                            <a href={Member.adminUrlForId(id)}><Button variant='outline-secondary'>Editera</Button></a>
+                            <a href={member?.adminUrl()}><Button variant='outline-secondary'>Editera</Button></a>
                             : null}
                     </div>
                     <hr />
