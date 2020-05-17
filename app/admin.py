@@ -109,7 +109,7 @@ class MemberAdmin(nested.NestedModelAdmin):
                'email_verification_code_created']
 
 
-class EventTypeAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
+class EventTypeAttachmentInline(admin.TabularInline):
     model = models.EventType.attachments.through
 
 
@@ -120,7 +120,7 @@ class EventTypeAdmin(admin.ModelAdmin):
     filter_horizontal = ['attachments']
 
 
-class EventAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
+class EventAttachmentInline(admin.TabularInline):
     model = models.Event.attachments.through
     extra = 0
 
@@ -155,7 +155,7 @@ class EventAdmin(admin.ModelAdmin):
     filter_horizontal = ['attachments', 'coordinators']
 
 
-class ActivityTypeAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
+class ActivityTypeAttachmentInline(admin.TabularInline):
     model = models.ActivityType.attachments.through
     extra = 0
     search_fields = ['name']
@@ -168,7 +168,7 @@ class ActivityTypeAdmin(admin.ModelAdmin):
     filter_horizontal = ['attachments']
 
 
-class ActivityAttachmentInline(bulk_admin.TabularBulkInlineModelAdmin):
+class ActivityAttachmentInline(admin.TabularInline):
     model = models.Activity.attachments.through
     extra = 0
     search_fields = ['name']
@@ -207,5 +207,5 @@ class FAQAdmin(bulk_admin.BulkModelAdmin):
 
 
 @admin.register(models.InfoText)
-class InfoTextAdmin(abulk_admin.BulkModelAdmin):
+class InfoTextAdmin(bulk_admin.BulkModelAdmin):
     search_fields = ['key', 'content']
