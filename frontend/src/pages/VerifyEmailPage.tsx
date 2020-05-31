@@ -1,4 +1,4 @@
-import React, { useMemo, FormEvent, useEffect } from "react";
+import React, { useMemo, useEffect, ChangeEvent } from "react";
 import { useContext, useState } from "react"
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
@@ -71,8 +71,8 @@ const CheckAddress = (props: { onNext: () => void }) => {
         return () => controller.abort();
     }, [user.memberId])
 
-    const onEmailChange = (e: FormEvent<HTMLInputElement>) => {
-        const target = e.target as HTMLInputElement;
+    const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const target = e.target;
         setEmail(target.value);
     }
 

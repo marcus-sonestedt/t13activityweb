@@ -1,7 +1,12 @@
+import React, { ChangeEvent, useState } from "react";
+import { Button, Form } from "react-bootstrap";
+import { createProxyAsync, updateProxyAsync } from "../logic/ProxyActions";
 import { Member } from "../Models";
-import React, { useState, FormEvent } from "react";
-import { Form, Button } from "react-bootstrap";
-import { updateProxyAsync, createProxyAsync } from "../logic/ProxyActions";
+
+type FormControlElement =
+  | HTMLInputElement
+  | HTMLSelectElement
+  | HTMLTextAreaElement;
 
 /* If member is null id,  will create new proxy-member on save */
 export const ProfileEditForm = (props: {
@@ -10,10 +15,10 @@ export const ProfileEditForm = (props: {
     onError?: (err: string) => void
 }) => {
     const [validated, setValidated] = useState(false);
-    const [fullname, setFullname] = useState(props.member?.fullname ?? '');
-    const [email, setEmail] = useState(props.member?.email ?? '');
-    const [phone, setPhone] = useState(props.member?.phone_number ?? '');
-    const [comment, setComment] = useState(props.member?.comment ?? '');
+    const [fullname, setFullname] = useState(props.member ?.fullname ?? '');
+    const [email, setEmail] = useState(props.member ?.email ?? '');
+    const [phone, setPhone] = useState(props.member ?.phone_number ?? '');
+    const [comment, setComment] = useState(props.member ?.comment ?? '');
 
     const { member, onSaved } = props;
 
@@ -48,15 +53,15 @@ export const ProfileEditForm = (props: {
             } else {
                 m = await createProxyAsync(m);
             }
-            onSaved?.(m);
+            onSaved ?.(m);
         } catch (e) {
             console.error(e);
-            props.onError?.(e.toString());
+            props.onError ?.(e.toString());
         }
     };
 
     const setState = (f: (v: string) => void) => {
-        return (e: FormEvent<HTMLInputElement>) => {
+        return (e: ChangeEvent<FormControlElement>) => {
             f(e.currentTarget.value);
         }
     }
@@ -94,4 +99,5 @@ export const ProfileEditForm = (props: {
         </div>
     </Form>
 }
+
 

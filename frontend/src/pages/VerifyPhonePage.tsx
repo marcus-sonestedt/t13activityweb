@@ -1,4 +1,4 @@
-import React, { useMemo, FormEvent, useEffect } from "react";
+import React, { useMemo, useEffect, ChangeEvent } from "react";
 import { useContext, useState } from "react"
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { userContext } from "../components/UserContext"
@@ -76,7 +76,7 @@ const CheckPhoneNumber = (props: { setState: (state: State) => void }) => {
         return () => controller.abort();
     }, [user.memberId])
 
-    const onPhoneChange = (e: FormEvent<HTMLInputElement>) => {
+    const onPhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
         let number = (e.target as HTMLInputElement).value.toString();
         setPhone(addCountryPrefix(number));
     }
