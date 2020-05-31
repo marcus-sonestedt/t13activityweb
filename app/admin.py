@@ -6,9 +6,11 @@ from django.urls import reverse
 from django.utils.html import escape, mark_safe
 
 import nested_inline.admin as nested
+import logging
 
 from app import models
 
+logger = logging.getLogger(__name__)
 
 def unregister(model):
     def f2(f):
@@ -181,7 +183,27 @@ class ActivityAdmin(admin.ModelAdmin):
                     'assigned',  'confirmed', 'completed', 'cancelled')
     search_fields = ['name']
     filter_horizontal = ['attachments']
+    actions = ['clone_activity']
 
+    def clone_activity(self, requst, queryset):
+        for obj in queryset:
+            logger.info(f'Cloning {obj} 19 times')
+
+            obj.assigned = None
+            obj.assigned_for_proxy = None
+            obj.assigned_at = None
+            obj.confirmed = False
+            obj.completed = False
+            obj.cancelled = False
+
+            name = obj.name
+
+            for i in range(2, 21):
+                obj.pk = None
+                obj.name = f'{name} {i}'
+                obj.save() # autogenerates new id
+
+    clone_activity.short_description="Skapa 19 kopior på samma aktivitet"
 
 @admin.register(models.ActivityDelistRequest)
 class ActivityDelistRequestAdmin(admin.ModelAdmin):
