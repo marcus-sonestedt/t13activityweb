@@ -151,7 +151,7 @@ const Footer = () => {
             </p>
           </Col>
           <Col lg={4} md={12}>
-            <p>Hosted at <a href='https://eu.pythonanywhere.com'>eu.pythonanywhere.com</a>.</p>
+            <p>Hosted at <a href='https://eu.pythonanywhere.com/?affiliate_id=00000d91'>eu.pythonanywhere.com</a>.</p>
           </Col>
           <Col lg={4} md={12}>
             <p>
