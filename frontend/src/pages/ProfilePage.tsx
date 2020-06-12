@@ -76,13 +76,13 @@ export const ProfilePage = () => {
                             : <Button variant='warning' href="/frontend/verify/phone">Behöver verifieras!</Button>}
                     </h4>
                     <h4>Roll: {user.isStaff ? 'Personal' : 'Medlem'}</h4>
-                    <h4>Guldkortsnummer: {member.membercard_number}</h4>
+                    <h4>Guldkortsnummer: {user.member?.membercard_number}</h4>
                     {!member.image_url ? null : <Image src={member.image_url} />}
                     <h4>Funktionärslicenser:</h4>
-                    {!member.licenses ? "Inga licenser" :
-                    <ul>
-                        {member.licenses.map(renderLicense)}
-                    </ul>}
+                    {!member.licenses 
+                        ? "Inga licenser" 
+                        : <ul>{member.licenses.map(renderLicense)}</ul>
+                    }  
                 </div>
             </Col>
             <Col lg={4} md={12}>

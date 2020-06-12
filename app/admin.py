@@ -57,9 +57,23 @@ class NestedADRInline(nested.NestedTabularInline):
     fields = ['activity', 'reason', 'approved', 'approver',  'reject_reason']
     extra = 0
 
+class NestedLicenseInline(nested.NestedTabularInline):
+    model = models.License
+    verbose_name_plural = 'Licenser'
+    fk_name = 'member'
+    fields = ['type', 'level']
+    extra = 0
+
+
+class NestedDriverInline(nested.NestedTabularInline):
+    model = models.Driver
+    verbose_name_plural = 'Förare/Kart'
+    fk_name = 'member'
+    fields = ['name', 'number', 'klass', 'birthday']
+    extra = 0
 
 class NestedMemberInline(nested.NestedStackedInline):
-    inlines = [NestedActivityInline, NestedProxyActivityInline, NestedADRInline]
+    inlines = [NestedActivityInline, NestedProxyActivityInline, NestedADRInline, NestedLicenseInline, NestedDriverInline]
     model = models.Member
     can_delete = False
     verbose_name_plural = 'Medlem'
@@ -82,10 +96,9 @@ class UserWithMemberAdmin(nested.NestedModelAdmin):
             return list()
         return super().get_inline_instances(request, obj)
 
-
 @admin.register(models.Member)
 class MemberAdmin(nested.NestedModelAdmin):
-    inlines = [NestedActivityInline, NestedADRInline]
+    inlines = [NestedActivityInline, NestedADRInline, NestedLicenseInline, NestedDriverInline]
     readonly_fields = ['user']
     list_filter = ['phone_verified', 'email_verified']
     search_fields = ['user', 'phone_number', 'membercard_number']
@@ -109,6 +122,22 @@ class MemberAdmin(nested.NestedModelAdmin):
     exclude = ['created', 'updated', 'email_verification_code',
                'email_verification_code_created']
 
+
+
+@admin.register(models.LicenseType)
+class LicenseTypeAdmin(admin.ModelAdmin):
+    search_fields = ['name', 'abbrev']
+
+@admin.register(models.CarClass)
+class CarClassAdmin(admin.ModelAdmin):
+    search_fields = ['name', 'abbrev']
+    list_display = (
+        'name',
+        'abbrev',
+        'min_age',
+        'max_age',
+        'min_weight'
+    )
 
 class EventTypeAttachmentInline(admin.TabularInline):
     model = models.EventType.attachments.through

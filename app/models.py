@@ -39,6 +39,9 @@ class LicenseType(models.Model):
     start_level = models.CharField(max_length=1, verbose_name='Första nivån')
     end_level = models.CharField(max_length=1,  verbose_name='Sista nivån')
 
+    def __str__(self):
+        return self.name
+
 class Member(models.Model):
     '''A club member or a member's proxy'''
 
@@ -178,6 +181,8 @@ class License(models.Model):
     member = models.ForeignKey(Member, verbose_name='Innehavare', on_delete=models.CASCADE)
     level  = models.CharField(max_length=1, verbose_name='Nivå')
 
+    def __str__(self):
+        return f'{self.member} - {self.type.name} - {self.level}'
 
 class CarClass(models.Model):
     class Meta:
@@ -188,17 +193,17 @@ class CarClass(models.Model):
     name = models.CharField(max_length=64, unique=True)
     abbrev = models.CharField(max_length=6, unique=True)
     comment = models.TextField()
-    min_age = models.PositiveSmallIntegerField(verbose_name='Minsta ålder')
-    max_age = models.PositiveSmallIntegerField(verbose_name='Högsta ålder')
-    min_weight = models.PositiveSmallIntegerField(verbose_name='Minsta vikt')
+    min_age = models.PositiveSmallIntegerField(verbose_name='Minsta ålder', default=15)
+    max_age = models.PositiveSmallIntegerField(verbose_name='Högsta ålder', default=99)
+    min_weight = models.PositiveSmallIntegerField(verbose_name='Minsta vikt', default=0)
 
     def __str__(self):
-        return self.name
+        return self.abbrev
 
 class Driver(models.Model):
     class Meta:
-        verbose_name = 'Förare'
-        verbose_name_plural = 'Förare'
+        verbose_name = 'Förare/Fordon'
+        verbose_name_plural = 'Förare/Fordon'
         ordering = ['member', 'name']
         unique_together = ['member', 'name', 'number']
 
