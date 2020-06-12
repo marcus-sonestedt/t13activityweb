@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import { Badge, Button, Col, Container, Row, Image, Modal, Alert } from "react-bootstrap";
+import { Badge, Button, Col, Container, Row, Image, Modal, Alert, Table } from "react-bootstrap";
 import NotFound from "../components/NotFound";
 
 import { userContext } from "../components/UserContext";
-import { Member, LicenseType, License } from '../Models';
+import { Member, LicenseType, License, Driver } from '../Models';
 import { ProfileEditForm } from "../components/ProfileEditForm";
 
 export const ProfilePage = () => {
@@ -28,20 +28,47 @@ export const ProfilePage = () => {
         setShowEditDialog(true);
     }
 
-    const renderLicense = (license:License) => 
-        <li>{((license.type) as LicenseType).name} {license.level}</li>;
+    const addLicense = () => {}
+    const addDriver = () => {}
 
-    return <Container>
+    const renderLicense = (license:License) => 
+        <tr>
+            <td>{license.type}</td>
+            <td><b>{license.level}</b></td>
+            <td>
+                <Button variant='danger' size='sm'>Radera</Button>{' '}
+                <Button size='sm'>Editera</Button>
+            </td>
+        </tr>
+
+    const renderDriver = (driver:Driver) => 
+        <tr>
+            <td>{driver.name}</td>            
+            <td>{driver.number}</td>            
+            <td>{driver.klass}</td>            
+            <td>{driver.birthday}</td>            
+            <td>
+                <Button variant='danger' size='sm'>Radera</Button>{' '}
+                <Button size='sm'>Editera</Button>
+            </td>
+        </tr>
+
+    return <Container fluid>
         <Row>
-            <Col lg={8} md={12}>
+            <Col lg={1} md={0}/>
+            <Col lg={4} md={12}>
                 <Row>
                     <Col>
                         <h1>Min profil</h1>
                     </Col>
-                    <Col>
+                    <Col className='text-right'>
                         <Button variant='secondary' onClick={handleEditProfile}>
-                            Editera
+                            Ändra profil
                         </Button>
+                        {' '}
+                        <a href="/app/change_password/">
+                            <Button>Byt lösenord</Button>
+                        </a>
                     </Col>
                 </Row>
                 <Modal show={showEditDialog} onHide={() => setShowEditDialog(false)}>
@@ -75,22 +102,54 @@ export const ProfilePage = () => {
                             ? <Badge variant='success'>Verifierat</Badge>
                             : <Button variant='warning' href="/frontend/verify/phone">Behöver verifieras!</Button>}
                     </h4>
+
                     <h4>Roll: {user.isStaff ? 'Personal' : 'Medlem'}</h4>
                     <h4>Guldkortsnummer: {user.member?.membercard_number}</h4>
                     {!member.image_url ? null : <Image src={member.image_url} />}
-                    <h4>Funktionärslicenser:</h4>
-                    {!member.licenses 
-                        ? "Inga licenser" 
-                        : <ul>{member.licenses.map(renderLicense)}</ul>
-                    }  
                 </div>
             </Col>
-            <Col lg={4} md={12}>
-                <h2>Övriga inställningar</h2>
-                <a href="/app/change_password/">
-                    <Button>Ändra lösenord</Button>
-                </a>
+            <Col lg={1} md={0}/>
+            <Col lg={5} md={12}>
+                <Row>
+                    <Col>
+                        <h3>Funktionärslicenser</h3>
+                    </Col>
+                    <Col className='text-right'>
+                        <Button variant='success' onClick={addLicense}>
+                            Lägg till
+                        </Button>
+                    </Col>
+                </Row>
+                <Row>
+                    {!member.license_set
+                        ? "Inga licenser" 
+                        : <Table striped responsive >
+                            <thead><tr><th>Typ</th><th>Nivå</th><th/></tr></thead>
+                            <tbody>{member.license_set.map(renderLicense)}</tbody>
+                        </Table>
+                    } 
+                </Row>
+                <Row>
+                    <Col>
+                        <h3>Fordon/Förare</h3> 
+                    </Col>
+                    <Col className='text-right'>
+                        <Button variant='success' onClick={addDriver}>
+                            Lägg till
+                        </Button>
+                    </Col>
+                </Row>
+                <Row>
+                {!member.driver_set
+                    ? "Inga fordon" 
+                    : <Table striped responsive >
+                        <thead><tr><th>Namn</th><th>Nummer</th><th>Klass</th><th>Födelsedatum</th><th/></tr></thead>
+                        <tbody>{member.driver_set.map(renderDriver)}</tbody>
+                    </Table>
+                }    
+                </Row>
             </Col>
+            <Col lg={1} md={0}/>
         </Row>
     </Container >
 }

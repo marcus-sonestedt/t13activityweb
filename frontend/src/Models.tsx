@@ -47,7 +47,7 @@ export class PagedLicenses  extends PagedValues<License> {
 }
 
 
-export class CarClassification implements IdValue {
+export class CarClass implements IdValue {
     id: string = "";
     name: string = "";
     abbrev: string = "";
@@ -55,12 +55,20 @@ export class CarClassification implements IdValue {
     min_age: number = 0;
     max_age: number = 999;
     min_weight: number = 0;
+
+    url = () => CarClass.urlForId(this.id, this.abbrev);
+    adminUrl = () => CarClass.adminUrlForId(this.id);
+    apiUrl = () => CarClass.apiUrlForId(this.id);
+
+    static urlForId = (id:string, abbrev: string) => `/frontend/carclass/${id}/${abbrev}`;
+    static adminUrlForId = (id: string) => `/admin/app/carclass/${id}`;
+    static apiUrlForId = (id: string) => `/api/carclass/${id}`;      
 }
 
 
-export class PagedCarClassifications extends PagedValues<CarClassification> {
-    @Type(() => CarClassification)
-    results: CarClassification[] = [];
+export class PagedCarClass extends PagedValues<CarClass> {
+    @Type(() => CarClass)
+    results: CarClass[] = [];
 }
 
 
@@ -69,8 +77,8 @@ export class Driver implements IdValue {
     member: string = "";
     name: string = "";
     number: number = 0;
-    @Type(() => CarClassification)
-    klass: CarClassification | null = null;
+    @Type(() => CarClass)
+    klass: CarClass | null = null;
     @Type(() => Date)
     birthday: Date | null = null;
 
@@ -79,7 +87,7 @@ export class Driver implements IdValue {
     apiUrl = () => Driver.apiUrlForId(this.id);
 
     static urlForId = (id: string, fullname?: string) => `/frontend/driver/${id}/${slugify(fullname)}`;
-    static adminUrlForId = (user_id: string) => `/admin/app/driver/${user_id}`;
+    static adminUrlForId = (id: string) => `/admin/app/driver/${id}`;
     static apiUrlForId = (id: string) => `/api/driver/${id}`;    
 }
 
@@ -107,7 +115,10 @@ export class Member implements IdValue {
     phone_verified = false;
 
     @Type(() => License)
-    licenses: License[] = []
+    license_set: License[] = []
+
+    @Type(() => Driver)
+    driver_set: Driver[] = []
 
     url = () => Member.urlForId(this.id, this.fullname);
     adminUrl = () => Member.adminUrlForId(this.user_id);
