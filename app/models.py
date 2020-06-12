@@ -156,6 +156,35 @@ def member_saved(sender, instance, created, **kwargs):
         instance.email_verified = False
         instance.save()
 
+class CarClassification(models.Model):
+    class Meta:
+        verbose_name = 'Klass'
+        verbose_name_plural = 'Klasser'
+        ordering =  ['name']
+
+    name = models.CharField(max_length=64)
+    abbrev = models.CharField(max_length=6)
+    comment = models.TextField()
+    min_age = models.IntegerField(verbose_name='Minsta ålder')
+    max_age = models.IntegerField(verbose_name='Högsta ålder')
+
+    def __str__(self):
+        return self.name
+
+class Driver(models.Model):
+    class Meta:
+        verbose_name = 'Förare'
+        verbose_name_plural = 'Förare'
+        ordering = ['member', 'name']
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='Namn', max_length=128)
+    number = models.IntegerField(verbose_name='Nummer')
+    klass = models.ForeignKey(CarClassification, on_delete=models.SET_NULL, null=True, blank=True)
+    birthday = models.DateField(verbose_name='Födelsedatum')
+
+    def __str__(self):
+        return self.name
 
 class Attachment(models.Model):
     class Meta:
