@@ -35,6 +35,9 @@ class NotificationData():
         self.count_badges()
         self.compute_notifications()
 
+        self.license_set = member.license_set
+        self.driver_set = member.driver_set
+
     def count_badges(self):
         self.completedWeight = self.member.completed_weight
         self.bookedWeight = self.member.booked_weight

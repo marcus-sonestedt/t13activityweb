@@ -34,7 +34,7 @@ class LicenseType(models.Model):
         verbose_name = 'Licenstyp'
         verbose_name_plural = 'Licenstyper'
 
-    name = models.CharField(verbose_name='Namn', max_length=64)
+    name = models.CharField(verbose_name='Namn', max_length=64, unique=True)
     description = models.TextField(verbose_name='Beskrivning')
     start_level = models.CharField(max_length=1, verbose_name='Första nivån')
     end_level = models.CharField(max_length=1,  verbose_name='Sista nivån')
@@ -82,8 +82,6 @@ class Member(models.Model):
     proxy = models.ManyToManyField('self', blank=True, symmetrical=False,
                                    verbose_name="Huvudman", related_name='proxies')
 
-
-    licenses = models.ManyToManyField(LicenseType, verbose_name='Licenser', through='License')
 
     def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -176,8 +174,9 @@ class License(models.Model):
     class Meta:
         verbose_name = 'Licens'
         verbose_name_plural = 'Licenser'
+        unique_together = ('type', 'member')
 
-    type = models.ForeignKey(LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
+    type   = models.ForeignKey(LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
     member = models.ForeignKey(Member, verbose_name='Innehavare', on_delete=models.CASCADE)
     level  = models.CharField(max_length=1, verbose_name='Nivå')
 

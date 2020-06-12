@@ -20,32 +20,44 @@ class UserWithProxiesSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name', 'proxy', 'proxies')
 
-
 class LicenseTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LicenseType
         fields = '__all__'
 
 class LicenseSerializer(serializers.ModelSerializer):
-    type = LicenseTypeSerializer(required=False)
+    type = serializers.CharField()
+    level = serializers.CharField()
 
     class Meta:
         model = models.License
-        fields = '__all__'
+        fields = ('type', 'level')
 
 class LicensePatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.License
         fields = '__all__'
 
+class DriverSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Driver
+        fields = '__all__'
+
+class CarClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CarClass
+        fields = '__all__'
+
+
 class MemberSerializer(serializers.ModelSerializer):
-    licenses = LicenseSerializer(required=False, many=True)
+    license_set = LicenseSerializer(required=False, many=True)
+    driver_set = DriverSerializer(required=False, many=True)
 
     class Meta:
         model = Member
         fields = ['fullname', 'phone_number', 'id', 'email',
                   'phone_verified', 'email_verified', 'user_id',
-                  'licenses']
+                  'license_set', 'driver_set']
 
 
 class CreateMemberSerializer(serializers.ModelSerializer):
