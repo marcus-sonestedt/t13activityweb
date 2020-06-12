@@ -21,11 +21,31 @@ class UserWithProxiesSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'first_name', 'last_name', 'proxy', 'proxies')
 
 
+class LicenseTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.LicenseType
+        fields = '__all__'
+
+class LicenseSerializer(serializers.ModelSerializer):
+    type = LicenseTypeSerializer(required=False)
+
+    class Meta:
+        model = models.License
+        fields = '__all__'
+
+class LicensePatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.License
+        fields = '__all__'
+
 class MemberSerializer(serializers.ModelSerializer):
+    licenses = LicenseSerializer(required=False, many=True)
+
     class Meta:
         model = Member
         fields = ['fullname', 'phone_number', 'id', 'email',
-                  'phone_verified', 'email_verified', 'user_id']
+                  'phone_verified', 'email_verified', 'user_id',
+                  'licenses']
 
 
 class CreateMemberSerializer(serializers.ModelSerializer):
@@ -46,12 +66,18 @@ class MemberBookWeightSerializer(MemberSerializer):
         fields = MemberSerializer.Meta.fields + ['booked_weight_year',
                                                  'membercard_number', 'booked_weight']
 
-
 class MemberPatchSerializer(serializers.Serializer):
     fullname = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     phone_number = serializers.CharField(required=False)
     membercard_number = serializers.CharField(required=False, allow_blank=True)
+    licenses = LicensePatchSerializer(required=False, many=True)
+
+
+class DriverSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Driver
+        fields = '__all__'
 
 
 class AttachmentSerializer(serializers.Serializer):
@@ -68,7 +94,6 @@ class EventTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventType
         fields = '__all__'
-
 
 
 class EventTypeBriefSerializer(serializers.ModelSerializer):
@@ -107,6 +132,7 @@ class EventListSerializer(serializers.ModelSerializer):
         fields = [x.name for x in Event._meta.get_fields() if x.name not in ['coordinators']] + \
             ['has_bookable_activities', 'current_user_assigned']
 
+
 class ActivityTypeSerializer(serializers.ModelSerializer):
     attachments = AttachmentSerializer(many=True)
 
@@ -119,7 +145,6 @@ class ActivityDelistRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityDelistRequest
         fields = '__all__'
-
 
 
 class EventActivitySerializer(serializers.ModelSerializer):
@@ -136,9 +161,11 @@ class EventActivitySerializer(serializers.ModelSerializer):
         fields = [x.name for x in Activity._meta.get_fields()] + \
             ['bookable',  'active_delist_request']
 
+
 class ActivitySerializer(EventActivitySerializer):
     '''serializer used when fetching stand-alone tasks'''
     event = EventListSerializer(required=False)
+
 
 class ActivityTypeBriefSerializer(EventActivitySerializer):
     class Meta:
@@ -149,7 +176,8 @@ class ActivityTypeBriefSerializer(EventActivitySerializer):
 class EventListADRSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = [x.name for x in Event._meta.get_fields() if x.name not in ['type', 'attachments', 'coordinators', 'activities']]
+        fields = [x.name for x in Event._meta.get_fields() if x.name not in [
+            'type', 'attachments', 'coordinators', 'activities']]
 
 
 class ActivityADRSerializer(EventActivitySerializer):
@@ -158,8 +186,9 @@ class ActivityADRSerializer(EventActivitySerializer):
     type = ActivityTypeBriefSerializer()
 
     class Meta:
-        model = Activity  
-        fields = [x.name for x in Activity._meta.get_fields() if x.name != 'attachments']
+        model = Activity
+        fields = [x.name for x in Activity._meta.get_fields() if x.name !=
+                  'attachments']
 
 
 class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):

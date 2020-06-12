@@ -80,7 +80,7 @@ class Member(models.Model):
                                    verbose_name="Huvudman", related_name='proxies')
 
 
-    licenses = models.ManyToManyField(LicenseType, verbose_name='Licenser')
+    licenses = models.ManyToManyField(LicenseType, verbose_name='Licenser', through='License')
 
     def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -168,7 +168,18 @@ def member_saved(sender, instance, created, **kwargs):
         instance.email_verified = False
         instance.save()
 
-class CarClassification(models.Model):
+
+class License(models.Model):
+    class Meta:
+        verbose_name = 'Licens'
+        verbose_name_plural = 'Licenser'
+
+    type = models.ForeignKey(LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, verbose_name='Innehavare', on_delete=models.CASCADE)
+    level  = models.CharField(max_length=1, verbose_name='Nivå')
+
+
+class CarClass(models.Model):
     class Meta:
         verbose_name = 'Klass'
         verbose_name_plural = 'Klasser'
@@ -194,7 +205,7 @@ class Driver(models.Model):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Namn', max_length=128)
     number = models.PositiveSmallIntegerField(verbose_name='Nummer')
-    klass = models.ForeignKey(CarClassification, on_delete=models.SET_NULL, null=True, blank=True)
+    klass = models.ForeignKey(CarClass, on_delete=models.SET_NULL, null=True, blank=True)
     birthday = models.DateField(verbose_name='Födelsedatum')
 
     def __str__(self):

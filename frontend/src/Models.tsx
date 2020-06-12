@@ -21,6 +21,74 @@ export interface IdValue {
     id: string;
 }
 
+export class LicenseType implements IdValue {
+    id: string = "";
+    name: string = "";
+    description: string = "";
+    start_level: string = "";
+    end_level: string = "";
+}
+
+export class PagedLicenseTypes extends PagedValues<LicenseType> {
+    @Type(() => LicenseType)
+    results: LicenseType[] = [];
+}
+
+export class License  {
+    @Type(() => LicenseType)
+    type: LicenseType | string = "";
+    member: string = "";
+    level: string = ""; 
+}
+
+export class PagedLicenses  extends PagedValues<License> {
+    @Type(() => License)
+    results: License[] = [];
+}
+
+
+export class CarClassification implements IdValue {
+    id: string = "";
+    name: string = "";
+    abbrev: string = "";
+    comment: string = "";
+    min_age: number = 0;
+    max_age: number = 999;
+    min_weight: number = 0;
+}
+
+
+export class PagedCarClassifications extends PagedValues<CarClassification> {
+    @Type(() => CarClassification)
+    results: CarClassification[] = [];
+}
+
+
+export class Driver implements IdValue {
+    id: string = "";
+    member: string = "";
+    name: string = "";
+    number: number = 0;
+    @Type(() => CarClassification)
+    klass: CarClassification | null = null;
+    @Type(() => Date)
+    birthday: Date | null = null;
+
+    url = () => Driver.urlForId(this.id, this.name);
+    adminUrl = () => Driver.adminUrlForId(this.id);
+    apiUrl = () => Driver.apiUrlForId(this.id);
+
+    static urlForId = (id: string, fullname?: string) => `/frontend/driver/${id}/${slugify(fullname)}`;
+    static adminUrlForId = (user_id: string) => `/admin/app/driver/${user_id}`;
+    static apiUrlForId = (id: string) => `/api/driver/${id}`;    
+}
+
+
+export class PagedDrivers extends PagedValues<Driver> {
+    @Type(() => Driver)
+    results: Driver[] = [];
+}
+
 export class Member implements IdValue {
     id: string = "";
     user_id: string = "";
@@ -37,6 +105,9 @@ export class Member implements IdValue {
 
     email_verified = false;
     phone_verified = false;
+
+    @Type(() => License)
+    licenses: License[] = []
 
     url = () => Member.urlForId(this.id, this.fullname);
     adminUrl = () => Member.adminUrlForId(this.user_id);

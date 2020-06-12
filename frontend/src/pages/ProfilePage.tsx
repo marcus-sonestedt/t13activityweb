@@ -3,7 +3,7 @@ import { Badge, Button, Col, Container, Row, Image, Modal, Alert } from "react-b
 import NotFound from "../components/NotFound";
 
 import { userContext } from "../components/UserContext";
-import { Member } from '../Models';
+import { Member, LicenseType, License } from '../Models';
 import { ProfileEditForm } from "../components/ProfileEditForm";
 
 export const ProfilePage = () => {
@@ -27,6 +27,9 @@ export const ProfilePage = () => {
         setEditError(undefined);
         setShowEditDialog(true);
     }
+
+    const renderLicense = (license:License) => 
+        <li>{((license.type) as LicenseType).name} {license.level}</li>;
 
     return <Container>
         <Row>
@@ -73,8 +76,13 @@ export const ProfilePage = () => {
                             : <Button variant='warning' href="/frontend/verify/phone">Behöver verifieras!</Button>}
                     </h4>
                     <h4>Roll: {user.isStaff ? 'Personal' : 'Medlem'}</h4>
-                    <h4>Guldkortsnummer: {user.member?.membercard_number}</h4>
+                    <h4>Guldkortsnummer: {member.membercard_number}</h4>
                     {!member.image_url ? null : <Image src={member.image_url} />}
+                    <h4>Funktionärslicenser:</h4>
+                    {!member.licenses ? "Inga licenser" :
+                    <ul>
+                        {member.licenses.map(renderLicense)}
+                    </ul>}
                 </div>
             </Col>
             <Col lg={4} md={12}>
