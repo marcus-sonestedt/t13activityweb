@@ -35,7 +35,7 @@ export const ProfilePage = () => {
         <tr>
             <td>{license.type}</td>
             <td><b>{license.level}</b></td>
-            <td>
+            <td className='text-right'>
                 <Button variant='danger' size='sm'>Radera</Button>{' '}
                 <Button size='sm'>Editera</Button>
             </td>
@@ -47,7 +47,7 @@ export const ProfilePage = () => {
             <td>{driver.number}</td>            
             <td>{driver.klass}</td>            
             <td>{driver.birthday}</td>            
-            <td>
+            <td className='text-right'>
                 <Button variant='danger' size='sm'>Radera</Button>{' '}
                 <Button size='sm'>Editera</Button>
             </td>
@@ -60,15 +60,11 @@ export const ProfilePage = () => {
                 <Row>
                     <Col>
                         <h1>Min profil</h1>
-                    </Col>
+                    </Col>                  
                     <Col className='text-right'>
                         <Button variant='secondary' onClick={handleEditProfile}>
                             Ändra profil
                         </Button>
-                        {' '}
-                        <a href="/app/change_password/">
-                            <Button>Byt lösenord</Button>
-                        </a>
                     </Col>
                 </Row>
                 <Modal show={showEditDialog} onHide={() => setShowEditDialog(false)}>
@@ -80,10 +76,19 @@ export const ProfilePage = () => {
                         {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
                     </Modal.Body>
                 </Modal>
-                <div>
+                <Row>
+                    <Col>
                     <h3>
                         <a href={Member.urlForId(member.id, member.fullname)}>{member.fullname}</a>{' '}
                     </h3>
+                    </Col>
+                    <Col className='text-right'>
+                        <a href="/app/change_password/">
+                            <Button>Byt lösenord</Button>
+                        </a>
+                    </Col>
+                </Row>
+                <div>
                     <h4>
                         Email:
                         {' '}
@@ -115,7 +120,7 @@ export const ProfilePage = () => {
                         <h3>Funktionärslicenser</h3>
                     </Col>
                     <Col className='text-right'>
-                        <Button variant='success' onClick={addLicense}>
+                        <Button variant='success' onClick={addLicense} size='sm'>
                             Lägg till
                         </Button>
                     </Col>
@@ -134,7 +139,7 @@ export const ProfilePage = () => {
                         <h3>Fordon/Förare</h3> 
                     </Col>
                     <Col className='text-right'>
-                        <Button variant='success' onClick={addDriver}>
+                        <Button variant='success' onClick={addDriver} size='sm'>
                             Lägg till
                         </Button>
                     </Col>
