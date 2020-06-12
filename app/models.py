@@ -28,6 +28,16 @@ class RuleViolationException(BaseException):
 
 # Create your models here, these will be tables in the SQL database.
 
+class LicenseType(models.Model):
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Licenstyp'
+        verbose_name_plural = 'Licenstyper'
+
+    name = models.CharField(verbose_name='Namn', max_length=64)
+    description = models.TextField(verbose_name='Beskrivning')
+    start_level = models.CharField(max_length=1, verbose_name='Första nivån')
+    end_level = models.CharField(max_length=1,  verbose_name='Sista nivån')
 
 class Member(models.Model):
     '''A club member or a member's proxy'''
@@ -47,7 +57,6 @@ class Member(models.Model):
 
     phone_number = models.CharField(max_length=20, blank=True,
                                     verbose_name="Telefonnnummer")
-
     phone_verified = models.BooleanField(default=False,
                                          verbose_name="Telefonnummer verifierat")
     email_verified = models.BooleanField(default=False,
@@ -69,6 +78,9 @@ class Member(models.Model):
     # our proxies are the reverse relation lookup, i.e. 'proxies'
     proxy = models.ManyToManyField('self', blank=True, symmetrical=False,
                                    verbose_name="Huvudman", related_name='proxies')
+
+
+    licenses = models.ManyToManyField(LicenseType, verbose_name='Licenser')
 
     def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
@@ -162,11 +174,12 @@ class CarClassification(models.Model):
         verbose_name_plural = 'Klasser'
         ordering =  ['name']
 
-    name = models.CharField(max_length=64)
-    abbrev = models.CharField(max_length=6)
+    name = models.CharField(max_length=64, unique=True)
+    abbrev = models.CharField(max_length=6, unique=True)
     comment = models.TextField()
-    min_age = models.IntegerField(verbose_name='Minsta ålder')
-    max_age = models.IntegerField(verbose_name='Högsta ålder')
+    min_age = models.PositiveSmallIntegerField(verbose_name='Minsta ålder')
+    max_age = models.PositiveSmallIntegerField(verbose_name='Högsta ålder')
+    min_weight = models.PositiveSmallIntegerField(verbose_name='Minsta vikt')
 
     def __str__(self):
         return self.name
@@ -176,10 +189,11 @@ class Driver(models.Model):
         verbose_name = 'Förare'
         verbose_name_plural = 'Förare'
         ordering = ['member', 'name']
+        unique_together = ['member', 'name', 'number']
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Namn', max_length=128)
-    number = models.IntegerField(verbose_name='Nummer')
+    number = models.PositiveSmallIntegerField(verbose_name='Nummer')
     klass = models.ForeignKey(CarClassification, on_delete=models.SET_NULL, null=True, blank=True)
     birthday = models.DateField(verbose_name='Födelsedatum')
 
