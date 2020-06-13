@@ -4,6 +4,7 @@ import { createDriverAsync, updateDriverAsync } from "../logic/DriverActions";
 import { Driver, CarClass, PagedCarClasses } from '../Models';
 import { getJsonHeaders } from "../logic/ADRActions";
 import { deserialize } from "class-transformer";
+import moment from 'moment';
 
 type FormControlElement =
   | HTMLInputElement
@@ -103,16 +104,17 @@ export const DriverEditForm = (props: {
 
         <Form.Group controlId="formKlass">
             <Form.Label>Telefonnummer</Form.Label>
-            <Form.Control type="select" placeholder="J125" required
-                value={klass} onChange={setState(setKlass)} />
-                {classes.map(c => <option key={c.abbrev} value={c.abbrev}>{c.abbrev}</option>)}
+            <Form.Control as="select" placeholder="J125" required
+                value={klass} onChange={setState(setKlass)}>
+                {classes.map(c => <option key={c.abbrev} value={c.abbrev}>{c.abbrev} - {c.name}</option>)}
+            </Form.Control>
         </Form.Group>
 
         <Form.Group controlId="formBirthday">
             <Form.Label>Födelsedatum</Form.Label>
             <Form.Control type="date" placeholder="2001-02-03"
-                value={birthday.toISOString()} onChange={setState(x => setBirthday(new Date(x)))}>
-                <option></option>
+                value={moment(birthday).format("YYYY-MM-DD")} 
+                onChange={setState(x => setBirthday(new Date(x)))}>
             </Form.Control>
         </Form.Group>
 

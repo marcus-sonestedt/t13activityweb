@@ -117,10 +117,10 @@ export class Member implements IdValue {
     phone_verified = false;
 
     @Type(() => License)
-    license_set: License[] = []
+    license_set: License[] = [];
 
     @Type(() => Driver)
-    driver_set: Driver[] = []
+    driver_set: Driver[] = [];
 
     url = () => Member.urlForId(this.id, this.fullname);
     adminUrl = () => Member.adminUrlForId(this.user_id);

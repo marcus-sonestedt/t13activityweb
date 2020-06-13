@@ -152,7 +152,7 @@ const Licenses = (props: { member: Member }) => {
     }
 
     const renderLicense = (license: License) =>
-        <tr>
+        <tr key={license.type}>
             <td>{license.type}</td>
             <td><b>{license.level}</b></td>
             <td className='text-right'>
@@ -224,16 +224,18 @@ const Drivers = (props: { member: Member }) => {
     const deleteDriver = async (driver: Driver) => {
         if (!window.confirm(`Vill du verkligen ta bort förare/fordon '${driver.name}' #${driver.number} ?`))
             return;
+
         try {
             await deleteDriverAsync(driver);
         } catch (e) {
             alert(e);
         }
+
         window.location.reload();
     }
 
     const renderDriver = (driver: Driver) =>
-        <tr>
+        <tr key={driver.id}>
             <td>{driver.name}</td>
             <td>{driver.number}</td>
             <td>{driver.klass}</td>

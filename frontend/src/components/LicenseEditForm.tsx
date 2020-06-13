@@ -88,7 +88,7 @@ export const LicenseEditForm = (props: {
         <h2>Medlemsprofil</h2>
         <Form.Group controlId="formLicenseType">
             <Form.Label>Licenstyp</Form.Label>
-            <Form.Control type="select" placeholder="Förnamn Efternamn" required
+            <Form.Control as="select" placeholder="---" required
                 value={type} onChange={setState(setType)} >
                 {types.map(t => <option key={t.id} value={t.id}>{t.name}</option> )}
             </Form.Control>
