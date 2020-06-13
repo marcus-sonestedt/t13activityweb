@@ -1,6 +1,19 @@
 import { Driver } from "../Models";
 import { getJsonHeaders } from './ADRActions';
 
+export const deleteDriverAsync  = async (driver: Driver) => {
+    const r = await fetch(driver.apiUrl(), {
+        method: 'DELETE',
+        headers: getJsonHeaders(),
+        body: JSON.stringify(driver)
+    });
+
+    if (r.status >= 300) {
+        console.error(r.status + ': ' + r.statusText);
+        throw (await r.text())
+    }
+}
+
 export const updateDriverAsync = async (driver: Driver) => {
     const r = await fetch(driver.apiUrl(), {
         method: 'PATCH',
