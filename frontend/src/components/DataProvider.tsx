@@ -35,30 +35,29 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
             signal: controller.signal,
             cache: "no-store",
             headers: getJsonHeaders()
-        })
-            .then(r => {
-                if (r.status >= 300) {
-                    setPlaceHolder("Oops. Något gick fel! :(");
-                    setError(`Error ${r.status}: ${r.statusText}\n`);
-                    r.text().then(errorBody => setError(err => err + errorBody));
-                } else {
-                    return r.text();
-                }
-            }).then(json => {
-                if (controller.signal.aborted)
-                    return;
-                if (json === undefined)
-                    return;
-                handleData(json)
-            }).catch(e => {
-                if (e.name === 'AbortError') {
-                    console.debug("Silencing AbortError: " + e);
-                    return
-                }
-                console.error(e);
-                setPlaceHolder("Oops. Något gick fel. :(");
-                setError(e.toString());
-            });
+        }).then(r => {
+            if (r.status >= 300) {
+                setPlaceHolder("Oops. Något gick fel! :(");
+                setError(`Error ${r.status}: ${r.statusText}\n`);
+                r.text().then(errorBody => setError(err => err + errorBody));
+            } else {
+                return r.text();
+            }
+        }).then(json => {
+            if (controller.signal.aborted)
+                return;
+            if (json === undefined)
+                return;
+            handleData(json)
+        }).catch(e => {
+            if (e.name === 'AbortError') {
+                console.debug("Silencing AbortError: " + e);
+                return
+            }
+            console.error(e);
+            setPlaceHolder("Oops. Något gick fel. :(");
+            setError(e.toString());
+        });
 
         return function cleanup() {
             controller.abort();

@@ -3,33 +3,64 @@ import { Badge, Button, Col, Container, Row, Image, Modal, Alert, Table } from "
 import NotFound from "../components/NotFound";
 
 import { userContext } from "../components/UserContext";
-import { Member, LicenseType, License, Driver } from '../Models';
+import { Member, License, Driver } from '../Models';
 import { ProfileEditForm } from "../components/ProfileEditForm";
+import { LicenseEditForm } from "../components/LicenseEditForm";
+import { DriverEditForm } from "../components/DriverEditForm";
 
 export const ProfilePage = () => {
     const user = useContext(userContext);
     const member = user.member;
-    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showProfileForm, setShowProfileForm] = useState(false);
+    const [showLicenseForm, setShowLicenseForm] = useState(false);
+    const [showDriverForm, setShowDriverForm] = useState(false);
     const [editError, setEditError] = useState<string>();
+    const [license, setLicense] = useState<License>();
+    const [driver, setDriver] = useState<Driver>();
 
     if (!user.isLoggedIn || !member)
         return <NotFound />
 
-    const handleSaved = (member?: Member) => {
-        setShowEditDialog(false);
+    const handleSavedProfile = (member?: Member) => {
+        setShowProfileForm(false);
         if (member) {
             user.member = member;
             window.location.reload();
         }
-    }
+    }    
 
     const handleEditProfile = () => {
         setEditError(undefined);
-        setShowEditDialog(true);
+        setShowProfileForm(true);
     }
 
-    const addLicense = () => {}
-    const addDriver = () => {}
+    const handleSavedLicense = (license?: License) => {
+        setShowLicenseForm(false);
+        if (license) {
+            window.location.reload();
+        }
+    }
+
+    const handleSavedDriver = (driver?: Driver) => {
+        setShowDriverForm(false);
+        if (driver) {
+            window.location.reload();
+        }
+    }
+
+    const addLicense = () => {
+        const l = new License();
+        l.member = member.id;
+        setLicense(l);
+        setShowLicenseForm(true);
+    }
+
+    const addDriver = () => {
+        const d = new Driver();
+        d.member = member.id;
+        setDriver(d);
+        setShowDriverForm(true);
+    }
 
     const renderLicense = (license:License) => 
         <tr>
@@ -54,6 +85,33 @@ export const ProfilePage = () => {
         </tr>
 
     return <Container fluid>
+        <Modal show={showProfileForm} onHide={() => setShowProfileForm(false)}>
+            <Modal.Header closeButton={true}>
+                Editera profilinformation
+            </Modal.Header>
+            <Modal.Body>
+                <ProfileEditForm member={member} onSaved={handleSavedProfile} onError={setEditError} />
+                {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
+            </Modal.Body>
+        </Modal>
+        <Modal show={showLicenseForm} onHide={() => setShowLicenseForm(false)}>
+            <Modal.Header closeButton={true}>
+                Editera licensinformation
+            </Modal.Header>
+            <Modal.Body>
+                <LicenseEditForm license={license} onSaved={handleSavedLicense} onError={setEditError} />
+                {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
+            </Modal.Body>
+        </Modal>
+        <Modal show={showDriverForm} onHide={() => setShowDriverForm(false)}>
+            <Modal.Header closeButton={true}>
+                Editera förar/fordondsinformaton
+            </Modal.Header>
+            <Modal.Body>
+                <DriverEditForm driver={driver} onSaved={handleSavedDriver} onError={setEditError} />
+                {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
+            </Modal.Body>
+        </Modal>        
         <Row>
             <Col lg={1} md={0}/>
             <Col lg={4} md={12}>
@@ -67,15 +125,6 @@ export const ProfilePage = () => {
                         </Button>
                     </Col>
                 </Row>
-                <Modal show={showEditDialog} onHide={() => setShowEditDialog(false)}>
-                    <Modal.Header closeButton={true}>
-                        Editera profilinformation
-                    </Modal.Header>
-                    <Modal.Body>
-                        <ProfileEditForm member={member} onSaved={handleSaved} onError={setEditError} />
-                        {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
-                    </Modal.Body>
-                </Modal>
                 <Row>
                     <Col>
                     <h3>

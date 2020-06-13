@@ -35,10 +35,13 @@ export class PagedLicenseTypes extends PagedValues<LicenseType> {
 }
 
 export class License  {
-    @Type(() => LicenseType)
-    type: LicenseType | string = "";
+    type: string = "";
     member: string = "";
     level: string = ""; 
+
+    apiUrl = () => License.apiUrlForId(this.member, this.type);
+
+    static apiUrlForId = (member: string, type: string) => `/api/member/${member}/license/${type}`;          
 }
 
 export class PagedLicenses  extends PagedValues<License> {
@@ -66,7 +69,7 @@ export class CarClass implements IdValue {
 }
 
 
-export class PagedCarClass extends PagedValues<CarClass> {
+export class PagedCarClasses extends PagedValues<CarClass> {
     @Type(() => CarClass)
     results: CarClass[] = [];
 }
@@ -77,8 +80,7 @@ export class Driver implements IdValue {
     member: string = "";
     name: string = "";
     number: number = 0;
-    @Type(() => CarClass)
-    klass: CarClass | null = null;
+    klass: string = "";
     @Type(() => Date)
     birthday: Date | null = null;
 
