@@ -68,21 +68,21 @@ const Profile = (props: { member: Member }) => {
             <Col>
                 <h1>Min profil</h1>
             </Col>
-            <Col className='text-right'>
-                <Button variant='secondary' onClick={handleEditProfile}>
-                    Ändra profil
-                        </Button>
-            </Col>
         </Row>
         <Row>
             <Col>
                 <h3>
-                    <a href={Member.urlForId(member.id, member.fullname)}>{member.fullname}</a>{' '}
+                    Namn:{' '}
+                    <a href={Member.urlForId(member.id, member.fullname)}><i>{member.fullname}</i></a>{' '}
                 </h3>
             </Col>
             <Col className='text-right'>
+                <Button variant='primary' onClick={handleEditProfile}>
+                    Ändra profil
+                </Button>
+                {' '}
                 <a href="/app/change_password/">
-                    <Button>Byt lösenord</Button>
+                    <Button variant='warning'>Byt lösenord</Button>
                 </a>
             </Col>
         </Row>
@@ -90,7 +90,7 @@ const Profile = (props: { member: Member }) => {
             <h4>
                 Email:
                         {' '}
-                <a href={`mailto:${member.email}`}>{member.email}</a>
+                <a href={`mailto:${member.email}`}><i>{member.email}</i></a>
                 {' '}
                 {member.email_verified
                     ? <Badge variant='success'>Verifierad</Badge>
@@ -99,15 +99,15 @@ const Profile = (props: { member: Member }) => {
             <h4>
                 Telefon:
                         {' '}
-                <a href={`tel:${member.phone_number}`}>{member.phone_number}</a>
+                <a href={`tel:${member.phone_number}`}><i>{member.phone_number}</i></a>
                 {' '}
                 {member.phone_verified
                     ? <Badge variant='success'>Verifierat</Badge>
                     : <Button variant='warning' href="/frontend/verify/phone">Behöver verifieras!</Button>}
             </h4>
 
-            <h4>Roll: {user.isStaff ? 'Personal' : 'Medlem'}</h4>
-            <h4>Guldkortsnummer: {user.member?.membercard_number}</h4>
+            <h4>Roll: <i style={{color:'lightblue'}}>{user.isStaff ? 'Personal' : 'Medlem'}</i></h4>
+            <h4>Guldkortsnummer: <i style={{color:'lightblue'}}>{user.member?.membercard_number}</i></h4>
             {!member.image_url ? null : <Image src={member.image_url} />}
         </div>
     </>
@@ -157,7 +157,7 @@ const Licenses = (props: { member: Member }) => {
             <td><b>{license.level}</b></td>
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteLicense(license)}>Radera</Button>{' '}
-                <Button size='sm' onClick={() => editLicense(license)}>Editera</Button>
+                <Button variant='primary' size='sm'onClick={() => editLicense(license)}>Editera</Button>
             </td>
         </tr>
 
@@ -240,7 +240,7 @@ const Drivers = (props: { member: Member }) => {
             <td>{driver.birthday}</td>
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteDriver(driver)}>Radera</Button>{' '}
-                <Button size='sm' onClick={() => editDriver(driver)}>Editera</Button>
+                <Button variant='primary' size='sm' onClick={() => editDriver(driver)}>Editera</Button>
             </td>
         </tr>
 
