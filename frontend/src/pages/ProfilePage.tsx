@@ -249,7 +249,7 @@ const Drivers = (props: { member: Member }) => {
     return <>
         <Modal show={showDriverForm} onHide={() => setShowDriverForm(false)}>
             <Modal.Header closeButton={true}>
-                Editera förar/fordondsinformaton
+                Editera förare och fordonsinformation
             </Modal.Header>
             <Modal.Body>
                 <DriverEditForm driver={driver} onSaved={handleSavedDriver} onError={setEditError} />

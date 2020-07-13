@@ -202,7 +202,7 @@ class ActivityTypeList(generics.ListAPIView):
 
 
 class FAQList(generics.ListAPIView):
-    queryset = FAQ.objects.all()
+    queryset = models.FAQ.objects.all()
     serializer_class = FAQSerializer
     permission_classes = [AllowAny]
     read_only = True
@@ -211,6 +211,12 @@ class FAQList(generics.ListAPIView):
 class InfoTextList(generics.RetrieveAPIView):
     queryset = models.InfoText.objects.all()
     serializer_class = serializers.InfoTextSerializer
+    permission_classes = [AllowAny]
+    read_only = True
+
+class CarClassList(generics.ListAPIView):
+    queryset = models.CarClass.objects.all()
+    serializer_class = serializers.CarClassSerializer
     permission_classes = [AllowAny]
     read_only = True
 
@@ -235,6 +241,9 @@ url_patterns = [
 
     path('activity_type', ActivityTypeList.as_view()),
     re_path(r'activity_type/(?P<id>[0-9]+)', ActivityTypeList.as_view()),
+
+    re_path(r'carclass/?', CarClassList.as_view()),
+    re_path(r'carclass/(?P<pk>[\w-]+)', CarClassList.as_view()),
 
     path('faq', FAQList.as_view()),
     re_path(r'infotext/(?P<pk>[\w-]+)', InfoTextList.as_view())

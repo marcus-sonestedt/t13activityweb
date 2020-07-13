@@ -1,10 +1,12 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
+import moment from 'moment';
+
 import { createDriverAsync, updateDriverAsync } from "../logic/DriverActions";
 import { Driver, CarClass, PagedCarClasses } from '../Models';
 import { getJsonHeaders } from "../logic/ADRActions";
 import { deserialize } from "class-transformer";
-import moment from 'moment';
+import './Form.css';
 
 type FormControlElement =
   | HTMLInputElement
@@ -33,7 +35,7 @@ export const DriverEditForm = (props: {
             signal: controller.signal,
             headers: getJsonHeaders()
         }).then(r => {
-            if (r.status !== 200)
+            if (r.status >= 300)
                 throw r.statusText;
             return r.text();
         }).catch(e => {
@@ -44,7 +46,7 @@ export const DriverEditForm = (props: {
                 setClasses(deserialize(PagedCarClasses, json).results);
         });
 
-        return function cleanup() { controller.abort();}        
+        return function cleanup() { controller.abort(); }
     }, [setClasses, onError]);
 
     if (!driver)
@@ -89,23 +91,25 @@ export const DriverEditForm = (props: {
     }
 
     return <Form validated={validated} onSubmit={handleSubmit}>
-        <h2>Medlemsprofil</h2>
+        <h2>Förare och fordon</h2>
         <Form.Group controlId="formFullName">
-            <Form.Label>Förnamn Efternamn</Form.Label>
+            <Form.Label>Fullständigt namn</Form.Label>
             <Form.Control type="text" placeholder="Förnamn Efternamn" required
+                isValid={name.length >= 3 && name.indexOf(' ') > 0}
                 value={name} onChange={setState(setName)} />
         </Form.Group>
 
         <Form.Group controlId="formNumber">
-            <Form.Label>Nummer</Form.Label>
-            <Form.Control type="number" placeholder="44" required
-                value={number} onChange={setState(x => setNumber(parseInt(x)))} />
+            <Form.Label>Nummer på kart</Form.Label>
+            <Form.Control type="number" placeholder="44" required isValid={(number ?? 0) > 0}
+                value={number?.toString() ?? "0"} onChange={setState(x => setNumber(parseInt(x)))} />
         </Form.Group>
 
         <Form.Group controlId="formKlass">
-            <Form.Label>Telefonnummer</Form.Label>
-            <Form.Control as="select" placeholder="J125" required
+            <Form.Label>Klass</Form.Label>
+            <Form.Control as="select" placeholder="J125" required isValid={klass.length > 0}
                 value={klass} onChange={setState(setKlass)}>
+                <option key={undefined} value=""/>
                 {classes.map(c => <option key={c.abbrev} value={c.abbrev}>{c.abbrev} - {c.name}</option>)}
             </Form.Control>
         </Form.Group>
@@ -113,9 +117,8 @@ export const DriverEditForm = (props: {
         <Form.Group controlId="formBirthday">
             <Form.Label>Födelsedatum</Form.Label>
             <Form.Control type="date" placeholder="2001-02-03"
-                value={moment(birthday).format("YYYY-MM-DD")} 
-                onChange={setState(x => setBirthday(new Date(x)))}>
-            </Form.Control>
+                value={moment(birthday).format("YYYY-MM-DD")}
+                onChange={setState(x => setBirthday(x2 => new Date(x) ))}/>
         </Form.Group>
 
         <div style={{ textAlign: 'right' }}>

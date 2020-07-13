@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from app import models
 from app.models import Attachment, Member, Event, EventType, Activity, \
-    ActivityType, ActivityDelistRequest, FAQ
+    ActivityType, ActivityDelistRequest
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -215,13 +215,19 @@ class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):
 
 class FAQSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FAQ
+        model = models.FAQ
         fields = '__all__'
 
 
 class InfoTextSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.InfoText
+        fields = '__all__'
+
+
+class CarClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CarClass
         fields = '__all__'
 
 
@@ -233,3 +239,4 @@ class DoubleBookedSerializer(serializers.Serializer):
     activity_id = serializers.CharField()
     activity_name = serializers.CharField()
     activity_comment = serializers.CharField()
+
