@@ -96,7 +96,7 @@ export const LicenseEditForm = (props: {
 
         <Form.Group controlId="formLevel">
             <Form.Label>Licensnivå</Form.Label>
-            <Form.Control type="email" placeholder="X" required
+            <Form.Control type="text" placeholder="X" required
                 value={level} onChange={setState(setLevel)} />
         </Form.Group>
 
