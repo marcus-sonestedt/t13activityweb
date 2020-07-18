@@ -27,6 +27,11 @@ export class LicenseType implements IdValue {
     description: string = "";
     start_level: string = "";
     end_level: string = "";
+
+    apiUrl = () => LicenseType.apiUrlForId(this.id);
+
+    static apiUrlLíst = '/api/licensetype'
+    static apiUrlForId = (id: string) => `/api/licensetype/${id}`
 }
 
 export class PagedLicenseTypes extends PagedValues<LicenseType> {
@@ -35,13 +40,14 @@ export class PagedLicenseTypes extends PagedValues<LicenseType> {
 }
 
 export class License  {
+    id: string = "";
     type: string = "";
     member: string = "";
     level: string = ""; 
 
-    apiUrl = () => License.apiUrlForId(this.member, this.type);
-
-    static apiUrlForId = (member: string, type: string) => `/api/member/${member}/license/${type}`;          
+    apiUrl = () => License.apiUrlForId(this.member, this.id);
+    
+    static apiUrlForId = (member: string, id: string) => `/api/member/${member}/license/${id}`;          
 }
 
 export class PagedLicenses  extends PagedValues<License> {

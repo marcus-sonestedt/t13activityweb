@@ -225,6 +225,12 @@ class InfoTextSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class LicenseTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.LicenseType
+        fields = '__all__'
+
+
 class CarClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CarClass

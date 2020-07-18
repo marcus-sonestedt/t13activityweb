@@ -26,7 +26,7 @@ export const LicenseEditForm = (props: {
     useEffect(() => {
         const controller = new AbortController();
         
-        fetch(`/api/licensetype/`, {
+        fetch(LicenseType.apiUrlLíst, {
             signal: controller.signal,
             headers: getJsonHeaders()
         }).then(r => {
@@ -43,6 +43,8 @@ export const LicenseEditForm = (props: {
 
         return function cleanup() { controller.abort();}        
     }, [setTypes, onError]);
+
+    const typeObj = types?.find(t => t.id === type);       
 
     if (!license)
         return null;
@@ -65,7 +67,7 @@ export const LicenseEditForm = (props: {
 
         try {
             let l = license;
-            if (l.type !== '') {
+            if (l.id !== '') {
                 await updateLicenseAsync(l);
             } else {
                 l = await createLicenseAsync(l);
@@ -82,13 +84,12 @@ export const LicenseEditForm = (props: {
             f(e.currentTarget.value);
         }
     }
-       
 
     return <Form validated={validated} onSubmit={handleSubmit}>
         <h2>Medlemsprofil</h2>
         <Form.Group controlId="formLicenseType">
             <Form.Label>Licenstyp</Form.Label>
-            <Form.Control as="select" placeholder="---" required
+            <Form.Control as="select" placeholder="---" required isValid={type !== ''}
                 value={type} onChange={setState(setType)} >
                 {types.map(t => <option key={t.id} value={t.id}>{t.name}</option> )}
             </Form.Control>
@@ -96,7 +97,9 @@ export const LicenseEditForm = (props: {
 
         <Form.Group controlId="formLevel">
             <Form.Label>Licensnivå</Form.Label>
-            <Form.Control type="text" placeholder="X" required
+            <Form.Control type="text" required 
+                placeholder={typeObj?.start_level +'-' + typeObj?.end_level} 
+                isValid={level <= (typeObj?.start_level ?? '') && level >= (typeObj?.end_level ?? '')}
                 value={level} onChange={setState(setLevel)} />
         </Form.Group>
 
