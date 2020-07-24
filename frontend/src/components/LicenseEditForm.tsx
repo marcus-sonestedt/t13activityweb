@@ -1,9 +1,8 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState, useContext } from "react";
 import { Button, Form } from "react-bootstrap";
 import { createLicenseAsync, updateLicenseAsync } from "../logic/LicenseActions";
-import { PagedLicenseTypes, License, LicenseType } from '../Models';
-import { getJsonHeaders } from "../logic/ADRActions";
-import { deserialize } from "class-transformer"
+import { License, LicenseType } from '../Models';
+import { userContext } from "./UserContext";
 
 type FormControlElement =
   | HTMLInputElement
@@ -13,41 +12,21 @@ type FormControlElement =
 /* If member is null id,  will create new proxy-member on save */
 export const LicenseEditForm = (props: {
     license?: License,
-    onSaved?: (license: License) => void
-    onError?: (err: string) => void
+    onSaved?: (license: License) => void,
+    onError?: (err: string) => void,
+    licenseTypes: LicenseType[]
 }) => {
-    const { license, onSaved, onError} = props;
+    const { license, onSaved, onError, licenseTypes} = props;
 
     const [validated, setValidated] = useState(false);
     const [type, setType] = useState(license?.type ?? '');
     const [level, setLevel] = useState(license?.level ?? '');
-    const [types, setTypes] = useState<LicenseType[]>([]);
+    const member = useContext(userContext).member;
 
-    useEffect(() => {
-        const controller = new AbortController();
-        
-        fetch(LicenseType.apiUrlLíst, {
-            signal: controller.signal,
-            headers: getJsonHeaders()
-        }).then(r => {
-            if (r.status !== 200)
-                throw r.statusText;
-            return r.text();
-        }).catch(e => {
-            console.error(e);
-            onError?.(e);
-        }).then(json => {
-            if (json)
-                setTypes(deserialize(PagedLicenseTypes, json).results);
-        });
-
-        return function cleanup() { controller.abort();}        
-    }, [setTypes, onError]);
-
-    const typeObj = types?.find(t => t.id === type);       
-
-    if (!license)
+    if (!license || !member)
         return null;
+
+    const licenseType = licenseTypes?.find(t => t.id === type);       
 
     const handleSubmit = async (event: any) => {
         const form = event.currentTarget;
@@ -64,6 +43,7 @@ export const LicenseEditForm = (props: {
 
         license.type = type;
         license.level = level;
+        license.member = member.id;
 
         try {
             let l = license;
@@ -86,20 +66,20 @@ export const LicenseEditForm = (props: {
     }
 
     return <Form validated={validated} onSubmit={handleSubmit}>
-        <h2>Medlemsprofil</h2>
+        <h2>Funktionärslicens</h2>
         <Form.Group controlId="formLicenseType">
             <Form.Label>Licenstyp</Form.Label>
             <Form.Control as="select" placeholder="---" required isValid={type !== ''}
                 value={type} onChange={setState(setType)} >
-                {types.map(t => <option key={t.id} value={t.id}>{t.name}</option> )}
+                {licenseTypes.map(t => <option key={t.id} value={t.id}>{t.name}</option> )}
             </Form.Control>
         </Form.Group>
 
         <Form.Group controlId="formLevel">
             <Form.Label>Licensnivå</Form.Label>
             <Form.Control type="text" required 
-                placeholder={typeObj?.start_level +'-' + typeObj?.end_level} 
-                isValid={level <= (typeObj?.start_level ?? '') && level >= (typeObj?.end_level ?? '')}
+                placeholder={licenseType?.start_level +'-' + licenseType?.end_level} 
+                isValid={level <= (licenseType?.start_level ?? '') && level >= (licenseType?.end_level ?? '')}
                 value={level} onChange={setState(setLevel)} />
         </Form.Group>
 

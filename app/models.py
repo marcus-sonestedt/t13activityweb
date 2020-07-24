@@ -3,7 +3,6 @@ Definition of models.
 """
 
 from django.db import models
-from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
 from django.core.exceptions import ObjectDoesNotExist
@@ -120,14 +119,14 @@ class Member(models.Model):
     def completed_weight(self):
         return self.year_activities \
             .filter(completed=True) \
-            .aggregate(Sum('weight')) \
+            .aggregate(models.Sum('weight')) \
             .get('weight__sum', 0) or 0
 
     @property
     def booked_weight(self):
         booked_weight = self.year_activities \
             .exclude((~Q(delist_requests__member=None)) & Q(delist_requests__approved=None)) \
-            .aggregate(booked_weight=Sum('weight')) \
+            .aggregate(booked_weight=models.Sum('weight')) \
             .get('booked_weight', 0) or 0
 
         return booked_weight + self.min_signup_bias
@@ -174,7 +173,7 @@ class License(models.Model):
     class Meta:
         verbose_name = 'Licens'
         verbose_name_plural = 'Licenser'
-        unique_together = ('type', 'member')
+        constraints = [models.UniqueConstraint(fields=['type', 'member'], name='license_type_per_member')]
 
     type   = models.ForeignKey(LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
     member = models.ForeignKey(Member, verbose_name='Innehavare', on_delete=models.CASCADE)

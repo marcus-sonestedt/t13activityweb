@@ -1,10 +1,12 @@
 import React from "react";
 import { Member } from "../Models";
+import { Type } from "class-transformer";
 
 export class UserContext {
   isLoggedIn = false;
   isStaff = false;
 
+  @Type(() => Member)
   member? : Member;
 
   memberId = '';
@@ -15,7 +17,7 @@ export class UserContext {
   myDelistRequests = 0;
   unansweredDelistRequests = 0;
 
-  notifications: { message:string, link:string}[] = [];
+  notifications: { message:string, link:string }[] = [];
 
   completedWeight = 0;
   bookedWeight = 0;

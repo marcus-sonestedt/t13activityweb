@@ -156,7 +156,7 @@ const Footer = () => {
           <Col lg={4} md={12}>
             <p>
               Developed with <a href="https://reactjs.org">React</a> and
-              {' '}<a href="https:///www.djangoproject.com">Django</a> by
+              {' '}<a href="https://www.djangoproject.com">Django</a> by
               {' '}<a href="https://github.com/marcusl">Marcus Sonestedt</a>.
             </p>
           </Col>

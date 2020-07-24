@@ -45,12 +45,10 @@ export class License  {
     member: string = "";
     level: string = ""; 
 
-    apiUrl = () => License.apiUrlForId(this.member, this.id);
-    
     static apiUrlForId = (member: string, id: string) => `/api/member/${member}/license/${id}`;          
 }
 
-export class PagedLicenses  extends PagedValues<License> {
+export class PagedLicenses extends PagedValues<License> {
     @Type(() => License)
     results: License[] = [];
 }
@@ -258,6 +256,7 @@ export class T13EventType implements IdValue {
 
     url = () => `/frontend/event_type/${this.id}/${slugify(this.name)}`;
     adminUrl = () => '/admin/app/eventtype/' + this.id;
+
     static apiUrl = (id: string) => `/api/event_type/${id}`;
     static apiUrlAll = () => `/api/event_type`;
 }

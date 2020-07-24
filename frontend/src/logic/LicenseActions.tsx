@@ -2,7 +2,7 @@ import { License } from "../Models";
 import { getJsonHeaders } from './ADRActions';
 
 export const deleteLicenseAsync  = async (license: License) => {
-    const r = await fetch(license.apiUrl(), {
+    const r = await fetch(License.apiUrlForId(license.member, license.id), {
         method: 'DELETE',
         headers: getJsonHeaders(),
         body: JSON.stringify(license)
@@ -16,7 +16,7 @@ export const deleteLicenseAsync  = async (license: License) => {
 
 // throws on error
 export const updateLicenseAsync = async (license: License) => {
-    const r = await fetch(license.apiUrl(), {
+    const r = await fetch(License.apiUrlForId(license.member, license.id), {
         method: 'PATCH',
         headers: getJsonHeaders(),
         body: JSON.stringify(license)
@@ -30,8 +30,8 @@ export const updateLicenseAsync = async (license: License) => {
 
 // throws on error
 export const createLicenseAsync = async (license: License) => {
-    const r = await fetch(license.apiUrl(), {
-        method: 'PUT',
+    const r = await fetch(License.apiUrlForId(license.member, ''), {
+        method: 'PUT',  
         headers: getJsonHeaders(),
         body: JSON.stringify(license)
     });

@@ -1,14 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Badge, Button, Col, Container, Row, Image, Modal, Alert, Table } from "react-bootstrap";
-import NotFound from "../components/NotFound";
+import { deserialize } from "class-transformer";
 
+import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
-import { Member, License, Driver } from '../Models';
+import { Member, License, Driver, LicenseType, PagedLicenseTypes } from '../Models';
 import { ProfileEditForm } from "../components/ProfileEditForm";
 import { LicenseEditForm } from "../components/LicenseEditForm";
 import { DriverEditForm } from "../components/DriverEditForm";
 import { deleteDriverAsync } from '../logic/DriverActions';
 import { deleteLicenseAsync } from '../logic/LicenseActions';
+import { getJsonHeaders } from "../logic/ADRActions";
 
 export const ProfilePage = () => {
     const user = useContext(userContext);
@@ -119,9 +121,34 @@ const Licenses = (props: { member: Member }) => {
     const [showLicenseForm, setShowLicenseForm] = useState(false);
     const [editError, setEditError] = useState<string>();
     const [license, setLicense] = useState<License>();
+    const [licenseTypes, setLicenseTypes] = useState<LicenseType[]>([]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        
+        fetch(LicenseType.apiUrlLíst, {
+            signal: controller.signal,
+            headers: getJsonHeaders()
+        }).then(r => {
+            if (r.status !== 200)
+                throw r.statusText;
+            return r.text();
+        }).catch(e => {
+            console.error(e);
+            throw e;
+        }).then(json => {
+            if (json)
+            setLicenseTypes(deserialize(PagedLicenseTypes, json).results);
+        });
+
+        return function cleanup() { controller.abort();}        
+    }, [setLicenseTypes]);
+
 
     const handleSavedLicense = (license?: License) => {
         setShowLicenseForm(false);
+        setEditError(undefined);  
+              
         if (license) {
             window.location.reload();
         }
@@ -152,8 +179,8 @@ const Licenses = (props: { member: Member }) => {
     }
 
     const renderLicense = (license: License) =>
-        <tr key={license.type}>
-            <td>{license.type}</td>
+        <tr key={license.id}>
+            <td>{licenseTypes.find(lt => lt.id === license.type)?.name}</td>
             <td><b>{license.level}</b></td>
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteLicense(license)}>Radera</Button>{' '}
@@ -161,15 +188,13 @@ const Licenses = (props: { member: Member }) => {
             </td>
         </tr>
 
-
-
     return <>
-        <Modal show={showLicenseForm} onHide={() => setShowLicenseForm(false)}>
+        <Modal show={showLicenseForm} onHide={() => {setEditError(undefined); setShowLicenseForm(false);}}>
             <Modal.Header closeButton={true}>
                 Editera licensinformation
             </Modal.Header>
             <Modal.Body>
-                <LicenseEditForm license={license} onSaved={handleSavedLicense} onError={setEditError} />
+                <LicenseEditForm license={license} licenseTypes={licenseTypes} onSaved={handleSavedLicense} onError={setEditError} />
                 {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
             </Modal.Body>
         </Modal>
@@ -197,13 +222,15 @@ const Licenses = (props: { member: Member }) => {
 }
 
 const Drivers = (props: { member: Member }) => {
-    const { member } = props;
+    const member = props.member as Member;
     const [showDriverForm, setShowDriverForm] = useState(false);
     const [driver, setDriver] = useState<Driver>();
     const [editError, setEditError] = useState<string>();
 
     const handleSavedDriver = (driver?: Driver) => {
         setShowDriverForm(false);
+        setEditError(undefined);
+
         if (driver) {
             window.location.reload();
         }
@@ -239,7 +266,7 @@ const Drivers = (props: { member: Member }) => {
             <td>{driver.name}</td>
             <td>{driver.number}</td>
             <td>{driver.klass}</td>
-            <td>{driver.birthday}</td>
+            <td>{driver.birthday?.toLocaleString()}</td>
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteDriver(driver)}>Radera</Button>{' '}
                 <Button variant='primary' size='sm' onClick={() => editDriver(driver)}>Editera</Button>
@@ -247,7 +274,7 @@ const Drivers = (props: { member: Member }) => {
         </tr>
 
     return <>
-        <Modal show={showDriverForm} onHide={() => setShowDriverForm(false)}>
+        <Modal show={showDriverForm} onHide={() => {setEditError(undefined); setShowDriverForm(false); }}>
             <Modal.Header closeButton={true}>
                 Editera förare och fordonsinformation
             </Modal.Header>

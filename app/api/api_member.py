@@ -227,59 +227,109 @@ class DoubleBookedMembersList(generics.ListAPIView):
         return sorted(values, key=lambda v: (v['assigned_fullname'], v['event_id']))
 
 
-class MemberLicenseList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.CreateModelMixin):
+class MemberLicenseList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = serializers.LicenseSerializer
-    queryset = models.License.objects.all()
+    queryset = models.License.objects
+    pagination_class = None
+    lookup_field = 'id'
 
     def get_queryset(self):
         queryset = self.queryset.filter(member=self.kwargs['member_id'])
-        if self.kwargs['license_id'] is not None:
-            queryset = queryset.filter(type=self.kwargs['license_id'])
+        if self.kwargs['id'] is not None:
+            queryset = queryset.filter(type=self.kwargs['id'])
         return queryset
 
-    def patch(self, request, *args, **kwargs):
-        if self.kwargs['license_id'] is None:
-            return HttpResponseBadRequest('Invalid args for PATCH call')
-
-        try:
-            return self.partial_update(request, *args, **kwargs)
-        except FieldDoesNotExist:
-            return HttpResponseBadRequest('Field not found on model')
-        except (models.Member.DoesNotExist,  models.License.DoesNotExist) as e:
-            return HttpResponseNotFound()
-
     def put(self,  request, *args, **kwargs):
-        if self.kwargs['license_id'] is not None:
-            return HttpResponseBadRequest('Invalid args for PUT call')
+        if self.kwargs['id'] is not None:
+            logger.warn("Expected 'id' to be null for PUT")
+            return HttpResponseBadRequest()
 
         try:
-            self.create(request, *args, **kwargs)
+            return self.create(request, *args, **kwargs)            
         except IntegrityError as e:
             traceback.print_exc()
             resp = HttpResponse(str(e))
             resp.status_code = HTTPStatus.CONFLICT
             return resp
 
+    def patch(self, request, *args, **kwargs):
+        if self.kwargs['id'] is None:
+            logger.warn("Expected 'id' to be valid for PATCH")
+            return HttpResponseBadRequest()
+
+        try:
+            return self.partial_update(request, *args, **kwargs)
+        except FieldDoesNotExist as e:
+            return HttpResponseBadRequest(str(e))
+        except (models.Member.DoesNotExist, models.License.DoesNotExist) as e:
+            return HttpResponseNotFound(str(e))
+
     def delete(self, request, *args, **kwargs):
-        if self.kwargs['license_id'] is not None:
-            return HttpResponseBadRequest('Invalid args for DELETE call')
+        if self.kwargs['id'] is None:
+            logger.warn("Expected 'id' to be valid for DELETE")
+            return HttpResponseBadRequest()
 
-        qs = self.get_queryset()
-        qs.delete()
-
-        return HttpResponse()
+        return self.destroy(request, *args, **kwargs)
 
     def check_object_permissions(self, request, obj):
         if self.request.method.upper() in ['DELETE', 'PATCH', 'PUT'] \
             and self.request.user.member.id != self.kwargs['member_id']:
             return HttpResponseForbidden('Can only modify licenses for self')
 
-        if request.method.upper() == 'PATCH' \
-                and not request.user.is_staff \
-                and request.user.member.id != obj.id:
-            raise PermissionDenied(
-                "Can only PATCH self, or proxies who haven't logged in themselves yet (unless is staff).")
+        return super().check_object_permissions(request, obj)
+
+
+
+class MemberDriverList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = serializers.DriverSerializer
+    queryset = models.Driver.objects
+    pagination_class = None
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(member=self.kwargs['member_id'])
+        if self.kwargs['id'] is not None:
+            queryset = queryset.filter(type=self.kwargs['id'])
+        return queryset
+
+    def put(self,  request, *args, **kwargs):
+        if self.kwargs['id'] is not None:
+            logger.warn("Expected 'id' to be null for PUT")
+            return HttpResponseBadRequest()
+
+        try:
+            return self.create(request, *args, **kwargs)            
+        except IntegrityError as e:
+            traceback.print_exc()
+            resp = HttpResponse(str(e))
+            resp.status_code = HTTPStatus.CONFLICT
+            return resp
+
+    def patch(self, request, *args, **kwargs):
+        if self.kwargs['id'] is None:
+            logger.warn("Expected 'id' to be valid for PATCH")
+            return HttpResponseBadRequest()
+
+        try:
+            return self.partial_update(request, *args, **kwargs)
+        except FieldDoesNotExist as e:
+            return HttpResponseBadRequest(str(e))
+        except (models.Member.DoesNotExist, models.Driver.DoesNotExist) as e:
+            return HttpResponseNotFound(str(e))
+
+    def delete(self, request, *args, **kwargs):
+        if self.kwargs['id'] is None:
+            logger.warn("Expected 'id' to be valid for DELETE")
+            return HttpResponseBadRequest()
+
+        return self.destroy(request, *args, **kwargs)
+
+    def check_object_permissions(self, request, obj):
+        if self.request.method.upper() in ['DELETE', 'PATCH', 'PUT'] \
+            and self.request.user.member.id != self.kwargs['member_id']:
+            return HttpResponseForbidden('Can only modify drivers for self')
 
         return super().check_object_permissions(request, obj)
 
@@ -294,7 +344,10 @@ url_patterns = [
     re_path(r'^members/has_card/', MemberWithCardList.as_view()),
     re_path(r'^members/double_booked/', DoubleBookedMembersList.as_view()),
 
-    re_path(r'^member/(?P<member_id>[0-9]+)/license/(?P<license_id>[0-9]+)?', 
-        MemberLicenseList.as_view())
+    re_path(r'^member/(?P<member_id>[0-9]+)/license/(?P<id>[0-9]+)?', 
+        MemberLicenseList.as_view()),
+
+    re_path(r'^member/(?P<member_id>[0-9]+)/driver/(?P<id>[0-9]+)?', 
+        MemberDriverList.as_view())
 
 ]

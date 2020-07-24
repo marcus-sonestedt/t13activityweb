@@ -26,12 +26,9 @@ class LicenseTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class LicenseSerializer(serializers.ModelSerializer):
-    type = serializers.CharField()
-    level = serializers.CharField()
-
     class Meta:
         model = models.License
-        fields = ('type', 'level')
+        fields = '__all__'
 
 class LicensePatchSerializer(serializers.ModelSerializer):
     class Meta:
@@ -199,8 +196,7 @@ class ActivityADRSerializer(EventActivitySerializer):
 
     class Meta:
         model = Activity
-        fields = [x.name for x in Activity._meta.get_fields() if x.name !=
-                  'attachments']
+        fields = [x.name for x in Activity._meta.get_fields() if x.name != 'attachments']
 
 
 class ActivityDelistRequestDeepSerializer(ActivityDelistRequestSerializer):
