@@ -218,10 +218,12 @@ const Licenses = () => {
 
         <Row>
             <Col>
-                <h3>Funktionärslicenser</h3>
+                <h3>Funktionärslicenser ({member.license_set.length}/{licenseTypes.length})</h3>
             </Col>
             <Col className='text-right'>
-                <Button variant='success' onClick={addLicense} size='sm'>Lägg till</Button>
+                <Button variant='success' onClick={addLicense} size='sm'
+                    disabled={member.license_set.length >= licenseTypes.length}
+                >Lägg till</Button>
             </Col>
         </Row>
         <Row>
@@ -336,10 +338,13 @@ const Drivers = () => {
         </Modal>
         <Row>
             <Col>
-                <h3>Fordon/Förare</h3>
+                <h3>Fordon/Förare ({member.driver_set.length} st)</h3>
             </Col>
             <Col className='text-right'>
-                <Button variant='success' onClick={addDriver} size='sm'>Lägg till</Button>
+                <Button variant='success' onClick={addDriver} size='sm'
+                    disabled={member.driver_set.length > 20}>
+                    Lägg till
+                </Button>
             </Col>
         </Row>
         <Row>
