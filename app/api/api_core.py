@@ -115,12 +115,13 @@ class EventCsv(generics.GenericAPIView):
         event = self.get_object()
 
         licenseTypes = models.LicenseType.objects.all()
-        charset = 'utf-8'
+        charset = 'windows-1252'
 
-        def yieldCsv(row):
+        def yieldRow(row):
             for col in row:
                 yield col.encode(charset)
                 yield b';'
+            yield b'\r\n'
 
         def csv():
             header1 = [event.name, str(event.start_date), event.type.name]
@@ -128,14 +129,14 @@ class EventCsv(generics.GenericAPIView):
             for lt in licenseTypes:
                 header2.append(lt.name)
 
-            yieldCsv(header1)
-            yieldCsv(header2)
+            yield from yieldRow(header1)
+            yield from yieldRow(header2)
 
             for a in event.activities.all():
                 row = [a.name, a.type.name, f'{a.start_time} - {a.end_time}']
                 if a.assigned:
                     row.append(a.assigned.fullname)
-                    row.append(a.assigned.phone_number)
+                    row.append(f'tel:{a.assigned.phone_number}')
                     row.append(a.assigned.email)                
 
                     for lt in licenseTypes:
@@ -145,7 +146,7 @@ class EventCsv(generics.GenericAPIView):
                         except models.License.DoesNotExist:
                             row.append('')
 
-                yieldCsv(row)
+                yield from yieldRow(row)
 
         filename = f'{event.name}.csv'
         try:
@@ -154,7 +155,7 @@ class EventCsv(generics.GenericAPIView):
         except UnicodeEncodeError:
             file_expr = "filename*=utf-8''{}".format(quote(filename))
 
-        resp = StreamingHttpResponse(streaming_content=csv(), content_type='text/csv', charset=charset)
+        resp = StreamingHttpResponse(streaming_content=csv(), content_type='text/csv')
         resp['Content-Disposition'] = f'attachment; {file_expr}'
         return resp
 
