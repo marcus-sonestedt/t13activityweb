@@ -125,8 +125,6 @@ const EventDetails = (props: { event?: T13Event }) => {
         </div>
         {!user?.isStaff && event.coordinators.find(m => m.id !== user?.member?.id) ? null : 
             <>
-                <Button href="export">Visa funktionärslista</Button>
-                {' '}
                 <Button href="export">Ladda funktionärslista (.CSV)</Button>
             </>
         }

@@ -1,21 +1,22 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import { Row, Col, Pagination, Table } from "react-bootstrap";
 import { userContext } from "./UserContext";
 //import { useHistory } from "react-router-dom";
-import { deserialize } from "class-transformer";
+import { deserialize, deserializeArray } from "class-transformer";
 
-import { PagedActivities, T13Event, Activity } from "../Models";
+import { PagedActivities, T13Event, Activity, LicenseType } from "../Models";
 import { EnlistButtons } from "../components/EnlistButtons";
 import { HoverTooltip, PageItems } from "./Utilities";
 import { Reimbursements } from "../pages/ActivityTypePage";
 import DataProvider from "./DataProvider";
+import { getJsonHeaders } from "../logic/ADRActions";
 
 export const EventActivitiesTable = (props: { event?: T13Event }) => {
     const { event } = props;
     const [activities, setActivities] = useState(new PagedActivities());
     const [page, setPage] = useState(1);
     const [reload, setReload] = useState(0);
-    //const history = useHistory();
+    const [licenseTypes, setLicenseTypes] = useState<LicenseType[]>([]);
     const user = useContext(userContext);
     const pageSize = 8;
 
@@ -25,6 +26,29 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
         }
         setActivities(as);
     }, [event]);
+
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        fetch(LicenseType.apiUrlLíst, {
+            signal: controller.signal,
+            headers: getJsonHeaders()
+        }).then(r => {
+            if (r.status !== 200)
+                throw r.statusText;
+            return r.text();
+        }).catch(e => {
+            console.error(e);
+            throw e;
+        }).then(json => {
+            if (json)
+                setLicenseTypes(deserializeArray(LicenseType, json));
+        });
+
+        return function cleanup() { controller.abort(); }
+    }, [setLicenseTypes]);
+
 
     const renderActivityRow = (activity: Activity) => {
         const type = activity.type !== null
@@ -46,6 +70,13 @@ export const EventActivitiesTable = (props: { event?: T13Event }) => {
                 assigned.push(<>{' '}</>)
                 assigned.push(
                     <EnlistButtons activity={activity} reloadActivity={() => setReload(r => r + 1)} />)
+            }
+
+            if (activity.assigned && (user.isStaff || activity.event.coordinators.find(m => m.id === user.memberId))) {
+                activity.assigned.license_set.forEach(l =>  {
+                    assigned.push(<br/>)
+                    assigned.push(<>{`${licenseTypes.find(t => t.id === l.type)?.name} - ${l.level}`}</>)
+                })
             }
         }
 
