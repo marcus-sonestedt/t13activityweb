@@ -44,8 +44,8 @@ export class License  {
     type: string = "";
     member: string = "";
     level: string = ""; 
-
-    static apiUrlForId = (member: string, id: string) => `/api/member/${member}/license/${id}`;          
+    apiUrl = () => `/api/member/license/${this.id}`;          
+    static apiUrlForId = (id: string) => `/api/member/license/${id}`;          
 }
 
 export class PagedLicenses extends PagedValues<License> {
@@ -94,7 +94,7 @@ export class Driver implements IdValue {
 
     static urlForId = (id: string, fullname?: string) => `/frontend/driver/${id}/${slugify(fullname)}`;
     static adminUrlForId = (id: string) => `/admin/app/driver/${id}`;
-    static apiUrlForId = (id: string) => `/api/driver/${id}`;    
+    static apiUrlForId = (id: string) => `/api/member/driver/${id}`;    
 }
 
 

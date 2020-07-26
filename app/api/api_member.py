@@ -227,7 +227,7 @@ class DoubleBookedMembersList(generics.ListAPIView):
         return sorted(values, key=lambda v: (v['assigned_fullname'], v['event_id']))
 
 
-class MemberLicenseList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+class MemberLicenseList(generics.ListAPIView, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = serializers.LicenseSerializer
     queryset = models.License.objects
@@ -235,7 +235,6 @@ class MemberLicenseList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.De
     lookup_field = 'id'
 
     def get_queryset(self):
-        queryset = self.queryset.filter(member=self.kwargs['member_id'])
         if self.kwargs['id'] is not None:
             queryset = queryset.filter(type=self.kwargs['id'])
         return queryset
@@ -274,14 +273,14 @@ class MemberLicenseList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.De
 
     def check_object_permissions(self, request, obj):
         if self.request.method.upper() in ['DELETE', 'PATCH', 'PUT'] \
-            and self.request.user.member.id != self.kwargs['member_id']:
+            and self.request.user.member.id != obj.member.id:
             return HttpResponseForbidden('Can only modify licenses for self')
 
         return super().check_object_permissions(request, obj)
 
 
 
-class MemberDriverList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+class MemberDriverList(generics.ListAPIView, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = serializers.DriverSerializer
     queryset = models.Driver.objects
@@ -289,7 +288,6 @@ class MemberDriverList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.Des
     lookup_field = 'id'
 
     def get_queryset(self):
-        queryset = self.queryset.filter(member=self.kwargs['member_id'])
         if self.kwargs['id'] is not None:
             queryset = queryset.filter(type=self.kwargs['id'])
         return queryset
@@ -328,7 +326,7 @@ class MemberDriverList(generics.ListAPIView, mixins.UpdateModelMixin, mixins.Des
 
     def check_object_permissions(self, request, obj):
         if self.request.method.upper() in ['DELETE', 'PATCH', 'PUT'] \
-            and self.request.user.member.id != self.kwargs['member_id']:
+            and self.request.user.member.id != obj.member.id:
             return HttpResponseForbidden('Can only modify drivers for self')
 
         return super().check_object_permissions(request, obj)
@@ -344,10 +342,7 @@ url_patterns = [
     re_path(r'^members/has_card/', MemberWithCardList.as_view()),
     re_path(r'^members/double_booked/', DoubleBookedMembersList.as_view()),
 
-    re_path(r'^member/(?P<member_id>[0-9]+)/license/(?P<id>[0-9]+)?', 
-        MemberLicenseList.as_view()),
-
-    re_path(r'^member/(?P<member_id>[0-9]+)/driver/(?P<id>[0-9]+)?', 
-        MemberDriverList.as_view())
+    re_path(r'^member/license/(?P<id>[0-9]+)?$', MemberLicenseList.as_view()),
+    re_path(r'^member/driver/(?P<id>[0-9]+)?$', MemberDriverList.as_view())
 
 ]

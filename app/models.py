@@ -173,7 +173,9 @@ class License(models.Model):
     class Meta:
         verbose_name = 'Licens'
         verbose_name_plural = 'Licenser'
-        constraints = [models.UniqueConstraint(fields=['type', 'member'], name='license_type_per_member')]
+        constraints = [
+            models.UniqueConstraint(fields=['type', 'member'], name='license_type_per_member')
+        ]
 
     type   = models.ForeignKey(LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
     member = models.ForeignKey(Member, verbose_name='Innehavare', on_delete=models.CASCADE)

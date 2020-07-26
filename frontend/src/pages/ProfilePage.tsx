@@ -29,6 +29,7 @@ export const ProfilePage = () => {
             <Col lg={1} md={0} />
             <Col lg={5} md={12}>
                 <Licenses member={member} />
+                <br/>
                 <Drivers member={member} />
             </Col>
             <Col lg={1} md={0} />
@@ -148,7 +149,7 @@ const Licenses = (props: { member: Member }) => {
     const handleSavedLicense = (license?: License) => {
         setShowLicenseForm(false);
         setEditError(undefined);  
-              
+
         if (license) {
             window.location.reload();
         }
@@ -167,7 +168,9 @@ const Licenses = (props: { member: Member }) => {
     }
 
     const deleteLicense = async (license: License) => {
-        if (!window.confirm(`Vill du verkligen ta bort licensen '${license.type}' ${license.level} ?`))
+        const name = licenseTypes.find(lt => lt.id === license.type)?.name;
+
+        if (!window.confirm(`Vill du verkligen ta bort licensen '${name}' ${license.level} ?`))
             return;
 
         try {
@@ -175,6 +178,7 @@ const Licenses = (props: { member: Member }) => {
         } catch (e) {
             alert(e);
         }
+        
         window.location.reload();
     }
 
@@ -184,7 +188,7 @@ const Licenses = (props: { member: Member }) => {
             <td><b>{license.level}</b></td>
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteLicense(license)}>Radera</Button>{' '}
-                <Button variant='primary' size='sm'onClick={() => editLicense(license)}>Editera</Button>
+                <Button variant='primary' size='sm' onClick={() => editLicense(license)}>Editera</Button>
             </td>
         </tr>
 
@@ -249,7 +253,7 @@ const Drivers = (props: { member: Member }) => {
     }
 
     const deleteDriver = async (driver: Driver) => {
-        if (!window.confirm(`Vill du verkligen ta bort förare/fordon '${driver.name}' #${driver.number} ?`))
+        if (!window.confirm(`Vill du verkligen ta bort förare & fordon '${driver.name}' #${driver.number} ?`))
             return;
 
         try {
