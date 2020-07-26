@@ -83,14 +83,7 @@ class MemberPatchSerializer(serializers.Serializer):
     licenses = LicensePatchSerializer(required=False, many=True)
 
 
-class DriverSerializer(serializers.ModelSerializer):
-    klass = serializers.PrimaryKeyRelatedField
-    class Meta:
-        model = models.Driver
-        fields = '__all__'
-
-
-class AttachmentSerializer(serializers.Serializer):
+class AttachmentSerializer(serializers.ModelSerializer):
     uploader = UserSerializer()
 
     class Meta:

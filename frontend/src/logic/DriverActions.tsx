@@ -1,6 +1,14 @@
 import { Driver } from "../Models";
 import { getJsonHeaders } from './ADRActions';
 
+const fixDriverDate = (key:string, value:any) => {
+    if (key === 'birthday') {
+        return value.split('T')[0]; // remove time part        
+    }
+
+    return value;
+}
+
 export const deleteDriverAsync  = async (driver: Driver) => {
     const r = await fetch(driver.apiUrl(), {
         method: 'DELETE',
@@ -18,7 +26,7 @@ export const updateDriverAsync = async (driver: Driver) => {
     const r = await fetch(driver.apiUrl(), {
         method: 'PATCH',
         headers: getJsonHeaders(),
-        body: JSON.stringify(driver)
+        body: JSON.stringify(driver, fixDriverDate)
     });
 
     if (r.status >= 300) {
@@ -32,7 +40,7 @@ export const createDriverAsync = async (driver: Driver) => {
     const r = await fetch(Driver.apiUrlForId(''), {
         method: 'PUT',
         headers: getJsonHeaders(),
-        body: JSON.stringify(driver)
+        body: JSON.stringify(driver, fixDriverDate)
     });
 
     if (r.status >= 300) {

@@ -24,7 +24,7 @@ export const DriverEditForm = (props: {
     const [name, setName] = useState(driver?.name ?? '');
     const [number, setNumber] = useState(driver?.number ?? 0);
     const [klass, setKlass] = useState(driver?.klass ?? '');
-    const [birthday, setBirthday] = useState(driver?.birthday ?? new Date(2001,0,1));
+    const [birthday, setBirthday] = useState(driver?.birthday ?? new Date(2001,0,1,1,0,0));
 
     if (!driver)
         return null;
@@ -87,7 +87,7 @@ export const DriverEditForm = (props: {
             <Form.Control as="select" placeholder="J125" required isValid={klass.length > 0}
                 value={klass} onChange={setState(setKlass)}>
                 <option key={undefined} value=""/>
-                {classes.map(c => <option key={c.abbrev} value={c.abbrev}>{c.abbrev} - {c.name}</option>)}
+                {classes.map(c => <option key={c.id} value={c.id}>{c.abbrev} - {c.name}</option>)}
             </Form.Control>
         </Form.Group>
 
