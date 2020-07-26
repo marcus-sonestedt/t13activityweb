@@ -5,9 +5,11 @@ from django.conf import settings
 from django.urls import path, re_path
 from django.apps import apps
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
-from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, StreamingHttpResponse
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Count
+from django.db.models import Q, OuterRef, Subquery
 
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
@@ -22,6 +24,8 @@ from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import mixins
 
+from urllib.parse import quote
+
 from app import models
 from app.models import Activity, ActivityType, Event, EventType, Member, \
     ActivityDelistRequest, RuleViolationException, FAQ
@@ -30,8 +34,6 @@ from app import serializers
 from app.serializers import ActivitySerializer, ActivityTypeSerializer, \
     AttachmentSerializer, EventSerializer, EventTypeSerializer, MemberSerializer, \
     EventActivitySerializer, FAQSerializer, UserSerializer
-from django.db.models.aggregates import Count
-from django.db.models import Q, OuterRef, Subquery
 
 logger = logging.getLogger(__name__)
 
@@ -103,6 +105,58 @@ class EventList(generics.ListAPIView):
     @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
+
+
+class EventCsv(generics.GenericAPIView):
+    queryset = Event.objects.prefetch_related('activities')
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
+    
+    def get(self, request, *args, **kwargs):
+        event = self.get_object()
+
+        licenseTypes = models.LicenseType.objects.all()
+        charset = 'utf-8'
+
+        def yieldCsv(row):
+            for col in row:
+                yield col.encode(charset)
+                yield b';'
+
+        def csv():
+            header1 = [event.name, str(event.start_date), event.type.name]
+            header2 = ['Beskrivning', 'Typ', 'Tid', 'Tilldelad', 'Telefon', 'Email']
+            for lt in licenseTypes:
+                header2.append(lt.name)
+
+            yieldCsv(header1)
+            yieldCsv(header2)
+
+            for a in event.activities.all():
+                row = [a.name, a.type.name, f'{a.start_time} - {a.end_time}']
+                if a.assigned:
+                    row.append(a.assigned.fullname)
+                    row.append(a.assigned.phone_number)
+                    row.append(a.assigned.email)                
+
+                    for lt in licenseTypes:
+                        try:
+                            l = a.assigned.license_set.get(type=lt.id)
+                            row.append(l.level)
+                        except models.License.DoesNotExist:
+                            row.append('')
+
+                yieldCsv(row)
+
+        filename = f'{event.name}.csv'
+        try:
+            filename.encode('ascii')
+            file_expr = 'filename="{}"'.format(filename)
+        except UnicodeEncodeError:
+            file_expr = "filename*=utf-8''{}".format(quote(filename))
+
+        resp = StreamingHttpResponse(streaming_content=csv(), content_type='text/csv', charset=charset)
+        resp['Content-Disposition'] = f'attachment; {file_expr}'
+        return resp
 
 
 class EventActivities(generics.ListAPIView):
@@ -244,7 +298,8 @@ url_patterns = [
 
     path('events', EventList.as_view()),
     re_path(r'events/(?P<upcoming>upcoming)', EventList.as_view()),
-    re_path(r'events/(?P<id>[0-9]+)', EventList.as_view()),
+    re_path(r'events/(?P<id>[0-9]+)$', EventList.as_view()),
+    re_path(r'events/(?P<pk>[0-9]+)/csv$', EventCsv.as_view()),
 
     path('event_type', EventTypeList.as_view()),
     re_path(r'event_type/(?P<id>[0-9]+)', EventTypeList.as_view()),

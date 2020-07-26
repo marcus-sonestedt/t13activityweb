@@ -125,7 +125,7 @@ const EventDetails = (props: { event?: T13Event }) => {
         </div>
         {!user?.isStaff && event.coordinators.find(m => m.id !== user?.member?.id) ? null : 
             <>
-                <Button href="export">Ladda funktionärslista (.CSV)</Button>
+                <Button href={`/api/events/${event.id}/csv`}>Ladda funktionärslista (.csv)</Button>
             </>
         }
     </>
