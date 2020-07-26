@@ -1,21 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Badge, Button, Col, Container, Row, Image, Modal, Alert, Table } from "react-bootstrap";
 import { deserializeArray } from "class-transformer";
-
-import { NotFound } from "../components/NotFound";
-import { userContext } from "../components/UserContext";
-import { Member, License, Driver, LicenseType, CarClass } from '../Models';
-import { ProfileEditForm } from "../components/ProfileEditForm";
-import { LicenseEditForm } from "../components/LicenseEditForm";
+import React, { useContext, useEffect, useState } from "react";
+import { Alert, Badge, Button, Col, Container, Image, Modal, Row, Table } from "react-bootstrap";
 import { DriverEditForm } from "../components/DriverEditForm";
+import { LicenseEditForm } from "../components/LicenseEditForm";
+import { NotFound } from "../components/NotFound";
+import { ProfileEditForm } from "../components/ProfileEditForm";
+import { userContext } from "../components/UserContext";
+import { getJsonHeaders } from "../logic/ADRActions";
 import { deleteDriverAsync } from '../logic/DriverActions';
 import { deleteLicenseAsync } from '../logic/LicenseActions';
-import { getJsonHeaders } from "../logic/ADRActions";
+import { CarClass, Driver, License, LicenseType, Member } from '../Models';
+import { plainToClass } from 'class-transformer'
 
 export const ProfilePage = () => {
     const user = useContext(userContext);
+    const member = user.member;
 
-    if (!user.isLoggedIn || !user.member)
+    if (!user.isLoggedIn || !member)
         return <NotFound />
 
     return <Container fluid>
@@ -23,20 +24,20 @@ export const ProfilePage = () => {
         <Row>
             <Col lg={1} md={0} />
             <Col lg={4} md={12}>
-                <Profile/>
+                <Profile />
             </Col>
             <Col lg={1} md={0} />
             <Col lg={5} md={12}>
-                <Licenses/>
-                <br/>
-                <Drivers/>
+                <Licenses member={member} />
+                <br />
+                <Drivers member={member} />
             </Col>
             <Col lg={1} md={0} />
         </Row>
     </Container >
 }
 
-const Profile = (props: {} ) => {
+const Profile = (props: {}) => {
     const user = useContext(userContext);
     const member = user.member;
     const [showProfileForm, setShowProfileForm] = useState(false);
@@ -109,16 +110,16 @@ const Profile = (props: {} ) => {
                     : <Button variant='warning' href="/frontend/verify/phone">Behöver verifieras!</Button>}
             </h4>
 
-            <h4>Roll: <i style={{color:'lightblue'}}>{user.isStaff ? 'Personal' : 'Medlem'}</i></h4>
-            <h4>Guldkortsnummer: <i style={{color:'lightblue'}}>{user.member?.membercard_number}</i></h4>
+            <h4>Roll: <i style={{ color: 'lightblue' }}>{user.isStaff ? 'Personal' : 'Medlem'}</i></h4>
+            <h4>Guldkortsnummer: <i style={{ color: 'lightblue' }}>{user.member?.membercard_number}</i></h4>
             {!member.image_url ? null : <Image src={member.image_url} />}
         </div>
     </>
 }
 
-const Licenses = () => {
+export const Licenses = (props: { member: Member }) => {
     const user = useContext(userContext);
-    const member = user.member;
+    const member = props.member;
 
     const [showLicenseForm, setShowLicenseForm] = useState(false);
     const [editError, setEditError] = useState<string>();
@@ -127,7 +128,7 @@ const Licenses = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-        
+
         fetch(LicenseType.apiUrlLíst, {
             signal: controller.signal,
             headers: getJsonHeaders()
@@ -140,17 +141,17 @@ const Licenses = () => {
             throw e;
         }).then(json => {
             if (json)
-            setLicenseTypes(deserializeArray(LicenseType, json));
+                setLicenseTypes(deserializeArray(LicenseType, json));
         });
 
-        return function cleanup() { controller.abort();}        
+        return function cleanup() { controller.abort(); }
     }, [setLicenseTypes]);
 
     if (!member) return null;
 
     const handleSavedLicense = (license?: License) => {
         setShowLicenseForm(false);
-        setEditError(undefined);  
+        setEditError(undefined);
 
         if (license) {
             window.location.reload();
@@ -187,26 +188,27 @@ const Licenses = () => {
         } catch (e) {
             alert(e);
         }
-        
+
         window.location.reload();
     }
 
     const renderLicense = (license_in: License) => {
-        const license = Object.assign(new License(), license_in); // apiUrl property lost by React
+        const license = plainToClass(License, license_in);
 
         return <tr key={license.id}>
             <td>{licenseTypes?.find(lt => lt.id === license.type)?.name}</td>
             <td><b>{license.level}</b></td>
-            {}
-            <td className='text-right'>
-                <Button variant='danger' size='sm' onClick={() => deleteLicense(license)}>Radera</Button>{' '}
-                <Button variant='primary' size='sm' onClick={() => editLicense(license)}>Editera</Button>
-            </td>
+            {member.id !== user?.member?.id ? null :
+                <td className='text-right'>
+                    <Button variant='danger' size='sm' onClick={() => deleteLicense(license)}>Radera</Button>{' '}
+                    <Button variant='primary' size='sm' onClick={() => editLicense(license)}>Editera</Button>
+                </td>
+            }
         </tr>
     }
 
     return <>
-        <Modal show={showLicenseForm} onHide={() => {setEditError(undefined); setShowLicenseForm(false);}}>
+        <Modal show={showLicenseForm} onHide={() => { setEditError(undefined); setShowLicenseForm(false); }}>
             <Modal.Header closeButton={true}>
                 Editera licensinformation
             </Modal.Header>
@@ -218,13 +220,15 @@ const Licenses = () => {
 
         <Row>
             <Col>
-                <h3>Funktionärslicenser ({member.license_set.length}/{licenseTypes.length})</h3>
+                <h3>Funktionärslicenser ({member.license_set.length}/{licenseTypes.length} st)</h3>
             </Col>
-            <Col className='text-right'>
-                <Button variant='success' onClick={addLicense} size='sm'
-                    disabled={member.license_set.length >= licenseTypes.length}
-                >Lägg till</Button>
-            </Col>
+            {member.id !== user?.member?.id ? null :
+                <Col className='text-right'>
+                    <Button variant='success' onClick={addLicense} size='sm'
+                        disabled={member.license_set.length >= licenseTypes.length}
+                    >Lägg till</Button>
+                </Col>
+            }
         </Row>
         <Row>
             {!member.license_set
@@ -238,9 +242,9 @@ const Licenses = () => {
     </>
 }
 
-const Drivers = () => {
+export const Drivers = (props: { member: Member }) => {
     const user = useContext(userContext);
-    const member = user.member;
+    const member = props.member;
     const [showDriverForm, setShowDriverForm] = useState(false);
     const [driver, setDriver] = useState<Driver>();
     const [editError, setEditError] = useState<string>();
@@ -248,7 +252,7 @@ const Drivers = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-        
+
         fetch(CarClass.apiUrlLíst, {
             signal: controller.signal,
             headers: getJsonHeaders()
@@ -261,10 +265,10 @@ const Drivers = () => {
             throw e;
         }).then(json => {
             if (json)
-            setCarClasses(deserializeArray(CarClass, json));
+                setCarClasses(deserializeArray(CarClass, json));
         });
 
-        return function cleanup() { controller.abort();}        
+        return function cleanup() { controller.abort(); }
     }, [setCarClasses]);
 
     if (!member) return null;
@@ -284,7 +288,7 @@ const Drivers = () => {
             alert("Inga kart-klasser inlagda i databasen");
             return;
         }
-        
+
         const d = new Driver();
         d.member = member.id;
         d.klass = defaultClass;
@@ -311,27 +315,29 @@ const Drivers = () => {
     }
 
     const renderDriver = (driver_in: Driver) => {
-        const driver = Object.assign(new Driver(), driver_in); // apiUrl property lost by React
+        const driver = plainToClass(Driver, driver_in);
 
         return <tr key={driver.id}>
             <td>{driver.name}</td>
             <td>{driver.number}</td>
             <td>{carClasses?.find(c => c.id === driver.klass)?.abbrev}</td>
-            <td>{driver.birthday?.toLocaleString()}</td>
-            <td className='text-right'>
-                <Button variant='danger' size='sm' onClick={() => deleteDriver(driver)}>Radera</Button>{' '}
-                <Button variant='primary' size='sm' onClick={() => editDriver(driver)}>Editera</Button>
-            </td>
+            <td>{driver.birthday?.toISOString()?.split('T')[0]}</td>
+            {member.id !== user?.member?.id ? null :
+                <td className='text-right'>
+                    <Button variant='danger' size='sm' onClick={() => deleteDriver(driver)}>Radera</Button>{' '}
+                    <Button variant='primary' size='sm' onClick={() => editDriver(driver)}>Editera</Button>
+                </td>
+            }
         </tr>
     }
 
     return <>
-        <Modal show={showDriverForm} onHide={() => {setEditError(undefined); setShowDriverForm(false); }}>
+        <Modal show={showDriverForm} onHide={() => { setEditError(undefined); setShowDriverForm(false); }}>
             <Modal.Header closeButton={true}>
                 Editera förare och fordonsinformation
             </Modal.Header>
             <Modal.Body>
-                <DriverEditForm driver={driver} classes={carClasses} 
+                <DriverEditForm driver={driver} classes={carClasses}
                     onSaved={handleSavedDriver} onError={setEditError} />
                 {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
             </Modal.Body>
@@ -340,12 +346,14 @@ const Drivers = () => {
             <Col>
                 <h3>Fordon/Förare ({member.driver_set.length} st)</h3>
             </Col>
-            <Col className='text-right'>
-                <Button variant='success' onClick={addDriver} size='sm'
-                    disabled={member.driver_set.length > 20}>
-                    Lägg till
+            {member.id !== user?.member?.id ? null :
+                <Col className='text-right'>
+                    <Button variant='success' onClick={addDriver} size='sm'
+                        disabled={member.driver_set.length > 20}>
+                        Lägg till
                 </Button>
-            </Col>
+                </Col>
+            }
         </Row>
         <Row>
             {!member.driver_set
@@ -361,3 +369,4 @@ const Drivers = () => {
 
 
 export default ProfilePage;
+

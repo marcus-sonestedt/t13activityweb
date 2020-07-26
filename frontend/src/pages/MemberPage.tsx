@@ -6,6 +6,7 @@ import DataProvider from "../components/DataProvider";
 import { deserialize } from "class-transformer";
 import NotFound from "../components/NotFound";
 import { userContext } from "../components/UserContext";
+import { Licenses, Drivers } from "./ProfilePage";
 
 export const MemberComponent = (props: { member?: Member }) => {
     const { member } = props;
@@ -15,7 +16,7 @@ export const MemberComponent = (props: { member?: Member }) => {
         return null;
 
     return <div>
-        <h3>Namn: {member.fullname}</h3>
+        <h2>Namn: {member.fullname}</h2>
         <h4>Email:{' '}
             <a href={`mailto:${member.email}`}>{member.email}</a>
         </h4>
@@ -25,6 +26,10 @@ export const MemberComponent = (props: { member?: Member }) => {
         {member.image_url === undefined ? null :
             <Image src={member.image_url} />
         }
+        <br/>
+        <Licenses member={member}/>
+        <br/>
+        <Drivers member={member}/>
     </div>
 }
 

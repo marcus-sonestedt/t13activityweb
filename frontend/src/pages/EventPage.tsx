@@ -123,9 +123,14 @@ const EventDetails = (props: { event?: T13Event }) => {
             <h5>Övrig info</h5>
             {event.comment ? <MarkDown source={event.comment} /> : <p>¯\_(ツ)_/¯</p>}
         </div>
+        {!user?.isStaff && event.coordinators.find(m => m.id !== user?.member?.id) ? null : 
+            <>
+                <Button href="export">Visa funktionärslista</Button>
+                {' '}
+                <Button href="export">Ladda funktionärslista (.CSV)</Button>
+            </>
+        }
     </>
-
-
 }
 
 
