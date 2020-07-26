@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Badge, Button, Col, Container, Row, Image, Modal, Alert, Table } from "react-bootstrap";
-import { deserialize } from "class-transformer";
+import { deserializeArray } from "class-transformer";
 
 import { NotFound } from "../components/NotFound";
 import { userContext } from "../components/UserContext";
-import { Member, License, Driver, LicenseType, PagedLicenseTypes } from '../Models';
+import { Member, License, Driver, LicenseType, CarClass } from '../Models';
 import { ProfileEditForm } from "../components/ProfileEditForm";
 import { LicenseEditForm } from "../components/LicenseEditForm";
 import { DriverEditForm } from "../components/DriverEditForm";
@@ -14,9 +14,8 @@ import { getJsonHeaders } from "../logic/ADRActions";
 
 export const ProfilePage = () => {
     const user = useContext(userContext);
-    const member = user.member;
 
-    if (!user.isLoggedIn || !member)
+    if (!user.isLoggedIn || !user.member)
         return <NotFound />
 
     return <Container fluid>
@@ -24,24 +23,26 @@ export const ProfilePage = () => {
         <Row>
             <Col lg={1} md={0} />
             <Col lg={4} md={12}>
-                <Profile member={member} />
+                <Profile/>
             </Col>
             <Col lg={1} md={0} />
             <Col lg={5} md={12}>
-                <Licenses member={member} />
+                <Licenses/>
                 <br/>
-                <Drivers member={member} />
+                <Drivers/>
             </Col>
             <Col lg={1} md={0} />
         </Row>
     </Container >
 }
 
-const Profile = (props: { member: Member }) => {
+const Profile = (props: {} ) => {
     const user = useContext(userContext);
-    const { member } = props;
+    const member = user.member;
     const [showProfileForm, setShowProfileForm] = useState(false);
     const [editError, setEditError] = useState<string>();
+
+    if (!member) return null;
 
     const handleSavedProfile = (member?: Member) => {
         setShowProfileForm(false);
@@ -55,7 +56,6 @@ const Profile = (props: { member: Member }) => {
         setEditError(undefined);
         setShowProfileForm(true);
     }
-
 
     return <>
         <Modal show={showProfileForm} onHide={() => setShowProfileForm(false)}>
@@ -92,7 +92,7 @@ const Profile = (props: { member: Member }) => {
         <div>
             <h4>
                 Email:
-                        {' '}
+                {' '}
                 <a href={`mailto:${member.email}`}><i>{member.email}</i></a>
                 {' '}
                 {member.email_verified
@@ -101,7 +101,7 @@ const Profile = (props: { member: Member }) => {
             </h4>
             <h4>
                 Telefon:
-                        {' '}
+                {' '}
                 <a href={`tel:${member.phone_number}`}><i>{member.phone_number}</i></a>
                 {' '}
                 {member.phone_verified
@@ -116,8 +116,9 @@ const Profile = (props: { member: Member }) => {
     </>
 }
 
-const Licenses = (props: { member: Member }) => {
-    const { member } = props;
+const Licenses = () => {
+    const user = useContext(userContext);
+    const member = user.member;
 
     const [showLicenseForm, setShowLicenseForm] = useState(false);
     const [editError, setEditError] = useState<string>();
@@ -139,12 +140,13 @@ const Licenses = (props: { member: Member }) => {
             throw e;
         }).then(json => {
             if (json)
-            setLicenseTypes(deserialize(PagedLicenseTypes, json).results);
+            setLicenseTypes(deserializeArray(LicenseType, json));
         });
 
         return function cleanup() { controller.abort();}        
     }, [setLicenseTypes]);
 
+    if (!member) return null;
 
     const handleSavedLicense = (license?: License) => {
         setShowLicenseForm(false);
@@ -156,8 +158,15 @@ const Licenses = (props: { member: Member }) => {
     }
 
     const addLicense = () => {
+        const defaultType = licenseTypes.find(() => true)?.id;
+        if (!defaultType) {
+            alert("Inga licenstyper registrerade i databasen");
+            return;
+        }
+
         const l = new License();
         l.member = member.id;
+        l.type = defaultType;
         setLicense(l);
         setShowLicenseForm(true);
     }
@@ -182,15 +191,19 @@ const Licenses = (props: { member: Member }) => {
         window.location.reload();
     }
 
-    const renderLicense = (license: License) =>
-        <tr key={license.id}>
-            <td>{licenseTypes.find(lt => lt.id === license.type)?.name}</td>
+    const renderLicense = (license_in: License) => {
+        const license = Object.assign(new License(), license_in); // apiUrl property lost by React
+
+        return <tr key={license.id}>
+            <td>{licenseTypes?.find(lt => lt.id === license.type)?.name}</td>
             <td><b>{license.level}</b></td>
+            {}
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteLicense(license)}>Radera</Button>{' '}
                 <Button variant='primary' size='sm' onClick={() => editLicense(license)}>Editera</Button>
             </td>
         </tr>
+    }
 
     return <>
         <Modal show={showLicenseForm} onHide={() => {setEditError(undefined); setShowLicenseForm(false);}}>
@@ -208,9 +221,7 @@ const Licenses = (props: { member: Member }) => {
                 <h3>Funktionärslicenser</h3>
             </Col>
             <Col className='text-right'>
-                <Button variant='success' onClick={addLicense} size='sm'>
-                    Lägg till
-                        </Button>
+                <Button variant='success' onClick={addLicense} size='sm'>Lägg till</Button>
             </Col>
         </Row>
         <Row>
@@ -225,11 +236,36 @@ const Licenses = (props: { member: Member }) => {
     </>
 }
 
-const Drivers = (props: { member: Member }) => {
-    const member = props.member as Member;
+const Drivers = () => {
+    const user = useContext(userContext);
+    const member = user.member;
     const [showDriverForm, setShowDriverForm] = useState(false);
     const [driver, setDriver] = useState<Driver>();
     const [editError, setEditError] = useState<string>();
+    const [carClasses, setCarClasses] = useState<CarClass[]>([]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        
+        fetch(CarClass.apiUrlLíst, {
+            signal: controller.signal,
+            headers: getJsonHeaders()
+        }).then(r => {
+            if (r.status !== 200)
+                throw r.statusText;
+            return r.text();
+        }).catch(e => {
+            console.error(e);
+            throw e;
+        }).then(json => {
+            if (json)
+            setCarClasses(deserializeArray(CarClass, json));
+        });
+
+        return function cleanup() { controller.abort();}        
+    }, [setCarClasses]);
+
+    if (!member) return null;
 
     const handleSavedDriver = (driver?: Driver) => {
         setShowDriverForm(false);
@@ -241,8 +277,15 @@ const Drivers = (props: { member: Member }) => {
     }
 
     const addDriver = () => {
+        const defaultClass = carClasses.find(() => true)?.id;
+        if (!defaultClass) {
+            alert("Inga kart-klasser inlagda i databasen");
+            return;
+        }
+        
         const d = new Driver();
         d.member = member.id;
+        d.klass = defaultClass;
         setDriver(d);
         setShowDriverForm(true);
     }
@@ -265,17 +308,20 @@ const Drivers = (props: { member: Member }) => {
         window.location.reload();
     }
 
-    const renderDriver = (driver: Driver) =>
-        <tr key={driver.id}>
+    const renderDriver = (driver_in: Driver) => {
+        const driver = Object.assign(new Driver(), driver_in); // apiUrl property lost by React
+
+        return <tr key={driver.id}>
             <td>{driver.name}</td>
             <td>{driver.number}</td>
-            <td>{driver.klass}</td>
+            <td>{carClasses?.find(c => c.id === driver.klass)?.abbrev}</td>
             <td>{driver.birthday?.toLocaleString()}</td>
             <td className='text-right'>
                 <Button variant='danger' size='sm' onClick={() => deleteDriver(driver)}>Radera</Button>{' '}
                 <Button variant='primary' size='sm' onClick={() => editDriver(driver)}>Editera</Button>
             </td>
         </tr>
+    }
 
     return <>
         <Modal show={showDriverForm} onHide={() => {setEditError(undefined); setShowDriverForm(false); }}>
@@ -283,7 +329,8 @@ const Drivers = (props: { member: Member }) => {
                 Editera förare och fordonsinformation
             </Modal.Header>
             <Modal.Body>
-                <DriverEditForm driver={driver} onSaved={handleSavedDriver} onError={setEditError} />
+                <DriverEditForm driver={driver} classes={carClasses} 
+                    onSaved={handleSavedDriver} onError={setEditError} />
                 {editError ? <Alert variant='danger'><p>{editError}</p></Alert> : null}
             </Modal.Body>
         </Modal>
@@ -292,9 +339,7 @@ const Drivers = (props: { member: Member }) => {
                 <h3>Fordon/Förare</h3>
             </Col>
             <Col className='text-right'>
-                <Button variant='success' onClick={addDriver} size='sm'>
-                    Lägg till
-        </Button>
+                <Button variant='success' onClick={addDriver} size='sm'>Lägg till</Button>
             </Col>
         </Row>
         <Row>

@@ -235,8 +235,11 @@ class MemberLicenseList(generics.ListAPIView, mixins.CreateModelMixin, mixins.Up
     lookup_field = 'id'
 
     def get_queryset(self):
+        queryset = self.queryset
+        if self.kwargs['member_id'] is not None:
+            queryset = queryset.filter(member=self.kwargs['member_id'])
         if self.kwargs['id'] is not None:
-            queryset = queryset.filter(type=self.kwargs['id'])
+            queryset = queryset.filter(id=self.kwargs['id'])
         return queryset
 
     def put(self,  request, *args, **kwargs):
@@ -288,8 +291,11 @@ class MemberDriverList(generics.ListAPIView, mixins.CreateModelMixin, mixins.Upd
     lookup_field = 'id'
 
     def get_queryset(self):
+        queryset = self.queryset
+        if self.kwargs['member_id'] is not None:
+            queryset = queryset.filter(member=self.kwargs['member_id'])
         if self.kwargs['id'] is not None:
-            queryset = queryset.filter(type=self.kwargs['id'])
+            queryset = queryset.filter(id=self.kwargs['id'])
         return queryset
 
     def put(self,  request, *args, **kwargs):
@@ -342,7 +348,7 @@ url_patterns = [
     re_path(r'^members/has_card/', MemberWithCardList.as_view()),
     re_path(r'^members/double_booked/', DoubleBookedMembersList.as_view()),
 
-    re_path(r'^member/license/(?P<id>[0-9]+)?$', MemberLicenseList.as_view()),
-    re_path(r'^member/driver/(?P<id>[0-9]+)?$', MemberDriverList.as_view())
+    re_path(r'^member/((?P<member_id>[0-9]+)/)?license/(?P<id>[0-9]+)?$', MemberLicenseList.as_view()),
+    re_path(r'^member/((?P<member_id>[0-9]+)/)?driver/(?P<id>[0-9]+)?$', MemberDriverList.as_view())
 
 ]

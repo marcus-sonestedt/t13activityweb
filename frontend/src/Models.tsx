@@ -34,11 +34,6 @@ export class LicenseType implements IdValue {
     static apiUrlForId = (id: string) => `/api/licensetype/${id}`
 }
 
-export class PagedLicenseTypes extends PagedValues<LicenseType> {
-    @Type(() => LicenseType)
-    results: LicenseType[] = [];
-}
-
 export class License  {
     id: string = "";
     type: string = "";
@@ -47,12 +42,6 @@ export class License  {
     apiUrl = () => `/api/member/license/${this.id}`;          
     static apiUrlForId = (id: string) => `/api/member/license/${id}`;          
 }
-
-export class PagedLicenses extends PagedValues<License> {
-    @Type(() => License)
-    results: License[] = [];
-}
-
 
 export class CarClass implements IdValue {
     id: string = "";
@@ -67,17 +56,11 @@ export class CarClass implements IdValue {
     adminUrl = () => CarClass.adminUrlForId(this.id);
     apiUrl = () => CarClass.apiUrlForId(this.id);
 
+    static apiUrlLíst = '/api/carclass'
     static urlForId = (id:string, abbrev: string) => `/frontend/carclass/${id}/${abbrev}`;
     static adminUrlForId = (id: string) => `/admin/app/carclass/${id}`;
     static apiUrlForId = (id: string) => `/api/carclass/${id}`;      
 }
-
-
-export class PagedCarClasses extends PagedValues<CarClass> {
-    @Type(() => CarClass)
-    results: CarClass[] = [];
-}
-
 
 export class Driver implements IdValue {
     id: string = "";
@@ -90,7 +73,7 @@ export class Driver implements IdValue {
 
     url = () => Driver.urlForId(this.id, this.name);
     adminUrl = () => Driver.adminUrlForId(this.id);
-    apiUrl = () => Driver.apiUrlForId(this.id);
+    apiUrl = () => Driver.apiUrlForId(this.id); 
 
     static urlForId = (id: string, fullname?: string) => `/frontend/driver/${id}/${slugify(fullname)}`;
     static adminUrlForId = (id: string) => `/admin/app/driver/${id}`;

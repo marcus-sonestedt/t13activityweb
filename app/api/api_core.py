@@ -219,13 +219,14 @@ class CarClassList(generics.ListAPIView):
     serializer_class = serializers.CarClassSerializer
     permission_classes = [AllowAny]
     read_only = True
+    pagination_class = None
 
 class LicenseTypeList(generics.ListAPIView):
     queryset = models.LicenseType.objects.all()
     serializer_class = serializers.LicenseTypeSerializer
     permission_classes = [AllowAny]
     read_only = True
-
+    pagination_class = None
 
 
 

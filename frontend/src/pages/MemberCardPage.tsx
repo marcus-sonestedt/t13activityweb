@@ -13,7 +13,7 @@ export const MemberCardPage = () => {
     const tabMatch = window.location.search.match(/[?&]tab=([a-z-]+)/);
     const tab = tabMatch ? tabMatch[1] : 'ready';
     const history = useHistory();
-    const setQueryTab = (key: string) => { history.replace(`?tab=${key}`); }
+    const setQueryTab = (key: string | null) => { history.replace(`?tab=${key}`); }
 
     return <Tab.Container defaultActiveKey={tab}
         onSelect={setQueryTab}>

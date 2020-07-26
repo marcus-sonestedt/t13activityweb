@@ -17,7 +17,7 @@ export const MainPage = () => {
     const tab = tabMatch ? tabMatch[1] : 'overview';
     const user = useContext(userContext);
     const history = useHistory();
-    const setQueryTab = (key: string) => { history.replace(`?tab=${key}`); }
+    const setQueryTab = (key: string | null) => { history.replace(`?tab=${key}`); }
     const taskBadgeVariant = user.bookedWeight >= user.minSignups ? 'success' : 'warning';
     const taskBadgeText = `${user.completedWeight} / ${user.bookedWeight} / ${user.minSignups}`
     const verified = (user.member?.email_verified && user.member?.phone_verified) ?? false;

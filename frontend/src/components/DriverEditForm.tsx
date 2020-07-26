@@ -1,11 +1,9 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import moment from 'moment';
 
 import { createDriverAsync, updateDriverAsync } from "../logic/DriverActions";
-import { Driver, CarClass, PagedCarClasses } from '../Models';
-import { getJsonHeaders } from "../logic/ADRActions";
-import { deserialize } from "class-transformer";
+import { Driver, CarClass } from '../Models';
 import './Form.css';
 
 type FormControlElement =
@@ -16,38 +14,17 @@ type FormControlElement =
 /* If member is null id,  will create new proxy-member on save */
 export const DriverEditForm = (props: {
     driver?: Driver,
-    onSaved?: (driver: Driver) => void
-    onError?: (err: string) => void
+    onSaved?: (driver: Driver) => void,
+    onError?: (err: string) => void,
+    classes: CarClass[]
 }) => {
-    const { driver, onSaved, onError } = props;
+    const { driver, onSaved, onError, classes } = props;
 
     const [validated, setValidated] = useState(false);
     const [name, setName] = useState(driver?.name ?? '');
     const [number, setNumber] = useState(driver?.number ?? 0);
     const [klass, setKlass] = useState(driver?.klass ?? '');
     const [birthday, setBirthday] = useState(driver?.birthday ?? new Date(2001,0,1));
-    const [classes, setClasses] = useState<CarClass[]>([]);
-
-    useEffect(() => {
-        const controller = new AbortController();
-        
-        fetch(`/api/carclass/`, {
-            signal: controller.signal,
-            headers: getJsonHeaders()
-        }).then(r => {
-            if (r.status >= 300)
-                throw r.statusText;
-            return r.text();
-        }).catch(e => {
-            console.error(e);
-            onError?.(e);
-        }).then(json => {
-            if (json)
-                setClasses(deserialize(PagedCarClasses, json).results);
-        });
-
-        return function cleanup() { controller.abort(); }
-    }, [setClasses, onError]);
 
     if (!driver)
         return null;
@@ -118,7 +95,7 @@ export const DriverEditForm = (props: {
             <Form.Label>Födelsedatum</Form.Label>
             <Form.Control type="date" placeholder="2001-02-03"
                 value={moment(birthday).format("YYYY-MM-DD")}
-                onChange={setState(x => setBirthday(x2 => new Date(x) ))}/>
+                onChange={setState(x => setBirthday(() => new Date(x) ))}/>
         </Form.Group>
 
         <div style={{ textAlign: 'right' }}>

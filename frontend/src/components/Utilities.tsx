@@ -41,9 +41,8 @@ export const HoverTooltip = (props: React.PropsWithChildren<{
     return <OverlayTrigger
         placement={placement ?? "right"}
         delay={{ show: 250, hide: 400 }}
-        overlay={renderTooltip}>
-        {props.children}
-    </OverlayTrigger>
+        overlay={renderTooltip}
+        children={() => props.children}/>
 };
 
 export const PageItems = (p: {

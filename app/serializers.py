@@ -84,6 +84,7 @@ class MemberPatchSerializer(serializers.Serializer):
 
 
 class DriverSerializer(serializers.ModelSerializer):
+    klass = serializers.PrimaryKeyRelatedField
     class Meta:
         model = models.Driver
         fields = '__all__'
