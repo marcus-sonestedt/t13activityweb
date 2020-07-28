@@ -109,7 +109,7 @@ class EventList(generics.ListAPIView):
 
 class EventCsv(generics.GenericAPIView):
     queryset = Event.objects.prefetch_related('activities')
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAdminUser]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
         event = self.get_object()
@@ -158,6 +158,14 @@ class EventCsv(generics.GenericAPIView):
         resp = StreamingHttpResponse(streaming_content=csv(), content_type='text/csv')
         resp['Content-Disposition'] = f'attachment; {file_expr}'
         return resp
+
+    def check_object_permissions(self, request, obj):
+        if not self.request.user.is_staff and \
+            not self.request.user.member in obj.coordinators:
+            return HttpResponseForbidden('Can only download CSV if staff or coordinator')
+
+        return super().check_object_permissions(request, obj)
+
 
 
 class EventActivities(generics.ListAPIView):
