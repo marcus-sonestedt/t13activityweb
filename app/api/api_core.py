@@ -161,7 +161,7 @@ class EventCsv(generics.GenericAPIView):
 
     def check_object_permissions(self, request, obj):
         if not self.request.user.is_staff and \
-            not self.request.user.member in obj.coordinators:
+            not self.request.user.member in obj.coordinators.all():
             return HttpResponseForbidden('Can only download CSV if staff or coordinator')
 
         return super().check_object_permissions(request, obj)
