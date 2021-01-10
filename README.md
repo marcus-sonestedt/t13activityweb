@@ -75,7 +75,7 @@ python -m pip install -r requirements.txt
 
 ```bash
 python manage.py migrate
-cat fixtures/2020_testdata.json | python manage.py loaddata - --format= json
+python manage.py loaddata fixtures/2020_testdata.json --format=json
 python manage.py createsuperuser
 ```
 
