@@ -16,7 +16,7 @@ def exportScheduleToExcel(filename, year):
     cols = {}
 
     c = 1
-    for t in ["Aktivitet", "Datum", "Vecka", "Dag",
+    for t in ["Aktivitet", "Typ", "Datum", "Vecka", "Dag",
               "Uppgift", "Start", "Slut",
               "Ersättning", "Mat", "Hyrkart",
               "Publ. datum", "Koordinator",
@@ -27,12 +27,12 @@ def exportScheduleToExcel(filename, year):
         c += 1
 
     ws.column_dimensions['A'].width = 35
-    ws.column_dimensions['E'].width = 25
-    for c in ['B','C','D','K']:
+    ws.column_dimensions['F'].width = 25
+    for c in ['B','C','D','E','L']:
         ws.column_dimensions[c].width = 10
-    for c in ['F','G']:
+    for c in ['G','H']:
         ws.column_dimensions[c].width = 7
-    for c in ['H','I','J']:
+    for c in ['I','J','K']:
         ws.column_dimensions[c].width = 4
 
     header_font = openpyxl.styles.Font(bold=True)
@@ -46,16 +46,17 @@ def exportScheduleToExcel(filename, year):
         print(f'{event.start_date}: {event.name}')
 
         ws.cell(r, 1).value = event.name
+        ws.cell(r, cols['Typ']).value = event.type.name if event.type else ''
 
-        datecell = ws.cell(r, 2)
+        datecell = ws.cell(r, cols['Datum'])
         datecell.value = event.start_date
         datecell.number_format = 'YYYY-MM-DD'
 
-        weekcell = ws.cell(r, 3)
+        weekcell = ws.cell(r, cols['Vecka'])
         weekcell.value = f'=ISOWEEKNUM({datecell.coordinate})' 
         weekcell.data_type = 'f'
 
-        daycell = ws.cell(r, 4)
+        daycell = ws.cell(r, cols['Dag'])
         daycell.value = f'={datecell.coordinate}' 
         daycell.number_format = 'ddd'
 
