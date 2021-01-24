@@ -9,29 +9,105 @@ from app.models import Event, EventType, Activity, ActivityType, Member
 
 logger = logging.getLogger(__name__)
 
+class ExcelSheet:
+    '''Defines structure for excel sheet, used both on import and export''' 
 
-def importDataFromExcel(file, year=2019):
+    def __init__(self,  ws):
+        self.ws = ws
+        self.cols = {}
+        c = 0
+        for t in ["Aktivitet", "Typ", "Datum", "Vecka", "Dag",
+                  "Uppgift", "Start", "Slut",
+                  "Ersättning", "Mat", "Hyrkart",
+                  "Publ. datum", "Koordinator",
+                  "Guldkortsnr", "Namn", "Mobilnummer", "Kommentar"]:
+            self.cols[t] = c        
+            c += 1
+
+    def createHeader(self, row = 1):
+        for t, c in self.cols.items():
+            ws.cell(row, c).value = t
+            ws.column_dimensions[chr(64+c)].best_fit = True
+
+class ExcelRow:
+    def __init__(self, sheet, row):
+        self.sheet = sheet
+        self._row = row
+
+    def cell(self, header):
+        return self._row[self.sheet.cols[header]]
+
+    @property
+    def event(self):
+        return self.cell("Aktivitet")
+
+    @property
+    def event_type(self):
+        return self.cell("Typ")
+
+    @property
+    def date(self):
+        return self.cell("Datum")
+
+    @property
+    def activity(self):
+        return self.cell("Uppgift")
+
+    @property
+    def start_time(self):
+        return self.cell("Start")
+
+    @property
+    def end_time(self):
+        return self.cell("Slut")
+
+    @property
+    def reimbursement(self):
+        return self.cell("Ersättning")
+
+    @property
+    def food(self):
+        return self.cell("Mat")
+
+    @property
+    def rental_kart(self):
+        return self.cell("Hyrkart")
+
+    @property
+    def bookable_date(self):
+        return self.cell("Publ. datum")
+
+    @property
+    def coordinator(self):
+        return self.cell("Koordinator")
+
+
+
+def importDataFromExcel(file, year=datetime.date.today().year):
     wb = openpyxl.load_workbook(file, data_only=True, read_only=True)
     sheet = wb._sheets[0]
 
     locale.setlocale(locale.LC_ALL, 'sv_SE')
 
-    events = dict()
-    eventTypes = dict()
-    activityTypes = dict()
+    events = {}
+    eventTypes = {}
+    activityTypes = {}
     n = 0
     et_name = None
 
     try:
-        for cols in sheet.rows:
+        es = ExcelSheet(sheet)
+
+        for cells in sheet.rows:
+            row = ExcelRow(es, cells)
             n += 1
-            if n <= 9:
+            if n <= 2:
                 continue
 
-            if cols[0].value is None and et_name is None:
+            if row.event.value is None and et_name is None:
                 continue
 
-            et_name = cols[0].value or et_name
+            et_name = row.event_type.value or et_name
             et = eventTypes.get(et_name)
             if et is None:
                 #logger.info(f"Event type {et_name}")
@@ -42,14 +118,20 @@ def importDataFromExcel(file, year=2019):
                     et.save()
                 eventTypes[et_name] = et
 
-            if cols[2].value is None:
-                break
+            if row.date.value is None:
+                continue
 
-            event_name = f"{et_name} vecka {cols[1].value}"            
-
-            date = cols[2].value
+            date = row.date.value
             if year is not None:
-                date = date.replace(year=year)
+                (_, week, weekday) = date.isocalendar()            
+                date = datetime.date.fromisocalendar(year, week, weekday)
+            else:
+                (_, week, weekday) = date.isocalendar()            
+
+            if any(et_name.startswith(t) for t in ['Träning', 'Arbetsdag', 'Gokartskola']):
+                event_name = f"{et_name} {calendar.day_name[weekday - 1]} vecka {week}"            
+            else:    
+                event_name = row.event.value
 
             event = events.get((event_name, date))
 
@@ -63,7 +145,7 @@ def importDataFromExcel(file, year=2019):
                                   end_date=date, type=et)
                     event.save()
 
-                    coord = cols[19].value
+                    coord = row.coordinator.value
 
                     if coord is not None:
                         if ' ' in coord:
@@ -81,7 +163,11 @@ def importDataFromExcel(file, year=2019):
 
                 events[event_name] = event
 
-            at_name = cols[5].value
+            at_name = row.activity.value
+            if at_name is None or at_name == '':
+                print(f"Skipping row {n} as 'uppgift' is empty")
+                continue
+
             at = activityTypes.get(at_name)
             if at is None:
                 #logger.info(f"Activity Type: {at_name}")
@@ -92,26 +178,14 @@ def importDataFromExcel(file, year=2019):
                     at.save()
                 activityTypes[at_name] = at
 
-            ebd = cols[18].value
+            ebd = row.bookable_date.value
 
             activity = Activity(
                 name=f"{at_name} {calendar.day_name[date.weekday()]}", event=event, type=at,
                 earliest_bookable_date=ebd)
 
-            interval = cols[4].value.replace('—', '-').replace('–', '-') \
-                .replace(' ', '').replace('.', ':')
-
-            try:
-                (start_time, end_time) = interval.split('-')
-            except ValueError as e:
-                logger.error(e)
-                logger.error(interval)
-
-            #logger.info(f'{activity.name} {interval}')
-            (sh, sm) = start_time.split(':')
-            (eh, em) = end_time.split(':')
-            activity.start_time = datetime.time(hour=int(sh), minute=int(sm))
-            activity.end_time = datetime.time(hour=int(eh), minute=int(em))
+            activity.start_time = row.start_time.value
+            activity.end_time = row.end_time.value
 
             activity.full_clean()
             activity.save()
@@ -125,28 +199,18 @@ def importDataFromExcel(file, year=2019):
 
     except:
         print(f"Error on row {n}")
-        raise
-
-
-
+        raise   
 
 def exportScheduleToExcel(filename, year):
     wb = openpyxl.Workbook(iso_dates=True)
     ws = wb._sheets[0]
 
     driver_type = ActivityType.objects.get(name__startswith="Förare")
-    cols = {}
 
-    c = 1
-    for t in ["Aktivitet", "Typ", "Datum", "Vecka", "Dag",
-              "Uppgift", "Start", "Slut",
-              "Ersättning", "Mat", "Hyrkart",
-              "Publ. datum", "Koordinator",
-              "Guldkortsnr", "Namn", "Mobilnummer", "Kommentar"]:
-        cols[t] = c
-        ws.cell(1, c).value = t
-        ws.column_dimensions[chr(64+c)].best_fit = True
-        c += 1
+    es = ExcelSheet(ws)
+    es.createHeader()
+
+    cols = es.cols
 
     ws.column_dimensions['A'].width = 35
     ws.column_dimensions['F'].width = 25
