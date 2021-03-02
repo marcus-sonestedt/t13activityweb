@@ -142,6 +142,30 @@ Uses [React](https://reactjs.org), TypeScript and Bootstrap.
 
 * Start your server!
 
+
+### Tweak stuff via SQL! (danger)
+
+Set tasks' earliest bookable date 1 month before event occurs, for events at a certain date or later
+
+(This is different for every SQL DB apparently, see https://stackoverflow.com/questions/1293330/how-can-i-do-an-update-statement-with-join-in-sql-server#1293347
+
+Code below is for SQLite (run sqlite3 in prompt, or google for a GUI)
+
+```sql
+update app_activity
+set earliest_bookable_date = (
+	select date(e.start_date, "+1 months") 
+	from app_event e 
+	where e.id = event_id
+)
+where ROWID in (
+	select a.ROWID from app_activity a
+	left join app_event e on a.event_id = e.id
+	where e.start_date >= '2021-07-01'
+)
+```
+
+
 ## Update individual packages
 
 ### Frontend/NPM
