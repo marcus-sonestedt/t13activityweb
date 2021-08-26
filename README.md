@@ -1,6 +1,6 @@
 # T13 Activity Web
 
-Website to help organizations &amp; clubs coordinate activities amongst their members, especially my local karting club.
+Website to help organizations &amp; clubs coordinate activities amongst their members, especially my local kart club.
 
 [Master: ![Build Status](https://lolworx.visualstudio.com/Team13%20GKRC/_apis/build/status/marcusl.t13activityweb?branchName=master)](https://lolworx.visualstudio.com/Team13%20GKRC/_build/latest?definitionId=1&branchName=master)
 [Dev: ![Build Status](https://lolworx.visualstudio.com/Team13%20GKRC/_apis/build/status/marcusl.t13activityweb?branchName=dev)](https://lolworx.visualstudio.com/Team13%20GKRC/_build/latest?definitionId=1&branchName=dev)
@@ -10,17 +10,17 @@ Developed by [Marcus Sonestedt](https://www.github.com/marcusl) under the [Affer
 
 ## Data model
 
-* EventTypes - race day, training week, track work day or club barbequeue
+* EventTypes - race day, training week, track work day or club barbecues
 * Events - a specific race or similar time-bound event of some type
-* ActivityType - a role that has to be filled during an event, flag marshal, pre-grid controller or technical scrutineer for races, carpenter or painter for work days or grillmeister and saucemaster for barbequeues.
+* ActivityType - a role that has to be filled during an event, flag marshal, pre-grid controller or technical scrutineer for races, carpenter or painter for work days or grill-meister and sauce-master for barbecues.
 * Activity - a specific activity of given type for an event, which can be assigned to a user
 * Member - person able to perform an Activity, possible linked to a web site User
-* ActivityDelistRequest - request by member to be delisted from an activity, must be approved/rejected by staff to have an effect, unless someone else
+* ActivityDelistRequest - request by member to be de-listed from an activity, must be approved/rejected by staff to have an effect, unless someone else
 books that activity
 
 ## Development
 
-* Any OS should work, although it has been devleoped on Windows with the goal to support running on Linux in production.
+* Any OS should work, although it has been developed on Windows with the goal to support running on Linux in production.
 * Visual Studio Code is an free and excellent editor.
 * Visual Studio Community/Professional is also usable.
 
@@ -142,29 +142,26 @@ Uses [React](https://reactjs.org), TypeScript and Bootstrap.
 
 * Start your server!
 
-
 ### Tweak stuff via SQL! (danger)
 
 Set tasks' earliest bookable date 1 month before event occurs, for events at a certain date or later
 
-(This is different for every SQL DB apparently, see https://stackoverflow.com/questions/1293330/how-can-i-do-an-update-statement-with-join-in-sql-server#1293347
+(This is different for every SQL DB apparently, see [this Stack Overflow question](https://stackoverflow.com/questions/1293330/how-can-i-do-an-update-statement-with-join-in-sql-server#1293347)
 
 Code below is for SQLite (run sqlite3 in prompt, or google for a GUI)
 
 ```sql
 update app_activity
 set earliest_bookable_date = (
-	select date(e.start_date, "+1 months") 
-	from app_event e 
-	where e.id = event_id
+  select date(e.start_date, "+1 months") 
+  from app_event e 
+  where e.id = event_id
 )
 where ROWID in (
-	select a.ROWID from app_activity a
-	left join app_event e on a.event_id = e.id
-	where e.start_date >= '2021-07-01'
+  select a.ROWID from app_activity a
+  left join app_event e on a.event_id = e.id
 )
 ```
-
 
 ## Update individual packages
 
@@ -200,7 +197,7 @@ python -m pipupgrade --latest --yes
 
 ## Third-party services
 
-API-Keys, passwords, email-addreses and other things that interact with the world
+API-Keys, passwords, email-addresses and other things that interact with the world
 outside this web application is stored in secrets.py.
 
 See [secrets_example.py](T13ActivityWeb\secrets_example.py) for the format and current keys.
@@ -228,7 +225,7 @@ Usage:
 
 Purpose:
 
-* send/receive SMSes.
+* send/receive SMS.
 * verifying phone numbers (via SMS)
 
 Setup:

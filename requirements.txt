@@ -9,7 +9,9 @@ pillow
 openpyxl
 twilio
 
+wheel
 pytest
 pipupgrade
 autopep8
 pylint
+
