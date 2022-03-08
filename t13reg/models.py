@@ -62,6 +62,10 @@ class RegDriver(models.Model):
     def driver(self):
         return self.member_driver if self.member_driver is not None else self.ext_driver
 
+    def save(self):
+        self.clean()
+        super().save()
+
     def clean(self):
         super().clean()
         if (self.member_driver is None) == (self.ext_driver is None):
