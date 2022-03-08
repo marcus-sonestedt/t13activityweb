@@ -92,8 +92,8 @@ class Member(models.Model):
             self.user.last_name = parts[1]
         self.user.save()
 
-    get_fullname.short_description = 'Namn'
     fullname = property(get_fullname, set_fullname)
+    fullname.short_description = 'Namn'
 
     def get_email(self):
         return self.user.email
@@ -200,7 +200,15 @@ class CarClass(models.Model):
     def __str__(self):
         return self.abbrev
 
-class Driver(models.Model):
+# Shared with registration app
+class DriverFields:
+    name = models.CharField(verbose_name='Namn', max_length=128)
+    number = models.PositiveSmallIntegerField(verbose_name='Nummer')
+    klass = models.ForeignKey(CarClass, on_delete=models.SET_NULL, null=True, blank=True)
+    ssno = models.CharField(verbose_name='Personnummer', max_length='13')
+    lots_guid = models.CharField(verbose_name='LOTS-id', max_length='56')
+
+class Driver(models.Model, DriverFields):
     class Meta:
         verbose_name = 'Förare/Fordon'
         verbose_name_plural = 'Förare/Fordon'
@@ -208,10 +216,6 @@ class Driver(models.Model):
         unique_together = ['member', 'name', 'number']
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='Namn', max_length=128)
-    number = models.PositiveSmallIntegerField(verbose_name='Nummer')
-    klass = models.ForeignKey(CarClass, on_delete=models.SET_NULL, null=True, blank=True)
-    birthday = models.DateField(verbose_name='Födelsedatum')
 
     def __str__(self):
         return self.name

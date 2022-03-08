@@ -1,5 +1,7 @@
 {
     "recommendations": [
-        "pachwenko.django-test-runner"
+        "pachwenko.django-test-runner",
+        "ms-python.python",
+        "dsznajder.es7-react-js-snippets"
     ]
 }
