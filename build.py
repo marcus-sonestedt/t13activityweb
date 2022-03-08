@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 
 from subprocess import run
 from pathlib import Path
@@ -15,6 +15,7 @@ def clean():
 
 def install():
     run(['npm','install'], check=True, cwd='frontend', shell=SHELL)
+    run(['npx', 'browserslist@latest', '--update-db'], cwd='frontend', shell=SHELL)
     run(['python','-m', 'pip','install','-r', 'requirements.txt'], check=True, shell=SHELL)
 
 def build():
