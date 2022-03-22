@@ -229,12 +229,14 @@ export const EventsTable = (props: {
 
     const toggleTypeFilter = () => {
         let next = null;
-        if (typeFilter === null)
+        if (typeFilter === null) {
             next = types[0];
-        else if (typeFilter === types[types.length - 1])
+        } else if (typeFilter === types[types.length - 1]) {
             next = null;
-        else
-            next = types[types.findIndex(t => t === typeFilter) + 1];
+        } else {
+            let idx = types.findIndex(t => t === typeFilter) + 1
+            next = idx < types.length ? types[idx] : null
+        }
 
         setTypeFilter(next);
     }
