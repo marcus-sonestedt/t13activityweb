@@ -92,8 +92,11 @@ def importDataFromExcel(file, year=datetime.date.today().year):
     events = {}
     eventTypes = {}
     activityTypes = {}
-    n = 0
     et_name = None
+    date = None
+    event_name = None
+    n = 0
+    a = 0
 
     try:
         es = ExcelSheet(sheet)
@@ -118,10 +121,7 @@ def importDataFromExcel(file, year=datetime.date.today().year):
                     et.save()
                 eventTypes[et_name] = et
 
-            if row.date.value is None:
-                continue
-
-            date = row.date.value
+            date = row.date.value or date
             if year is not None:
                 (_, week, weekday) = date.isocalendar()            
                 date = datetime.date.fromisocalendar(year, week, weekday)
@@ -131,7 +131,7 @@ def importDataFromExcel(file, year=datetime.date.today().year):
             if any(et_name.startswith(t) for t in ['Träning', 'Arbetsdag', 'Gokartskola']):
                 event_name = f"{et_name} {calendar.day_name[weekday - 1]} vecka {week}"            
             else:    
-                event_name = row.event.value
+                event_name = row.event.value or event_name
 
             event = events.get((event_name, date))
 
@@ -180,6 +180,10 @@ def importDataFromExcel(file, year=datetime.date.today().year):
 
             ebd = row.bookable_date.value
 
+            # temphack
+            #if not row.event_type.value:
+            #    continue 
+
             activity = Activity(
                 name=f"{at_name} {calendar.day_name[date.weekday()]}", event=event, type=at,
                 earliest_bookable_date=ebd)
@@ -189,6 +193,10 @@ def importDataFromExcel(file, year=datetime.date.today().year):
 
             activity.full_clean()
             activity.save()
+
+            a += 1
+
+        print(f'Imported {a} activities from {n} rows ...')
 
         print(f'''Database row count:
             {EventType.objects.all().count()} event types
