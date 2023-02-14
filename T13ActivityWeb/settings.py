@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'oauth2_provider',
+    'corsheaders',
     'rest_framework',
     'captcha'
 ]
@@ -156,6 +157,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -302,3 +304,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'app.drf_defaults.DefaultResultsSetPagination',
     'PAGE_SIZE': 100
 }
+
+# https://django-oauth-toolkit.readthedocs.io/en/2.2.0/tutorial/tutorial_01.html
+CORS_ORIGIN_ALLOW_ALL = True
