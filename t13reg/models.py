@@ -6,6 +6,7 @@ from app import models as appModels
 
 # Create your models here.
 
+
 class ExternalDriver(models.Model, appModels.DriverFields):
     class Meta:
         order_with_respect_to = 'user'
@@ -13,7 +14,7 @@ class ExternalDriver(models.Model, appModels.DriverFields):
         verbose_name_plural = 'Besökare'
         indexes = [
             models.Index(fields=['user']),
-        ]    
+        ]
 
     user = models.OneToOneField(models.User, on_delete=models.CASCADE)
 
@@ -50,17 +51,21 @@ class ExternalDriver(models.Model, appModels.DriverFields):
     fullname = property(get_fullname, set_fullname)
     fullname.short_description = 'Namn'
 
+
 class RegDriver(models.Model):
     '''represents either club member or a visiting driver'''
     class Meta:
         verbose_name = 'Registrerad Förare'
+        unique_together = ['member_driver', 'ext_driver']
 
-    member_driver = models.ForeignKey(appModels.Driver, null=True, on_delete=models.CASCADE)
-    ext_driver = models.ForeignKey(ExternalDriver, null=True, on_delete=models.CASCADE)
-    
+    member_driver = models.ForeignKey(
+        appModels.Driver, null=True, on_delete=models.CASCADE)
+    ext_driver = models.ForeignKey(
+        ExternalDriver, null=True, on_delete=models.CASCADE)
+
     @property
     def driver(self):
-        return self.member_driver if self.member_driver is not None else self.ext_driver
+        return self.member_driver or self.ext_driver
 
     def save(self):
         self.clean()
@@ -69,10 +74,12 @@ class RegDriver(models.Model):
     def clean(self):
         super().clean()
         if (self.member_driver is None) == (self.ext_driver is None):
-            raise ValidationError("One and only one of the fields must be set")
+            raise ValidationError(
+                "One and only one of the member/ext driver must be set")
 
     def __str__(self):
         return str(self.driver)
+
 
 class Registration(models.Model):
     class Meta:
@@ -81,7 +88,7 @@ class Registration(models.Model):
         ordering = ['date', 'driver']
         indexes = [
             models.Index(fields=['date']),
-            models.Index(fields=['driver']),            
+            models.Index(fields=['driver']),
         ]
 
     date = models.DateField(auto_now_add=True)

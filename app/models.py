@@ -27,6 +27,7 @@ class RuleViolationException(BaseException):
 
 # Create your models here, these will be tables in the SQL database.
 
+
 class LicenseType(models.Model):
     class Meta:
         ordering = ['name']
@@ -41,6 +42,7 @@ class LicenseType(models.Model):
     def __str__(self):
         return self.name
 
+
 class Member(models.Model):
     '''A club member or a member's proxy'''
 
@@ -50,7 +52,7 @@ class Member(models.Model):
         verbose_name_plural = 'Medlemmar'
         indexes = [
             models.Index(fields=['user']),
-        ]    
+        ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -81,7 +83,6 @@ class Member(models.Model):
     proxy = models.ManyToManyField('self', blank=True, symmetrical=False,
                                    verbose_name="Huvudman", related_name='proxies')
 
-
     def get_fullname(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
@@ -92,8 +93,8 @@ class Member(models.Model):
             self.user.last_name = parts[1]
         self.user.save()
 
+    get_fullname.description = 'Namn'
     fullname = property(get_fullname, set_fullname)
-    fullname.short_description = 'Namn'
 
     def get_email(self):
         return self.user.email
@@ -174,39 +175,50 @@ class License(models.Model):
         verbose_name = 'Licens'
         verbose_name_plural = 'Licenser'
         constraints = [
-            models.UniqueConstraint(fields=['type', 'member'], name='license_type_per_member')
+            models.UniqueConstraint(
+                fields=['type', 'member'], name='license_type_per_member')
         ]
 
-    type   = models.ForeignKey(LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
-    member = models.ForeignKey(Member, verbose_name='Innehavare', on_delete=models.CASCADE)
-    level  = models.CharField(max_length=1, verbose_name='Nivå')
+    type = models.ForeignKey(
+        LicenseType, verbose_name='Licenstyp', on_delete=models.CASCADE)
+    member = models.ForeignKey(
+        Member, verbose_name='Innehavare', on_delete=models.CASCADE)
+    level = models.CharField(max_length=1, verbose_name='Nivå')
 
     def __str__(self):
         return f'{self.member} - {self.type.name} - {self.level}'
+
 
 class CarClass(models.Model):
     class Meta:
         verbose_name = 'Klass'
         verbose_name_plural = 'Klasser'
-        ordering =  ['name']
+        ordering = ['name']
 
     name = models.CharField(max_length=64, unique=True)
     abbrev = models.CharField(max_length=6, unique=True)
     comment = models.TextField()
-    min_age = models.PositiveSmallIntegerField(verbose_name='Minsta ålder', default=15)
-    max_age = models.PositiveSmallIntegerField(verbose_name='Högsta ålder', default=99)
-    min_weight = models.PositiveSmallIntegerField(verbose_name='Minsta vikt', default=0)
+    min_age = models.PositiveSmallIntegerField(
+        verbose_name='Minsta ålder', default=15)
+    max_age = models.PositiveSmallIntegerField(
+        verbose_name='Högsta ålder', default=99)
+    min_weight = models.PositiveSmallIntegerField(
+        verbose_name='Minsta vikt', default=0)
 
     def __str__(self):
         return self.abbrev
 
 # Shared with registration app
+
+
 class DriverFields:
     name = models.CharField(verbose_name='Namn', max_length=128)
     number = models.PositiveSmallIntegerField(verbose_name='Nummer')
-    klass = models.ForeignKey(CarClass, on_delete=models.SET_NULL, null=True, blank=True)
+    klass = models.ForeignKey(
+        CarClass, on_delete=models.SET_NULL, null=True, blank=True)
     ssno = models.CharField(verbose_name='Personnummer', max_length='13')
     lots_guid = models.CharField(verbose_name='LOTS-id', max_length='56')
+
 
 class Driver(models.Model, DriverFields):
     class Meta:
@@ -219,6 +231,7 @@ class Driver(models.Model, DriverFields):
 
     def __str__(self):
         return self.name
+
 
 class Attachment(models.Model):
     class Meta:
@@ -241,6 +254,7 @@ class Attachment(models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Attachment, self).save(*args, **kwargs)
+
 
 class EventType(models.Model):
     '''Predefined type of activity with some help text to explain it'''
@@ -271,7 +285,7 @@ class Event(models.Model):
             models.Index(fields=('type',)),
             models.Index(fields=('cancelled',))
         ]
-        
+
     name = models.CharField(max_length=40)
     description = models.TextField(blank=True)
 
@@ -314,7 +328,8 @@ class Event(models.Model):
 
     def activities_available_count(self):
         if not hasattr(self, '_activities_available_count'):
-            self._activities_available_count = self.activities.filter(self.activities_available_count_query()).count()
+            self._activities_available_count = self.activities.filter(
+                self.activities_available_count_query()).count()
         return self._activities_available_count
 
     activities_available_count.short_description = 'Lediga uppgifter'
@@ -328,7 +343,7 @@ class Event(models.Model):
                 self._has_bookable_activities = self.activities_available_count > 0
         return self._has_bookable_activities
 
-    has_bookable_activities.boolean = True  
+    has_bookable_activities.boolean = True
     has_bookable_activities = property(has_bookable_activities)
 
     def __str__(self):
@@ -417,7 +432,7 @@ class Activity(models.Model):
         except ActivityDelistRequest.DoesNotExist:
             return None
 
-    def can_member_enlist(self, member:Member):
+    def can_member_enlist(self, member: Member):
         return not self.event.activities.filter(assigned=member).exists()
 
     class Meta:

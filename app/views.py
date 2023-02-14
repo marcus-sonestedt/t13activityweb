@@ -17,7 +17,6 @@ from django.views.decorators.http import require_http_methods
 
 from app import forms
 from app.excel import importDataFromExcel
-import app.excel
 
 logger = logging.getLogger(__name__)
 
