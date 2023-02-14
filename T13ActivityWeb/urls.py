@@ -13,6 +13,47 @@ from app import urls as app_urls
 from frontend.urls import urlpatterns as frontend_urls
 from T13ActivityWeb import settings
 
+import oauth2_provider.views as oauth2_views
+from oauth2_provider.views.generic import ProtectedResourceView
+from django.http import HttpResponse
+
+# OAuth2 provider testing endpoint
+
+
+class ApiEndpoint(ProtectedResourceView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, OAuth2!')
+
+
+# OAuth2 provider endpoints
+oauth2_endpoint_views = [
+    path('authorize/', oauth2_views.AuthorizationView.as_view(), name="authorize"),
+    path('token/', oauth2_views.TokenView.as_view(), name="token"),
+    path('revoke-token/', oauth2_views.RevokeTokenView.as_view(), name="revoke-token"),
+]
+
+if settings.DEBUG:
+    # OAuth2 Application Management endpoints
+    oauth2_endpoint_views += [
+        path('applications/', oauth2_views.ApplicationList.as_view(), name="list"),
+        path('applications/register/',
+             oauth2_views.ApplicationRegistration.as_view(), name="register"),
+        path('applications/<pk>/',
+             oauth2_views.ApplicationDetail.as_view(), name="detail"),
+        path('applications/<pk>/delete/',
+             oauth2_views.ApplicationDelete.as_view(), name="delete"),
+        path('applications/<pk>/update/',
+             oauth2_views.ApplicationUpdate.as_view(), name="update"),
+    ]
+
+    # OAuth2 Token Management endpoints
+    oauth2_endpoint_views += [
+        path('authorized-tokens/', oauth2_views.AuthorizedTokensListView.as_view(),
+             name="authorized-token-list"),
+        path('authorized-tokens/<pk>/delete/', oauth2_views.AuthorizedTokenDeleteView.as_view(),
+             name="authorized-token-delete"),
+    ]
+
 urlpatterns = [
     re_path(r'^$', RedirectView.as_view(url='static/index.html')),
     re_path(r'^frontend/(.*)', include(frontend_urls)),
@@ -20,12 +61,18 @@ urlpatterns = [
     re_path(r'^(?P<path>[~/]+)$',
             RedirectView.as_view(url='static/%(path)s')),
     path('manifest.json',
-            RedirectView.as_view(url='static/manifest.json')),
+         RedirectView.as_view(url='static/manifest.json')),
 
     path('app/', include(app_urls.urlpatterns)),
     path('api/', include(app_urls.api_urlpatterns)),
     path('admin/', admin.site.urls),
-    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    # OAuth 2 endpoints:
+    # need to pass in a tuple of the endpoints as well as the app's name
+    # because the app_name attribute is not set in the included module
+    path('o/', include((oauth2_endpoint_views, 'oauth2_provider'),
+         namespace="oauth2_provider")),
+    path('api2/hello', ApiEndpoint.as_view()),  # an example resource endpoint
 ] \
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -38,4 +85,4 @@ if settings.DEBUG:
     ] + urlpatterns
 
 
-#print(urlpatterns)
+# print(urlpatterns)
