@@ -25,6 +25,7 @@ urlpatterns = [
     path('app/', include(app_urls.urlpatterns)),
     path('api/', include(app_urls.api_urlpatterns)),
     path('admin/', admin.site.urls),
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ] \
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,6 +4,7 @@ djangorestframework
 django-recaptcha
 django-nested-inline
 django-debug-toolbar
+django-oauth-toolkit
 
 pillow
 openpyxl
