@@ -7,7 +7,8 @@ from app.api.api_adr import url_patterns as adr_urls
 from app.api.api_sms_email import url_patterns as sms_urls
 from app.api.api_proxy import url_patterns as proxy_urls
 from app.api.api_member import url_patterns as member_urls
+from app.api.api_oauth import url_patterns as oauth_urls
 
 urlpatterns = views_urls
 
-api_urlpatterns = core_urls + adr_urls + sms_urls + user_urls + proxy_urls + member_urls
+api_urlpatterns = core_urls + adr_urls + sms_urls + user_urls + proxy_urls + member_urls + oauth_urls

@@ -303,7 +303,18 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
     'DEFAULT_PAGINATION_CLASS': 'app.drf_defaults.DefaultResultsSetPagination',
     'PAGE_SIZE': 100
+
+    # TODO: Enable this and override in other direction?
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #    'rest_framework.permissions.IsAuthenticated',
+    # )
 }
 
 # https://django-oauth-toolkit.readthedocs.io/en/2.2.0/tutorial/tutorial_01.html
 CORS_ORIGIN_ALLOW_ALL = True
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read scope',
+               'write': 'Write scope',
+               'groups': 'Access to your groups'}
+}

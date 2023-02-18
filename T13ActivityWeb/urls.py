@@ -14,15 +14,6 @@ from frontend.urls import urlpatterns as frontend_urls
 from T13ActivityWeb import settings
 
 import oauth2_provider.views as oauth2_views
-from oauth2_provider.views.generic import ProtectedResourceView
-from django.http import HttpResponse
-
-# OAuth2 provider testing endpoint
-
-
-class ApiEndpoint(ProtectedResourceView):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse('Hello, OAuth2!')
 
 
 # OAuth2 provider endpoints
@@ -72,7 +63,6 @@ urlpatterns = [
     # because the app_name attribute is not set in the included module
     path('o/', include((oauth2_endpoint_views, 'oauth2_provider'),
          namespace="oauth2_provider")),
-    path('api2/hello', ApiEndpoint.as_view()),  # an example resource endpoint
 ] \
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
