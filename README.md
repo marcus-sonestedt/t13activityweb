@@ -170,7 +170,7 @@ where ROWID in (
   select a.ROWID from app_activity a
   left join app_event e on a.event_id = e.id
   where e.start_date >= '2024-07-01' 
-)
+);
 ```
 
 ## Update individual packages
