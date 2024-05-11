@@ -51,7 +51,7 @@ def reload():
             print(f"Ignoring WSGI file {path} as it doesn't exist here.")
 
     if found:
-       run(['python','manage.py','check', '--deploy'], shell=SHELL)
+        run(['python','manage.py','check', '--deploy'], shell=SHELL)
 
 
 this_module = sys.modules[__name__]

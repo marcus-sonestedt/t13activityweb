@@ -90,8 +90,12 @@ python manage.py createsuperuser
 
 * Start development server
 
+Insecure to run locally and serve static file.
+
+Copy secrets_example.py to secrets.py (defaults with DEBUG=True)-
+
 ```bash
-python manage.py runserver
+python manage.py runserver --insecure
 ```
 
 ### FrontEnd
