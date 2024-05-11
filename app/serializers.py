@@ -236,3 +236,15 @@ class DoubleBookedSerializer(serializers.Serializer):
     activity_name = serializers.CharField()
     activity_comment = serializers.CharField()
 
+
+class CompletionSerializer(serializers.Serializer):
+    assigned_id = serializers.CharField()
+    assigned_fullname = serializers.CharField()
+    event_id = serializers.CharField()
+    event_name = serializers.CharField()
+    activity_id = serializers.CharField()
+    activity_name = serializers.CharField()
+    completed = serializers.BooleanField()
+    datetime = serializers.DateTimeField()
+
+

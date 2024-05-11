@@ -28,6 +28,7 @@ export const Navigation = () => {
                         <Nav.Link href="/admin">Administrera</Nav.Link>
                         <Nav.Link href="/frontend/membercards">Guldkort</Nav.Link>
                         <Nav.Link href="/frontend/double-bookings">Dubbelbokningar</Nav.Link>
+                        <Nav.Link href="/frontend/completions">Närvaro</Nav.Link>
                     </>}
                     {!user.isLoggedIn ? <p>{' '}</p> : <>
                     <Nav.Link href="/frontend/proxies">Underhuggare</Nav.Link>

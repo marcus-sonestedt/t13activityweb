@@ -1,13 +1,9 @@
 {
     "python.pythonPath": "env\\Scripts\\python.exe",
     "cSpell.words": [
-        "Affero",
-        "Sendgrid",
-        "Sendgrid's",
-        "Sonestedt",
-        "Twilio",
-        "Twilio's",
         "activityweb",
+        "Affero",
+        "authtoken",
         "createsuperuser",
         "loaddata",
         "macke",
@@ -15,7 +11,12 @@
         "recaptcha",
         "rowid",
         "runserver",
+        "Sendgrid",
+        "Sendgrid's",
+        "Sonestedt",
         "testdata",
+        "Twilio",
+        "Twilio's",
         "venv",
         "virtualenv",
         "wsgi"
