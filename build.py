@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+    #!/usr/bin/env python3.7
 
 from subprocess import run
 from pathlib import Path
@@ -14,6 +14,7 @@ def clean():
         shutil.rmtree(static_dir)
 
 def install():
+    run(['npx','browserslist@latest','--update-db'], check=False, cwd='frontend', shell=SHELL)
     run(['npm','install'], check=True, cwd='frontend', shell=SHELL)
     run(['python','-m', 'pip','install','-r', 'requirements.txt'], check=True, shell=SHELL)
 
