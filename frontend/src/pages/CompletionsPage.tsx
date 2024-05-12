@@ -133,7 +133,7 @@ export const CompletionsPage = () => {
         <Row>
             <Col md={9}>
                 <DataProvider
-                    url={(filter.length == 0)  
+                    url={(filter.length === 0)  
                         ? `/api/members/completions?page=${page}&page_size=${pageSize}`
                         : (filter.length >= 3) 
                         ? `/api/members/completions?filter=${filter}`
