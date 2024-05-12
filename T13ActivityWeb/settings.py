@@ -318,3 +318,5 @@ OAUTH2_PROVIDER = {
                'write': 'Write scope',
                'groups': 'Access to your groups'}
 }
+
+PKCE_REQUIRED = False # TODO disable only for new t13 website
