@@ -14,11 +14,11 @@ def clean():
         shutil.rmtree(static_dir)
 
 def install():
-    run(['npx','browserslist@latest','--update-db'], check=False, cwd='frontend', shell=SHELL)
     run(['npm','install'], check=True, cwd='frontend', shell=SHELL)
-    run(['python','-m', 'pip','install','-r', 'requirements.txt'], check=True, shell=SHELL)
+    run(['python','-m','pip','install','-r','requirements.txt'], check=True, shell=SHELL)
 
 def build():
+    run(['npx','browserslist@latest','--update-db','-y'], check=False, cwd='frontend', shell=SHELL)
     run(['npm','run','build'], check=True, cwd='frontend', shell=SHELL) 
     run(['python','manage.py','collectstatic'], check=True, shell=SHELL)
     run(['python','manage.py','check'], check=True, shell=SHELL)
