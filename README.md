@@ -102,7 +102,7 @@ python manage.py runserver --insecure
 
 Uses [React](https://reactjs.org), TypeScript and Bootstrap.
 
-* Install [Node.js](https://nodejs.org)
+* Install [Node.js](https://nodejs.org) v16 (v18 or later does not work yet)
 
 * Go into frontend dir
 
