@@ -55,9 +55,25 @@ export const CompletionsPage = () => {
                     <a href={T13Event.urlForId(data.event_id)}>{data.event_name}</a>}
                 </td>
                 <td><a href={Activity.urlForId(data.activity_id)}>{data.activity_name}</a></td>
-                <td>{data.start_date.toLocaleDateString()}<br/>
-                    {data.start_date.toLocaleTimeString()}                
-                </td>
+                <td>{data.start_date.getDate() === data.end_date.getDate()
+                    ? <div>
+                        {data.start_date.toLocaleDateString()}
+                        <span> </span>
+                        {data.start_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}
+                        -
+                        {data.end_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}
+                    </div> 
+                    : <div>
+                        {data.start_date.toLocaleDateString()}
+                        <span> </span>
+                        {data.start_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}
+                        <br/>
+                        {data.end_date.toLocaleDateString()}
+                        <span> </span>
+                        {data.end_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}                
+                    </div>
+                    }
+                    </td>
                 <td>
                     <Button onClick={toggleCompletedState} 
                             variant={data.completed ? 'success' : 'danger'} size='sm'>

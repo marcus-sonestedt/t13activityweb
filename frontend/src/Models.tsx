@@ -392,6 +392,8 @@ export class Completion {
     completed!: boolean;
     @Type(() => Date)
     start_date: Date = new Date(0);
+    @Type(() => Date)
+    end_date: Date = new Date(0);
 }
 
 export class PagedCompletions extends PagedValues<Completion>

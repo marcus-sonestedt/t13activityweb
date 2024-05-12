@@ -245,6 +245,7 @@ class CompletionSerializer(serializers.Serializer):
     activity_id = serializers.CharField()
     activity_name = serializers.CharField()
     completed = serializers.BooleanField()
-    datetime = serializers.DateTimeField()
+    start_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
 
 

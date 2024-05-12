@@ -348,34 +348,36 @@ class CompletionsList(generics.ListAPIView):
 
     def get_queryset(self):
         today = datetime.date.today()
+        last_week = today - datetime.timedelta(days=7)
 
-        events = models.Event.objects \
-            .filter(start_date__lte=today, \
-                    start_date__year=today.year) \
-            .order_by('-start_date')
-
-        print(f"Found {len(events)} event(s) that might need confirmation")
-        print(events)
+        acts = models.Activity.objects \
+            .exclude(assigned=None) \
+            .exclude(cancelled=True) \
+            .filter(event__start_date__year=today.year) \
+            .filter(event__start_date__lte=today) \
+            .exclude(completed=True, 
+                    event__start_date__lt=last_week) \
+            .order_by('-event__start_date', 'start_time') 
+            
+        print(f"Found {len(acts)} activities that might need confirmation")
+        #print(acts)
         values = []
 
-        for e in events:
-            acts = e.activities.exclude(assigned=None) \
-                               .exclude(cancelled=True) \
-                               .exclude(completed=True,
-                                        event__start_date__lt=today) \
-                               .order_by('start_time') 
-            
-            for a in acts:
-                values.append({
-                    'assigned_id': a.assigned.id,
-                    'assigned_fullname': a.assigned.fullname,
-                    'event_id': e.id,
-                    'event_name': e.name,
-                    'activity_id': a.id,
-                    'activity_name': a.name,
-                    'completed': a.completed,
-                    'datetime': datetime.datetime.combine(date=e.start_date, time=a.start_time or datetime.time(0, 0)),
-                })
+        for a in acts:
+            e = a.event
+            start_date = datetime.datetime.combine(date=e.start_date, time=a.start_time or datetime.time(0, 0))
+            end_date = datetime.datetime.combine(date=e.end_date, time=a.end_time or datetime.time(0, 0))
+            values.append({
+                'assigned_id': a.assigned.id,
+                'assigned_fullname': a.assigned.fullname,
+                'event_id': e.id,
+                'event_name': e.name,
+                'activity_id': a.id,
+                'activity_name': a.name,
+                'completed': a.completed,
+                'start_date': start_date,
+                'end_date': end_date
+            })
 
         return values
 
@@ -388,6 +390,15 @@ def set_completed(request, activity_id):
         activity = models.Activity.objects.get(id=activity_id)
     except models.Activity.DoesNotExist:
         return HttpResponseNotFound()
+    
+    if activity.event.start_date > datetime.date.today():
+        return HttpResponseBadRequest("Activity is in the future")
+
+    if activity.assigned is None:
+        return HttpResponseBadRequest("Activity is not assigned")
+
+    if activity.cancelled:
+        return HttpResponseBadRequest("Activity is cancelled")
 
     completed = request.data['completed']
     print(f"Setting activity {activity_id} to completed={completed}")
