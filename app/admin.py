@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from django.urls import reverse
 from django.utils.html import escape, mark_safe
+from django.db.models import Q
 
 import nested_inline.admin as nested
 import logging
@@ -106,6 +107,15 @@ class MemberAdmin(nested.NestedModelAdmin):
     def user_link(self, obj: User):
         link = reverse("admin:auth_user_change", args=[obj.user_id])
         return mark_safe(f'<a href="{link}">{escape(obj.fullname + " (" + obj.user.__str__() + ")")}</a>')
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset = self.model.objects.filter( \
+            Q(user__first_name__icontains=search_term)
+            | Q(user__last_name__icontains=search_term)
+            | Q(user__email__icontains=search_term)
+        )
+
+        return queryset, True
 
     user_link.short_description = 'Användare'
     user_link.admin_order_field = 'user'  # Make row sortable
