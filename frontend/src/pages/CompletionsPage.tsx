@@ -15,6 +15,7 @@ class SetConfirmResponse {
 
 export const CompletionsPage = () => {
     const [tasks, setTasks] = useState(new PagedCompletions())
+    const [filter, setFilter] = useState('')
     const [page, setPage] = useState(1)
     const pageSize = 15;
 
@@ -120,9 +121,23 @@ export const CompletionsPage = () => {
             </Col>
         </Row>
         <Row>
+            <Col md={6}>
+                <span>Sök användare (minst 3 tecken): </span> 
+                <input type='text'
+                    onChange={e => setFilter(e.target.value)}
+                    value={filter}
+                    autoFocus={true}/>
+                <button onClick={() => setFilter('')}>Reset</button>
+            </Col>
+        </Row>
+        <Row>
             <Col md={9}>
                 <DataProvider
-                    url={`/api/members/completions?page=${page}&page_size=${pageSize}`}
+                    url={(filter.length == 0)  
+                        ? `/api/members/completions?page=${page}&page_size=${pageSize}`
+                        : (filter.length >= 3) 
+                        ? `/api/members/completions?filter=${filter}`
+                        : undefined}
                     ctor={json => deserialize(PagedCompletions, json)}
                     onLoaded={setTasks}>
                     <Table>

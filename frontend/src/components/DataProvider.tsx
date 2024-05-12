@@ -4,7 +4,7 @@ import { getJsonHeaders } from '../logic/ADRActions';
 
 export interface DataProps<T> {
     ctor: ((json: string) => T);
-    url: string;
+    url?: string;
     onLoaded?: ((data: T) => void);
     render?: ((data:T) => ReactNode);
 }
@@ -26,12 +26,18 @@ export function DataProvider<T>(props: React.PropsWithChildren<DataProps<T>>) {
     );
 
     useEffect(() => {
-        const controller = new AbortController();
-        setPlaceHolder("Laddar...");
         setError(undefined);
         setData(undefined);
 
-        fetch(url, {
+        if (url === undefined) {
+            setPlaceHolder("Ingen data...");
+            return;
+        }
+
+        const controller = new AbortController();
+        setPlaceHolder("Laddar...");
+
+        fetch(url ? url : '', {
             signal: controller.signal,
             cache: "no-store",
             headers: getJsonHeaders()

@@ -355,10 +355,17 @@ class CompletionsList(generics.ListAPIView):
             .exclude(cancelled=True) \
             .filter(event__start_date__year=today.year) \
             .filter(event__start_date__lte=today) \
-            .exclude(completed=True, 
-                    event__start_date__lt=last_week) \
             .order_by('-event__start_date', 'start_time') 
-            
+
+        user_filter = self.request.GET.get('filter', None)
+
+        if user_filter:
+            acts = acts.filter(Q(assigned__user__first_name__icontains=user_filter)
+                               |Q(assigned__user__last_name__icontains=user_filter))
+        else:
+            acts = acts.exclude(completed=True, 
+                event__start_date__lt=last_week) 
+
         print(f"Found {len(acts)} activities that might need confirmation")
         #print(acts)
         values = []
