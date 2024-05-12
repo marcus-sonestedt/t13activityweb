@@ -5,6 +5,7 @@
         "Affero",
         "authtoken",
         "createsuperuser",
+        "csrftoken",
         "loaddata",
         "macke",
         "meister",

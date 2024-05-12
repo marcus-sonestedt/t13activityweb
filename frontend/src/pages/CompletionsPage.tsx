@@ -8,6 +8,11 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
+class SetConfirmResponse {
+    activity_id! : string;
+    completed!: boolean;
+}
+
 export const CompletionsPage = () => {
     const [tasks, setTasks] = useState(new PagedCompletions())
     const [page, setPage] = useState(1)
@@ -35,17 +40,27 @@ export const CompletionsPage = () => {
                         throw resp.statusText;
                     }
 
+                    return resp.json();
+                }).then((data:SetConfirmResponse) => {
+                    console.log(data);
                     setTasks(tasks => {
                         tasks.results = tasks.results.map(task => {
                             if (task.activity_id === data.activity_id) {
-                                task.completed = !task.completed;
+                                task.completed = data.completed;
                             }
                             return task;
                         });
                         return tasks;
                     });
-                });
+                    // above doesn't work?!
+                    window.location.reload();
+                }).catch(err => {
+                    console.error(err);
+                    throw err;
+                });                
             }
+
+            const timeOpts = {hour: '2-digit', minute: '2-digit'};
 
             const row = <tr key={`${data.assigned_id}-${data.activity_id}`}>
                 <td>{data.assigned_id === member ? null :
@@ -59,21 +74,21 @@ export const CompletionsPage = () => {
                     ? <div>
                         {data.start_date.toLocaleDateString()}
                         <span> </span>
-                        {data.start_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}
+                        {data.start_date.toLocaleTimeString(undefined, timeOpts)}
                         -
-                        {data.end_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}
+                        {data.end_date.toLocaleTimeString(undefined, timeOpts)}
                     </div> 
                     : <div>
                         {data.start_date.toLocaleDateString()}
                         <span> </span>
-                        {data.start_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}
+                        {data.start_date.toLocaleTimeString(undefined, timeOpts)}
                         <br/>
                         {data.end_date.toLocaleDateString()}
                         <span> </span>
-                        {data.end_date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'})}                
+                        {data.end_date.toLocaleTimeString(undefined, timeOpts)}                
                     </div>
                     }
-                    </td>
+                </td>
                 <td>
                     <Button onClick={toggleCompletedState} 
                             variant={data.completed ? 'success' : 'danger'} size='sm'>
