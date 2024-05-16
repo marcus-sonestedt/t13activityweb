@@ -8,11 +8,14 @@ import { Navigation } from './components/Navigation';
 import { NotFound } from './components/NotFound';
 import { UserContext, UserProvider } from './components/UserContext';
 import { ErrorBoundary } from './components/Utilities';
+
+import { ActivityDelistRequestsPage } from './pages/ADRPage';
 import { ActivityPage } from './pages/ActivityPage';
 import { ActivityTypePage } from './pages/ActivityTypePage';
 import { ActivityTypesPage } from './pages/ActivityTypesPage';
-import { ActivityDelistRequestsPage } from './pages/ADRPage';
+import { CompletionsPage } from './pages/CompletionsPage';
 import { DoubleBookingsPage } from './pages/DoubleBookingsPage';
+import { EditProfilePage } from './pages/EditProfilePage';
 import { EventPage } from './pages/EventPage';
 import { EventTypePage } from './pages/EventTypePage';
 import { EventTypesPage } from './pages/EventTypesPage';
@@ -21,9 +24,8 @@ import { MainPage } from './pages/MainPage';
 import { MemberCardPage } from './pages/MemberCardPage';
 import { MemberPage } from './pages/MemberPage';
 import { NotificationsPage } from './pages/NotificationsPage';
-import { EditProfilePage } from './pages/EditProfilePage';
-import { ProxiesPage } from './pages/ProxiesPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { ProxiesPage } from './pages/ProxiesPage';
 import { VerifyEmailPage } from './pages/VerifyEmailPage';
 import { VerifyPhonePage } from './pages/VerifyPhonePage';
 import { WelcomePage } from './pages/WelcomePage';
@@ -113,6 +115,7 @@ const MainBody = (props: { isLoggedIn: boolean }) =>
 
         <Route path='/frontend/membercards' component={MemberCardPage} />
         <Route path='/frontend/double-bookings' component={DoubleBookingsPage} />
+        <Route path='/frontend/completions' component={CompletionsPage} />
 
         <Route exact path="/frontend/" render={() => <Redirect to="/frontend/home" />} />
         <Route path="/frontend/welcome" render={() => <Redirect to="/frontend/home" />} />

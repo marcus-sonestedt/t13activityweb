@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+    #!/usr/bin/env python3.7
 
 from subprocess import run
 from pathlib import Path
@@ -15,9 +15,10 @@ def clean():
 
 def install():
     run(['npm','install'], check=True, cwd='frontend', shell=SHELL)
-    run(['python','-m', 'pip','install','-r', 'requirements.txt'], check=True, shell=SHELL)
+    run(['python','-m','pip','install','-r','requirements.txt'], check=True, shell=SHELL)
 
 def build():
+    run(['npx','browserslist@latest','--update-db','-y'], check=False, cwd='frontend', shell=SHELL)
     run(['npm','run','build'], check=True, cwd='frontend', shell=SHELL) 
     run(['python','manage.py','collectstatic'], check=True, shell=SHELL)
     run(['python','manage.py','check'], check=True, shell=SHELL)
@@ -51,7 +52,7 @@ def reload():
             print(f"Ignoring WSGI file {path} as it doesn't exist here.")
 
     if found:
-       run(['python','manage.py','check', '--deploy'], shell=SHELL)
+        run(['python','manage.py','check', '--deploy'], shell=SHELL)
 
 
 this_module = sys.modules[__name__]

@@ -1,5 +1,7 @@
 import datetime
 import logging
+import traceback
+import json
 
 from django.urls import path, re_path
 from django.apps import apps
@@ -9,26 +11,27 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from django.db.models import Sum, Q, Count
 from django.db import transaction
+from django.db import IntegrityError
 
 from django.views.decorators.cache import cache_page, cache_control, never_cache
 from django.views.decorators.vary import vary_on_cookie
 from django.views.decorators.csrf import csrf_exempt
 
-from rest_framework.views import APIView
+from rest_framework import mixins
 from rest_framework import authentication, generics, parsers, renderers, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.authtoken.views import obtain_auth_token, ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from rest_framework import mixins
+from rest_framework.parsers import JSONParser
 
 from app import models, serializers
 
 from app.notifications import NotificationData, NotificationDataSerializer
-import traceback
 from http import HTTPStatus
-from django.db import IntegrityError
+
 
 logger = logging.getLogger(__name__)
 
@@ -338,6 +341,81 @@ class MemberDriverList(generics.ListAPIView, mixins.CreateModelMixin, mixins.Upd
         return super().check_object_permissions(request, obj)
 
 
+
+class CompletionsList(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    serializer_class = serializers.CompletionSerializer
+
+    def get_queryset(self):
+        today = datetime.date.today()
+        last_week = today - datetime.timedelta(days=7)
+
+        acts = models.Activity.objects \
+            .exclude(assigned=None) \
+            .exclude(cancelled=True) \
+            .filter(event__start_date__year=today.year) \
+            .filter(event__start_date__lte=today) \
+            .order_by('-event__start_date', 'start_time') 
+
+        user_filter = self.request.GET.get('filter', None)
+
+        if user_filter:
+            acts = acts.filter(Q(assigned__user__first_name__icontains=user_filter)
+                               |Q(assigned__user__last_name__icontains=user_filter))
+        else:
+            acts = acts.exclude(completed=True, 
+                event__start_date__lt=last_week) 
+
+        print(f"Found {len(acts)} activities that might need confirmation")
+        #print(acts)
+        values = []
+
+        for a in acts:
+            e = a.event
+            start_date = datetime.datetime.combine(date=e.start_date, time=a.start_time or datetime.time(0, 0))
+            end_date = datetime.datetime.combine(date=e.end_date, time=a.end_time or datetime.time(0, 0))
+            values.append({
+                'assigned_id': a.assigned.id,
+                'assigned_fullname': a.assigned.fullname,
+                'event_id': e.id,
+                'event_name': e.name,
+                'activity_id': a.id,
+                'activity_name': a.name,
+                'completed': a.completed,
+                'start_date': start_date,
+                'end_date': end_date
+            })
+
+        return values
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAdminUser])
+@parser_classes([JSONParser])
+def set_completed(request, activity_id):
+    try:
+        activity = models.Activity.objects.get(id=activity_id)
+    except models.Activity.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    if activity.event.start_date > datetime.date.today():
+        return HttpResponseBadRequest("Activity is in the future")
+
+    if activity.assigned is None:
+        return HttpResponseBadRequest("Activity is not assigned")
+
+    if activity.cancelled:
+        return HttpResponseBadRequest("Activity is cancelled")
+
+    completed = request.data['completed']
+    print(f"Setting activity {activity_id} to completed={completed}")
+
+    activity.completed = completed
+    activity.save()
+
+    return Response({'activity_id': activity_id, 
+                     'completed': activity.completed})
+
 ##############################################################################
 
 url_patterns = [
@@ -347,8 +425,10 @@ url_patterns = [
     re_path(r'^members/not_ready/', MemberNotReadyList.as_view()),
     re_path(r'^members/has_card/', MemberWithCardList.as_view()),
     re_path(r'^members/double_booked/', DoubleBookedMembersList.as_view()),
+    re_path(r'^members/completions/', CompletionsList.as_view()),
+    re_path(r'^members/set_completed/(?P<activity_id>\d+)', set_completed),
 
-    re_path(r'^member/((?P<member_id>[0-9]+)/)?license/(?P<id>[0-9]+)?$', MemberLicenseList.as_view()),
-    re_path(r'^member/((?P<member_id>[0-9]+)/)?driver/(?P<id>[0-9]+)?$', MemberDriverList.as_view())
+    re_path(r'^member/((?P<member_id>\d+)/)?license/(?P<id>[0-9]+)?$', MemberLicenseList.as_view()),
+    re_path(r'^member/((?P<member_id>\d+)/)?driver/(?P<id>[0-9]+)?$', MemberDriverList.as_view())
 
 ]

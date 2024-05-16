@@ -190,10 +190,11 @@ export class Activity implements IdValue {
 
     url = () => `/frontend/activity/${this.id}/${slugify(this.name)}`;
     adminUrl = () => '/admin/app/activity/' + this.id;
-    apiUrl = () => Activity.apiUrlFromId(this.id);
+    apiUrl = () => Activity.apiUrlFromId(this.id);    
 
     static apiUrlFromId = (id: string) => `/api/activity/${id}`;
     static urlForId = (id: string) => `/frontend/activity/${id}/_`
+    static urlForConfirm = (id: string) => `/api/activity_confirm/${id}`
 }
 
 
@@ -379,4 +380,24 @@ export class PagedDoubleBookedTasks extends PagedValues<DoubleBookedTask>
 {
     @Type(() => DoubleBookedTask)
     results: DoubleBookedTask[] = [];
+}
+
+export class Completion {
+    assigned_id!: string;
+    assigned_fullname!: string;
+    event_id!: string;
+    event_name!: string;
+    activity_id!: string;
+    activity_name!: string;
+    completed!: boolean;
+    @Type(() => Date)
+    start_date: Date = new Date(0);
+    @Type(() => Date)
+    end_date: Date = new Date(0);
+}
+
+export class PagedCompletions extends PagedValues<Completion>
+{
+    @Type(() => Completion)
+    results: Completion[] = [];
 }

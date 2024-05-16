@@ -204,7 +204,7 @@ const VerifyResult = (props: { setState: (state: State) => void }) => {
         fetch(`/api/member/${user.memberId}`,
             {
                 headers: {
-                    Accept: 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRFToken': cookies.get('csrftoken'),
                 },
                 signal: controller.signal,

@@ -52,10 +52,14 @@ By default, uses the [SQLite](https://www.sqlite.org/) db during development, wh
 
   * On Windows:
 
-    ```cmd
+    ```cmd/bat
     python -m venv env  
-    env/scripts/activate
+    env/scripts/activate.bat
     ```
+
+    ```powershell
+    python -m venv env  
+    env/scripts/activate.ps1
 
   * On Linux:
 
@@ -71,6 +75,11 @@ By default, uses the [SQLite](https://www.sqlite.org/) db during development, wh
 python -m pip install -r requirements.txt
 ```
 
+* Collect static files
+
+'''bash
+python manage.py collectstatic
+
 * Initialize database with create schema (via migrations), load some sample data and create a super user so you can log in:
 
 ```bash
@@ -81,15 +90,19 @@ python manage.py createsuperuser
 
 * Start development server
 
+Insecure to run locally and serve static file.
+
+Copy secrets_example.py to secrets.py (defaults with DEBUG=True)-
+
 ```bash
-python manage.py runserver
+python manage.py runserver --insecure
 ```
 
 ### FrontEnd
 
 Uses [React](https://reactjs.org), TypeScript and Bootstrap.
 
-* Install [Node.js](https://nodejs.org)
+* Install [Node.js](https://nodejs.org) v16 (v18 or later does not work yet)
 
 * Go into frontend dir
 
@@ -153,14 +166,15 @@ Code below is for SQLite (run sqlite3 in prompt, or google for a GUI)
 ```sql
 update app_activity
 set earliest_bookable_date = (
-  select date(e.start_date, "+1 months") 
+  select date(e.start_date, "-1 months") 
   from app_event e 
   where e.id = event_id
 )
 where ROWID in (
   select a.ROWID from app_activity a
   left join app_event e on a.event_id = e.id
-)
+  where e.start_date >= '2024-07-01' 
+);
 ```
 
 ## Update individual packages
